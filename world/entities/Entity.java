@@ -27,9 +27,6 @@ public class Entity {
         this.coordinates = new double[]{1, 1};
         this.action_queue = new ArrayList<>();
         this.animations = new HashMap<>();
-        this.animations.put("idle", new Animation("player_idle.png", 2, 1));
-        this.animations.put("walking", new Animation("player_walking.png", 4, 3));
-        this.setAnimation("idle");
     }
 
     public void update() {
@@ -55,6 +52,10 @@ public class Entity {
     public void setAnimation(String name) {
         current_animation = animations.get(name);
         if (current_animation == null) setAnimation("idle");
+    }
+
+    public void addAnimation(String name, Animation a) {
+        this.animations.put(name, a);
     }
 
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }

@@ -1,11 +1,9 @@
 package world;
 
-import misc.MiscMath;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
-import world.events.Event;
+import world.entities.types.Player;
 import world.events.EventDispatcher;
-import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityMoveEvent;
 import world.generators.chunk.ChunkType;
@@ -17,32 +15,27 @@ public class World {
     private static Chunk[][] chunks;
     private static ChunkType[][] chunk_map;
 
-    private static Entity player;
+    private static Player player;
 
     public static void init(int size) {
         generate(size, new DefaultWorldGenerator());
-        player = new Entity();
-        EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), new EventHandler() {
-            @Override
-            public void handle(Event e) {
-                EntityMoveEvent event = (EntityMoveEvent) e;
-                Entity entity = event.getEntity();
-                if (entity.equals(player)) {
-                    double[] coords = entity.getCoordinates();
-                    int[] chcoords = entity.getChunkCoordinates();
-                    int cdx = 0, cdy = 0, dx = 0, dy = 0;
-                    if (coords[0] == Chunk.CHUNK_SIZE - 1 && chcoords[0] < size - 1) cdx = 1;
-                    if (coords[0] == 0 && chcoords[0] > 0) cdx = -1;
-                    if (coords[1] == Chunk.CHUNK_SIZE - 1 && chcoords[1] < size - 1) cdy = 1;
-                    if (coords[1] == 0 && chcoords[1] > 0) cdy = -1;
-                    System.out.println(coords[0]+", "+cdx+", "+((coords[0] + cdx) % Chunk.CHUNK_SIZE));
-                    entity.setCoordinates(
-                            (coords[0] + Chunk.CHUNK_SIZE + cdx) % Chunk.CHUNK_SIZE,
-                            (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE);
-                    entity.setChunkCoordinates(chcoords[0] + cdx, chcoords[1] + cdy);
-                    if (cdx != 0 || cdy != 0) entity.move(cdx, cdy);
-                }
-            }
+        player = new Player();
+        EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), e -> {
+            EntityMoveEvent event = (EntityMoveEvent) e;
+            Entity entity = event.getEntity();
+            double[] coords = entity.getCoordinates();
+            int[] chcoords = entity.getChunkCoordinates();
+            int cdx = 0, cdy = 0;
+            if (coords[0] == Chunk.CHUNK_SIZE - 1 && chcoords[0] < size - 1) cdx = 1;
+            if (coords[0] == 0 && chcoords[0] > 0) cdx = -1;
+            if (coords[1] == Chunk.CHUNK_SIZE - 1 && chcoords[1] < size - 1) cdy = 1;
+            if (coords[1] == 0 && chcoords[1] > 0) cdy = -1;
+            System.out.println(coords[0]+", "+cdx+", "+((coords[0] + cdx) % Chunk.CHUNK_SIZE));
+            entity.setCoordinates(
+                    (coords[0] + Chunk.CHUNK_SIZE + cdx) % Chunk.CHUNK_SIZE,
+                    (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE);
+            entity.setChunkCoordinates(chcoords[0] + cdx, chcoords[1] + cdy);
+            if (cdx != 0 || cdy != 0) entity.move(cdx, cdy);
         }));
     }
 
@@ -51,7 +44,7 @@ public class World {
         return chunks[x][y];
     }
 
-    public static Entity getPlayer() {
+    public static Player getPlayer() {
         return player;
     }
 
