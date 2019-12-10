@@ -1,20 +1,22 @@
 package world.entities;
 
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import world.Chunk;
 import world.entities.actions.Action;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.MoveAction;
+import world.entities.animations.Animation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Entity {
 
     private int[] chunk_coordinates;
     private double[] coordinates;
     private int walk_speed, height;
-    private Image sprite;
+
+    private HashMap<String, Animation> animations;
+    private Animation current_animation;
 
     private ArrayList<ActionGroup> action_queue;
 
@@ -24,11 +26,10 @@ public class Entity {
         this.chunk_coordinates = new int[]{0, 0};
         this.coordinates = new double[]{0, 0};
         this.action_queue = new ArrayList<>();
-        try {
-            this.sprite = new Image("assets/player.png", false, Image.FILTER_NEAREST);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+        this.animations = new HashMap<>();
+        this.animations.put("idle", new Animation("player_idle.png", 2, 1));
+        this.animations.put("walking", new Animation("player_walking.png", 4, 3));
+        this.setAnimation("idle");
     }
 
     public void update() {
@@ -39,7 +40,6 @@ public class Entity {
 
     public void queueAction(Action a) {
         a.setParent(this);
-        a.init();
         action_queue.add(new ActionGroup(a));
     }
 
@@ -50,6 +50,11 @@ public class Entity {
 
     public void stopAllActions() {
         action_queue.clear();
+    }
+
+    public void setAnimation(String name) {
+        current_animation = animations.get(name);
+        if (current_animation == null) setAnimation("idle");
     }
 
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
@@ -69,12 +74,9 @@ public class Entity {
     }
 
     public void draw(float sx, float sy, float scale) {
-        sprite.draw(
-                sx + ((float)coordinates[0] * scale * Chunk.TILE_SIZE),
-                sy + ((float)coordinates[1] * scale * Chunk.TILE_SIZE) - (height * Chunk.TILE_SIZE * scale / 2),
-                Chunk.TILE_SIZE * scale,
-                Chunk.TILE_SIZE * scale
-        );
+        float ex = sx + ((float)coordinates[0] * scale * Chunk.TILE_SIZE);
+        float ey = sy + ((float)coordinates[1] * scale * Chunk.TILE_SIZE);
+        current_animation.draw(ex, ey, scale);
     }
 
 }

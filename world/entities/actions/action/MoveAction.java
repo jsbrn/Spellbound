@@ -17,8 +17,9 @@ public class MoveAction extends Action {
     }
 
     @Override
-    public void init() {
+    public void start() {
         this.start = this.getParent().getCoordinates();
+        this.getParent().setAnimation("walking");
     }
 
     @Override
@@ -31,15 +32,11 @@ public class MoveAction extends Action {
     }
 
     @Override
-    public void stop() {
-
-    }
-
-    @Override
     public boolean finished() {
         double[] coordinates = getParent().getCoordinates();
         if (coordinates[0] == target[0] && coordinates[1] == target[1]) {
             EventDispatcher.invoke(new EntityMoveEvent(getParent()));
+            getParent().setAnimation("idle");
             return true;
         }
         return false;
