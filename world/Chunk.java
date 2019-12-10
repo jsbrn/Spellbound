@@ -20,6 +20,8 @@ public class Chunk {
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
         ChunkGenerator generator = ChunkGenerator.get(type);
+        base = generator.generateBase(TILE_SIZE);
+        top = generator.generateObjects(TILE_SIZE);
     }
 
     public void set(int x, int y, byte base, byte top) {

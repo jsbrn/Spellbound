@@ -15,6 +15,7 @@ public class GameScreen extends BasicGameState {
     static StateBasedGame game;
     private Input input;
     private World world;
+    private boolean init;
 
     private Image wood_bg, frame, cursor;
 
@@ -28,12 +29,14 @@ public class GameScreen extends BasicGameState {
     }
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        if (init) return;
         game = sbg;
         Assets.loadTileSprite();
         world = new World(16);
         wood_bg = new Image("assets/wood.png", false, Image.FILTER_NEAREST);
         frame = new Image("assets/frame.png", false, Image.FILTER_NEAREST);
         cursor = new Image("assets/cursor.png", false, Image.FILTER_NEAREST);
+        init = true;
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -66,7 +69,7 @@ public class GameScreen extends BasicGameState {
         if (input.isKeyDown(Input.KEY_S)) dy = 1;
         if (input.isKeyDown(Input.KEY_D)) dx = 1;
 
-        world.getPlayer().move(dx, dy);
+        if (dx != 0 || dy != 0) world.getPlayer().move(dx, dy);
 
     }
 

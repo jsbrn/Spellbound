@@ -31,6 +31,7 @@ public class World {
     }
 
     public void update() {
+        //tile updates and NPC handling to come
         player.move();
     }
 
@@ -39,10 +40,13 @@ public class World {
     }
 
     public void draw(float ox, float oy, float scale, Graphics g) {
-        Chunk current = get(0, 0);
+        Chunk current = get(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
         current.draw(ox, oy, scale);
         player.draw(ox, oy, scale);
-        g.drawString(player.debug(), 0, 0);
+        g.drawString("PLAYER DEBUG = "+ player.debug(), 0, 0);
+        g.drawString("CC = " + player.getChunkCoordinates()[0] + ", " + player.getChunkCoordinates()[1], 0, 20);
+        g.drawString("BASE = " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[0], 0, 40);
+        g.drawString("OBJ = " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[1], 0, 60);
     }
 
 }
