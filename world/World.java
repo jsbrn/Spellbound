@@ -2,6 +2,7 @@ package world;
 
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
+import world.entities.actions.action.SetAnimationAction;
 import world.entities.types.Player;
 import world.events.EventDispatcher;
 import world.events.EventListener;
@@ -30,12 +31,15 @@ public class World {
             if (coords[0] == 0 && chcoords[0] > 0) cdx = -1;
             if (coords[1] == Chunk.CHUNK_SIZE - 1 && chcoords[1] < size - 1) cdy = 1;
             if (coords[1] == 0 && chcoords[1] > 0) cdy = -1;
-            System.out.println(coords[0]+", "+cdx+", "+((coords[0] + cdx) % Chunk.CHUNK_SIZE));
             entity.setCoordinates(
                     (coords[0] + Chunk.CHUNK_SIZE + cdx) % Chunk.CHUNK_SIZE,
                     (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE);
             entity.setChunkCoordinates(chcoords[0] + cdx, chcoords[1] + cdy);
-            if (cdx != 0 || cdy != 0) entity.move(cdx, cdy);
+            if (cdx != 0 || cdy != 0) {
+                entity.queueAction(new SetAnimationAction("walking"));
+                entity.move(cdx, cdy);
+                entity.queueAction(new SetAnimationAction("idle"));
+            }
         }));
     }
 

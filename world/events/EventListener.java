@@ -13,7 +13,6 @@ public class EventListener {
     }
 
     public final EventListener on(String eventClass, EventHandler eventHandler) {
-        System.out.println("Registering handler for event "+eventClass);
         this.eventHandlers.put(eventClass, eventHandler);
         return this;
     }

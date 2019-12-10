@@ -11,7 +11,7 @@ import world.generators.chunk.ChunkType;
 public class Chunk {
 
     public static final int TILE_SIZE = 16;
-    public static final int CHUNK_SIZE = 9;
+    public static final int CHUNK_SIZE = 13;
 
     private byte base[][];
     private byte top[][];
@@ -20,8 +20,8 @@ public class Chunk {
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
         ChunkGenerator generator = ChunkGenerator.get(type);
-        base = generator.generateBase(TILE_SIZE);
-        top = generator.generateObjects(TILE_SIZE);
+        base = generator.generateBase(CHUNK_SIZE);
+        top = generator.generateObjects(CHUNK_SIZE);
     }
 
     public void set(int x, int y, byte base, byte top) {

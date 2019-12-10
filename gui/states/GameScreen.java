@@ -8,7 +8,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import world.Chunk;
 import world.World;
-import world.entities.Entity;
+import world.entities.actions.action.SetAnimationAction;
 
 public class GameScreen extends BasicGameState {
 
@@ -40,19 +40,19 @@ public class GameScreen extends BasicGameState {
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
-        float scale = (Window.getHeight() / (Chunk.TILE_SIZE * Chunk.CHUNK_SIZE) - 1);
+        float scale = (Window.getHeight() / (Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)) - 1;
         float size = scale * Chunk.TILE_SIZE * Chunk.CHUNK_SIZE;
         float ox = (Window.getWidth()/2) - (size / 2);
         float oy = (Window.getHeight() / 2) - (size/2);
 
-        wood_bg.startUse();
-        for (int i = 0; i < Window.getScreenHeight() / wood_bg.getWidth() * scale; i++) {
-            for (int j = 0; j < Window.getScreenHeight() / wood_bg.getHeight(); j++) {
-                wood_bg.drawEmbedded(i * wood_bg.getWidth() * scale, j * wood_bg.getHeight() * scale, wood_bg.getWidth() * scale, wood_bg.getHeight() * scale);
-            }
-        }
-        wood_bg.endUse();
-        frame.draw(ox - (6 * scale), oy - (6 * scale), scale);
+//        wood_bg.startUse();
+//        for (int i = 0; i < Window.getScreenHeight() / wood_bg.getWidth() * scale; i++) {
+//            for (int j = 0; j < Window.getScreenHeight() / wood_bg.getHeight(); j++) {
+//                wood_bg.drawEmbedded(i * wood_bg.getWidth() * scale, j * wood_bg.getHeight() * scale, wood_bg.getWidth() * scale, wood_bg.getHeight() * scale);
+//            }
+//        }
+//        wood_bg.endUse();
+//        frame.draw(ox - (6 * scale), oy - (6 * scale), scale);
         World.draw(ox, oy, scale, g);
 
     }
@@ -74,7 +74,10 @@ public class GameScreen extends BasicGameState {
             dx = 1;
         }
 
-        if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) World.getPlayer().move(dx, dy);
+        if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) {
+            World.getPlayer().queueAction(new SetAnimationAction("walking"));
+            World.getPlayer().move(dx, dy);
+        }
 
     }
 
@@ -87,6 +90,10 @@ public class GameScreen extends BasicGameState {
                 e.printStackTrace();
             }
         }
+
+        if (key == Input.KEY_W || key == Input.KEY_A || key == Input.KEY_S || key == Input.KEY_D)
+            World.getPlayer().queueAction(new SetAnimationAction("idle"));
+
     }
 
     @Override

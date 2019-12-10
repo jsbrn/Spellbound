@@ -40,12 +40,12 @@ public class Entity {
         action_queue.add(new ActionGroup(a));
     }
 
-    public void stopAction() {
+    public void skipAction() {
         if (action_queue.isEmpty()) return;
         action_queue.remove(0);
     }
 
-    public void stopAllActions() {
+    public void clearActions() {
         action_queue.clear();
     }
 
