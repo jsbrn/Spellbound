@@ -4,7 +4,7 @@ import world.entities.Entity;
 
 import java.util.HashMap;
 
-public final class EventListener {
+public class EventListener {
 
     private HashMap<String, EventHandler> eventHandlers;
 

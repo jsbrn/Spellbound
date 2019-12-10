@@ -52,8 +52,9 @@ public class GameScreen extends BasicGameState {
             }
         }
         wood_bg.endUse();
-        //frame.draw(ox - (10 * scale), oy - (10 * scale), scale);
+        frame.draw(ox - (6 * scale), oy - (6 * scale), scale);
         World.draw(ox, oy, scale, g);
+
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {

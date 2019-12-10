@@ -24,7 +24,7 @@ public class Entity {
         this.walk_speed = 3;
         this.height = 1;
         this.chunk_coordinates = new int[]{0, 0};
-        this.coordinates = new double[]{0, 0};
+        this.coordinates = new double[]{1, 1};
         this.action_queue = new ArrayList<>();
         this.animations = new HashMap<>();
         this.animations.put("idle", new Animation("player_idle.png", 2, 1));
@@ -68,6 +68,7 @@ public class Entity {
     }
     public double[] getCoordinates() { return coordinates; }
     public void setCoordinates(double x, double y) { this.coordinates[0] = x; this.coordinates[1] = y; }
+    public void setChunkCoordinates(int x, int y) { this.chunk_coordinates[0] = x; this.chunk_coordinates[1] = y; }
 
     public String debug() {
         return "ACTION_GROUPS_COUNT = " + action_queue.size();
