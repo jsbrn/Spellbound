@@ -20,7 +20,6 @@ public final class EventListener {
 
     protected final void invoke(Event e) {
         for (String clss: eventHandlers.keySet()) {
-            System.out.println(clss+" VS "+e.getClass());
             if (clss.equals(e.getClass().toString())) eventHandlers.get(clss).handle(e);
         }
     }

@@ -14,13 +14,12 @@ public class GameScreen extends BasicGameState {
 
     static StateBasedGame game;
     private Input input;
-    private World world;
     private boolean init;
 
     private Image wood_bg, frame, cursor;
 
     public GameScreen(int state) {
-
+        this.init = false;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class GameScreen extends BasicGameState {
         if (init) return;
         game = sbg;
         Assets.loadTileSprite();
-        world = new World(16);
+        World.init(16);
         wood_bg = new Image("assets/wood.png", false, Image.FILTER_NEAREST);
         frame = new Image("assets/frame.png", false, Image.FILTER_NEAREST);
         cursor = new Image("assets/cursor.png", false, Image.FILTER_NEAREST);
@@ -54,22 +53,27 @@ public class GameScreen extends BasicGameState {
         }
         wood_bg.endUse();
         //frame.draw(ox - (10 * scale), oy - (10 * scale), scale);
-        world.draw(ox, oy, scale, g);
+        World.draw(ox, oy, scale, g);
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
         MiscMath.DELTA_TIME = delta;
         input = gc.getInput();
-        world.update();
+        World.update();
 
         int dx = 0, dy = 0;
-        if (input.isKeyDown(Input.KEY_W))  dy = -1;
-        if (input.isKeyDown(Input.KEY_A)) dx = -1;
-        if (input.isKeyDown(Input.KEY_S)) dy = 1;
-        if (input.isKeyDown(Input.KEY_D)) dx = 1;
+        if (input.isKeyDown(Input.KEY_W)) {
+            dy = -1;
+        } else if (input.isKeyDown(Input.KEY_A)) {
+            dx = -1;
+        } else if (input.isKeyDown(Input.KEY_S)) {
+            dy = 1;
+        } else if (input.isKeyDown(Input.KEY_D)) {
+            dx = 1;
+        }
 
-        if (dx != 0 || dy != 0) world.getPlayer().move(dx, dy);
+        if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) World.getPlayer().move(dx, dy);
 
     }
 
@@ -86,7 +90,12 @@ public class GameScreen extends BasicGameState {
 
     @Override
     public void keyPressed(int key, char c) {
-
+//        if (World.getPlayer().getActionQueue().isEmpty()) {
+//            if (key == Input.KEY_W) World.getPlayer().move(0, -1);
+//            if (key == Input.KEY_A) World.getPlayer().move(-1, 0);
+//            if (key == Input.KEY_S) World.getPlayer().move(0, 1);
+//            if (key == Input.KEY_D) World.getPlayer().move(1, 0);
+//        }
     }
 
 }

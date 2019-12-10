@@ -7,6 +7,7 @@ public class EventDispatcher {
     private static ArrayList<EventListener> listeners;
 
     public static void invoke(Event e) {
+        if (listeners == null) listeners = new ArrayList<>();
         System.out.println("Invoking event " + e.getClass());
         for (EventListener listener: listeners) {
             listener.invoke(e);

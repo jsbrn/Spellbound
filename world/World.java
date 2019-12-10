@@ -8,39 +8,37 @@ import world.generators.world.WorldGenerator;
 
 public class World {
 
-    private int size;
-    private Chunk[][] chunks;
-    private ChunkType[][] chunk_map;
+    private static Chunk[][] chunks;
+    private static ChunkType[][] chunk_map;
 
-    private Entity player;
+    private static Entity player;
 
-    public World(int size) {
-        this.size = size;
-        this.chunks = new Chunk[size][size];
-        this.player = new Entity();
-        generate(new DefaultWorldGenerator());
+    public static void init(int size) {
+        generate(size, new DefaultWorldGenerator());
+        player = new Entity();
+
     }
 
-    public Chunk get(int x, int y) {
+    public static Chunk getChunk(int x, int y) {
         if (chunks[x][y] == null) chunks[x][y] = new Chunk(chunk_map[x][y]);
         return chunks[x][y];
     }
 
-    public Entity getPlayer() {
+    public static Entity getPlayer() {
         return player;
     }
 
-    public void update() {
-        //tile updates and NPC handling to come
-        player.move();
+    public static void update() {
+        player.update();
     }
 
-    public void generate(WorldGenerator generator) {
+    public static void generate(int size, WorldGenerator generator) {
+        chunks = new Chunk[size][size];
         chunk_map = generator.generateChunkMap(size);
     }
 
-    public void draw(float ox, float oy, float scale, Graphics g) {
-        Chunk current = get(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
+    public static void draw(float ox, float oy, float scale, Graphics g) {
+        Chunk current = getChunk(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
         current.draw(ox, oy, scale);
         player.draw(ox, oy, scale);
         g.drawString("PLAYER DEBUG = "+ player.debug(), 0, 0);
