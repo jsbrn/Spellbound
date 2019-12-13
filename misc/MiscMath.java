@@ -2,9 +2,12 @@ package misc;
 
 import org.lwjgl.opengl.Display;
 
+import java.util.Random;
+
 public class MiscMath {
 
     public static int DELTA_TIME = 1;
+    private static Random rng = new Random();
 
     /**
      * Calculate the amount to add per frame to reach a certain value from a certain amount of time.
@@ -184,6 +187,11 @@ public class MiscMath {
         return Math.round(a / b) * b;
     }
 
+    public static double random(double min, double max) {
+        if (max < min) return random(max, min);
+        return min + (Math.random() * (max - min));
+    }
+
     public static boolean linesIntersect(int[] l, int[] l2) {
         if (l == l2) return true;
         if (l.length != 4 || l2.length != 4) return false;
@@ -258,10 +266,10 @@ public class MiscMath {
      * @param rotation The angle, from degrees.
      * @return
      */
-    public static int[] getRotatedOffset(int offset_x, int offset_y, double rotation) {
+    public static float[] getRotatedOffset(double offset_x, double offset_y, double rotation) {
         rotation = Math.toRadians(rotation);
-        return new int[]{(int) (offset_x * Math.cos(rotation) - offset_y * Math.sin(rotation)),
-                (int) (offset_x * Math.sin(rotation) + offset_y * Math.cos(rotation))};
+        return new float[]{(float)(offset_x * Math.cos(rotation) - offset_y * Math.sin(rotation)),
+                (float)(offset_x * Math.sin(rotation) + offset_y * Math.cos(rotation))};
     }
 
     public static double[] calculateVelocity(int x, int y) {

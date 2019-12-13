@@ -8,13 +8,15 @@ public class Animation {
     private Image sprite;
     private int frame_count, original_fps, fps;
     private float frame_width, frame_height;
-    private long startTime;
+    private long start_time;
+    private boolean loop;
 
     public Animation(String image, int frame_count, int fps) {
         try {
             this.frame_count = frame_count;
             this.original_fps = fps;
             this.fps = original_fps;
+            this.start_time = 0;
             this.sprite = new Image("assets/animations/"+image, false, Image.FILTER_NEAREST);
             this.frame_width = this.sprite.getWidth() / (float)frame_count;
             this.frame_height = this.sprite.getHeight();
@@ -23,18 +25,20 @@ public class Animation {
         }
     }
 
-    public void play() {
-        this.fps = original_fps;
+    private int getFrame() {
+        int mills = (int)((System.currentTimeMillis() - start_time) % 1000);
+        int frame = (mills / (1000 / (frame_count * fps))) % frame_count;
+        return frame;
     }
 
-    public void play(int fps) {
-        this.startTime = System.currentTimeMillis();
-        this.fps = fps;
+    public int loopCount() {
+        return (int)((System.currentTimeMillis() - start_time) / 1000);
     }
+
+    public boolean finished() { return !loop && loopCount() > 0; }
 
     public void draw(float ex, float ey, float scale) {
-        int mills = (int)((System.currentTimeMillis() - startTime) % 1000);
-        int frame = mills / (1000 / (frame_count * fps));
+        int frame = getFrame();
         sprite.startUse();
         float y_offset = -(frame_height * scale / 2);
         sprite.drawEmbedded(

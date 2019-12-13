@@ -9,12 +9,15 @@ import org.newdawn.slick.state.StateBasedGame;
 import world.Chunk;
 import world.World;
 import world.entities.actions.action.SetAnimationAction;
+import world.particles.ParticleSource;
 
 public class GameScreen extends BasicGameState {
 
     static StateBasedGame game;
     private Input input;
     private boolean init;
+
+    private ParticleSource particleSource;
 
     private Image wood_bg, frame, cursor;
 
@@ -32,6 +35,9 @@ public class GameScreen extends BasicGameState {
         game = sbg;
         Assets.loadTileSprite();
         World.init(16);
+
+        this.particleSource = new ParticleSource();
+
         wood_bg = new Image("assets/wood.png", false, Image.FILTER_NEAREST);
         frame = new Image("assets/frame.png", false, Image.FILTER_NEAREST);
         cursor = new Image("assets/cursor.png", false, Image.FILTER_NEAREST);
@@ -54,6 +60,13 @@ public class GameScreen extends BasicGameState {
 //        wood_bg.endUse();
 //        frame.draw(ox - (6 * scale), oy - (6 * scale), scale);
         World.draw(ox, oy, scale, g);
+
+        particleSource.draw(ox, oy, scale, g);
+        particleSource.setCoordinates(
+                (gc.getInput().getMouseX() - ox) / scale,
+                (gc.getInput().getMouseY() - oy) / scale);
+
+        g.drawString(particleSource.debug(), 0, 70);
 
     }
 
@@ -79,6 +92,8 @@ public class GameScreen extends BasicGameState {
             World.getPlayer().move(dx, dy);
         }
 
+        particleSource.update();
+
     }
 
     @Override
@@ -98,12 +113,10 @@ public class GameScreen extends BasicGameState {
 
     @Override
     public void keyPressed(int key, char c) {
-//        if (World.getPlayer().getActionQueue().isEmpty()) {
-//            if (key == Input.KEY_W) World.getPlayer().move(0, -1);
-//            if (key == Input.KEY_A) World.getPlayer().move(-1, 0);
-//            if (key == Input.KEY_S) World.getPlayer().move(0, 1);
-//            if (key == Input.KEY_D) World.getPlayer().move(1, 0);
-//        }
+
+        if (World.getPlayer().getActionQueue().isEmpty()) {
+            if (key == Input.KEY_C) World.getPlayer().setAnimation("casting");
+        }
     }
 
 }

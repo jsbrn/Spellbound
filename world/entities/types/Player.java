@@ -9,6 +9,7 @@ public class Player extends Entity {
         super();
         this.addAnimation("idle", new Animation("player_idle.png", 2, 1));
         this.addAnimation("walking", new Animation("player_walking.png", 4, 3));
+        this.addAnimation("casting", new Animation("player_casting.png", 5, 2));
         this.setAnimation("idle");
     }
 
