@@ -192,6 +192,25 @@ public class MiscMath {
         return min + (Math.random() * (max - min));
     }
 
+    /**
+     * Returns a rotated point about the origin (0, 0).
+     *
+     * @param offset_x The x coord.
+     * @param offset_y The y coord.
+     * @param rotation The angle, from degrees.
+     * @return
+     */
+    public static float[] getRotatedOffset(double offset_x, double offset_y, double rotation) {
+        rotation = Math.toRadians(rotation);
+        return new float[]{(float)(offset_x * Math.cos(rotation) - offset_y * Math.sin(rotation)),
+                (float)(offset_x * Math.sin(rotation) + offset_y * Math.cos(rotation))};
+    }
+
+    public static double[] calculateVelocity(int x, int y) {
+        double dt = distance(0, 0, x, y);
+        return new double[]{dt != 0 ? x / dt : 0, dt != 0 ? y / dt : 0};
+    }
+
     public static boolean linesIntersect(int[] l, int[] l2) {
         if (l == l2) return true;
         if (l.length != 4 || l2.length != 4) return false;
@@ -257,68 +276,5 @@ public class MiscMath {
         }
         return false;
     }
-
-    /**
-     * Returns a rotated point about the origin (0, 0).
-     *
-     * @param offset_x The x coord.
-     * @param offset_y The y coord.
-     * @param rotation The angle, from degrees.
-     * @return
-     */
-    public static float[] getRotatedOffset(double offset_x, double offset_y, double rotation) {
-        rotation = Math.toRadians(rotation);
-        return new float[]{(float)(offset_x * Math.cos(rotation) - offset_y * Math.sin(rotation)),
-                (float)(offset_x * Math.sin(rotation) + offset_y * Math.cos(rotation))};
-    }
-
-    public static double[] calculateVelocity(int x, int y) {
-        double dt = distance(0, 0, x, y);
-        return new double[]{dt != 0 ? x / dt : 0, dt != 0 ? y / dt : 0};
-    }
-
-    /*public static double[] getWorldCoords(int onscreen_x, int onscreen_y) {
-        return new double[]{((onscreen_x - (Display.getWidth() / 2)) / Camera.getZoom()) + Camera.getX(),
-                ((onscreen_y - (Display.getHeight() / 2)) / Camera.getZoom()) + Camera.getY()};
-    }
-
-    public static int[] getOnscreenCoords(double world_x, double world_y) {
-        return new int[]{(int) round((world_x - Camera.getX()) * Camera.getZoom(), 1) + (Display.getWidth() / 2),
-                (int) round((world_y - Camera.getY()) * Camera.getZoom(), 1) + (Display.getHeight() / 2)};
-    }
-
-    public static int[] getSectorCoords(double world_x, double world_y) {
-        return new int[]{(int) Math.floor(world_x / Sector.sizePixels()),
-                (int) Math.floor(world_y / Sector.sizePixels())};
-    }
-
-    public static int[] getChunkCoords(double world_x, double world_y) {
-        int[] cc = new int[]{(int) Math.floor(world_x / Chunk.sizePixels()),
-                (int) Math.floor(world_y / Chunk.sizePixels())};
-        cc[0] %= Sector.sizeChunks();
-        cc[1] %= Sector.sizeChunks();
-        cc[0] = cc[0] >= 0 ? cc[0] : Sector.sizeChunks() + cc[0];
-        cc[1] = cc[1] >= 0 ? cc[1] : Sector.sizeChunks() + cc[1];
-        return cc;
-    }
-
-    public static int[] getMapCoords(int sector_x, int sector_y, int chunk_x, int chunk_y) {
-        int[] origin = {Sector.sizeChunks() * World.getWorld().size() / 2,
-                Sector.sizeChunks() * World.getWorld().size() / 2};
-        return new int[]{origin[0] + (Sector.sizeChunks() * sector_x) + chunk_x,
-                origin[1] + (Sector.sizeChunks() * sector_y) + chunk_y};
-    }
-
-    public static int[] getMapCoords(double world_x, double world_y) {
-        int[] sc = getSectorCoords(world_x, world_y);
-        int[] cc = getChunkCoords(world_x, world_y);
-        return getMapCoords(sc[0], sc[1], cc[0], cc[1]);
-    }
-
-    public static int[] getWorldCoordsFromMap(int x, int y) {
-        int[] c = new int[]{(x - (Sector.sizeChunks() * World.getWorld().size() / 2)) * Chunk.sizePixels(),
-                (y - (Sector.sizeChunks() * World.getWorld().size() / 2)) * Chunk.sizePixels()};
-        return c;
-    }*/
 
 }

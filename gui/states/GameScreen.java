@@ -59,12 +59,13 @@ public class GameScreen extends BasicGameState {
 //        }
 //        wood_bg.endUse();
 //        frame.draw(ox - (6 * scale), oy - (6 * scale), scale);
+
         World.draw(ox, oy, scale, g);
 
-        particleSource.draw(ox, oy, scale, g);
-        particleSource.setCoordinates(
-                (gc.getInput().getMouseX() - ox) / scale,
-                (gc.getInput().getMouseY() - oy) / scale);
+        this.particleSource.draw(ox, oy, scale, g);
+        this.particleSource.setCoordinates(
+                (gc.getInput().getMouseX() - ox) / scale / Chunk.TILE_SIZE,
+                (gc.getInput().getMouseY() - oy) / scale / Chunk.TILE_SIZE);
 
         g.drawString(particleSource.debug(), 0, 70);
 
@@ -92,7 +93,7 @@ public class GameScreen extends BasicGameState {
             World.getPlayer().move(dx, dy);
         }
 
-        particleSource.update();
+        this.particleSource.update();
 
     }
 
