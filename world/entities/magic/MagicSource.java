@@ -14,13 +14,15 @@ public class MagicSource {
     private ArrayList<Technique> techniques;
     private ParticleSource body;
     private double[] castCoordinates, moveTarget;
-    private double moveSpeed;
+    private double moveSpeed, rotateSpeed, targetDirection;
     private MagicSource next;
 
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques) {
         this.castCoordinates = new double[]{x, y};
-        this.moveTarget = new double[]{x, y};
-        this.moveSpeed = 5;
+        this.moveTarget = new double[]{caster.getCoordinates()[0] + 0.5, caster.getCoordinates()[1]};
+        this.targetDirection = 0;
+        this.moveSpeed = 0.5;
+        this.rotateSpeed = 360;
         this.caster = caster;
         this.techniques = techniques;
         this.body = new ParticleSource();
@@ -37,6 +39,9 @@ public class MagicSource {
             unitVector[0] * MiscMath.getConstant(moveSpeed, 1),
             unitVector[1] * MiscMath.getConstant(moveSpeed, 1)
         );
+
+        double rdx = rotateSpeed; //Math.min(rotateSpeed, Math.abs(targetDirection - body.getDirection()));
+        body.addDirection(MiscMath.getConstant(targetDirection > body.getDirection() ? rdx : -rdx, 1));
         body.update();
     }
 
@@ -51,6 +56,13 @@ public class MagicSource {
     public void setMoveTarget(double x, double y) {
         moveTarget[0] = x;
         moveTarget[1] = y;
+    }
+
+    public double getRotationSpeed() { return rotateSpeed; }
+    public double getTargetDirection() { return targetDirection; }
+
+    public void setTargetDirection(double angle) {
+        this.targetDirection = angle;
     }
 
     public ParticleSource getBody() { return body; }

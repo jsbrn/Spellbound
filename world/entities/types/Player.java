@@ -22,7 +22,9 @@ public class Player extends Entity {
         this.spellbook = new Spellbook();
 
         Spell testSpell = new Spell();
-        testSpell.addTechnique(Technique.create(TechniqueName.PROPEL));
+        testSpell.addTechnique(Technique.create(TechniqueName.SPIN));
+        testSpell.addTechnique(Technique.create(TechniqueName.GRAVITATE));
+        testSpell.addTechnique(Technique.create(TechniqueName.POINT));
         this.spellbook.addSpell(testSpell);
 
     }

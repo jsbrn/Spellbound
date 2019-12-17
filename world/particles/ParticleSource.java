@@ -13,28 +13,37 @@ public class ParticleSource {
 
     private double[] coordinates;
     private double direction, minRadius, maxRadius, fov, particleVelocity;
-    private int ratePerFrame, particlesRemaining;
+    private int ratePerSecond, particlesRemaining;
     private EmissionMode emissionMode;
     private Color[] colors;
+
+    private long lastParticleSpawn;
 
     private ArrayList<Particle> particles;
 
     public ParticleSource() {
+        this.lastParticleSpawn = System.currentTimeMillis();
         this.coordinates = new double[2];
         this.direction = 0;
         this.minRadius = 0;
         this.maxRadius = 0.25f;
-        this.particlesRemaining = 500;
-        this.ratePerFrame = 10;
+        this.particlesRemaining = 200;
+        this.ratePerSecond = 100;
         this.fov = 360;
         this.particleVelocity = 0.5f;
         this.emissionMode = EmissionMode.RADIATE;
-        this.colors = new Color[]{Color.red, Color.yellow, Color.orange};
+        this.colors = new Color[]{Color.white, Color.gray, Color.lightGray};
         this.particles = new ArrayList<>();
     }
 
     public void update() {
-        for (int i = 0; i < ratePerFrame; i++) {
+
+        if (particlesRemaining <= 0) return;
+
+        int amountToSpawn = (int)((System.currentTimeMillis() - lastParticleSpawn) / (1000 / ratePerSecond));
+
+        for (int i = 0; i < amountToSpawn; i++) {
+            lastParticleSpawn = System.currentTimeMillis();
             particlesRemaining--;
             double pdir = direction + MiscMath.random(-fov/2, fov/2);
             double[] p_off = MiscMath.getRotatedOffset(
@@ -101,9 +110,10 @@ public class ParticleSource {
 
     public boolean isDepleted() { return particlesRemaining <= 0 && particles.size() == 0; }
 
-    public void setCoordinates(double x, double y) {
-        this.coordinates[0] = x;
-        this.coordinates[1] = y;
+    public double getDirection() { return direction; }
+
+    public void addDirection(double angle) {
+        setDirection(direction + angle);
     }
 
     public void setDirection(double angle) {
@@ -112,9 +122,20 @@ public class ParticleSource {
 
     public double[] getCoordinates() { return coordinates; }
 
+    public void setCoordinates(double x, double y) {
+        this.coordinates[0] = x;
+        this.coordinates[1] = y;
+    }
+
     public void addCoordinates(double dx, double dy) {
         setCoordinates(coordinates[0] + dx, coordinates[1] + dy);
     }
+
+    public void setArcLength(double degrees) { this.fov = degrees; }
+
+    public double getArcLength() { return fov; }
+
+    public void setEmissionMode(EmissionMode emissionMode) { this.emissionMode = emissionMode; }
 
     public String debug() {
         double[] pos = MiscMath.getRotatedOffset(
@@ -160,8 +181,4 @@ class Particle {
         return new double[]{ origin[0] + startOffset[0] + offset[0], origin[1] + startOffset[1] + offset[1] };
     }
 
-}
-
-enum EmissionMode {
-    RADIATE, GRAVITATE, SCATTER
 }
