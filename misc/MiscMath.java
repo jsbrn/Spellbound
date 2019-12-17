@@ -206,9 +206,9 @@ public class MiscMath {
                 (float)(offset_x * Math.sin(rotation) + offset_y * Math.cos(rotation))};
     }
 
-    public static double[] calculateVelocity(int x, int y) {
-        double dt = distance(0, 0, x, y);
-        return new double[]{dt != 0 ? x / dt : 0, dt != 0 ? y / dt : 0};
+    public static float[] getUnitVector(float x, float y) {
+        float dt = (float)distance(0, 0, x, y);
+        return new float[]{dt != 0 ? x / dt : 0, dt != 0 ? y / dt : 0};
     }
 
     public static boolean linesIntersect(int[] l, int[] l2) {

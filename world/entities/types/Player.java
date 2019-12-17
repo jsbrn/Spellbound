@@ -2,8 +2,11 @@ package world.entities.types;
 
 import world.entities.Entity;
 import world.entities.animations.Animation;
+import world.entities.magic.Spellbook;
 
 public class Player extends Entity {
+
+    private Spellbook spellbook;
 
     public Player() {
         super();
