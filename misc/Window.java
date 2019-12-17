@@ -8,6 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.imageout.ImageOut;
+import world.Chunk;
 
 import java.io.File;
 import java.util.Calendar;
@@ -69,6 +70,10 @@ public class Window {
         } catch (SlickException ex) {
 
         }
+    }
+
+    public static float getScale() {
+        return (float)(Window.getHeight() / (Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)) - 1;
     }
 
     public static int getFPS() {

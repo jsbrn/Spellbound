@@ -46,10 +46,7 @@ public class GameScreen extends BasicGameState {
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
-        float scale = (Window.getHeight() / (Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)) - 1;
-        float size = scale * Chunk.TILE_SIZE * Chunk.CHUNK_SIZE;
-        float ox = (Window.getWidth()/2) - (size / 2);
-        float oy = (Window.getHeight() / 2) - (size/2);
+
 
 //        wood_bg.startUse();
 //        for (int i = 0; i < Window.getScreenHeight() / wood_bg.getWidth() * scale; i++) {
@@ -60,12 +57,13 @@ public class GameScreen extends BasicGameState {
 //        wood_bg.endUse();
 //        frame.draw(ox - (6 * scale), oy - (6 * scale), scale);
 
-        World.draw(ox, oy, scale, g);
+        float[] origin = MiscMath.getWorldOnscreenOrigin();
+        double[] mouse_wcoords = MiscMath.getWorldCoordinates(gc.getInput().getMouseX(), gc.getInput().getMouseY());
 
-        this.particleSource.draw(ox, oy, scale, g);
-        this.particleSource.setCoordinates(
-                (gc.getInput().getMouseX() - ox) / scale / Chunk.TILE_SIZE,
-                (gc.getInput().getMouseY() - oy) / scale / Chunk.TILE_SIZE);
+        World.draw(origin[0], origin[1], Window.getScale(), g);
+
+        this.particleSource.draw(origin[0], origin[1], Window.getScale(), g);
+        this.particleSource.setCoordinates(mouse_wcoords[0], mouse_wcoords[1]);
 
         g.drawString(particleSource.debug(), 0, 70);
 
@@ -113,11 +111,14 @@ public class GameScreen extends BasicGameState {
     }
 
     @Override
+    public void mouseClicked(int button, int x, int y, int clickCount) {
+        double[] mouse_wcoords = MiscMath.getWorldCoordinates(x, y);
+        World.getPlayer().getSpellbook().getSpell(0).cast(mouse_wcoords[0], mouse_wcoords[1], World.getPlayer());
+    }
+
+    @Override
     public void keyPressed(int key, char c) {
 
-        if (World.getPlayer().getActionQueue().isEmpty()) {
-            if (key == Input.KEY_C) World.getPlayer().setAnimation("casting");
-        }
     }
 
 }

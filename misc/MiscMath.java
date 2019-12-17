@@ -1,6 +1,7 @@
 package misc;
 
 import org.lwjgl.opengl.Display;
+import world.Chunk;
 
 import java.util.Random;
 
@@ -200,15 +201,15 @@ public class MiscMath {
      * @param rotation The angle, from degrees.
      * @return
      */
-    public static float[] getRotatedOffset(double offset_x, double offset_y, double rotation) {
+    public static double[] getRotatedOffset(double offset_x, double offset_y, double rotation) {
         rotation = Math.toRadians(rotation);
-        return new float[]{(float)(offset_x * Math.cos(rotation) - offset_y * Math.sin(rotation)),
-                (float)(offset_x * Math.sin(rotation) + offset_y * Math.cos(rotation))};
+        return new double[]{offset_x * Math.cos(rotation) - offset_y * Math.sin(rotation),
+                offset_x * Math.sin(rotation) + offset_y * Math.cos(rotation)};
     }
 
-    public static float[] getUnitVector(float x, float y) {
-        float dt = (float)distance(0, 0, x, y);
-        return new float[]{dt != 0 ? x / dt : 0, dt != 0 ? y / dt : 0};
+    public static double[] getUnitVector(double x, double y) {
+        double dt = distance(0, 0, x, y);
+        return new double[]{dt != 0 ? x / dt : 0, dt != 0 ? y / dt : 0};
     }
 
     public static boolean linesIntersect(int[] l, int[] l2) {
@@ -275,6 +276,20 @@ public class MiscMath {
             if (p4[0] >= p1[0] && p4[0] <= p2[0]) return true;
         }
         return false;
+    }
+
+    public static float[] getWorldOnscreenOrigin() {
+        float scale = Window.getScale();
+        float size = scale * Chunk.TILE_SIZE * Chunk.CHUNK_SIZE;
+        float ox = (Window.getWidth()/2) - (size / 2);
+        float oy = (Window.getHeight() / 2) - (size/2);
+        return new float[]{ox, oy};
+    }
+
+    public static double[] getWorldCoordinates(int osx, int osy) {
+        float[] world_origin = getWorldOnscreenOrigin();
+        return new double[]{(osx - world_origin[0]) / Window.getScale() / Chunk.TILE_SIZE,
+                (osy - world_origin[1]) / Window.getScale() / Chunk.TILE_SIZE};
     }
 
 }

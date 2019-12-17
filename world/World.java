@@ -3,6 +3,7 @@ package world;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.actions.action.SetAnimationAction;
+import world.entities.magic.MagicSource;
 import world.entities.types.Player;
 import world.events.EventDispatcher;
 import world.events.EventListener;
@@ -11,16 +12,20 @@ import world.generators.chunk.ChunkType;
 import world.generators.world.DefaultWorldGenerator;
 import world.generators.world.WorldGenerator;
 
+import java.util.ArrayList;
+
 public class World {
 
     private static Chunk[][] chunks;
     private static ChunkType[][] chunk_map;
 
     private static Player player;
+    private static ArrayList<MagicSource> magic_sources;
 
     public static void init(int size) {
         generate(size, new DefaultWorldGenerator());
         player = new Player();
+        magic_sources = new ArrayList<>();
         EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), e -> {
             EntityMoveEvent event = (EntityMoveEvent) e;
             Entity entity = event.getEntity();
@@ -52,8 +57,17 @@ public class World {
         return player;
     }
 
+    public static void addMagicSource(MagicSource magicSource) {
+        magic_sources.add(magicSource);
+    }
+
     public static void update() {
         player.update();
+        for (int i = magic_sources.size() - 1; i >= 0; i--) {
+            MagicSource magicSource = magic_sources.get(i);
+            magicSource.update();
+            if (magicSource.getBody().isDepleted()) magic_sources.remove(i);
+        }
     }
 
     public static void generate(int size, WorldGenerator generator) {
@@ -65,10 +79,13 @@ public class World {
         Chunk current = getChunk(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
         current.draw(ox, oy, scale);
         player.draw(ox, oy, scale);
-        g.drawString("PLAYER DEBUG = "+ player.debug(), 0, 0);
-        g.drawString("CC = " + player.getChunkCoordinates()[0] + ", " + player.getChunkCoordinates()[1], 0, 20);
-        g.drawString("BASE = " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[0], 0, 40);
-        g.drawString("OBJ = " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[1], 0, 60);
+        for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(ox, oy, scale, g);
+
+        g.drawString("PLAYER DEBUG: "+ player.debug(), 0, 0);
+        g.drawString("CC: " + player.getChunkCoordinates()[0] + ", " + player.getChunkCoordinates()[1], 0, 20);
+        g.drawString("BASE: " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[0], 0, 40);
+        g.drawString("OBJ: " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[1], 0, 60);
+        g.drawString("MAGIC_SOURCES: "+magic_sources.size(), 0, 90);
     }
 
 }
