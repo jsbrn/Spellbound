@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public final class GUI {
 
     private ArrayList<GUIElement> elements;
-    private GUIElement focused;
 
     public GUI() {
         this.elements = new ArrayList<>();
@@ -17,6 +16,13 @@ public final class GUI {
     public boolean sendClick(int osx, int osy) {
         for (int i = elements.size() - 1; i >= 0; i--)
             if (elements.get(i).onClick((int)(osx/Window.getScale()), (int)(osy/Window.getScale())))
+                return true;
+        return false;
+    }
+
+    public boolean sendKeyStroke(int key) {
+        for (int i = elements.size() - 1; i >= 0; i--)
+            if (elements.get(i).onKeyPress(key))
                 return true;
         return false;
     }

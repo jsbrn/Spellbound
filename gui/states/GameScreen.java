@@ -4,7 +4,6 @@ import assets.Assets;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.GUIElement;
-import gui.elements.Backdrop;
 import gui.elements.Hotbar;
 import gui.elements.Statusbar;
 import misc.MiscMath;
@@ -37,8 +36,7 @@ public class GameScreen extends BasicGameState {
         if (init) return;
         game = sbg;
         gui = new GUI();
-        gui.addChild(new Backdrop(), 0, 0, GUIAnchor.TOP_LEFT);
-        GUIElement statusbar = new Statusbar(World.getPlayer()).addChild(new Hotbar(), 0, 32, GUIAnchor.TOP_LEFT);
+        GUIElement statusbar = new Statusbar(World.getPlayer()).addChild(new Hotbar(World.getPlayer()), 0, 32, GUIAnchor.TOP_LEFT);
         gui.addChild(statusbar, 1, 1, GUIAnchor.TOP_LEFT);
         Assets.loadTileSprite();
         World.init(16);
@@ -49,9 +47,8 @@ public class GameScreen extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
         float[] origin = MiscMath.getWorldOnscreenOrigin();
-        gui.draw(g);
         World.draw(origin[0], origin[1], Window.getScale(), g);
-
+        gui.draw(g);
 
     }
 

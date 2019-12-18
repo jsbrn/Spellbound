@@ -20,7 +20,7 @@ public class Statusbar extends GUIElement {
         try {
             this.image = new Image("assets/gui/statusbar.png", false, Image.FILTER_NEAREST);
             this.healthColor = new Color(1f, 0f, 0f, 0.5f);
-            this.manaColor = new Color(0f, 0f, 1f, 0.5f);
+            this.manaColor = new Color(210, 100, 185, 100);
         } catch (SlickException e) {
             e.printStackTrace();
         }

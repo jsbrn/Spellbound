@@ -33,7 +33,7 @@ public class Chunk {
         return new byte[]{this.base[x][y], this.top[x][y]};
     }
 
-    public void draw(float sx, float sy, float scale) {
+    public void draw(float sx, float sy, float scale, Color filter) {
         Assets.TILES.startUse();
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
@@ -50,7 +50,7 @@ public class Chunk {
                         btx,
                         0,
                         btx + TILE_SIZE,
-                        TILE_SIZE);
+                        TILE_SIZE, filter);
                 Assets.TILES.drawEmbedded(
                         ox,
                         oy - (TILE_SIZE / 2 * scale),
@@ -59,7 +59,7 @@ public class Chunk {
                         ttx,
                         0,
                         ttx + TILE_SIZE,
-                        TILE_SIZE);
+                        TILE_SIZE, filter);
                 //Assets.TILES.draw(sx + (i * TILE_SIZE * scale), sy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale, Color.white);
 
             }

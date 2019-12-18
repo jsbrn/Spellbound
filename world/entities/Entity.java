@@ -22,7 +22,7 @@ public class Entity {
 
     public Entity() {
         this.walk_speed = 3;
-        this.chunk_coordinates = new int[]{0, 0};
+        this.chunk_coordinates = new int[]{1, 1};
         this.coordinates = new double[]{1, 1};
         this.action_queue = new ArrayList<>();
         this.animations = new HashMap<>();

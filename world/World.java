@@ -1,5 +1,7 @@
 package world;
 
+import misc.Window;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.actions.action.SetAnimationAction;
@@ -49,8 +51,17 @@ public class World {
     }
 
     public static Chunk getChunk(int x, int y) {
+        if (x < 0 || x >= chunk_map.length || y < 0 || y >= chunk_map[0].length) return null;
         if (chunks[x][y] == null) chunks[x][y] = new Chunk(chunk_map[x][y]);
         return chunks[x][y];
+    }
+
+    public static Chunk[][] getAdjacentChunks(int x, int y) {
+        return new Chunk[][]{
+            new Chunk[]{ getChunk( x-1, y-1), getChunk(x-1, y), getChunk(x-1, y+1) },
+            new Chunk[]{ getChunk( x, y-1), getChunk(x, y), getChunk(x, y+1) },
+            new Chunk[]{ getChunk( x+1, y-1), getChunk(x+1, y), getChunk(x+1, y+1) }
+        };
     }
 
     public static Player getPlayer() {
@@ -77,7 +88,21 @@ public class World {
 
     public static void draw(float ox, float oy, float scale, Graphics g) {
         Chunk current = getChunk(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
-        current.draw(ox, oy, scale);
+        Chunk[][] adjacent = getAdjacentChunks(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
+        float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
+        Color faded = new Color(0.2f, 0.2f, 0.2f);
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk adj = adjacent[i+1][j+1];
+                if (adj == null) continue;
+                float osx = ox + (i * chunk_size), osy = oy + (j * chunk_size);
+                adj.draw(
+                        osx,
+                        osy,
+                        Window.getScale(),
+                        i == 0 && j == 0 ? Color.white : faded);
+            }
+        }
         player.draw(ox, oy, scale);
         for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(ox, oy, scale, g);
     }
