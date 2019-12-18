@@ -1,5 +1,7 @@
 package world.entities.actions;
 
+import world.entities.Entity;
+
 import java.util.ArrayList;
 
 public final class ActionGroup {
@@ -24,6 +26,10 @@ public final class ActionGroup {
         if (!actions.get(0).started()) actions.get(0).start();
         actions.get(0).update();
         if (actions.get(0).finished()) actions.remove(0);
+    }
+
+    public void setParent(Entity parent) {
+        for (Action a: actions) a.setParent(parent);
     }
 
     public boolean finished() {

@@ -20,7 +20,7 @@ public class Statusbar extends GUIElement {
         try {
             this.image = new Image("assets/gui/statusbar.png", false, Image.FILTER_NEAREST);
             this.healthColor = new Color(1f, 0f, 0f, 0.5f);
-            this.manaColor = new Color(210, 100, 185, 100);
+            this.manaColor = new Color(220, 25, 225, 255/2);
         } catch (SlickException e) {
             e.printStackTrace();
         }
@@ -32,12 +32,17 @@ public class Statusbar extends GUIElement {
     }
 
     @Override
-    public boolean onClick(int ogx, int ogy) {
+    public boolean onMouseRelease(int ogx, int ogy) {
         return false;
     }
 
     @Override
-    public boolean onKeyPress(int key) {
+    public boolean onKeyDown(int key) {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int key) {
         return false;
     }
 
@@ -45,9 +50,9 @@ public class Statusbar extends GUIElement {
     protected void drawBuffered(Graphics b) {
         b.drawImage(image, 0, 0);
         b.setColor(healthColor);
-        b.fillRect(15, 7, 32, 3);
+        b.fillRect(15, 7, (int)(32 * (target.getHP() / target.getMaxHP())), 3);
         b.setColor(manaColor);
-        b.fillRect(15, 14, 32, 3);
+        b.fillRect(15, 14, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
     }
 
 }

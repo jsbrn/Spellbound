@@ -10,9 +10,10 @@ public abstract class Action {
     public final void setParent(Entity e) { this.parent = e; }
     public final Entity getParent() { return this.parent; }
 
-    public abstract void start();
+    public abstract void onStart();
     public abstract void update();
     public abstract boolean finished();
+    public final void start() { this.onStart(); started = true; }
     public final boolean started() { return started; }
 
 }

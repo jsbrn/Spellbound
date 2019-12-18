@@ -5,13 +5,15 @@ import world.entities.actions.Action;
 public class SetAnimationAction extends Action {
 
     private String anim;
+    private boolean wait;
 
-    public SetAnimationAction(String name) {
+    public SetAnimationAction(String name, boolean waitUntilFinished) {
         this.anim = name;
+        this.wait = waitUntilFinished;
     }
 
     @Override
-    public void start() {
+    public void onStart() {
         getParent().setAnimation(anim);
     }
 
@@ -22,7 +24,7 @@ public class SetAnimationAction extends Action {
 
     @Override
     public boolean finished() {
-        return true;
+        return !wait || getParent().getAnimation(anim).finished();
     }
 
 }

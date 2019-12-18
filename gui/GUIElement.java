@@ -49,8 +49,9 @@ public abstract class GUIElement {
 
     public final void setParent(GUIElement parent) { this.parent = parent; }
 
-    public abstract boolean onClick(int ogx, int ogy);
-    public abstract boolean onKeyPress(int key);
+    public abstract boolean onMouseRelease(int ogx, int ogy);
+    public abstract boolean onKeyDown(int key);
+    public abstract boolean onKeyUp(int key);
 
     public final void draw(Graphics g) {
         try {

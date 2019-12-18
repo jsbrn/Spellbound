@@ -13,7 +13,7 @@ public class Entity {
 
     private int[] chunk_coordinates;
     private double[] coordinates;
-    private int walk_speed;
+    private int moveSpeed;
 
     private HashMap<String, Animation> animations;
     private Animation current_animation;
@@ -21,7 +21,7 @@ public class Entity {
     private ArrayList<ActionGroup> action_queue;
 
     public Entity() {
-        this.walk_speed = 3;
+        this.moveSpeed = 3;
         this.chunk_coordinates = new int[]{1, 1};
         this.coordinates = new double[]{1, 1};
         this.action_queue = new ArrayList<>();
@@ -34,12 +34,16 @@ public class Entity {
         if (action_queue.get(0).finished()) action_queue.remove(0);
     }
 
-    public void queueAction(Action a) {
-        a.setParent(this);
-        action_queue.add(new ActionGroup(a));
+    public void queueActions(ActionGroup actions) {
+        this.action_queue.add(actions);
+        actions.setParent(this);
     }
 
-    public void skipAction() {
+    public void queueAction(Action a) {
+        queueActions(new ActionGroup(a));
+    }
+
+    public void skipCurrentAction() {
         if (action_queue.isEmpty()) return;
         action_queue.remove(0);
     }
@@ -51,16 +55,22 @@ public class Entity {
     public void setAnimation(String name) {
         current_animation = animations.get(name);
         if (current_animation == null) setAnimation("idle");
+        current_animation.reset();
     }
 
     public void addAnimation(String name, Animation a) {
         this.animations.put(name, a);
     }
 
+    public Animation getAnimation(String name) { return this.animations.get(name); }
+
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
-    public void move(double tx, double ty) {
-        queueAction(new MoveAction((int)coordinates[0] + tx, (int)coordinates[1] + ty, walk_speed));
+    public void move(double tx, double ty, int times) {
+        ActionGroup movement = new ActionGroup();
+        for (int i = 0; i < times; i++)
+            movement.add(new MoveAction((int)coordinates[0] + (tx * (i + 1)), (int)coordinates[1] + (ty * (i + 1)), moveSpeed));
+        queueActions(movement);
     }
 
     public int[] getChunkCoordinates() {

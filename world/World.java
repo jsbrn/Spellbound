@@ -43,9 +43,9 @@ public class World {
                     (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE);
             entity.setChunkCoordinates(chcoords[0] + cdx, chcoords[1] + cdy);
             if (cdx != 0 || cdy != 0) {
-                entity.queueAction(new SetAnimationAction("walking"));
-                entity.move(cdx, cdy);
-                entity.queueAction(new SetAnimationAction("idle"));
+                entity.queueAction(new SetAnimationAction("walking", false));
+                entity.move(cdx, cdy, 1);
+                entity.queueAction(new SetAnimationAction("idle", false));
             }
         }));
     }

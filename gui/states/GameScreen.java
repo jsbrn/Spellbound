@@ -17,7 +17,7 @@ import world.entities.actions.action.SetAnimationAction;
 public class GameScreen extends BasicGameState {
 
     static StateBasedGame game;
-    private Input input;
+    private static Input input;
     private boolean init;
 
     private GUI gui;
@@ -32,14 +32,13 @@ public class GameScreen extends BasicGameState {
     }
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
         if (init) return;
+        World.init(16);
         game = sbg;
         gui = new GUI();
         GUIElement statusbar = new Statusbar(World.getPlayer()).addChild(new Hotbar(World.getPlayer()), 0, 32, GUIAnchor.TOP_LEFT);
         gui.addChild(statusbar, 1, 1, GUIAnchor.TOP_LEFT);
         Assets.loadTileSprite();
-        World.init(16);
 
         init = true;
     }
@@ -58,26 +57,11 @@ public class GameScreen extends BasicGameState {
         input = gc.getInput();
         World.update();
 
-        int dx = 0, dy = 0;
-        if (input.isKeyDown(Input.KEY_W)) {
-            dy = -1;
-        } else if (input.isKeyDown(Input.KEY_A)) {
-            dx = -1;
-        } else if (input.isKeyDown(Input.KEY_S)) {
-            dy = 1;
-        } else if (input.isKeyDown(Input.KEY_D)) {
-            dx = 1;
-        }
-
-        if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) {
-            World.getPlayer().queueAction(new SetAnimationAction("walking"));
-            World.getPlayer().move(dx, dy);
-        }
-
     }
 
     @Override
     public void keyReleased(int key, char c) {
+
         if (key == Input.KEY_F11) {
             try {
                 Window.toggleFullScreen();
@@ -86,21 +70,26 @@ public class GameScreen extends BasicGameState {
             }
         }
 
-        if (key == Input.KEY_W || key == Input.KEY_A || key == Input.KEY_S || key == Input.KEY_D)
-            World.getPlayer().queueAction(new SetAnimationAction("idle"));
+        gui.onKeyUp(key);
 
     }
 
     @Override
-    public void mouseClicked(int button, int x, int y, int clickCount) {
+    public void mousePressed(int button, int x, int y) {
+        super.mousePressed(button, x, y);
+    }
+
+    @Override
+    public void mouseReleased(int button, int x, int y) {
         double[] mouse_wcoords = MiscMath.getWorldCoordinates(x, y);
-        if (!gui.sendClick(x, y))
-            World.getPlayer().getSpellbook().getSpell(0).cast(mouse_wcoords[0], mouse_wcoords[1], World.getPlayer());
+        gui.onMouseRelease(x, y);
     }
 
     @Override
     public void keyPressed(int key, char c) {
-
+        gui.onKeyDown(key);
     }
+
+    public static Input getInput() { return input; }
 
 }

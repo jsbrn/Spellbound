@@ -32,10 +32,16 @@ public class Animation {
     }
 
     public int loopCount() {
-        return (int)((System.currentTimeMillis() - start_time) / 1000);
+        long frame_duration = 1000 / fps;
+        long time_since_start = System.currentTimeMillis() - start_time;
+        return (int)(time_since_start / frame_duration);
     }
 
     public boolean finished() { return !loop && loopCount() > 0; }
+
+    public void reset() {
+        this.start_time = System.currentTimeMillis();
+    }
 
     public void draw(float ex, float ey, float scale) {
         int frame = getFrame();

@@ -7,10 +7,10 @@ import world.entities.magic.techniques.emission.RadiateTechnique;
 import world.entities.magic.techniques.emission.ScatterTechnique;
 import world.entities.magic.techniques.movement.HoverTechnique;
 import world.entities.magic.techniques.movement.PropelTechnique;
+import world.entities.magic.techniques.rotation.AimTechnique;
 import world.entities.magic.techniques.rotation.CounterSpinTechnique;
 import world.entities.magic.techniques.rotation.SpinTechnique;
 
-import java.awt.*;
 
 public abstract class Technique {
 
@@ -27,6 +27,7 @@ public abstract class Technique {
         if (name == TechniqueName.HOVER) return new HoverTechnique();
         if (name == TechniqueName.SPIN) return new SpinTechnique();
         if (name == TechniqueName.COUNTER_SPIN) return new CounterSpinTechnique();
+        if (name == TechniqueName.AIM) return new AimTechnique();
         if (name == TechniqueName.GRAVITATE) return new GravitateTechnique();
         if (name == TechniqueName.RADIATE) return new RadiateTechnique();
         if (name == TechniqueName.SCATTER) return new ScatterTechnique();

@@ -64,6 +64,7 @@ public class MagicSource {
     public void setTargetDirection(double angle) {
         this.targetDirection = angle;
     }
+    public void setDirection(double angle) { this.body.setDirection(angle); }
 
     public ParticleSource getBody() { return body; }
 

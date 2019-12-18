@@ -17,7 +17,7 @@ public class MoveAction extends Action {
     }
 
     @Override
-    public void start() {
+    public void onStart() {
         this.start = this.getParent().getCoordinates();
     }
 
