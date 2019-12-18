@@ -27,9 +27,9 @@ public class SlickInitializer extends StateBasedGame {
         try {
             Window.WINDOW_INSTANCE = new AppGameContainer(new SlickInitializer(Window.WINDOW_TITLE));
             Window.WINDOW_INSTANCE.setDisplayMode(16*65, 45*16, false);
-            Window.WINDOW_INSTANCE.setVSync(true);
+            Window.WINDOW_INSTANCE.setTargetFrameRate(59);
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
-            Window.WINDOW_INSTANCE.setShowFPS(false);
+            Window.WINDOW_INSTANCE.setShowFPS(true);
             Window.WINDOW_INSTANCE.start();
         } catch (SlickException e) {
 

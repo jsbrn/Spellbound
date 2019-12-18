@@ -1,6 +1,7 @@
 package world.entities.magic.techniques;
 
 import world.entities.magic.MagicSource;
+import world.entities.magic.techniques.arc.PointTechnique;
 import world.entities.magic.techniques.emission.GravitateTechnique;
 import world.entities.magic.techniques.emission.RadiateTechnique;
 import world.entities.magic.techniques.emission.ScatterTechnique;
@@ -8,6 +9,8 @@ import world.entities.magic.techniques.movement.HoverTechnique;
 import world.entities.magic.techniques.movement.PropelTechnique;
 import world.entities.magic.techniques.rotation.CounterSpinTechnique;
 import world.entities.magic.techniques.rotation.SpinTechnique;
+
+import java.awt.*;
 
 public abstract class Technique {
 
@@ -27,7 +30,7 @@ public abstract class Technique {
         if (name == TechniqueName.GRAVITATE) return new GravitateTechnique();
         if (name == TechniqueName.RADIATE) return new RadiateTechnique();
         if (name == TechniqueName.SCATTER) return new ScatterTechnique();
-        if (name == TechniqueName.POINT) return new ScatterTechnique();
+        if (name == TechniqueName.POINT) return new PointTechnique();
         return null;
     }
 

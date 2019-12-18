@@ -80,12 +80,6 @@ public class World {
         current.draw(ox, oy, scale);
         player.draw(ox, oy, scale);
         for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(ox, oy, scale, g);
-
-        g.drawString("PLAYER DEBUG: "+ player.debug(), 0, 0);
-        g.drawString("CC: " + player.getChunkCoordinates()[0] + ", " + player.getChunkCoordinates()[1], 0, 20);
-        g.drawString("BASE: " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[0], 0, 40);
-        g.drawString("OBJ: " + current.get((int)player.getCoordinates()[0], (int)player.getCoordinates()[1])[1], 0, 60);
-        g.drawString("MAGIC_SOURCES: "+magic_sources.size(), 0, 90);
     }
 
 }

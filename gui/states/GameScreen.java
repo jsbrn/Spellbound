@@ -1,15 +1,19 @@
 package gui.states;
 
 import assets.Assets;
+import gui.GUI;
+import gui.GUIAnchor;
+import gui.GUIElement;
+import gui.elements.Backdrop;
+import gui.elements.Hotbar;
+import gui.elements.Statusbar;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import world.Chunk;
 import world.World;
 import world.entities.actions.action.SetAnimationAction;
-import world.particles.ParticleSource;
 
 public class GameScreen extends BasicGameState {
 
@@ -17,9 +21,7 @@ public class GameScreen extends BasicGameState {
     private Input input;
     private boolean init;
 
-    private ParticleSource particleSource;
-
-    private Image wood_bg, frame, cursor;
+    private GUI gui;
 
     public GameScreen(int state) {
         this.init = false;
@@ -31,41 +33,25 @@ public class GameScreen extends BasicGameState {
     }
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+
         if (init) return;
         game = sbg;
+        gui = new GUI();
+        gui.addChild(new Backdrop(), 0, 0, GUIAnchor.TOP_LEFT);
+        GUIElement statusbar = new Statusbar(World.getPlayer()).addChild(new Hotbar(), 0, 32, GUIAnchor.TOP_LEFT);
+        gui.addChild(statusbar, 1, 1, GUIAnchor.TOP_LEFT);
         Assets.loadTileSprite();
         World.init(16);
 
-        this.particleSource = new ParticleSource();
-
-        wood_bg = new Image("assets/wood.png", false, Image.FILTER_NEAREST);
-        frame = new Image("assets/frame.png", false, Image.FILTER_NEAREST);
-        cursor = new Image("assets/cursor.png", false, Image.FILTER_NEAREST);
         init = true;
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
-
-
-//        wood_bg.startUse();
-//        for (int i = 0; i < Window.getScreenHeight() / wood_bg.getWidth() * scale; i++) {
-//            for (int j = 0; j < Window.getScreenHeight() / wood_bg.getHeight(); j++) {
-//                wood_bg.drawEmbedded(i * wood_bg.getWidth() * scale, j * wood_bg.getHeight() * scale, wood_bg.getWidth() * scale, wood_bg.getHeight() * scale);
-//            }
-//        }
-//        wood_bg.endUse();
-//        frame.draw(ox - (6 * scale), oy - (6 * scale), scale);
-
         float[] origin = MiscMath.getWorldOnscreenOrigin();
-        double[] mouse_wcoords = MiscMath.getWorldCoordinates(gc.getInput().getMouseX(), gc.getInput().getMouseY());
-
+        gui.draw(g);
         World.draw(origin[0], origin[1], Window.getScale(), g);
 
-        this.particleSource.draw(origin[0], origin[1], Window.getScale(), g);
-        this.particleSource.setCoordinates(mouse_wcoords[0], mouse_wcoords[1]);
-
-        g.drawString(particleSource.debug(), 0, 70);
 
     }
 
@@ -91,8 +77,6 @@ public class GameScreen extends BasicGameState {
             World.getPlayer().move(dx, dy);
         }
 
-        this.particleSource.update();
-
     }
 
     @Override
@@ -113,7 +97,8 @@ public class GameScreen extends BasicGameState {
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
         double[] mouse_wcoords = MiscMath.getWorldCoordinates(x, y);
-        World.getPlayer().getSpellbook().getSpell(0).cast(mouse_wcoords[0], mouse_wcoords[1], World.getPlayer());
+        if (!gui.sendClick(x, y))
+            World.getPlayer().getSpellbook().getSpell(0).cast(mouse_wcoords[0], mouse_wcoords[1], World.getPlayer());
     }
 
     @Override

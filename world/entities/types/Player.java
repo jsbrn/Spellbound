@@ -1,13 +1,14 @@
 package world.entities.types;
 
 import world.entities.Entity;
+import world.entities.HumanoidEntity;
 import world.entities.animations.Animation;
 import world.entities.magic.Spell;
 import world.entities.magic.Spellbook;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.TechniqueName;
 
-public class Player extends Entity {
+public class Player extends HumanoidEntity {
 
     private Spellbook spellbook;
 

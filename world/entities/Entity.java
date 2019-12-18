@@ -13,7 +13,7 @@ public class Entity {
 
     private int[] chunk_coordinates;
     private double[] coordinates;
-    private int walk_speed, height;
+    private int walk_speed;
 
     private HashMap<String, Animation> animations;
     private Animation current_animation;
@@ -22,7 +22,6 @@ public class Entity {
 
     public Entity() {
         this.walk_speed = 3;
-        this.height = 1;
         this.chunk_coordinates = new int[]{0, 0};
         this.coordinates = new double[]{1, 1};
         this.action_queue = new ArrayList<>();
@@ -70,10 +69,6 @@ public class Entity {
     public double[] getCoordinates() { return coordinates; }
     public void setCoordinates(double x, double y) { this.coordinates[0] = x; this.coordinates[1] = y; }
     public void setChunkCoordinates(int x, int y) { this.chunk_coordinates[0] = x; this.chunk_coordinates[1] = y; }
-
-    public String debug() {
-        return "ACTION_GROUPS_COUNT = " + action_queue.size();
-    }
 
     public void draw(float sx, float sy, float scale) {
         float ex = sx + ((float)coordinates[0] * scale * Chunk.TILE_SIZE);

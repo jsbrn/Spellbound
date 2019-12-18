@@ -1,0 +1,9 @@
+package gui;
+
+public enum GUIAnchor {
+
+    TOP_LEFT, TOP_MIDDLE, TOP_RIGHT,
+    LEFT_MIDDLE, CENTER, RIGHT_MIDDLE,
+    BOTTOM_LEFT, BOTTOM_MIDDLE, BOTTOM_RIGHT
+
+}
