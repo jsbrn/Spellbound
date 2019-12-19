@@ -18,12 +18,12 @@ public final class GUI {
         this.elements = new ArrayList<>();
     }
 
-    public boolean onMouseRelease(int osx, int osy) {
+    public boolean onMouseRelease(int osx, int osy, int button) {
         for (int i = elements.size() - 1; i >= 0; i--)
             if (elements.get(i).onMouseRelease((int)(osx/Window.getScale()), (int)(osy/Window.getScale())))
                 return true;
         double[] wc = MiscMath.getWorldCoordinates(osx, osy);
-        EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1]));
+        EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
         return false;
     }
 

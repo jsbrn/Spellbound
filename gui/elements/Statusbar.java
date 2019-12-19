@@ -50,9 +50,9 @@ public class Statusbar extends GUIElement {
     protected void drawBuffered(Graphics b) {
         b.drawImage(image, 0, 0);
         b.setColor(healthColor);
-        b.fillRect(15, 7, (int)(32 * (target.getHP() / target.getMaxHP())), 3);
+        b.fillRect(16, 8, (int)(32 * (target.getHP() / target.getMaxHP())), 3);
         b.setColor(manaColor);
-        b.fillRect(15, 14, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
+        b.fillRect(16, 15, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
     }
 
 }

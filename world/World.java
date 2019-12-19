@@ -1,5 +1,6 @@
 package world;
 
+import assets.Assets;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -44,7 +45,7 @@ public class World {
             entity.setChunkCoordinates(chcoords[0] + cdx, chcoords[1] + cdy);
             if (cdx != 0 || cdy != 0) {
                 entity.queueAction(new SetAnimationAction("walking", false));
-                entity.move(cdx, cdy, 1);
+                entity.move(cdx, cdy);
                 entity.queueAction(new SetAnimationAction("idle", false));
             }
         }));
@@ -105,6 +106,9 @@ public class World {
         }
         player.draw(ox, oy, scale);
         for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(ox, oy, scale, g);
+
+        g.setFont(Assets.FONT);
+
     }
 
 }

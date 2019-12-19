@@ -66,11 +66,8 @@ public class Entity {
 
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
-    public void move(double tx, double ty, int times) {
-        ActionGroup movement = new ActionGroup();
-        for (int i = 0; i < times; i++)
-            movement.add(new MoveAction((int)coordinates[0] + (tx * (i + 1)), (int)coordinates[1] + (ty * (i + 1)), moveSpeed));
-        queueActions(movement);
+    public void move(double tx, double ty) {
+        queueAction(new MoveAction((int)coordinates[0] + tx, (int)coordinates[1] + ty, moveSpeed));
     }
 
     public int[] getChunkCoordinates() {

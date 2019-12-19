@@ -4,7 +4,9 @@ import assets.Assets;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.GUIElement;
+import gui.elements.Button;
 import gui.elements.Hotbar;
+import gui.elements.Label;
 import gui.elements.Statusbar;
 import misc.MiscMath;
 import misc.Window;
@@ -12,7 +14,6 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import world.World;
-import world.entities.actions.action.SetAnimationAction;
 
 public class GameScreen extends BasicGameState {
 
@@ -36,9 +37,15 @@ public class GameScreen extends BasicGameState {
         World.init(16);
         game = sbg;
         gui = new GUI();
-        GUIElement statusbar = new Statusbar(World.getPlayer()).addChild(new Hotbar(World.getPlayer()), 0, 32, GUIAnchor.TOP_LEFT);
-        gui.addChild(statusbar, 1, 1, GUIAnchor.TOP_LEFT);
-        Assets.loadTileSprite();
+        gui.addChild(new Statusbar(World.getPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
+        gui.addChild(new Hotbar(World.getPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
+        gui.addChild(new Button("spellbook.png") {
+            @Override
+            public boolean onMouseRelease(int ogx, int ogy) {
+                return false;
+            }
+        }, 4, 94, GUIAnchor.TOP_LEFT);
+        Assets.load();
 
         init = true;
     }
@@ -82,7 +89,7 @@ public class GameScreen extends BasicGameState {
     @Override
     public void mouseReleased(int button, int x, int y) {
         double[] mouse_wcoords = MiscMath.getWorldCoordinates(x, y);
-        gui.onMouseRelease(x, y);
+        gui.onMouseRelease(x, y, button);
     }
 
     @Override

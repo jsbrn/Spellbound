@@ -1,5 +1,6 @@
 package world.entities.types;
 
+import gui.states.GameScreen;
 import org.newdawn.slick.Input;
 import world.Chunk;
 import world.World;
@@ -64,33 +65,31 @@ public class Player extends HumanoidEntity {
                     public void handle(Event e) {
                         int key = ((KeyUpEvent)e).getKey();
                         if (key == Input.KEY_W || key == Input.KEY_A || key == Input.KEY_S || key == Input.KEY_D)
-                            that.skipCurrentAction();
                             that.queueAction(new SetAnimationAction("idle", false));
                     }
                 })
-                .on(KeyDownEvent.class.toString(), new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        int key = ((KeyDownEvent)e).getKey();
-                        int dx = 0, dy = 0;
-                        if (key == Input.KEY_W) {
-                            dy = -1;
-                        } else if (key == Input.KEY_A) {
-                            dx = -1;
-                        } else if (key == Input.KEY_S) {
-                            dy = 1;
-                        } else if (key == Input.KEY_D) {
-                            dx = 1;
-                        }
-
-                        if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) {
-                            that.queueAction(new SetAnimationAction("walking", false));
-                            that.move(dx, dy, Chunk.CHUNK_SIZE);
-                        }
-
-                    }
-                })
         );
+
+    }
+
+    public void update() {
+        super.update();
+
+        int dx = 0, dy = 0;
+        if (GameScreen.getInput().isKeyDown(Input.KEY_W)) {
+            dy = -1;
+        } else if (GameScreen.getInput().isKeyDown(Input.KEY_A)) {
+            dx = -1;
+        } else if (GameScreen.getInput().isKeyDown(Input.KEY_S)) {
+            dy = 1;
+        } else if (GameScreen.getInput().isKeyDown(Input.KEY_D)) {
+            dx = 1;
+        }
+
+        if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) {
+            World.getPlayer().queueAction(new SetAnimationAction("walking", false));
+            World.getPlayer().move(dx, dy);
+        }
 
     }
 

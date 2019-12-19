@@ -53,7 +53,7 @@ public abstract class GUIElement {
     public abstract boolean onKeyDown(int key);
     public abstract boolean onKeyUp(int key);
 
-    public final void draw(Graphics g) {
+    public void draw(Graphics g) {
         try {
             int[] dimensions = getDimensions(), coordinates = getCoordinates();
             if (buffer == null) buffer = new Image(dimensions[0], dimensions[1]);
