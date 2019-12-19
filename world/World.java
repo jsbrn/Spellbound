@@ -7,7 +7,7 @@ import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.actions.action.SetAnimationAction;
 import world.entities.magic.MagicSource;
-import world.entities.types.Player;
+import world.entities.types.humanoids.Player;
 import world.events.EventDispatcher;
 import world.events.EventListener;
 import world.events.event.EntityMoveEvent;
@@ -88,7 +88,6 @@ public class World {
     }
 
     public static void draw(float ox, float oy, float scale, Graphics g) {
-        Chunk current = getChunk(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
         Chunk[][] adjacent = getAdjacentChunks(player.getChunkCoordinates()[0], player.getChunkCoordinates()[1]);
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
         Color faded = new Color(0.2f, 0.2f, 0.2f);
@@ -106,9 +105,6 @@ public class World {
         }
         player.draw(ox, oy, scale);
         for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(ox, oy, scale, g);
-
-        g.setFont(Assets.FONT);
-
     }
 
 }

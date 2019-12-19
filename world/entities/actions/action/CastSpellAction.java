@@ -1,6 +1,6 @@
 package world.entities.actions.action;
 
-import world.entities.HumanoidEntity;
+import world.entities.types.humanoids.HumanoidEntity;
 import world.entities.actions.Action;
 
 public class CastSpellAction extends Action {

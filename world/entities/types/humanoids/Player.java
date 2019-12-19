@@ -1,10 +1,8 @@
-package world.entities.types;
+package world.entities.types.humanoids;
 
 import gui.states.GameScreen;
 import org.newdawn.slick.Input;
-import world.Chunk;
 import world.World;
-import world.entities.HumanoidEntity;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.CastSpellAction;
 import world.entities.actions.action.SetAnimationAction;
@@ -17,13 +15,10 @@ import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
-import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;
 import world.events.event.MouseReleaseEvent;
 
 public class Player extends HumanoidEntity {
-
-    private Spellbook spellbook;
 
     public Player() {
 
@@ -39,11 +34,10 @@ public class Player extends HumanoidEntity {
         this.addAnimation("casting", new Animation("player_casting.png", 5, 4));
         this.setAnimation("idle");
 
-        this.spellbook = new Spellbook(this);
         Spell testSpell = new Spell();
         testSpell.addTechnique(Technique.create(TechniqueName.PROPEL));
         testSpell.addTechnique(Technique.create(TechniqueName.RADIATE));
-        this.spellbook.addSpell(testSpell);
+        this.getSpellbook().addSpell(testSpell);
 
         Player that = this;
         EventDispatcher.register(new EventListener()
@@ -52,11 +46,11 @@ public class Player extends HumanoidEntity {
                     public void handle(Event e) {
                         MouseReleaseEvent mce = (MouseReleaseEvent)e;
                         ActionGroup actions = new ActionGroup();
-                        if (spellbook.getParent().getMana() >= 1) {
+                        if (getSpellbook().getParent().getMana() >= 1) {
                             actions.add(new SetAnimationAction("casting", true));
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
                             actions.add(new SetAnimationAction("idle", false));
-                            spellbook.getParent().queueActions(actions);
+                            getSpellbook().getParent().queueActions(actions);
                         }
                     }
                 })
@@ -92,7 +86,5 @@ public class Player extends HumanoidEntity {
         }
 
     }
-
-    public Spellbook getSpellbook() { return this.spellbook; }
 
 }

@@ -1,12 +1,17 @@
-package world.entities;
+package world.entities.types.humanoids;
 
 import misc.MiscMath;
+import world.entities.Entity;
 import world.entities.magic.Spellbook;
 
 public class HumanoidEntity extends Entity {
 
     private Spellbook spellbook;
     private double hp, mana, stamina, max_hp, max_mana, max_stamina;
+
+    public HumanoidEntity() {
+        this.spellbook = new Spellbook(this);
+    }
 
     @Override
     public void update() {
@@ -34,7 +39,6 @@ public class HumanoidEntity extends Entity {
     public void setMaxMana(double amount) { this.max_mana = amount; }
 
     public Spellbook getSpellbook() { return spellbook; }
-
     public void setSpellbook(Spellbook spellbook) {
         this.spellbook = spellbook;
     }

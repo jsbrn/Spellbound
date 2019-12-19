@@ -1,6 +1,6 @@
 package world.entities.magic;
 
-import world.entities.HumanoidEntity;
+import world.entities.types.humanoids.HumanoidEntity;
 import world.entities.magic.techniques.TechniqueName;
 
 import java.util.ArrayList;

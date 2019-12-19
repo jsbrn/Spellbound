@@ -39,27 +39,27 @@ public class Chunk {
             for (int i = 0; i < CHUNK_SIZE; i++) {
                 //Assets.TILES.setFilter(Image.FILTER_NEAREST);
                 float ox = sx + (i * TILE_SIZE * scale);
-                float oy = sy + (j * TILE_SIZE * scale);
+                float oy = sy + ((j - ((Assets.TILES.getHeight() / TILE_SIZE) - 1)) * TILE_SIZE * scale);
                 float btx = base[i][j] * TILE_SIZE;
                 float ttx = top[i][j] * TILE_SIZE;
                 Assets.TILES.drawEmbedded(
                         ox,
                         oy,
                         ox + (TILE_SIZE * scale),
-                        oy + (TILE_SIZE * scale),
+                        oy + (Assets.TILES.getHeight() * scale),
                         btx,
                         0,
                         btx + TILE_SIZE,
-                        TILE_SIZE, filter);
+                        Assets.TILES.getHeight(), filter);
                 Assets.TILES.drawEmbedded(
                         ox,
-                        oy - (TILE_SIZE / 2 * scale),
+                        oy,
                         ox + (TILE_SIZE * scale),
-                        oy + (TILE_SIZE / 2 * scale),
+                        oy + (Assets.TILES.getHeight() * scale),
                         ttx,
                         0,
                         ttx + TILE_SIZE,
-                        TILE_SIZE, filter);
+                        Assets.TILES.getHeight(), filter);
                 //Assets.TILES.draw(sx + (i * TILE_SIZE * scale), sy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale, Color.white);
 
             }

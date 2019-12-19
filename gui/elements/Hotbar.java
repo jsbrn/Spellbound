@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import world.entities.HumanoidEntity;
+import world.entities.types.humanoids.HumanoidEntity;
 
 public class Hotbar extends GUIElement {
 

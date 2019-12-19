@@ -5,9 +5,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import world.entities.Entity;
-import world.entities.HumanoidEntity;
-import world.entities.types.Player;
+import world.entities.types.humanoids.HumanoidEntity;
 
 public class Statusbar extends GUIElement {
 
