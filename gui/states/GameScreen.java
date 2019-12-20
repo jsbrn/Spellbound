@@ -1,6 +1,7 @@
 package gui.states;
 
 import assets.Assets;
+import assets.definitions.Definitions;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.GUIElement;
@@ -46,6 +47,7 @@ public class GameScreen extends BasicGameState {
             }
         }, 4, 94, GUIAnchor.TOP_LEFT);
         Assets.load();
+        Definitions.load();
 
         init = true;
     }

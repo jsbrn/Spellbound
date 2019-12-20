@@ -1,21 +1,25 @@
 package assets;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 
 public class Assets {
 
     public static int GAME_SCREEN = 0;
-    public static Image TILES;
+    public static Image TILE_SPRITESHEET;
     public static TrueTypeFont FONT;
 
     public static void load() {
         try {
-            TILES = new Image("assets/tiles.png", false, Image.FILTER_NEAREST);
+            TILE_SPRITESHEET = new Image("assets/tiles.png", false, Image.FILTER_NEAREST);
             Font awtFont = Font.createFont(Font.PLAIN, Assets.class.getResourceAsStream("/assets/fonts/font.ttf"))
                     .deriveFont(14f)
                     .deriveFont(Font.TRUETYPE_FONT);
@@ -28,6 +32,25 @@ public class Assets {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
+    }
+
+    public static String read(String internal) {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(Assets.class.getResourceAsStream("/assets/"+internal)));
+        String contents = "";
+        try {
+            while (true) {
+                String line = bf.readLine();
+                if (line == null) break;
+                contents += line;
+            }
+            bf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return contents;
     }
 
 }

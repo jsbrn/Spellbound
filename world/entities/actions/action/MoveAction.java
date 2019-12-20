@@ -1,6 +1,10 @@
 package world.entities.actions.action;
 
+import assets.Assets;
+import assets.definitions.Definitions;
 import misc.MiscMath;
+import org.json.simple.JSONObject;
+import world.World;
 import world.entities.Entity;
 import world.entities.actions.Action;
 import world.events.EventDispatcher;
@@ -32,6 +36,11 @@ public class MoveAction extends Action {
 
     @Override
     public boolean finished() {
+
+        int[] chunk_coords = getParent().getChunkCoordinates();
+        byte[] tile = World.getTile(chunk_coords[0], chunk_coords[1], (int)target[0], (int)target[1]);
+        if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
+
         double[] coordinates = getParent().getCoordinates();
         if (coordinates[0] == target[0] && coordinates[1] == target[1]) {
             EventDispatcher.invoke(new EntityMoveEvent(getParent()));

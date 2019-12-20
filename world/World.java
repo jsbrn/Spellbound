@@ -28,6 +28,7 @@ public class World {
     public static void init(int size) {
         generate(size, new DefaultWorldGenerator());
         player = new Player();
+        getChunk(1, 1).add(player);
         magic_sources = new ArrayList<>();
         EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), e -> {
             EntityMoveEvent event = (EntityMoveEvent) e;
@@ -42,7 +43,8 @@ public class World {
             entity.setCoordinates(
                     (coords[0] + Chunk.CHUNK_SIZE + cdx) % Chunk.CHUNK_SIZE,
                     (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE);
-            entity.setChunkCoordinates(chcoords[0] + cdx, chcoords[1] + cdy);
+            getChunk(entity.getChunkCoordinates()[0], entity.getChunkCoordinates()[1]).remove(entity);
+            getChunk(chcoords[0] + cdx, chcoords[1] + cdy).add(entity);
             if (cdx != 0 || cdy != 0) {
                 entity.queueAction(new SetAnimationAction("walking", false));
                 entity.move(cdx, cdy);
@@ -51,9 +53,13 @@ public class World {
         }));
     }
 
+    public static byte[] getTile(int cx, int cy, int tx, int ty) {
+        return getChunk(cx, cy).get(tx, ty);
+    }
+
     public static Chunk getChunk(int x, int y) {
         if (x < 0 || x >= chunk_map.length || y < 0 || y >= chunk_map[0].length) return null;
-        if (chunks[x][y] == null) chunks[x][y] = new Chunk(chunk_map[x][y]);
+        if (chunks[x][y] == null) chunks[x][y] = new Chunk(x, y, chunk_map[x][y]);
         return chunks[x][y];
     }
 
@@ -100,10 +106,9 @@ public class World {
                         osx,
                         osy,
                         Window.getScale(),
-                        i == 0 && j == 0 ? Color.white : faded);
+                        i == 0 && j == 0);
             }
         }
-        player.draw(ox, oy, scale);
         for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(ox, oy, scale, g);
     }
 

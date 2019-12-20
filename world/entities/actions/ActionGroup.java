@@ -24,8 +24,8 @@ public final class ActionGroup {
     public void update() {
         if (actions.isEmpty()) return;
         if (!actions.get(0).started()) actions.get(0).start();
+        if (actions.get(0).finished()) { actions.remove(0); return; }
         actions.get(0).update();
-        if (actions.get(0).finished()) actions.remove(0);
     }
 
     public void setParent(Entity parent) {

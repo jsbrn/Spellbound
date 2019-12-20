@@ -1,0 +1,51 @@
+[
+
+  {
+    "name": "Air",
+    "collision": false,
+    "peeking": false,
+    "height": 1
+  },
+  {
+    "name": "Grass",
+    "collision": false,
+    "peeking": false,
+    "height": 1
+  },
+  {
+    "name": "Well",
+    "collision": true,
+    "peeking": false,
+    "height": 1
+  },
+  {
+    "name": "Tall Grass",
+    "collision": false,
+    "peeking": false,
+    "height": 1
+  },
+  {
+    "name": "Flowers",
+    "collision": false,
+    "peeking": false,
+    "height": 1
+  },
+  {
+    "name": "House",
+    "collision": true,
+    "peeking": true,
+    "height": 2
+  },
+  {
+    "name": "House",
+    "collision": true,
+    "peeking": true,
+    "height": 3
+  },
+  {
+    "name": "House",
+    "collision": true,
+    "peeking": true,
+    "height": 2
+  }
+]
