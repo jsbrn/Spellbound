@@ -38,7 +38,7 @@ public class MoveAction extends Action {
     public boolean finished() {
 
         int[] chunk_coords = getParent().getChunkCoordinates();
-        byte[] tile = World.getTile(chunk_coords[0], chunk_coords[1], (int)target[0], (int)target[1]);
+        byte[] tile = World.getTile((int)target[0], (int)target[1]);
         if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
 
         double[] coordinates = getParent().getCoordinates();

@@ -1,9 +1,13 @@
 package world.particles;
 
+import assets.Assets;
+import assets.definitions.Definitions;
+import assets.definitions.TileDefinition;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Chunk;
+import world.World;
 
 import java.util.ArrayList;
 
@@ -90,12 +94,22 @@ public class ParticleSource {
                 (float)mnosw);
 
         for (int i = particles.size() - 1; i >= 0; i--) {
+
             Particle p = particles.get(i);
             if (p.isExpired()) { particles.remove(p); continue; }
             float alpha = 1 - (float)Math.abs(.5f - p.percentComplete() * 1.5f);
+            double[] pcoords = p.getCoordinates();
+
+            boolean behind_something = false;
+            for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / 16; t++) {
+                byte[] tile = World.getTile((int)pcoords[0], (int)pcoords[1] + t);
+                TileDefinition td = Definitions.getTile(tile[1]);
+                if (pcoords[1] > (pcoords[1] + t - td.getHeight())) { behind_something = true; break; }
+            }
+            if (behind_something) continue;
+
             p.getColor().a = alpha;
             g.setColor(p.getColor());
-            double[] pcoords = p.getCoordinates();
             g.fillRect(
                     (float)(ox + (pcoords[0] * Chunk.TILE_SIZE * scale) - (scale / 2)),
                     (float)(oy + (pcoords[1] * Chunk.TILE_SIZE * scale) - (scale / 2)),

@@ -21,7 +21,7 @@ public class MagicSource {
         this.castCoordinates = new double[]{x, y};
         this.moveTarget = new double[]{caster.getCoordinates()[0] + 0.5, caster.getCoordinates()[1]};
         this.targetDirection = 0;
-        this.moveSpeed = 0.5;
+        this.moveSpeed = 5;
         this.rotateSpeed = 45;
         this.caster = caster;
         this.techniques = techniques;

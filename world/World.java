@@ -53,8 +53,10 @@ public class World {
         }));
     }
 
-    public static byte[] getTile(int cx, int cy, int tx, int ty) {
-        return getChunk(cx, cy).get(tx, ty);
+    public static byte[] getTile(int tx, int ty) {
+        Chunk current = getChunk(World.getPlayer().getChunkCoordinates()[0], World.getPlayer().getChunkCoordinates()[1]);
+        if (current == null) return new byte[2];
+        return current.get(tx, ty);
     }
 
     public static Chunk getChunk(int x, int y) {

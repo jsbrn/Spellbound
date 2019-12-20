@@ -39,6 +39,8 @@ public class Chunk {
     }
 
     public byte[] get(int x, int y) {
+        if (x < 0 || y < 0 || y >= Chunk.CHUNK_SIZE || x >= Chunk.CHUNK_SIZE)
+            return new byte[2];
         return new byte[]{this.base[x][y], this.top[x][y]};
     }
 
