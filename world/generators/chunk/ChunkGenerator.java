@@ -7,6 +7,8 @@ public abstract class ChunkGenerator {
 
     public static ChunkGenerator get(ChunkType type) {
         if (type == ChunkType.OPEN_FIELD) return new OpenFieldChunkGenerator();
+        if (type == ChunkType.FOREST) return new ForestGenerator();
+        if (type == ChunkType.BACKYARD_TEST) return new TestBackyardGenerator();
         return null;
     }
 

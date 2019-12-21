@@ -1,8 +1,8 @@
-package world.generators.world;
+package world.generators.region;
 
 import world.generators.chunk.ChunkType;
 
-public interface WorldGenerator {
+public interface RegionGenerator {
 
     ChunkType[][] generateChunkMap(int size);
 

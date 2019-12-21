@@ -2,13 +2,13 @@ package world.entities.types.humanoids;
 
 import gui.states.GameScreen;
 import org.newdawn.slick.Input;
+import world.Region;
 import world.World;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.CastSpellAction;
 import world.entities.actions.action.SetAnimationAction;
 import world.entities.animations.Animation;
 import world.entities.magic.Spell;
-import world.entities.magic.Spellbook;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.TechniqueName;
 import world.events.Event;

@@ -1,9 +1,8 @@
 package world.entities.actions.action;
 
-import assets.Assets;
 import assets.definitions.Definitions;
 import misc.MiscMath;
-import org.json.simple.JSONObject;
+import world.Region;
 import world.World;
 import world.entities.Entity;
 import world.entities.actions.Action;
@@ -38,7 +37,7 @@ public class MoveAction extends Action {
     public boolean finished() {
 
         int[] chunk_coords = getParent().getChunkCoordinates();
-        byte[] tile = World.getTile((int)target[0], (int)target[1]);
+        byte[] tile = World.getRegion().getTile((int)target[0], (int)target[1]);
         if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
 
         double[] coordinates = getParent().getCoordinates();

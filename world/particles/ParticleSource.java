@@ -7,6 +7,7 @@ import misc.MiscMath;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Chunk;
+import world.Region;
 import world.World;
 
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ public class ParticleSource {
         this.direction = 0;
         this.minRadius = 0;
         this.maxRadius = 0.25f;
-        this.particlesRemaining = 200;
-        this.ratePerSecond = 100;
+        this.particlesRemaining = 500;
+        this.ratePerSecond = 300;
         this.fov = 360;
         this.particleVelocity = 0.5f;
         this.emissionMode = EmissionMode.RADIATE;
@@ -102,7 +103,7 @@ public class ParticleSource {
 
             boolean behind_something = false;
             for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / 16; t++) {
-                byte[] tile = World.getTile((int)pcoords[0], (int)pcoords[1] + t);
+                byte[] tile = World.getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
                 TileDefinition td = Definitions.getTile(tile[1]);
                 if (pcoords[1] > (pcoords[1] + t - td.getHeight())) { behind_something = true; break; }
             }

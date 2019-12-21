@@ -2,11 +2,11 @@ package world.generators.chunk;
 
 import java.util.Random;
 
-public class OpenFieldChunkGenerator extends ChunkGenerator {
+public class TestBackyardGenerator extends ChunkGenerator {
 
     private Random rng;
 
-    public OpenFieldChunkGenerator() {
+    public TestBackyardGenerator() {
         this.rng = new Random();
     }
 
@@ -29,6 +29,9 @@ public class OpenFieldChunkGenerator extends ChunkGenerator {
                 top[i][j] = (byte)(Math.random() > 0.6 ? (Math.random() < 0.2 ? 4 : 3) : 0);
             }
         }
+        top[5][5] = 5; //house :)
+        top[6][5] = 6;
+        top[7][5] = 7;
         return top;
     }
 

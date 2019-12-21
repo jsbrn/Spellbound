@@ -4,16 +4,15 @@ import assets.Assets;
 import assets.definitions.Definitions;
 import gui.GUI;
 import gui.GUIAnchor;
-import gui.GUIElement;
 import gui.elements.Button;
 import gui.elements.Hotbar;
-import gui.elements.Label;
 import gui.elements.Statusbar;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import world.Region;
 import world.World;
 
 public class GameScreen extends BasicGameState {
@@ -35,7 +34,7 @@ public class GameScreen extends BasicGameState {
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         if (init) return;
-        World.init(16);
+        World.init();
         game = sbg;
         gui = new GUI();
         gui.addChild(new Statusbar(World.getPlayer()), 2, 2, GUIAnchor.TOP_LEFT);

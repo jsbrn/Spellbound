@@ -47,5 +47,11 @@
     "collision": true,
     "peeking": true,
     "height": 2
+  },
+  {
+    "name": "Tree",
+    "collision": false,
+    "peeking": false,
+    "height": 2
   }
 ]

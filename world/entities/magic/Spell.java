@@ -1,5 +1,6 @@
 package world.entities.magic;
 
+import world.Region;
 import world.World;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
@@ -19,7 +20,7 @@ public class Spell {
     public void cast(double x, double y, Entity caster) {
         //maybe add something to catch the spell-level techniques (like spawn patterns and chaining)
         MagicSource cast = new MagicSource(x, y, caster, techniques);
-        World.addMagicSource(cast);
+        World.getRegion().addMagicSource(cast);
     }
 
 }

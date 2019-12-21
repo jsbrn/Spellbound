@@ -11,8 +11,10 @@ import java.util.HashMap;
 
 public class Entity {
 
+    private String region;
     private int[] chunk_coordinates;
     private double[] coordinates;
+
     private int moveSpeed;
 
     private HashMap<String, Animation> animations;
@@ -70,6 +72,8 @@ public class Entity {
         queueAction(new MoveAction((int)coordinates[0] + tx, (int)coordinates[1] + ty, moveSpeed));
     }
 
+    public void setRegion(String region) { this.region = region; }
+    public String getRegion() { return region; }
     public int[] getChunkCoordinates() {
         return chunk_coordinates;
     }

@@ -2,11 +2,11 @@ package world.generators.chunk;
 
 import java.util.Random;
 
-public class OpenFieldChunkGenerator extends ChunkGenerator {
+public class ForestGenerator extends ChunkGenerator {
 
     private Random rng;
 
-    public OpenFieldChunkGenerator() {
+    public ForestGenerator() {
         this.rng = new Random();
     }
 
@@ -26,6 +26,7 @@ public class OpenFieldChunkGenerator extends ChunkGenerator {
         byte[][] top = new byte[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
+                if (Math.random() > 0.5f) { top[i][j] = 8; continue; }
                 top[i][j] = (byte)(Math.random() > 0.6 ? (Math.random() < 0.2 ? 4 : 3) : 0);
             }
         }

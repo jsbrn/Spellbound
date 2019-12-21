@@ -33,6 +33,11 @@ public class Chunk {
 
     }
 
+    public void update() {
+        for (int i = entities.size() - 1; i >= 0; i--)
+            entities.get(i).update();
+    }
+
     public void set(int x, int y, byte base, byte top) {
         this.base[x][y] = base;
         this.top[x][y] = top;
