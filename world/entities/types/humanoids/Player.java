@@ -1,6 +1,7 @@
 package world.entities.types.humanoids;
 
 import gui.states.GameScreen;
+import misc.MiscMath;
 import org.newdawn.slick.Input;
 import world.Region;
 import world.World;
@@ -15,6 +16,7 @@ import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
+import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;
 import world.events.event.MouseReleaseEvent;
 
@@ -28,6 +30,7 @@ public class Player extends HumanoidEntity {
         this.setMaxMana(10);
         this.setHP(10);
         this.setMana(5);
+        this.setMaxStamina(10);
 
         this.addAnimation("idle", new Animation("player_idle.png", 2, 1));
         this.addAnimation("walking", new Animation("player_walking.png", 4, 3));

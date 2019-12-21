@@ -15,7 +15,7 @@ public class Entity {
     private int[] chunk_coordinates;
     private double[] coordinates;
 
-    private int moveSpeed;
+    private float moveSpeed;
 
     private HashMap<String, Animation> animations;
     private Animation current_animation;
@@ -69,8 +69,11 @@ public class Entity {
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
     public void move(double tx, double ty) {
-        queueAction(new MoveAction((int)coordinates[0] + tx, (int)coordinates[1] + ty, moveSpeed));
+        queueAction(new MoveAction((int)coordinates[0] + tx, (int)coordinates[1] + ty));
     }
+
+    public float getMoveSpeed() { return this.moveSpeed; }
+    public void setMoveSpeed(float moveSpeed) { this.moveSpeed = moveSpeed;}
 
     public void setRegion(String region) { this.region = region; }
     public String getRegion() { return region; }

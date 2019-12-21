@@ -4,54 +4,63 @@
     "name": "Air",
     "collision": false,
     "peeking": false,
-    "height": 1
+    "height": 1.0,
+    "speedMultiplier": 1.0
   },
   {
     "name": "Grass",
     "collision": false,
     "peeking": false,
-    "height": 1
+    "height": 1.0,
+    "speedMultiplier": 1.0
   },
   {
     "name": "Well",
     "collision": true,
     "peeking": false,
-    "height": 1
+    "height": 1.0,
+    "speedMultiplier": 1.0
   },
   {
     "name": "Tall Grass",
     "collision": false,
     "peeking": false,
-    "height": 1
+    "height": 1.0,
+    "speedMultiplier": 1.0
   },
   {
     "name": "Flowers",
     "collision": false,
     "peeking": false,
-    "height": 1
+    "height": 1.0,
+    "speedMultiplier": 1.0
   },
   {
     "name": "House",
     "collision": true,
     "peeking": true,
-    "height": 2
+    "height": 2,
+    "speedMultiplier": 1.0
   },
   {
     "name": "House",
     "collision": true,
     "peeking": true,
-    "height": 3
+    "height": 3,
+    "speedMultiplier": 1.0
   },
   {
     "name": "House",
     "collision": true,
     "peeking": true,
-    "height": 2
+    "height": 2,
+    "speedMultiplier": 1.0
   },
   {
     "name": "Tree",
     "collision": false,
     "peeking": false,
-    "height": 2
+    "height": 2,
+    "speedMultiplier": 0.5
   }
 ]

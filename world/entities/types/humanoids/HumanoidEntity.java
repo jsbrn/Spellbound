@@ -18,12 +18,12 @@ public class HumanoidEntity extends Entity {
         super.update();
         addHP(MiscMath.getConstant(max_hp, 180));
         addMana(MiscMath.getConstant(max_mana, 20));
-        addStamina(MiscMath.getConstant(max_stamina, 10));
+        addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
 
     public double getHP() { return hp; }
     public double getMana() { return mana; }
-    public double getStamina() { return mana; }
+    public double getStamina() { return stamina; }
     public double getMaxHP() { return max_hp; }
     public double getMaxMana() { return max_mana; }
     public double getMaxStamina() { return max_stamina; }
@@ -37,6 +37,7 @@ public class HumanoidEntity extends Entity {
 
     public void setMaxHP(double amount) { this.max_hp = amount; }
     public void setMaxMana(double amount) { this.max_mana = amount; }
+    public void setMaxStamina(double amount) { this.max_stamina = amount; }
 
     public Spellbook getSpellbook() { return spellbook; }
     public void setSpellbook(Spellbook spellbook) {

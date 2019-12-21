@@ -9,7 +9,7 @@ import world.entities.types.humanoids.HumanoidEntity;
 
 public class Statusbar extends GUIElement {
 
-    private Color healthColor, manaColor;
+    private Color healthColor, manaColor, staminaColor;
     private Image image;
     private HumanoidEntity target;
 
@@ -19,6 +19,7 @@ public class Statusbar extends GUIElement {
             this.image = new Image("assets/gui/statusbar.png", false, Image.FILTER_NEAREST);
             this.healthColor = new Color(1f, 0f, 0f, 0.5f);
             this.manaColor = new Color(220, 25, 225, 255/2);
+            this.staminaColor = new Color(50, 225, 60, 0.5f);
         } catch (SlickException e) {
             e.printStackTrace();
         }
@@ -51,6 +52,8 @@ public class Statusbar extends GUIElement {
         b.fillRect(16, 8, (int)(32 * (target.getHP() / target.getMaxHP())), 3);
         b.setColor(manaColor);
         b.fillRect(16, 15, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
+        b.setColor(staminaColor);
+        b.fillRect(16, 22, (int)(32 * (target.getStamina() / target.getMaxStamina())), 3);
     }
 
 }

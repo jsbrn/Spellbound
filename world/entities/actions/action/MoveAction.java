@@ -11,12 +11,10 @@ import world.events.event.EntityMoveEvent;
 
 public class MoveAction extends Action {
 
-    private double walk_speed;
     private double[] start, target;
 
-    public MoveAction(double x, double y, double walk_speed) {
+    public MoveAction(double x, double y) {
         this.target = new double[]{x, y};
-        this.walk_speed = walk_speed;
     }
 
     @Override
@@ -28,9 +26,10 @@ public class MoveAction extends Action {
     public void update() {
         Entity parent = getParent();
         double[] coordinates = parent.getCoordinates();
+        double multiplier = Definitions.getTile(World.getRegion().getTile((int)coordinates[0], (int)coordinates[1])[1]).getSpeedMultiplier();
         parent.setCoordinates(
-                MiscMath.tween(start[0], coordinates[0], target[0], walk_speed, 1),
-                MiscMath.tween(start[1], coordinates[1], target[1], walk_speed, 1));
+                MiscMath.tween(start[0], coordinates[0], target[0], parent.getMoveSpeed() * multiplier, 1),
+                MiscMath.tween(start[1], coordinates[1], target[1], parent.getMoveSpeed() * multiplier, 1));
     }
 
     @Override
