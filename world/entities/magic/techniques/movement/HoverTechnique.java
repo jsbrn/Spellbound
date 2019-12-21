@@ -12,7 +12,9 @@ public class HoverTechnique extends Technique {
 
     @Override
     public void update(MagicSource source) {
-        source.setMoveTarget(source.getCaster().getCoordinates()[0] + 0.5, source.getCaster().getCoordinates()[1]);
+        source.setMoveTarget(
+                source.getCaster().getLocation().getCoordinates()[0] + 0.5,
+                source.getCaster().getLocation().getCoordinates()[1]);
     }
 
 }

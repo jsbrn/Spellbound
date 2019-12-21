@@ -19,14 +19,14 @@ public class MagicSource {
 
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques) {
         this.castCoordinates = new double[]{x, y};
-        this.moveTarget = new double[]{caster.getCoordinates()[0] + 0.5, caster.getCoordinates()[1]};
+        this.moveTarget = new double[]{caster.getLocation().getCoordinates()[0] + 0.5, caster.getLocation().getCoordinates()[1]};
         this.targetDirection = 0;
         this.moveSpeed = 5;
         this.rotateSpeed = 45;
         this.caster = caster;
         this.techniques = techniques;
         this.body = new ParticleSource();
-        this.body.setCoordinates(caster.getCoordinates()[0] + 0.5f, caster.getCoordinates()[1]);
+        this.body.setCoordinates(caster.getLocation().getCoordinates()[0] + 0.5f, caster.getLocation().getCoordinates()[1]);
         for (Technique t: techniques) t.applyTo(this);
     }
 

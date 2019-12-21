@@ -1,5 +1,7 @@
 package world.generators.chunk;
 
+import world.RegionLink;
+
 import java.util.Random;
 
 public class OpenFieldChunkGenerator extends ChunkGenerator {
@@ -30,6 +32,11 @@ public class OpenFieldChunkGenerator extends ChunkGenerator {
             }
         }
         return top;
+    }
+
+    @Override
+    public RegionLink[][] generateLinks(int size) {
+        return new RegionLink[size][size];
     }
 
 }

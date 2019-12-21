@@ -3,6 +3,7 @@ package world.particles;
 import assets.Assets;
 import assets.definitions.Definitions;
 import assets.definitions.TileDefinition;
+import gui.states.GameScreen;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -70,30 +71,6 @@ public class ParticleSource {
 
     public void draw(float ox, float oy, float scale, Graphics g) {
 
-        double mxosw = maxRadius * 2 * Chunk.TILE_SIZE * scale;
-        double mnosw = minRadius * 2 * Chunk.TILE_SIZE * scale;
-        double[] dir_offset = MiscMath.getRotatedOffset(0, -maxRadius * 2, direction);
-
-        g.setColor(Color.red);
-        g.fillOval((float)(ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - 2), (float)(oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - 2), 4, 4);
-        g.drawLine(
-                (float)(ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - 2),
-                (float)(oy + ((coordinates[1]) * Chunk.TILE_SIZE * scale) - 2),
-                (float)(ox + ((coordinates[0] + dir_offset[0]) * Chunk.TILE_SIZE * scale) - 2),
-                (float)(oy + ((coordinates[1] + dir_offset[1]) * Chunk.TILE_SIZE * scale) - 2));
-        g.setColor(Color.blue);
-        g.drawOval(
-                (float)(ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - (mxosw/2)),
-                (float)(oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - (mxosw/2)),
-                (float)mxosw,
-                (float)mxosw);
-        g.setColor(Color.cyan);
-        g.drawOval(
-                (float)(ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - (mnosw/2)),
-                (float)(oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - (mnosw/2)),
-                (float)mnosw,
-                (float)mnosw);
-
         for (int i = particles.size() - 1; i >= 0; i--) {
 
             Particle p = particles.get(i);
@@ -105,7 +82,10 @@ public class ParticleSource {
             for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / 16; t++) {
                 byte[] tile = World.getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
                 TileDefinition td = Definitions.getTile(tile[1]);
-                if (pcoords[1] > (pcoords[1] + t - td.getHeight())) { behind_something = true; break; }
+                if (pcoords[1] > (pcoords[1] + t - td.getHeight())) {
+                    if (td.solid()) behind_something = true; else alpha /= 6;
+                    break;
+                }
             }
             if (behind_something) continue;
 
@@ -117,6 +97,33 @@ public class ParticleSource {
                     scale,
                     scale
             );
+        }
+
+        /** DEBUG **/
+        if (GameScreen.debugModeEnabled()) {
+            double mxosw = maxRadius * 2 * Chunk.TILE_SIZE * scale;
+            double mnosw = minRadius * 2 * Chunk.TILE_SIZE * scale;
+            double[] dir_offset = MiscMath.getRotatedOffset(0, -maxRadius * 2, direction);
+
+            g.setColor(Color.red);
+            g.fillOval((float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - 2), (float) (oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - 2), 4, 4);
+            g.drawLine(
+                    (float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - 2),
+                    (float) (oy + ((coordinates[1]) * Chunk.TILE_SIZE * scale) - 2),
+                    (float) (ox + ((coordinates[0] + dir_offset[0]) * Chunk.TILE_SIZE * scale) - 2),
+                    (float) (oy + ((coordinates[1] + dir_offset[1]) * Chunk.TILE_SIZE * scale) - 2));
+            g.setColor(Color.blue);
+            g.drawOval(
+                    (float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - (mxosw / 2)),
+                    (float) (oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - (mxosw / 2)),
+                    (float) mxosw,
+                    (float) mxosw);
+            g.setColor(Color.cyan);
+            g.drawOval(
+                    (float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - (mnosw / 2)),
+                    (float) (oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - (mnosw / 2)),
+                    (float) mnosw,
+                    (float) mnosw);
         }
 
         g.setColor(Color.white);

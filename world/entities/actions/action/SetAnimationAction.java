@@ -27,4 +27,6 @@ public class SetAnimationAction extends Action {
         return !wait || getParent().getAnimation(anim).finished();
     }
 
+    public String toString() { return "SetAnimation("+anim+", "+wait+")[started = "+started()+", finished = "+finished()+"]"; }
+
 }

@@ -33,4 +33,6 @@ public class CastSpellAction extends Action {
         return true;
     }
 
+    public String toString() { return "CastSpell("+wx+", "+wy+")"; }
+
 }

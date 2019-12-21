@@ -1,20 +1,19 @@
 package world;
 
+import misc.Location;
 import misc.Window;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.actions.action.SetAnimationAction;
 import world.entities.magic.MagicSource;
-import world.entities.types.humanoids.Player;
 import world.events.EventDispatcher;
 import world.events.EventListener;
 import world.events.event.EntityMoveEvent;
 import world.generators.chunk.ChunkType;
-import world.generators.region.DefaultWorldGenerator;
 import world.generators.region.RegionGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Region {
 
@@ -29,46 +28,46 @@ public class Region {
 
         this.name = name;
         this.size = size;
+
         chunks = new Chunk[size][size];
         chunk_map = generator.generateChunkMap(size);
         magic_sources = new ArrayList<>();
 
+        Region that = this;
         EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), e -> {
+
             EntityMoveEvent event = (EntityMoveEvent) e;
             Entity entity = event.getEntity();
-            double[] coords = entity.getCoordinates();
-            int[] chcoords = entity.getChunkCoordinates();
+
+            if (!entity.getLocation().getRegion().equals(that)) return;
+
+            double[] coords = entity.getLocation().getCoordinates();
+            int[] chcoords = entity.getLocation().getChunk().getCoordinates();
             int cdx = 0, cdy = 0;
             if (coords[0] == Chunk.CHUNK_SIZE - 1 && chcoords[0] < size - 1) cdx = 1;
             if (coords[0] == 0 && chcoords[0] > 0) cdx = -1;
             if (coords[1] == Chunk.CHUNK_SIZE - 1 && chcoords[1] < size - 1) cdy = 1;
             if (coords[1] == 0 && chcoords[1] > 0) cdy = -1;
-            entity.setCoordinates(
-                    (coords[0] + Chunk.CHUNK_SIZE + cdx) % Chunk.CHUNK_SIZE,
-                    (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE);
-            getChunk(entity.getChunkCoordinates()[0], entity.getChunkCoordinates()[1]).remove(entity);
-            getChunk(chcoords[0] + cdx, chcoords[1] + cdy).add(entity);
+
+
             if (cdx != 0 || cdy != 0) {
+                System.out.println("Moving to "+this.getName()+" @ ["+(chcoords[0]+cdx)+", "+(chcoords[1]+cdy)+"]");
+                entity.moveTo(new Location(
+                        this,
+                        getChunk(chcoords[0] + cdx, chcoords[1] + cdy),
+                        (coords[0] + Chunk.CHUNK_SIZE + cdx) % Chunk.CHUNK_SIZE,
+                        (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE));
                 entity.queueAction(new SetAnimationAction("walking", false));
                 entity.move(cdx, cdy);
                 entity.queueAction(new SetAnimationAction("idle", false));
             }
+
         }));
-    }
 
-    public void addEntity(Entity e, int cx, int cy, int tx, int ty) {
-        getChunk(cx, cy).add(e);
-        e.setRegion(name);
-        e.setCoordinates(tx, ty);
-    }
-
-    public void removeEntity(Entity e) {
-        int[] chcoords = e.getChunkCoordinates();
-        getChunk(chcoords[0], chcoords[1]).remove(e);
     }
 
     public byte[] getTile(int tx, int ty) {
-        Chunk current = getChunk(World.getPlayer().getChunkCoordinates()[0], World.getPlayer().getChunkCoordinates()[1]);
+        Chunk current = World.getPlayer().getLocation().getChunk();
         if (current == null) return new byte[2];
         return current.get(tx, ty);
     }
@@ -99,7 +98,9 @@ public class Region {
             magicSource.update();
             if (magicSource.getBody().isDepleted()) magic_sources.remove(i);
         }
-        Chunk[][] adjacent = getAdjacentChunks(World.getPlayer().getChunkCoordinates()[0], World.getPlayer().getChunkCoordinates()[1]);
+        Chunk[][] adjacent = getAdjacentChunks(
+                World.getPlayer().getLocation().getChunk().getCoordinates()[0],
+                World.getPlayer().getLocation().getChunk().getCoordinates()[1]);
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk adj = adjacent[i + 1][j + 1];
@@ -110,7 +111,9 @@ public class Region {
     }
 
     public void draw(float ox, float oy, float scale, Graphics g) {
-        Chunk[][] adjacent = getAdjacentChunks(World.getPlayer().getChunkCoordinates()[0], World.getPlayer().getChunkCoordinates()[1]);
+        Chunk[][] adjacent = getAdjacentChunks(
+                World.getPlayer().getLocation().getChunk().getCoordinates()[0],
+                World.getPlayer().getLocation().getChunk().getCoordinates()[1]);
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {

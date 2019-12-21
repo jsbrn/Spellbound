@@ -1,5 +1,6 @@
 package world.entities;
 
+import misc.Location;
 import world.Chunk;
 import world.entities.actions.Action;
 import world.entities.actions.ActionGroup;
@@ -11,10 +12,7 @@ import java.util.HashMap;
 
 public class Entity {
 
-    private String region;
-    private int[] chunk_coordinates;
-    private double[] coordinates;
-
+    private Location location;
     private float moveSpeed;
 
     private HashMap<String, Animation> animations;
@@ -24,8 +22,6 @@ public class Entity {
 
     public Entity() {
         this.moveSpeed = 3;
-        this.chunk_coordinates = new int[]{-1, -1};
-        this.coordinates = new double[]{1, 1};
         this.action_queue = new ArrayList<>();
         this.animations = new HashMap<>();
     }
@@ -42,6 +38,7 @@ public class Entity {
     }
 
     public void queueAction(Action a) {
+        System.out.println("Queueing "+a);
         queueActions(new ActionGroup(a));
     }
 
@@ -69,25 +66,30 @@ public class Entity {
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
     public void move(double tx, double ty) {
-        queueAction(new MoveAction((int)coordinates[0] + tx, (int)coordinates[1] + ty));
+        queueAction(new MoveAction((int)location.getCoordinates()[0] + tx, (int)location.getCoordinates()[1] + ty));
+    }
+
+    public Location getLocation() { return location; }
+
+    public void moveTo(Location new_) {
+        if (location != null) location.getChunk().removeEntity(this);
+        location = new_;
+        location.getChunk().addEntity(this);
     }
 
     public float getMoveSpeed() { return this.moveSpeed; }
-    public void setMoveSpeed(float moveSpeed) { this.moveSpeed = moveSpeed;}
-
-    public void setRegion(String region) { this.region = region; }
-    public String getRegion() { return region; }
-    public int[] getChunkCoordinates() {
-        return chunk_coordinates;
-    }
-    public double[] getCoordinates() { return coordinates; }
-    public void setCoordinates(double x, double y) { this.coordinates[0] = x; this.coordinates[1] = y; }
-    public void setChunkCoordinates(int x, int y) { this.chunk_coordinates[0] = x; this.chunk_coordinates[1] = y; }
+    public void setMoveSpeed(float moveSpeed) { this.moveSpeed = moveSpeed; }
 
     public void draw(float sx, float sy, float scale) {
-        float ex = sx + ((float)coordinates[0] * scale * Chunk.TILE_SIZE);
-        float ey = sy + ((float)coordinates[1] * scale * Chunk.TILE_SIZE);
+        float ex = sx + ((float)location.getCoordinates()[0] * scale * Chunk.TILE_SIZE);
+        float ey = sy + ((float)location.getCoordinates()[1] * scale * Chunk.TILE_SIZE);
         current_animation.draw(ex, ey, scale);
+    }
+
+    public String debug() {
+        String d = "";
+        for (ActionGroup ag: action_queue) d += ag.debug();
+        return d;
     }
 
 }

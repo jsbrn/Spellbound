@@ -4,11 +4,11 @@ import world.RegionLink;
 
 import java.util.Random;
 
-public class ForestGenerator extends ChunkGenerator {
+public class HomeGenerator extends ChunkGenerator {
 
     private Random rng;
 
-    public ForestGenerator() {
+    public HomeGenerator() {
         this.rng = new Random();
     }
 
@@ -17,26 +17,22 @@ public class ForestGenerator extends ChunkGenerator {
         byte[][] base = new byte[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                base[i][j] = 1;
+                base[i][j] = i == 0 ? (byte)11 : (byte)10;
             }
         }
+        base[6][5] = 0;
         return base;
     }
 
     @Override
     public byte[][] generateObjects(int size) {
         byte[][] top = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (Math.random() > 0.5f) { top[i][j] = 8; continue; }
-                top[i][j] = (byte)(Math.random() > 0.6 ? (Math.random() < 0.2 ? 4 : 3) : 0);
-            }
-        }
         return top;
     }
 
     @Override
     public RegionLink[][] generateLinks(int size) {
+        //RegionLink[][] toWorld
         return new RegionLink[size][size];
     }
 

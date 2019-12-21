@@ -16,8 +16,8 @@ public class PropelTechnique extends Technique {
         double[] moveTarget = MiscMath.getUnitVector(
                 (float)castTarget[0] - (float)source.getBody().getCoordinates()[0],
                 (float)castTarget[1] - (float)source.getBody().getCoordinates()[1]);
-        moveTarget[0] = caster.getCoordinates()[0] + (moveTarget[0] * Integer.MAX_VALUE); //far off into the distance
-        moveTarget[1] = caster.getCoordinates()[1] + (moveTarget[1] * Integer.MAX_VALUE);
+        moveTarget[0] = caster.getLocation().getCoordinates()[0] + (moveTarget[0] * Integer.MAX_VALUE); //far off into the distance
+        moveTarget[1] = caster.getLocation().getCoordinates()[1] + (moveTarget[1] * Integer.MAX_VALUE);
         source.setMoveTarget(moveTarget[0], moveTarget[1]);
 
         double angle = MiscMath.angleBetween(source.getBody().getCoordinates()[0], source.getBody().getCoordinates()[1], moveTarget[0], moveTarget[1]);

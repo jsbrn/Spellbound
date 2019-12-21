@@ -1,5 +1,6 @@
 package world;
 
+import misc.Location;
 import org.newdawn.slick.Graphics;
 import world.entities.types.humanoids.Player;
 import world.generators.region.DefaultWorldGenerator;
@@ -16,8 +17,8 @@ public class World {
         regions = new HashMap<>();
         player = new Player();
         Region world = new Region("world", 32, new DefaultWorldGenerator());
-        world.addEntity(player, 1, 1, 1, 1);
         addRegion(world);
+        player.moveTo(new Location(world, world.getChunk(1, 1), 1, 1));
     }
 
     public static void addRegion(Region region) {
@@ -28,7 +29,7 @@ public class World {
         return regions.get(name);
     }
 
-    public static Region getRegion() { return regions.get(player.getRegion()); }
+    public static Region getRegion() { return player.getLocation().getRegion(); }
 
     public static Player getPlayer() { return player; }
 

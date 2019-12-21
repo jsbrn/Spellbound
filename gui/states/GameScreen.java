@@ -12,19 +12,20 @@ import misc.Window;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import world.Region;
+import world.Chunk;
 import world.World;
 
 public class GameScreen extends BasicGameState {
 
     static StateBasedGame game;
     private static Input input;
-    private boolean init;
+    private boolean initialized;
 
     private GUI gui;
+    private static boolean debugMode;
 
     public GameScreen(int state) {
-        this.init = false;
+        this.initialized = false;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class GameScreen extends BasicGameState {
     }
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        if (init) return;
+        if (initialized) return;
         World.init();
         game = sbg;
         gui = new GUI();
@@ -48,14 +49,27 @@ public class GameScreen extends BasicGameState {
         Assets.load();
         Definitions.load();
 
-        init = true;
+        initialized = true;
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-
+        g.setFont(Assets.FONT);
         float[] origin = MiscMath.getWorldOnscreenOrigin();
         World.draw(origin[0], origin[1], Window.getScale(), g);
         gui.draw(g);
+
+        if (debugMode) {
+            for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
+                for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
+                    float tile_osw = Chunk.TILE_SIZE * Window.getScale();
+                    g.drawRect(origin[0] + (i * tile_osw), origin[1] + (j * tile_osw), tile_osw, tile_osw);
+                }
+            }
+            int y = Window.getHeight()/2;
+            g.drawString(World.getPlayer().debug(), 10, y);
+            g.drawString(World.getPlayer().getLocation().toString(), 10, y+25);
+            g.drawString(World.getPlayer().getLocation().getChunk().debug(), 10, y+50);
+        }
 
     }
 
@@ -96,8 +110,12 @@ public class GameScreen extends BasicGameState {
     @Override
     public void keyPressed(int key, char c) {
         gui.onKeyDown(key);
+        if (key == Input.KEY_F3)
+            debugMode = !debugMode;
     }
 
     public static Input getInput() { return input; }
+
+    public static boolean debugModeEnabled() { return debugMode; }
 
 }

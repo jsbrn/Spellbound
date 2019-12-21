@@ -2,12 +2,14 @@ package world;
 
 import assets.Assets;
 import assets.definitions.Definitions;
+import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.ChunkType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Chunk {
 
@@ -17,6 +19,7 @@ public class Chunk {
     private int[] coordinates;
     private byte[][] base;
     private byte[][] top;
+    private RegionLink[][] links;
     private ArrayList<Entity> entities;
 
     public Chunk(int x, int y, ChunkType type) {
@@ -25,12 +28,17 @@ public class Chunk {
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
 
-        this.entities = new ArrayList<Entity>();
+        this.entities = new ArrayList<>();
 
         ChunkGenerator generator = ChunkGenerator.get(type);
         base = generator.generateBase(CHUNK_SIZE);
         top = generator.generateObjects(CHUNK_SIZE);
+        links = generator.generateLinks(CHUNK_SIZE);
 
+    }
+
+    public RegionLink getLink(int tx, int ty) {
+        return links[tx][ty];
     }
 
     public void update() {
@@ -49,19 +57,15 @@ public class Chunk {
         return new byte[]{this.base[x][y], this.top[x][y]};
     }
 
-    public void add(Entity e) {
-        e.setChunkCoordinates(coordinates[0], coordinates[1]);
-        entities.add(e);
-    }
+    public void addEntity(Entity e) { entities.add(e); }
+    public void removeEntity(Entity e) { entities.remove(e); }
 
-    public void remove(Entity e) {
-        entities.remove(e);
-    }
+    public int[] getCoordinates() { return coordinates; }
 
     public void draw(float sx, float sy, float scale, boolean active) {
         Color filter = new Color(0.3f, 0.3f, 0.3f);
         Color translucent = new Color(1f, 1f, 1f, 0.5f);
-        double[] player_coords = World.getPlayer().getCoordinates();
+        double[] player_coords = World.getPlayer().getLocation().getCoordinates();
         for (int j = 0; j < CHUNK_SIZE; j++) {
             Assets.TILE_SPRITESHEET.startUse();
             for (int i = 0; i < CHUNK_SIZE; i++) {
@@ -100,8 +104,12 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : (active ? Color.white : filter));
             }
             Assets.TILE_SPRITESHEET.endUse();
-            for (Entity e: entities) if ((int)(e.getCoordinates()[1] + 0.5f) == j) e.draw(sx, sy, scale);
+            for (Entity e: entities) if ((int)(e.getLocation().getCoordinates()[1] + 0.5f) == j) e.draw(sx, sy, scale);
         }
+    }
+
+    public String debug() {
+        return "cx: "+coordinates[0]+", cy: "+coordinates[1]+", e: "+entities.size();
     }
 
 }

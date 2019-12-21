@@ -1,5 +1,10 @@
 package world.generators.chunk;
 
+import world.Region;
+import world.RegionLink;
+import world.World;
+import world.generators.region.PlayerHomeRegionGenerator;
+
 import java.util.Random;
 
 public class TestBackyardGenerator extends ChunkGenerator {
@@ -33,6 +38,16 @@ public class TestBackyardGenerator extends ChunkGenerator {
         top[6][5] = 6;
         top[7][5] = 7;
         return top;
+    }
+
+    @Override
+    public RegionLink[][] generateLinks(int size) {
+        RegionLink[][] links = new RegionLink[size][size];
+
+        Region player_home = new Region("player_home", 1, new PlayerHomeRegionGenerator());
+        World.addRegion(player_home);
+        links[6][5] = new RegionLink(player_home, 0, 0, 6, 0, 0, 1);
+        return links;
     }
 
 }

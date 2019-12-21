@@ -292,4 +292,12 @@ public class MiscMath {
                 (osy - world_origin[1]) / Window.getScale() / Chunk.TILE_SIZE};
     }
 
+    public static int getTileIndex(int tx, int ty) {
+        return (tx % Chunk.CHUNK_SIZE) + ty;
+    }
+
+    public static int[] getTileCoordinatesFromIndex(int index) {
+        return new int[]{(int)(index / Chunk.CHUNK_SIZE), (int)(index % Chunk.CHUNK_SIZE)};
+    }
+
 }
