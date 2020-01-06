@@ -2,6 +2,7 @@ package gui;
 
 import misc.MiscMath;
 import misc.Window;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public final class GUI {
 
     private ArrayList<GUIElement> elements;
+    private float darkness;
 
     public GUI() {
         this.elements = new ArrayList<>();
@@ -43,12 +45,24 @@ public final class GUI {
         return false;
     }
 
+    public void setFade(float alpha) {
+        darkness = alpha;
+    }
+
     public void addChild(GUIElement element, int ogx, int ogy, GUIAnchor anchor) {
         element.setOffset(ogx, ogy);
         element.setAnchor(anchor);
         this.elements.add(element);
     }
 
-    public void draw(Graphics g) { for (GUIElement element: elements) element.draw(g); }
+    public void draw(Graphics g) {
+        darkness = (float)MiscMath.tween(1f, darkness, 0f, 1f, 0.6f);
+        if (darkness > 0) {
+            g.setColor(new Color(0, 0, 0, darkness));
+            g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
+            g.setColor(Color.white);
+        }
+        for (GUIElement element: elements) element.draw(g);
+    }
 
 }

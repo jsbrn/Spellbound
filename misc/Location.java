@@ -35,7 +35,7 @@ public class Location {
     }
 
     public String toString() {
-        return region.getName()+"@["+chunk.debug()+"]";
+        return region.getName()+"@["+chunk.debug()+"]: "+coordinates[0]+", "+coordinates[1]+" ("+MiscMath.getTileIndex((int)coordinates[0], (int)coordinates[1])+")";
     }
 
 }

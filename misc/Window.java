@@ -16,7 +16,7 @@ import java.util.Calendar;
 public class Window {
 
     //the name of the window
-    public static final String WINDOW_TITLE = "A Mage's Quest";
+    public static final String WINDOW_TITLE = "Spellbound";
     //create a window object
     public static AppGameContainer WINDOW_INSTANCE;
 
@@ -46,24 +46,17 @@ public class Window {
             int month = Calendar.getInstance().get(Calendar.MONTH);
             int year = Calendar.getInstance().get(Calendar.YEAR);
             int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+            int hour = (int)(System.currentTimeMillis() / 1000 / 60 / 60) % 24;
+            int minute = (int)(System.currentTimeMillis() / 1000 / 60) % 60;
+            int second = (int)(System.currentTimeMillis() / 1000) % 60;
+            int mills = (int)(System.currentTimeMillis() % 1000);
             Image scrn = new Image(Window.getWidth(), Window.getHeight());
-            String file_url = System.getProperty("user.home") + "/secret/screenshots/"
-                    + year + "" + month + "" + day;
+            String folder = System.getProperty("user.home") + "/Desktop/";
+            String file_url = folder + "Spellbound-" + year + "-" + month + "-" + day+"-"+hour+"-"+minute+"-"+second+"-"+mills;
             g.copyArea(scrn, 0, 0);
             //make screenshots folder
-            if (new File(System.getProperty("user.home") + "/secret/screenshots/").exists() == false) {
-                new File(System.getProperty("user.home") + "/secret/screenshots/").mkdir();
-            }
-            //check if image_exists already
-            if (new File(file_url + ".png").exists()) {
-                int count = 2;
-                while (true) {
-                    if (new File(file_url + "_" + count + ".png").exists() == false) {
-                        file_url += "_" + count;
-                        break;
-                    }
-                    count++;
-                }
+            if (new File(System.getProperty("user.home") + "/Desktop/").exists() == false) {
+                new File(System.getProperty("user.home") + "/Desktop/").mkdir();
             }
             ImageOut.write(scrn, file_url + ".png");
             System.out.println("Saved screenshot to " + file_url + ".png");

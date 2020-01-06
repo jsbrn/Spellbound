@@ -293,7 +293,7 @@ public class MiscMath {
     }
 
     public static int getTileIndex(int tx, int ty) {
-        return (tx % Chunk.CHUNK_SIZE) + ty;
+        return (ty * Chunk.CHUNK_SIZE) + tx;
     }
 
     public static int[] getTileCoordinatesFromIndex(int index) {

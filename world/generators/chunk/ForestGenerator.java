@@ -1,10 +1,10 @@
 package world.generators.chunk;
 
-import world.RegionLink;
+import world.Portal;
 
 import java.util.Random;
 
-public class ForestGenerator extends ChunkGenerator {
+public class ForestGenerator extends OpenFieldChunkGenerator {
 
     private Random rng;
 
@@ -13,31 +13,9 @@ public class ForestGenerator extends ChunkGenerator {
     }
 
     @Override
-    public byte[][] generateBase(int size) {
-        byte[][] base = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                base[i][j] = 1;
-            }
-        }
-        return base;
-    }
-
-    @Override
-    public byte[][] generateObjects(int size) {
-        byte[][] top = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (Math.random() > 0.5f) { top[i][j] = 8; continue; }
-                top[i][j] = (byte)(Math.random() > 0.6 ? (Math.random() < 0.2 ? 4 : 3) : 0);
-            }
-        }
-        return top;
-    }
-
-    @Override
-    public RegionLink[][] generateLinks(int size) {
-        return new RegionLink[size][size];
+    public byte getTop(int x, int y) {
+        if (Math.random() > 0.5f) return 8;
+        return (byte)(Math.random() > 0.6 ? (Math.random() < 0.2 ? 4 : 3) : 0);
     }
 
 }

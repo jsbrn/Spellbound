@@ -1,7 +1,10 @@
 package world.entities;
 
+import gui.states.GameScreen;
 import misc.Location;
 import world.Chunk;
+import world.Portal;
+import world.World;
 import world.entities.actions.Action;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.MoveAction;
@@ -66,12 +69,29 @@ public class Entity {
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
     public void move(double tx, double ty) {
-        queueAction(new MoveAction((int)location.getCoordinates()[0] + tx, (int)location.getCoordinates()[1] + ty));
+        int new_x = (int)(location.getCoordinates()[0] + tx);
+        int new_y = (int)(location.getCoordinates()[1] + ty);
+        Portal origin = location.getChunk().getPortal(new_x, new_y);
+        if (origin != null) {
+            Portal destination = origin.getDestination().findPortal(origin.getDestinationName());
+            moveTo(new Location(
+                    origin.getDestination(),
+                    destination.getChunk(),
+                    destination.getTileCoordinates()[0],
+                    destination.getTileCoordinates()[1]));
+            queueAction(new MoveAction(
+                    destination.getTileCoordinates()[0] + destination.getExitDirection()[0],
+                    destination.getTileCoordinates()[1] + destination.getExitDirection()[1]));
+            if (this.equals(World.getPlayer())) GameScreen.getGUI().setFade(1); //TODO: convert to event
+            return;
+        }
+        queueAction(new MoveAction(new_x, new_y));
     }
 
     public Location getLocation() { return location; }
 
     public void moveTo(Location new_) {
+        System.out.println("Setting "+this+" location to "+new_);
         if (location != null) location.getChunk().removeEntity(this);
         location = new_;
         location.getChunk().addEntity(this);

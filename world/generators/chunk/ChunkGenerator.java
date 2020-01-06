@@ -1,12 +1,12 @@
 package world.generators.chunk;
 
-import world.RegionLink;
+import world.Portal;
 
 public abstract class ChunkGenerator {
 
-    public abstract byte[][] generateBase(int size);
-    public abstract byte[][] generateObjects(int size);
-    public abstract RegionLink[][] generateLinks(int size);
+    public abstract byte getBase(int x, int y);
+    public abstract byte getTop(int x, int y);
+    public abstract Portal getPortal(int x, int y);
 
     public static ChunkGenerator get(ChunkType type) {
         if (type == ChunkType.OPEN_FIELD) return new OpenFieldChunkGenerator();

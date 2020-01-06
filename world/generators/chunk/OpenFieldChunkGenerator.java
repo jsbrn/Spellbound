@@ -1,6 +1,6 @@
 package world.generators.chunk;
 
-import world.RegionLink;
+import world.Portal;
 
 import java.util.Random;
 
@@ -13,30 +13,17 @@ public class OpenFieldChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public byte[][] generateBase(int size) {
-        byte[][] base = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                base[i][j] = 1;
-            }
-        }
-        return base;
+    public byte getBase(int x, int y) {
+        return 1;
     }
 
     @Override
-    public byte[][] generateObjects(int size) {
-        byte[][] top = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                top[i][j] = (byte)(Math.random() > 0.6 ? (Math.random() < 0.2 ? 4 : 3) : 0);
-            }
-        }
-        return top;
+    public byte getTop(int x, int y) {
+        return (byte)(rng.nextFloat() > 0.6 ? (rng.nextFloat() < 0.2 ? 4 : 3) : 0);
     }
 
     @Override
-    public RegionLink[][] generateLinks(int size) {
-        return new RegionLink[size][size];
+    public Portal getPortal(int x, int y) {
+        return null;
     }
-
 }

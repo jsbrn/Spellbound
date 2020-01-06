@@ -23,6 +23,7 @@ public class Region {
     private int size;
 
     private ArrayList<MagicSource> magic_sources;
+    private HashMap<String, Portal> portals;
 
     public Region(String name, int size, RegionGenerator generator) {
 
@@ -32,17 +33,20 @@ public class Region {
         chunks = new Chunk[size][size];
         chunk_map = generator.generateChunkMap(size);
         magic_sources = new ArrayList<>();
+        portals = new HashMap<>();
 
         Region that = this;
         EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), e -> {
 
             EntityMoveEvent event = (EntityMoveEvent) e;
             Entity entity = event.getEntity();
+            Location location = entity.getLocation();
 
             if (!entity.getLocation().getRegion().equals(that)) return;
 
-            double[] coords = entity.getLocation().getCoordinates();
-            int[] chcoords = entity.getLocation().getChunk().getCoordinates();
+            double[] coords = location.getCoordinates();
+            int[] chcoords = location.getChunk().getCoordinates();
+
             int cdx = 0, cdy = 0;
             if (coords[0] == Chunk.CHUNK_SIZE - 1 && chcoords[0] < size - 1) cdx = 1;
             if (coords[0] == 0 && chcoords[0] > 0) cdx = -1;
@@ -64,6 +68,24 @@ public class Region {
 
         }));
 
+    }
+
+    /**
+     * Find the specified portal. Forcefully generates chunks until it finds the portal.
+     * @param name The portal to find.
+     * @return Portal
+     */
+    public Portal findPortal(String name) {
+        for (int i = 0; i < chunk_map.length; i++) {
+            for (int j = 0; j < chunk_map[i].length; j++) {
+                Chunk c = getChunk(i, j);
+                if (c != null) {
+                    Portal p = c.getPortal(name);
+                    if (p != null) return p;
+                }
+            }
+        }
+        return null;
     }
 
     public byte[] getTile(int tx, int ty) {
@@ -91,6 +113,12 @@ public class Region {
     public void addMagicSource(MagicSource magicSource) {
         magic_sources.add(magicSource);
     }
+
+    public void registerPortal(String name, Portal portal) {
+        this.portals.put(name, portal);
+    }
+
+    public Portal getPortal(String name) { return this.portals.get(name); }
 
     public void update() {
         for (int i = magic_sources.size() - 1; i >= 0; i--) {

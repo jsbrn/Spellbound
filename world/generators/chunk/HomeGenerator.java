@@ -1,6 +1,10 @@
 package world.generators.chunk;
 
-import world.RegionLink;
+import world.Portal;
+import world.Region;
+import world.World;
+import world.generators.region.PlayerHomeRegionGenerator;
+import world.generators.region.RegionGenerator;
 
 import java.util.Random;
 
@@ -13,27 +17,20 @@ public class HomeGenerator extends ChunkGenerator {
     }
 
     @Override
-    public byte[][] generateBase(int size) {
-        byte[][] base = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                base[i][j] = i == 0 ? (byte)11 : (byte)10;
-            }
-        }
-        base[6][5] = 0;
-        return base;
+    public byte getBase(int x, int y) {
+        return 1;
     }
 
     @Override
-    public byte[][] generateObjects(int size) {
-        byte[][] top = new byte[size][size];
-        return top;
+    public byte getTop(int x, int y) {
+        return 0;
     }
 
     @Override
-    public RegionLink[][] generateLinks(int size) {
-        //RegionLink[][] toWorld
-        return new RegionLink[size][size];
+    public Portal getPortal(int x, int y) {
+        return x == 1 && y == 1
+                ? new Portal("door", World.getRegion("world"), "door", 0, 1)
+                : null;
     }
 
 }

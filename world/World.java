@@ -21,8 +21,9 @@ public class World {
         player.moveTo(new Location(world, world.getChunk(1, 1), 1, 1));
     }
 
-    public static void addRegion(Region region) {
+    public static Region addRegion(Region region) {
         regions.put(region.getName(), region);
+        return region;
     }
 
     public static Region getRegion(String name) {

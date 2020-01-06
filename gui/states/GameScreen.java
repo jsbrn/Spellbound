@@ -7,6 +7,7 @@ import gui.GUIAnchor;
 import gui.elements.Button;
 import gui.elements.Hotbar;
 import gui.elements.Statusbar;
+import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.*;
@@ -20,8 +21,9 @@ public class GameScreen extends BasicGameState {
     static StateBasedGame game;
     private static Input input;
     private boolean initialized;
+    private Graphics graphics;
 
-    private GUI gui;
+    private static GUI gui;
     private static boolean debugMode;
 
     public GameScreen(int state) {
@@ -53,6 +55,7 @@ public class GameScreen extends BasicGameState {
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+        graphics = g;
         g.setFont(Assets.FONT);
         float[] origin = MiscMath.getWorldOnscreenOrigin();
         World.draw(origin[0], origin[1], Window.getScale(), g);
@@ -110,12 +113,20 @@ public class GameScreen extends BasicGameState {
     @Override
     public void keyPressed(int key, char c) {
         gui.onKeyDown(key);
+        if (key == Input.KEY_F2)
+            Window.takeScreenshot(graphics);
         if (key == Input.KEY_F3)
             debugMode = !debugMode;
+        if (key == Input.KEY_T)
+            World.getPlayer().moveTo(new Location(World.getRegion("player_home"), World.getRegion().getChunk(0, 0), 0, 0));
     }
 
     public static Input getInput() { return input; }
 
     public static boolean debugModeEnabled() { return debugMode; }
+
+    public static GUI getGUI() {
+        return gui;
+    }
 
 }

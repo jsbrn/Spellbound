@@ -1,13 +1,13 @@
 package world.generators.chunk;
 
 import world.Region;
-import world.RegionLink;
+import world.Portal;
 import world.World;
 import world.generators.region.PlayerHomeRegionGenerator;
 
 import java.util.Random;
 
-public class TestBackyardGenerator extends ChunkGenerator {
+public class TestBackyardGenerator extends OpenFieldChunkGenerator {
 
     private Random rng;
 
@@ -16,38 +16,17 @@ public class TestBackyardGenerator extends ChunkGenerator {
     }
 
     @Override
-    public byte[][] generateBase(int size) {
-        byte[][] base = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                base[i][j] = 1;
-            }
+    public byte getTop(int x, int y) {
+        if (y == 5) {
+            if (x >= 5 && x <= 7) return (byte)x;
         }
-        return base;
+        return super.getTop(x, y);
     }
 
     @Override
-    public byte[][] generateObjects(int size) {
-        byte[][] top = new byte[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                top[i][j] = (byte)(Math.random() > 0.6 ? (Math.random() < 0.2 ? 4 : 3) : 0);
-            }
-        }
-        top[5][5] = 5; //house :)
-        top[6][5] = 6;
-        top[7][5] = 7;
-        return top;
+    public Portal getPortal(int x, int y) {
+        return (x == 6 && y == 5)
+                ? new Portal("door", World.addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator())), "door", 0, 1)
+                : null;
     }
-
-    @Override
-    public RegionLink[][] generateLinks(int size) {
-        RegionLink[][] links = new RegionLink[size][size];
-
-        Region player_home = new Region("player_home", 1, new PlayerHomeRegionGenerator());
-        World.addRegion(player_home);
-        links[6][5] = new RegionLink(player_home, 0, 0, 6, 0, 0, 1);
-        return links;
-    }
-
 }

@@ -19,7 +19,7 @@ public class Chunk {
     private int[] coordinates;
     private byte[][] base;
     private byte[][] top;
-    private RegionLink[][] links;
+    private HashMap<Integer, Portal> portals;
     private ArrayList<Entity> entities;
 
     public Chunk(int x, int y, ChunkType type) {
@@ -27,18 +27,36 @@ public class Chunk {
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
+        this.portals = new HashMap<>();
 
         this.entities = new ArrayList<>();
 
         ChunkGenerator generator = ChunkGenerator.get(type);
-        base = generator.generateBase(CHUNK_SIZE);
-        top = generator.generateObjects(CHUNK_SIZE);
-        links = generator.generateLinks(CHUNK_SIZE);
+
+        for (int j = 0; j < CHUNK_SIZE; j++) {
+            for (int i = 0; i < CHUNK_SIZE; i++) {
+                base[i][j] = generator.getBase(i, j);
+                top[i][j] = generator.getTop(i, j);
+                Portal p = generator.getPortal(i, j);
+                if (p != null) {
+                    p.setChunk(this);
+                    p.setTileCoordinates(i, j);
+                    portals.put(MiscMath.getTileIndex(i, j), p);
+                }
+            }
+        }
 
     }
 
-    public RegionLink getLink(int tx, int ty) {
-        return links[tx][ty];
+    public Portal getPortal(int tx, int ty) {
+        return portals.get(MiscMath.getTileIndex(tx, ty));
+    }
+
+    public Portal getPortal(String name) {
+        for (Portal p: portals.values())
+            if (p.getName().equals(name))
+                return p;
+        return null;
     }
 
     public void update() {
