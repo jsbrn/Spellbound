@@ -73,26 +73,74 @@
     "speedMultiplier": 0.5
   },
   {
-    "name": "Door",
-    "collision": false,
-    "peeking": false,
-    "height": 1,
-    "solid": true,
-    "speedMultiplier": 1.0
-  },
-  {
-    "name": "Planks",
-    "collision": false,
-    "peeking": false,
-    "height": 1,
-    "solid": true,
-    "speedMultiplier": 1.0
-  },
-  {
-    "name": "Stone Wall",
+    "name": "Interior Wall, North",
     "collision": true,
     "peeking": false,
     "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Interior Door, North",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Wood Floor",
+    "collision": false,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Wood Corner, Northeast",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Wood Wall, East",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Wood Wall, West",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Wood Corner, Northwest",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Wood Wall, South",
+    "collision": true,
+    "peeking": true,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Wood Wall Window, South",
+    "collision": true,
+    "peeking": true,
+    "height": 2,
     "solid": true,
     "speedMultiplier": 1.0
   }
