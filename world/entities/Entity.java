@@ -71,6 +71,7 @@ public class Entity {
     public void move(double tx, double ty) {
         int new_x = (int)(location.getCoordinates()[0] + tx);
         int new_y = (int)(location.getCoordinates()[1] + ty);
+        if (new_x < 0 || new_x >= Chunk.CHUNK_SIZE || new_y < 0 || new_y >= Chunk.CHUNK_SIZE) return;
         Portal origin = location.getChunk().getPortal(new_x, new_y);
         if (origin != null) {
             Portal destination = origin.getDestination().findPortal(origin.getDestinationName());
