@@ -4,6 +4,6 @@ import world.generators.chunk.ChunkType;
 
 public interface RegionGenerator {
 
-    ChunkType[][] generateChunkMap(int size);
+    ChunkType getChunkType(int cx, int cy, int size);
 
 }

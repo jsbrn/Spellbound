@@ -1,4 +1,4 @@
-package world.generators.chunk;
+package world.generators.chunk.overworld;
 
 import world.Region;
 import world.Portal;
@@ -7,11 +7,11 @@ import world.generators.region.PlayerHomeRegionGenerator;
 
 import java.util.Random;
 
-public class TestBackyardGenerator extends OpenFieldChunkGenerator {
+public class BackyardGenerator extends OpenFieldGenerator {
 
     private Random rng;
 
-    public TestBackyardGenerator() {
+    public BackyardGenerator() {
         this.rng = new Random();
     }
 
@@ -26,7 +26,7 @@ public class TestBackyardGenerator extends OpenFieldChunkGenerator {
     @Override
     public Portal getPortal(int x, int y) {
         return (x == 6 && y == 5)
-                ? new Portal("door", World.addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator())), "door", 0, 1)
+                ? new Portal("door", 0, 1, World.getRegion("player_home"), "door")
                 : null;
     }
 }

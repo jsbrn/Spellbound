@@ -13,7 +13,6 @@ import world.generators.chunk.ChunkType;
 import world.generators.region.RegionGenerator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Region {
 
@@ -23,7 +22,6 @@ public class Region {
     private int size;
 
     private ArrayList<MagicSource> magic_sources;
-    private HashMap<String, Portal> portals;
 
     public Region(String name, int size, RegionGenerator generator) {
 
@@ -31,9 +29,13 @@ public class Region {
         this.size = size;
 
         chunks = new Chunk[size][size];
-        chunk_map = generator.generateChunkMap(size);
+        chunk_map = new ChunkType[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                chunk_map[i][j] = generator.getChunkType(i, j, size);
+            }
+        }
         magic_sources = new ArrayList<>();
-        portals = new HashMap<>();
 
         Region that = this;
         EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), e -> {
@@ -71,16 +73,17 @@ public class Region {
     }
 
     /**
-     * Find the specified portal. Forcefully generates chunks until it finds the portal.
-     * @param name The portal to find.
-     * @return Portal
+     * Find the portal that links to the portal specified. Forcefully generates chunks until it finds the portal.
+     * @param destination Region of destination portal.
+     * @param portal_name Name of destination portal.
+     * @return Portal if found, null if not
      */
-    public Portal findPortal(String name) {
+    public Portal findPortalTo(Region destination, String portal_name) {
         for (int i = 0; i < chunk_map.length; i++) {
             for (int j = 0; j < chunk_map[i].length; j++) {
                 Chunk c = getChunk(i, j);
                 if (c != null) {
-                    Portal p = c.getPortal(name);
+                    Portal p = c.findPortalTo(destination, portal_name);
                     if (p != null) return p;
                 }
             }
@@ -113,12 +116,6 @@ public class Region {
     public void addMagicSource(MagicSource magicSource) {
         magic_sources.add(magicSource);
     }
-
-    public void registerPortal(String name, Portal portal) {
-        this.portals.put(name, portal);
-    }
-
-    public Portal getPortal(String name) { return this.portals.get(name); }
 
     public void update() {
         for (int i = magic_sources.size() - 1; i >= 0; i--) {
@@ -156,6 +153,11 @@ public class Region {
             }
         }
         for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(ox, oy, scale, g);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
 }

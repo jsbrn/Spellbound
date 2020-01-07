@@ -74,7 +74,8 @@ public class Entity {
         if (new_x < 0 || new_x >= Chunk.CHUNK_SIZE || new_y < 0 || new_y >= Chunk.CHUNK_SIZE) return;
         Portal origin = location.getChunk().getPortal(new_x, new_y);
         if (origin != null) {
-            Portal destination = origin.getDestination().findPortal(origin.getDestinationName());
+            Portal destination = origin.getDestination().findPortalTo(location.getRegion(), origin.getName());
+            System.out.println(origin.getDestination()+", "+location.getRegion()+", "+origin.getName());
             moveTo(new Location(
                     origin.getDestination(),
                     destination.getChunk(),

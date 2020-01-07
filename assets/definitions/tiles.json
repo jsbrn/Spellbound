@@ -81,7 +81,7 @@
     "speedMultiplier": 1.0
   },
   {
-    "name": "Interior Door, North",
+    "name": "Wood Interior Door, North",
     "collision": true,
     "peeking": false,
     "height": 1,
@@ -140,6 +140,102 @@
     "name": "Wood Wall Window, South",
     "collision": true,
     "peeking": true,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Wall, North",
+    "collision": true,
+    "peeking": false,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Door, North",
+    "collision": true,
+    "peeking": false,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Floor",
+    "collision": false,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Corner, Northeast",
+    "collision": true,
+    "peeking": false,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Wall, East",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Wall, West",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Corner, Northwest",
+    "collision": true,
+    "peeking": false,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Wall, South",
+    "collision": true,
+    "peeking": true,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Window, South",
+    "collision": true,
+    "peeking": true,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "BLANK (REPLACE)",
+    "collision": false,
+    "peeking": true,
+    "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Trapdoor",
+    "collision": true,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Ladder, North",
+    "collision": false,
+    "peeking": false,
     "height": 2,
     "solid": true,
     "speedMultiplier": 1.0

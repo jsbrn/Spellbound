@@ -8,7 +8,7 @@ public class Portal {
     private Chunk chunk;
     private int[] exitDirection, tileCoordinates;
 
-    public Portal(String name, Region destination, String destination_name, int dx, int dy) {
+    public Portal(String name, int dx, int dy, Region destination, String destination_name) {
         this.destination = destination;
         this.destinationName = destination_name;
         this.name = name;

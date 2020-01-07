@@ -52,9 +52,9 @@ public class Chunk {
         return portals.get(MiscMath.getTileIndex(tx, ty));
     }
 
-    public Portal getPortal(String name) {
+    public Portal findPortalTo(Region destination, String destination_name) {
         for (Portal p: portals.values())
-            if (p.getName().equals(name))
+            if (p.getDestination().equals(destination) && p.getDestinationName().equals(destination_name))
                 return p;
         return null;
     }
