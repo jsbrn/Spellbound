@@ -11,9 +11,10 @@ public class DungeonGenerator implements RegionGenerator {
 
     @Override
     public ChunkType getChunkType(int cx, int cy, int size) {
-        if (cx == Chunk.CHUNK_SIZE/2) {
+        if (cx == size/2) {
             if (cy == 0) return ChunkType.DUNGEON_ENTRANCE;
-            return ChunkType.DUNGEON_NS_HALLWAY;
+            if (cy == 3) return ChunkType.DUNGEON_SOUTH_ROOM;
+            return ChunkType.DUNGEON_HALLWAY_NS;
         }
         return ChunkType.EMPTY;
     }

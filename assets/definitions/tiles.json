@@ -221,7 +221,7 @@
     "collision": false,
     "peeking": true,
     "height": 2,
-    "solid": true,
+    "solid": false,
     "speedMultiplier": 1.0
   },
   {
@@ -229,7 +229,7 @@
     "collision": true,
     "peeking": false,
     "height": 1,
-    "solid": true,
+    "solid": false,
     "speedMultiplier": 1.0
   },
   {
@@ -237,6 +237,46 @@
     "collision": false,
     "peeking": false,
     "height": 2,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Column, East",
+    "collision": true,
+    "peeking": true,
+    "height": 2,
+    "solid": false,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Stone Column, West",
+    "collision": true,
+    "peeking": true,
+    "height": 2,
+    "solid": false,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Cracked Stone Floor",
+    "collision": false,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Broken Stone Floor",
+    "collision": false,
+    "peeking": false,
+    "height": 1,
+    "solid": true,
+    "speedMultiplier": 1.0
+  },
+  {
+    "name": "Mossy Stone Floor",
+    "collision": false,
+    "peeking": false,
+    "height": 1,
     "solid": true,
     "speedMultiplier": 1.0
   }

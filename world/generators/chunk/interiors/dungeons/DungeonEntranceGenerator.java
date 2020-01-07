@@ -8,11 +8,12 @@ import world.generators.chunk.interiors.StoneRoomGenerator;
 
 import java.util.Random;
 
-public class DungeonEntranceGenerator extends StoneRoomGenerator {
+public class DungeonEntranceGenerator extends DungeonRoomGenerator {
 
     private Random rng;
 
-    public DungeonEntranceGenerator() {
+    public DungeonEntranceGenerator(boolean north, boolean south, boolean east, boolean west) {
+        super(north, south, east, west);
         this.rng = new Random();
     }
 
