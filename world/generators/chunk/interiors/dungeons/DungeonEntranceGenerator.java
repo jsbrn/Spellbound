@@ -4,36 +4,19 @@ import assets.definitions.Tile;
 import world.Chunk;
 import world.Portal;
 import world.World;
-import world.generators.chunk.interiors.StoneRoomGenerator;
 
 import java.util.Random;
 
 public class DungeonEntranceGenerator extends DungeonRoomGenerator {
 
-    private Random rng;
-
-    public DungeonEntranceGenerator(boolean north, boolean south, boolean east, boolean west) {
-        super(north, south, east, west);
-        this.rng = new Random();
-    }
-
-    @Override
-    public byte getBase(int x, int y) {
-        int half = Chunk.CHUNK_SIZE / 2;
-        if (Math.abs(half-x) <= 2 && y > half) return Tile.STONE_FLOOR; else return super.getBase(x, y);
+    public DungeonEntranceGenerator() {
+        super(false, true, false, false);
     }
 
     @Override
     public byte getTop(int x, int y) {
         int half = Chunk.CHUNK_SIZE / 2;
         if (x == half && y == getMinimum()) return Tile.STONE_LADDER;
-        if (x == half && y == getMaximum()) return Tile.AIR;
-        if (x == half-1 && y == getMaximum()) return Tile.AIR;
-        if (x == half-2 && y == getMaximum()) return Tile.STONE_CORNER_NORTHWEST;
-        if (x == half+1 && y == getMaximum()) return Tile.AIR;
-        if (x == half+2 && y == getMaximum()) return Tile.STONE_CORNER_NORTHEAST;
-        if (y > getMaximum() && x == half - 2) return Tile.STONE_WALL_WEST;
-        if (y > getMaximum() && x == half + 2) return Tile.STONE_WALL_EAST;
         return super.getTop(x, y);
     }
 

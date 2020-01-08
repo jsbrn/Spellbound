@@ -2,11 +2,11 @@ package world;
 
 import assets.Assets;
 import assets.definitions.Definitions;
+import gui.states.GameScreen;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
-import world.generators.chunk.ChunkType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ public class Chunk {
     private HashMap<Integer, Portal> portals;
     private ArrayList<Entity> entities;
 
-    public Chunk(int x, int y, ChunkType type) {
+    public Chunk(int x, int y, ChunkGenerator generator) {
 
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
@@ -30,8 +30,6 @@ public class Chunk {
         this.portals = new HashMap<>();
 
         this.entities = new ArrayList<>();
-
-        ChunkGenerator generator = ChunkGenerator.get(type);
 
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
@@ -111,7 +109,7 @@ public class Chunk {
                         0,
                         btx + TILE_SIZE,
                         Assets.TILE_SPRITESHEET.getHeight(), active ? Color.white : filter);
-                Assets.TILE_SPRITESHEET.drawEmbedded(
+                if (!GameScreen.debugModeEnabled() || GameScreen.showTopLayer()) Assets.TILE_SPRITESHEET.drawEmbedded(
                         ox,
                         oy,
                         ox + (TILE_SIZE * scale),

@@ -9,7 +9,7 @@ import world.entities.magic.MagicSource;
 import world.events.EventDispatcher;
 import world.events.EventListener;
 import world.events.event.EntityMoveEvent;
-import world.generators.chunk.ChunkType;
+import world.generators.chunk.ChunkGenerator;
 import world.generators.region.RegionGenerator;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Region {
 
     private String name;
     private Chunk[][] chunks;
-    private ChunkType[][] chunk_map;
+    private ChunkGenerator[][] chunkGenerators;
     private int size;
 
     private ArrayList<MagicSource> magic_sources;
@@ -29,10 +29,10 @@ public class Region {
         this.size = size;
 
         chunks = new Chunk[size][size];
-        chunk_map = new ChunkType[size][size];
+        chunkGenerators = new ChunkGenerator[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                chunk_map[i][j] = generator.getChunkType(i, j, size);
+                chunkGenerators[i][j] = generator.getChunkGenerator(i, j, size);
             }
         }
         magic_sources = new ArrayList<>();
@@ -79,8 +79,8 @@ public class Region {
      * @return Portal if found, null if not
      */
     public Portal findPortalTo(Region destination, String portal_name) {
-        for (int i = 0; i < chunk_map.length; i++) {
-            for (int j = 0; j < chunk_map[i].length; j++) {
+        for (int i = 0; i < chunkGenerators.length; i++) {
+            for (int j = 0; j < chunkGenerators[i].length; j++) {
                 Chunk c = getChunk(i, j);
                 if (c != null) {
                     Portal p = c.findPortalTo(destination, portal_name);
@@ -98,8 +98,8 @@ public class Region {
     }
 
     public Chunk getChunk(int x, int y) {
-        if (x < 0 || x >= chunk_map.length || y < 0 || y >= chunk_map[0].length) return null;
-        if (chunks[x][y] == null) chunks[x][y] = new Chunk(x, y, chunk_map[x][y]);
+        if (x < 0 || x >= chunkGenerators.length || y < 0 || y >= chunkGenerators[0].length) return null;
+        if (chunks[x][y] == null) chunks[x][y] = new Chunk(x, y, chunkGenerators[x][y]);
         return chunks[x][y];
     }
 

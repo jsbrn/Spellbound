@@ -4,15 +4,15 @@ import assets.definitions.Tile;
 import world.Chunk;
 import world.Portal;
 import world.World;
-import world.generators.chunk.ChunkGenerator;
 
 import java.util.Random;
 
-public class WoodRoomGenerator extends InteriorGenerator {
+public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
     private Random rng;
 
-    public WoodRoomGenerator() {
+    public PlayerHomeGenerator() {
+        super(false, false, false, false);
         this.rng = new Random();
     }
 

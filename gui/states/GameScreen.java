@@ -24,7 +24,7 @@ public class GameScreen extends BasicGameState {
     private Graphics graphics;
 
     private static GUI gui;
-    private static boolean debugMode;
+    private static boolean debugMode, showTopLayer;
 
     public GameScreen(int state) {
         this.initialized = false;
@@ -37,6 +37,7 @@ public class GameScreen extends BasicGameState {
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         if (initialized) return;
+        showTopLayer = true;
         World.init();
         game = sbg;
         gui = new GUI();
@@ -117,6 +118,8 @@ public class GameScreen extends BasicGameState {
             Window.takeScreenshot(graphics);
         if (key == Input.KEY_F3)
             debugMode = !debugMode;
+        if (key == Input.KEY_F4)
+            showTopLayer = !showTopLayer;
         if (key == Input.KEY_T)
             World.getPlayer().moveTo(new Location(World.getRegion("player_home"), World.getRegion().getChunk(0, 0), 0, 0));
     }
@@ -124,6 +127,8 @@ public class GameScreen extends BasicGameState {
     public static Input getInput() { return input; }
 
     public static boolean debugModeEnabled() { return debugMode; }
+
+    public static boolean showTopLayer() { return showTopLayer; }
 
     public static GUI getGUI() {
         return gui;

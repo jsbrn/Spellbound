@@ -1,9 +1,9 @@
 package world.generators.region;
 
-import world.generators.chunk.ChunkType;
+import world.generators.chunk.ChunkGenerator;
 
 public interface RegionGenerator {
 
-    ChunkType getChunkType(int cx, int cy, int size);
+    ChunkGenerator getChunkGenerator(int cx, int cy, int region_size);
 
 }
