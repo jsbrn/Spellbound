@@ -4,6 +4,7 @@ import misc.Location;
 import org.newdawn.slick.Graphics;
 import world.entities.types.humanoids.Player;
 import world.generators.region.DefaultWorldGenerator;
+import world.generators.region.DungeonGenerator;
 import world.generators.region.PlayerHomeRegionGenerator;
 
 import java.util.ArrayList;

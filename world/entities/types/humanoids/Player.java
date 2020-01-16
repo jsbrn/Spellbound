@@ -72,6 +72,8 @@ public class Player extends HumanoidEntity {
     public void update() {
         super.update();
 
+        if (GameScreen.debugModeEnabled()) setMoveSpeed(6.5f); else setMoveSpeed(3);
+
         int dx = 0, dy = 0;
         if (GameScreen.getInput().isKeyDown(Input.KEY_W)) {
             dy = -1;

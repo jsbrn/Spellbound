@@ -79,7 +79,7 @@ public class ParticleSource {
             double[] pcoords = p.getCoordinates();
 
             boolean behind_something = false;
-            for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / 16; t++) {
+            for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / Chunk.TILE_SIZE; t++) {
                 byte[] tile = World.getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
                 TileDefinition td = Definitions.getTile(tile[1]);
                 if (pcoords[1] > (pcoords[1] + t - td.getHeight())) {
@@ -99,7 +99,7 @@ public class ParticleSource {
             );
         }
 
-        /** DEBUG **/
+        //DEBUGGING PURPOSES
         if (GameScreen.debugModeEnabled()) {
             double mxosw = maxRadius * 2 * Chunk.TILE_SIZE * scale;
             double mnosw = minRadius * 2 * Chunk.TILE_SIZE * scale;

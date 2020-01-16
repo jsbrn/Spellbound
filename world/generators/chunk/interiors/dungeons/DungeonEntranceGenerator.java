@@ -9,8 +9,8 @@ import java.util.Random;
 
 public class DungeonEntranceGenerator extends DungeonRoomGenerator {
 
-    public DungeonEntranceGenerator() {
-        super(false, true, false, false);
+    public DungeonEntranceGenerator(boolean south, boolean east, boolean west) {
+        super(false, south, east, west);
     }
 
     @Override
