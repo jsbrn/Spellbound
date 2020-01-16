@@ -8,6 +8,7 @@ import world.Region;
 import world.World;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.CastSpellAction;
+import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.SetAnimationAction;
 import world.entities.animations.Animation;
 import world.entities.magic.Spell;
@@ -53,11 +54,19 @@ public class Player extends HumanoidEntity {
                     public void handle(Event e) {
                         MouseReleaseEvent mce = (MouseReleaseEvent)e;
                         ActionGroup actions = new ActionGroup();
-                        if (getSpellbook().getParent().getMana() >= 1) {
+                        if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0) {
                             actions.add(new SetAnimationAction("arms", "casting", true));
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
                             actions.add(new SetAnimationAction("arms", "default", false));
                             getSpellbook().getParent().queueActions(actions);
+                        }
+                        if (mce.getButton() == 1) {
+//                            getLocation().setLookDirection((int)MiscMath.angleBetween(
+//                                    getLocation().getCoordinates()[0] + 0.5,
+//                                    getLocation().getCoordinates()[1] + 0.5,
+//                                    mce.getX(),
+//                                    mce.getY()));
+                            that.queueAction(new MoveAction(mce.getX() - 0.5, mce.getY() - 0.5));
                         }
                     }
                 })
@@ -78,14 +87,6 @@ public class Player extends HumanoidEntity {
         super.update();
 
         if (GameScreen.debugModeEnabled()) setMoveSpeed(6.5f); else setMoveSpeed(3);
-
-//        int[] mouse = new int[]{ GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY() };
-//        double[] mouse_wc = MiscMath.getWorldCoordinates(mouse[0], mouse[1]);
-//        getLocation().setLookDirection((int)MiscMath.angleBetween(
-//                getLocation().getCoordinates()[0] + 0.5,
-//                getLocation().getCoordinates()[1] + 0.5,
-//                mouse_wc[0],
-//                mouse_wc[1]));
 
         int dx = 0, dy = 0;
         if (GameScreen.getInput().isKeyDown(Input.KEY_W)) {
