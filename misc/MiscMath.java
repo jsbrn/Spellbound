@@ -76,13 +76,15 @@ public class MiscMath {
         if (x1 < x2) {
             x = (x1 - x2) * -1;
             y = (y1 - y2) * -1;
-            new_rotation = (((float) Math.atan(y / x) * 60));
+            new_rotation = (((float) Math.atan(y / x) * 60)) + 90;
+        } else if (x1 == x2) {
+            new_rotation = y2 > y1 ? 180 : 0;
         } else {
-            x = (x2 - x1) * -1;
-            y = (y1 - y2);
-            new_rotation = (((float) Math.atan(y / x) * 60) + 180);
+                x = (x2 - x1) * -1;
+                y = (y1 - y2);
+                new_rotation = (((float) Math.atan(y / x) * 60) + 180) + 90;
         }
-        new_rotation += 90;
+        System.out.println(new_rotation % 360);
         return new_rotation % 360;
     }
 

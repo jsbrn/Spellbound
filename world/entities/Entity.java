@@ -2,6 +2,9 @@ package world.entities;
 
 import gui.states.GameScreen;
 import misc.Location;
+import misc.MiscMath;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import world.Chunk;
 import world.Portal;
 import world.World;
@@ -9,8 +12,10 @@ import world.entities.actions.Action;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.MoveAction;
 import world.entities.animations.Animation;
+import world.entities.animations.AnimationLayer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Entity {
@@ -18,15 +23,14 @@ public class Entity {
     private Location location;
     private float moveSpeed;
 
-    private HashMap<String, Animation> animations;
-    private Animation current_animation;
+    private HashMap<String, AnimationLayer> animationLayers;
 
     private ArrayList<ActionGroup> action_queue;
 
     public Entity() {
         this.moveSpeed = 3;
         this.action_queue = new ArrayList<>();
-        this.animations = new HashMap<>();
+        this.animationLayers = new HashMap<>();
     }
 
     public void update() {
@@ -54,17 +58,14 @@ public class Entity {
         action_queue.clear();
     }
 
-    public void setAnimation(String name) {
-        current_animation = animations.get(name);
-        if (current_animation == null) setAnimation("idle");
-        current_animation.reset();
+    public void addAnimation(String layer, String name, Animation a) {
+        if (animationLayers.get(layer) == null)
+            animationLayers.put(layer, new AnimationLayer());
+        animationLayers.get(layer).addAnimation(name, a);
     }
 
-    public void addAnimation(String name, Animation a) {
-        this.animations.put(name, a);
-    }
-
-    public Animation getAnimation(String name) { return this.animations.get(name); }
+    public AnimationLayer getAnimationLayer(String layer) { return animationLayers.get(layer); }
+    public Collection<AnimationLayer> getAnimationLayers() { return animationLayers.values(); }
 
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
@@ -105,13 +106,33 @@ public class Entity {
     public void draw(float sx, float sy, float scale) {
         float ex = sx + ((float)location.getCoordinates()[0] * scale * Chunk.TILE_SIZE);
         float ey = sy + ((float)location.getCoordinates()[1] * scale * Chunk.TILE_SIZE);
-        current_animation.draw(ex, ey, scale);
+
+        for (AnimationLayer animationLayer: animationLayers.values()) {
+            Animation anim = animationLayer.getAnimationByName(animationLayer.getCurrentAnimation());
+            if (anim != null)
+                anim.draw(
+                        ex,
+                        ey,
+                        scale,
+                        (location.getLookDirection() + (360 / 16)) / (360 / 8));
+        }
+
+
     }
 
-    public String debug() {
-        String d = "";
-        for (ActionGroup ag: action_queue) d += ag.debug();
-        return d;
+    public void drawDebug(float sx, float sy, float scale, Graphics g) {
+        float ex = sx + ((float)location.getCoordinates()[0] * scale * Chunk.TILE_SIZE);
+        float ey = sy + ((float)location.getCoordinates()[1] * scale * Chunk.TILE_SIZE);
+        g.setColor(Color.blue);
+        g.drawOval(ex, ey, Chunk.TILE_SIZE * scale, Chunk.TILE_SIZE * scale);
+        g.setColor(Color.red);
+        double[] offsets = MiscMath.getRotatedOffset(0, -Chunk.TILE_SIZE * scale, location.getLookDirection());
+        g.drawLine(
+                ex + (Chunk.TILE_SIZE*scale/2),
+                ey + (Chunk.TILE_SIZE*scale/2),
+                (float)(ex + (Chunk.TILE_SIZE*scale/2) + offsets[0]),
+                (float)(ey + (Chunk.TILE_SIZE*scale/2) + offsets[1]));
+        g.setColor(Color.white);
     }
 
 }

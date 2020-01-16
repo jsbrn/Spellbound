@@ -19,6 +19,9 @@ public class MoveAction extends Action {
 
     @Override
     public void onStart() {
+        Entity parent = getParent();
+        double[] coordinates = parent.getLocation().getCoordinates();
+        parent.getLocation().setLookDirection((int)MiscMath.angleBetween(coordinates[0], coordinates[1], target[0], target[1]));
         this.start = this.getParent().getLocation().getCoordinates();
     }
 

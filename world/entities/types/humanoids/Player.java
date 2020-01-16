@@ -2,6 +2,7 @@ package world.entities.types.humanoids;
 
 import gui.states.GameScreen;
 import misc.MiscMath;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.Region;
 import world.World;
@@ -32,10 +33,13 @@ public class Player extends HumanoidEntity {
         this.setMana(5);
         this.setMaxStamina(10);
 
-        this.addAnimation("idle", new Animation("player_idle.png", 2, 1));
-        this.addAnimation("walking", new Animation("player_walking.png", 4, 3));
-        this.addAnimation("casting", new Animation("player_casting.png", 5, 4));
-        this.setAnimation("idle");
+        this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true, Color.red));
+        this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
+        this.addAnimation("legs", "default", new Animation("humanoid/legs_idle.png", 2, 1, 16, true, true, Color.orange));
+        this.addAnimation("arms", "default", new Animation("humanoid/arms_idle.png", 2, 1, 16, true, true, Color.red));
+        this.addAnimation("legs", "walking", new Animation("humanoid/legs_walking.png", 2, 4, 16, true, true, Color.orange));
+        this.addAnimation("arms", "walking", new Animation("humanoid/arms_walking.png", 2, 4, 16, true, true, Color.red));
+        this.addAnimation("arms", "casting", new Animation("humanoid/arms_idle.png", 10, 1, 16, false, true, Color.red));
 
         Spell testSpell = new Spell();
         testSpell.addTechnique(Technique.create(TechniqueName.PROPEL));
@@ -50,9 +54,9 @@ public class Player extends HumanoidEntity {
                         MouseReleaseEvent mce = (MouseReleaseEvent)e;
                         ActionGroup actions = new ActionGroup();
                         if (getSpellbook().getParent().getMana() >= 1) {
-                            actions.add(new SetAnimationAction("casting", true));
+                            actions.add(new SetAnimationAction("arms", "casting", true));
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
-                            actions.add(new SetAnimationAction("idle", false));
+                            actions.add(new SetAnimationAction("arms", "default", false));
                             getSpellbook().getParent().queueActions(actions);
                         }
                     }
@@ -62,7 +66,8 @@ public class Player extends HumanoidEntity {
                     public void handle(Event e) {
                         int key = ((KeyUpEvent)e).getKey();
                         if (key == Input.KEY_W || key == Input.KEY_A || key == Input.KEY_S || key == Input.KEY_D)
-                            that.queueAction(new SetAnimationAction("idle", false));
+                            that.queueAction(new SetAnimationAction("arms", "default", false));
+                            that.queueAction(new SetAnimationAction("legs", "default", false));
                     }
                 })
         );
@@ -73,6 +78,14 @@ public class Player extends HumanoidEntity {
         super.update();
 
         if (GameScreen.debugModeEnabled()) setMoveSpeed(6.5f); else setMoveSpeed(3);
+
+//        int[] mouse = new int[]{ GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY() };
+//        double[] mouse_wc = MiscMath.getWorldCoordinates(mouse[0], mouse[1]);
+//        getLocation().setLookDirection((int)MiscMath.angleBetween(
+//                getLocation().getCoordinates()[0] + 0.5,
+//                getLocation().getCoordinates()[1] + 0.5,
+//                mouse_wc[0],
+//                mouse_wc[1]));
 
         int dx = 0, dy = 0;
         if (GameScreen.getInput().isKeyDown(Input.KEY_W)) {
@@ -86,7 +99,8 @@ public class Player extends HumanoidEntity {
         }
 
         if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) {
-            World.getPlayer().queueAction(new SetAnimationAction("walking", false));
+            World.getPlayer().queueAction(new SetAnimationAction("arms", "walking", false));
+            World.getPlayer().queueAction(new SetAnimationAction("legs", "walking", false));
             World.getPlayer().move(dx, dy);
         }
 

@@ -70,9 +70,10 @@ public class GameScreen extends BasicGameState {
                 }
             }
             int y = Window.getHeight()/2;
-            g.drawString(World.getPlayer().debug(), 10, y);
             g.drawString(World.getPlayer().getLocation().toString(), 10, y+25);
             g.drawString(World.getPlayer().getLocation().getChunk().debug(), 10, y+50);
+
+            World.getPlayer().drawDebug(origin[0], origin[1], Window.getScale(), g);
         }
 
     }
@@ -120,8 +121,6 @@ public class GameScreen extends BasicGameState {
             debugMode = !debugMode;
         if (key == Input.KEY_F4)
             showTopLayer = !showTopLayer;
-        if (key == Input.KEY_T)
-            World.getPlayer().moveTo(new Location(World.getRegion("player_home"), World.getRegion().getChunk(0, 0), 0, 0));
     }
 
     public static Input getInput() { return input; }

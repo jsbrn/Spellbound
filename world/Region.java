@@ -63,9 +63,11 @@ public class Region {
                         getChunk(chcoords[0] + cdx, chcoords[1] + cdy),
                         (coords[0] + Chunk.CHUNK_SIZE + cdx) % Chunk.CHUNK_SIZE,
                         (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE));
-                entity.queueAction(new SetAnimationAction("walking", false));
+                entity.queueAction(new SetAnimationAction("arms", "walking", false));
+                entity.queueAction(new SetAnimationAction("legs", "walking", false));
                 entity.move(cdx, cdy);
-                entity.queueAction(new SetAnimationAction("idle", false));
+                entity.queueAction(new SetAnimationAction("arms", "default", false));
+                entity.queueAction(new SetAnimationAction("legs", "default", false));
             }
 
         }));
