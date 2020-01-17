@@ -20,20 +20,19 @@ import java.util.HashMap;
 
 public class Entity {
 
+    private Mover mover;
     private Location location;
-    private float moveSpeed;
 
     private HashMap<String, AnimationLayer> animationLayers;
-
     private ArrayList<ActionGroup> action_queue;
 
     public Entity() {
-        this.moveSpeed = 3;
         this.action_queue = new ArrayList<>();
         this.animationLayers = new HashMap<>();
     }
 
     public void update() {
+        getMover().update();
         if (action_queue.isEmpty()) return;
         action_queue.get(0).update();
         if (action_queue.get(0).finished()) action_queue.remove(0);
@@ -48,6 +47,8 @@ public class Entity {
         System.out.println("Queueing "+a);
         queueActions(new ActionGroup(a));
     }
+
+    public Action getCurrentAction() { return action_queue.isEmpty() ? null : action_queue.get(0).getCurrentAction(); }
 
     public void skipCurrentAction() {
         if (action_queue.isEmpty()) return;
@@ -69,26 +70,9 @@ public class Entity {
 
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
-    public void move(double tx, double ty) {
-        int new_x = (int)(location.getCoordinates()[0] + tx);
-        int new_y = (int)(location.getCoordinates()[1] + ty);
-        if (new_x < 0 || new_x >= Chunk.CHUNK_SIZE || new_y < 0 || new_y >= Chunk.CHUNK_SIZE) return;
-        Portal origin = location.getChunk().getPortal(new_x, new_y);
-        if (origin != null) {
-            Portal destination = origin.getDestination().findPortalTo(location.getRegion(), origin.getName());
-            System.out.println(origin.getDestination()+", "+location.getRegion()+", "+origin.getName());
-            moveTo(new Location(
-                    origin.getDestination(),
-                    destination.getChunk(),
-                    destination.getTileCoordinates()[0],
-                    destination.getTileCoordinates()[1]));
-            queueAction(new MoveAction(
-                    destination.getTileCoordinates()[0] + destination.getExitDirection()[0],
-                    destination.getTileCoordinates()[1] + destination.getExitDirection()[1]));
-            if (this.equals(World.getPlayer())) GameScreen.getGUI().setFade(1); //TODO: convert to event
-            return;
-        }
-        queueAction(new MoveAction(new_x, new_y));
+    public Mover getMover() {
+        if (mover == null) mover = new Mover(this);
+        return mover;
     }
 
     public Location getLocation() { return location; }
@@ -99,9 +83,6 @@ public class Entity {
         location = new_;
         location.getChunk().addEntity(this);
     }
-
-    public float getMoveSpeed() { return this.moveSpeed; }
-    public void setMoveSpeed(float moveSpeed) { this.moveSpeed = moveSpeed; }
 
     public void draw(float sx, float sy, float scale) {
         float ex = sx + ((float)location.getCoordinates()[0] * scale * Chunk.TILE_SIZE);

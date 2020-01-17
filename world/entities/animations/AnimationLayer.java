@@ -16,7 +16,7 @@ public class AnimationLayer {
         currentAnimation = name;
         if (currentAnimation == null) setAnimation("default");
         Animation current = getAnimationByName(currentAnimation);
-        if (current != null) current.reset();
+        if (current != null && !current.loops()) current.reset();
     }
 
     public void addAnimation(String name, Animation a) {

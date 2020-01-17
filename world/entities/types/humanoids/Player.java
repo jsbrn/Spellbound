@@ -1,9 +1,12 @@
 package world.entities.types.humanoids;
 
+import assets.definitions.Definitions;
+import assets.definitions.TileDefinition;
 import gui.states.GameScreen;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
+import world.Chunk;
 import world.Region;
 import world.World;
 import world.entities.actions.ActionGroup;
@@ -24,6 +27,8 @@ import world.events.event.MouseReleaseEvent;
 
 public class Player extends HumanoidEntity {
 
+    private double[] moveTarget;
+
     public Player() {
 
         super();
@@ -33,14 +38,6 @@ public class Player extends HumanoidEntity {
         this.setHP(10);
         this.setMana(5);
         this.setMaxStamina(10);
-
-        this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true, Color.red));
-        this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
-        this.addAnimation("legs", "default", new Animation("humanoid/legs_idle.png", 2, 1, 16, true, true, Color.orange));
-        this.addAnimation("arms", "default", new Animation("humanoid/arms_idle.png", 2, 1, 16, true, true, Color.red));
-        this.addAnimation("legs", "walking", new Animation("humanoid/legs_walking.png", 2, 4, 16, true, true, Color.orange));
-        this.addAnimation("arms", "walking", new Animation("humanoid/arms_walking.png", 2, 4, 16, true, true, Color.red));
-        this.addAnimation("arms", "casting", new Animation("humanoid/arms_idle.png", 10, 1, 16, false, true, Color.red));
 
         Spell testSpell = new Spell();
         testSpell.addTechnique(Technique.create(TechniqueName.PROPEL));
@@ -55,6 +52,7 @@ public class Player extends HumanoidEntity {
                         MouseReleaseEvent mce = (MouseReleaseEvent)e;
                         ActionGroup actions = new ActionGroup();
                         if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0) {
+                            getLocation().lookAt(mce.getX(), mce.getY());
                             actions.add(new SetAnimationAction("arms", "casting", true));
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
                             actions.add(new SetAnimationAction("arms", "default", false));
@@ -70,15 +68,6 @@ public class Player extends HumanoidEntity {
                         }
                     }
                 })
-                .on(KeyUpEvent.class.toString(), new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        int key = ((KeyUpEvent)e).getKey();
-                        if (key == Input.KEY_W || key == Input.KEY_A || key == Input.KEY_S || key == Input.KEY_D)
-                            that.queueAction(new SetAnimationAction("arms", "default", false));
-                            that.queueAction(new SetAnimationAction("legs", "default", false));
-                    }
-                })
         );
 
     }
@@ -86,25 +75,45 @@ public class Player extends HumanoidEntity {
     public void update() {
         super.update();
 
-        if (GameScreen.debugModeEnabled()) setMoveSpeed(6.5f); else setMoveSpeed(3);
-
         int dx = 0, dy = 0;
-        if (GameScreen.getInput().isKeyDown(Input.KEY_W)) {
-            dy = -1;
-        } else if (GameScreen.getInput().isKeyDown(Input.KEY_A)) {
-            dx = -1;
-        } else if (GameScreen.getInput().isKeyDown(Input.KEY_S)) {
-            dy = 1;
-        } else if (GameScreen.getInput().isKeyDown(Input.KEY_D)) {
-            dx = 1;
+
+        if (GameScreen.getInput().isKeyDown(Input.KEY_W)) dy -= 1;
+        if (GameScreen.getInput().isKeyDown(Input.KEY_A)) dx -= 1;
+        if (GameScreen.getInput().isKeyDown(Input.KEY_S)) dy += 1;
+        if (GameScreen.getInput().isKeyDown(Input.KEY_D)) dx += 1;
+
+        double targetX = findMoveTarget(dx, 0)[0];
+        double targetY = findMoveTarget(0, dy)[1];
+        if (getActionQueue().isEmpty()) {
+            if (dx != 0 || dy != 0) {
+                getAnimationLayer("arms").setAnimation("walking");
+                getAnimationLayer("legs").setAnimation("walking");
+                getMover().setTargetX(targetX);
+                getMover().setTargetY(targetY);
+                System.out.println(targetX+", "+targetY);
+                getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
+            } else {
+                getAnimationLayer("arms").setAnimation("default");
+                getAnimationLayer("legs").setAnimation("default");
+                getMover().stop();
+            }
         }
 
-        if ((dx != 0 || dy != 0) && World.getPlayer().getActionQueue().isEmpty()) {
-            World.getPlayer().queueAction(new SetAnimationAction("arms", "walking", false));
-            World.getPlayer().queueAction(new SetAnimationAction("legs", "walking", false));
-            World.getPlayer().move(dx, dy);
-        }
+    }
 
+    private double[] findMoveTarget(int dx, int dy) {
+        double[] coordinates = new double[]{getLocation().getCoordinates()[0], getLocation().getCoordinates()[1]};
+        double[] potentialTarget = new double[]{ coordinates[0], coordinates[1] };
+        for (double i = 0; i < Chunk.TILE_SIZE; i += 0.5) {
+            double tx = coordinates[0] + (i * dx);
+            double ty = coordinates[1] + (i * dy);
+            byte[] tile = World.getRegion().getTile((int)MiscMath.round(tx, 1), (int)MiscMath.round(ty, 1));
+            boolean collides = Definitions.getTile(tile[0]).collides() || Definitions.getTile(tile[1]).collides();
+            if (collides) break;
+            potentialTarget[0] = tx;
+            potentialTarget[1] = ty;
+        }
+        return potentialTarget;
     }
 
 }

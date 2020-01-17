@@ -37,6 +37,9 @@ public class Location {
     }
 
     public int getLookDirection() { return lookDirection; }
+    public void lookAt(double tx, double ty) {
+        setLookDirection((int)MiscMath.angleBetween(coordinates[0], coordinates[1], tx, ty));
+    }
     public void setLookDirection(int degrees) { this.lookDirection = degrees % 360; }
 
     public String toString() {

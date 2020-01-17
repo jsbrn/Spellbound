@@ -4,11 +4,12 @@ import misc.Location;
 import misc.Window;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
+import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.SetAnimationAction;
 import world.entities.magic.MagicSource;
 import world.events.EventDispatcher;
 import world.events.EventListener;
-import world.events.event.EntityMoveEvent;
+import world.events.event.EntityMovedEvent;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.region.RegionGenerator;
 
@@ -38,9 +39,9 @@ public class Region {
         magic_sources = new ArrayList<>();
 
         Region that = this;
-        EventDispatcher.register(new EventListener().on(EntityMoveEvent.class.toString(), e -> {
+        EventDispatcher.register(new EventListener().on(EntityMovedEvent.class.toString(), e -> {
 
-            EntityMoveEvent event = (EntityMoveEvent) e;
+            EntityMovedEvent event = (EntityMovedEvent) e;
             Entity entity = event.getEntity();
             Location location = entity.getLocation();
 
@@ -55,7 +56,6 @@ public class Region {
             if (coords[1] == Chunk.CHUNK_SIZE - 1 && chcoords[1] < size - 1) cdy = 1;
             if (coords[1] == 0 && chcoords[1] > 0) cdy = -1;
 
-
             if (cdx != 0 || cdy != 0) {
                 System.out.println("Moving to "+this.getName()+" @ ["+(chcoords[0]+cdx)+", "+(chcoords[1]+cdy)+"]");
                 entity.moveTo(new Location(
@@ -65,7 +65,7 @@ public class Region {
                         (coords[1] + Chunk.CHUNK_SIZE + cdy) % Chunk.CHUNK_SIZE));
                 entity.queueAction(new SetAnimationAction("arms", "walking", false));
                 entity.queueAction(new SetAnimationAction("legs", "walking", false));
-                entity.move(cdx, cdy);
+                entity.queueAction(new MoveAction(entity.getLocation().getCoordinates()[0] + cdx, entity.getLocation().getCoordinates()[1] + cdy));
                 entity.queueAction(new SetAnimationAction("arms", "default", false));
                 entity.queueAction(new SetAnimationAction("legs", "default", false));
             }

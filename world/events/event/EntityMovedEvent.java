@@ -3,11 +3,11 @@ package world.events.event;
 import world.entities.Entity;
 import world.events.Event;
 
-public class EntityMoveEvent extends Event {
+public class EntityMovedEvent extends Event {
 
     private Entity entity;
 
-    public EntityMoveEvent(Entity e) {
+    public EntityMovedEvent(Entity e) {
         this.entity = e;
     }
 

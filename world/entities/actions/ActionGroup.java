@@ -29,6 +29,8 @@ public final class ActionGroup {
         a.update();
     }
 
+    public Action getCurrentAction() { return actions.isEmpty() ? null : actions.get(0); }
+
     public void setParent(Entity parent) {
         for (Action a: actions) a.setParent(parent);
     }

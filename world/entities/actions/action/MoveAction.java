@@ -2,12 +2,9 @@ package world.entities.actions.action;
 
 import assets.definitions.Definitions;
 import misc.MiscMath;
-import world.Region;
 import world.World;
 import world.entities.Entity;
 import world.entities.actions.Action;
-import world.events.EventDispatcher;
-import world.events.event.EntityMoveEvent;
 
 public class MoveAction extends Action {
 
@@ -28,13 +25,7 @@ public class MoveAction extends Action {
 
     @Override
     public void update() {
-        Entity parent = getParent();
-        double[] coordinates = parent.getLocation().getCoordinates();
-        double multiplier = Definitions.getTile(World.getRegion().getTile((int)(coordinates[0] + 0.5), (int)(coordinates[1] + 0.5))[1]).getSpeedMultiplier();
 
-        parent.getLocation().setCoordinates(
-                MiscMath.tween(start[0], coordinates[0], target[0], Math.abs(parent.getMoveSpeed() * multiplier * vel[0]), 1),
-                MiscMath.tween(start[1], coordinates[1], target[1], Math.abs(parent.getMoveSpeed() * multiplier * vel[1]), 1));
     }
 
     @Override
@@ -44,10 +35,7 @@ public class MoveAction extends Action {
         if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
 
         double[] coordinates = getParent().getLocation().getCoordinates();
-        if (coordinates[0] == target[0] && coordinates[1] == target[1]) {
-            EventDispatcher.invoke(new EntityMoveEvent(getParent()));
-            return true;
-        }
+
         return false;
     }
 
