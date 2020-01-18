@@ -14,12 +14,13 @@ import java.io.*;
 public class Assets {
 
     public static int GAME_SCREEN = 0;
-    public static Image TILE_SPRITESHEET;
+    public static Image TILE_SPRITESHEET, PARTICLE;
     public static TrueTypeFont FONT;
 
     public static void load() {
         try {
             TILE_SPRITESHEET = new Image("assets/tiles.png", false, Image.FILTER_NEAREST);
+            PARTICLE = new Image("assets/particle.png", false, Image.FILTER_NEAREST);
             Font awtFont = Font.createFont(Font.PLAIN, Assets.class.getResourceAsStream("/assets/fonts/font.ttf"))
                     .deriveFont(14f)
                     .deriveFont(Font.TRUETYPE_FONT);
@@ -32,9 +33,6 @@ public class Assets {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
     }
 
     public static String read(String internal) {

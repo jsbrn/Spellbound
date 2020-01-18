@@ -70,7 +70,7 @@ public class ParticleSource {
         }
     }
 
-    public void draw(float ox, float oy, float scale, Graphics g) {
+    public void draw(float ox, float oy, float scale) {
 
         for (int i = particles.size() - 1; i >= 0; i--) {
 
@@ -91,16 +91,10 @@ public class ParticleSource {
             if (behind_something) continue;
 
             p.getColor().a = alpha;
-            g.setColor(p.getColor());
-            g.fillRect(
-                    (float)(ox + (pcoords[0] * Chunk.TILE_SIZE * scale) - (scale / 2)),
-                    (float)(oy + (pcoords[1] * Chunk.TILE_SIZE * scale) - (scale / 2)),
-                    scale,
-                    scale
-            );
+            float osx = (float)(ox + (pcoords[0] * Chunk.TILE_SIZE * scale) - (scale / 2));
+            float osy = (float)(oy + (pcoords[1] * Chunk.TILE_SIZE * scale) - (scale / 2));
+            Assets.PARTICLE.drawEmbedded(osx, osy, osx + scale, osy + scale, 0, 0, 1, 1, p.getColor());
         }
-
-        g.setColor(Color.white);
 
     }
 

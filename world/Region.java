@@ -1,5 +1,6 @@
 package world;
 
+import assets.Assets;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Graphics;
@@ -213,8 +214,9 @@ public class Region {
                 }
             }
         }
-
-        for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(oscoords[0], oscoords[1], scale, g);
+        Assets.PARTICLE.startUse();
+        for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(oscoords[0], oscoords[1], scale);
+        Assets.PARTICLE.endUse();
     }
 
     public int getSize() { return size; }
