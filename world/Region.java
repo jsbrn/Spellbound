@@ -166,20 +166,26 @@ public class Region {
 
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
         int radius = 2;
-        for (int j = -radius; j <= radius; j++) {
-            for (int i = -radius; i <= radius; i++) {
-                int cx = pchcoords[0] + i;
-                int cy = pchcoords[1] + j;
-                Chunk adj = getChunk(cx, cy);
-                if (adj == null) continue;
-                float osx = oscoords[0] + (cx * chunk_size), osy = oscoords[1] + (cy * chunk_size);
-                adj.draw(
-                        osx,
-                        osy,
-                        scale);
-                if (debug && cx == pchcoords[0] && cy == pchcoords[1]) adj.drawDebug(osx, osy, scale, g);
+
+        for (int pass = 0; pass < 2; pass++) {
+            for (int cj = -radius; cj <= radius; cj++) {
+                for (int ci = -radius; ci <= radius; ci++) {
+                    int cx = pchcoords[0] + ci;
+                    int cy = pchcoords[1] + cj;
+                    Chunk adj = getChunk(cx, cy);
+                    if (adj == null) continue;
+                    float osx = oscoords[0] + (cx * chunk_size), osy = oscoords[1] + (cy * chunk_size);
+                    if (pass == 0) {
+                        adj.drawBase(osx, osy, scale);
+                    } else {
+                        adj.drawEntities(osx, osy, scale);
+                        adj.drawTop(osx, osy, scale);
+                        if (debug && cx == pchcoords[0] && cy == pchcoords[1]) adj.drawDebug(osx, osy, scale, g);
+                    }
+                }
             }
         }
+
         for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(oscoords[0], oscoords[1], scale, g);
     }
 

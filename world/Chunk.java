@@ -68,25 +68,13 @@ public class Chunk {
 
     public int[] getCoordinates() { return coordinates; }
 
-    public void draw(float osx, float osy, float scale) {
-        Color translucent = new Color(1f, 1f, 1f, 0.5f);
-        Location player_location = World.getPlayer().getLocation();
-        double[] player_coords = player_location.getLocalCoordinates();
+    public void drawBase(float osx, float osy, float scale) {
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
 
                 float ox = osx + (i * TILE_SIZE * scale);
                 float oy = osy + ((j - ((Assets.TILE_SPRITESHEET.getHeight() / TILE_SIZE) - 1)) * TILE_SIZE * scale);
                 float btx = base[i][j] * TILE_SIZE;
-                float ttx = top[i][j] * TILE_SIZE;
-
-                float height = Definitions.getTile(top[i][j]).getHeight();
-
-                boolean reveal =
-                        Math.abs(player_coords[0] - i) < 1
-                        && j - player_coords[1] < height
-                        && j - player_coords[1] > 0.25f
-                        && Definitions.getTile(top[i][j]).peeking();
 
                 Assets.TILE_SPRITESHEET.startUse();
                 Assets.TILE_SPRITESHEET.drawEmbedded(
@@ -98,6 +86,32 @@ public class Chunk {
                         0,
                         btx + TILE_SIZE,
                         Assets.TILE_SPRITESHEET.getHeight(), Color.white);
+                Assets.TILE_SPRITESHEET.endUse();
+            }
+        }
+    }
+
+    public void drawTop(float osx, float osy, float scale) {
+        Color translucent = new Color(1f, 1f, 1f, 0.5f);
+        Location player_location = World.getPlayer().getLocation();
+        double[] player_coords = player_location.getLocalCoordinates();
+
+
+        for (int j = 0; j < CHUNK_SIZE; j++) {
+            for (int i = 0; i < CHUNK_SIZE; i++) {
+
+                float ox = osx + (i * TILE_SIZE * scale);
+                float oy = osy + ((j - ((Assets.TILE_SPRITESHEET.getHeight() / TILE_SIZE) - 1)) * TILE_SIZE * scale);
+                float ttx = top[i][j] * TILE_SIZE;
+
+                float height = Definitions.getTile(top[i][j]).getHeight();
+
+                boolean reveal =
+                        Math.abs(player_coords[0] - i) < 1
+                                && j - player_coords[1] < height
+                                && j - player_coords[1] > 0.25f
+                                && Definitions.getTile(top[i][j]).peeking();
+                Assets.TILE_SPRITESHEET.startUse();
                 Assets.TILE_SPRITESHEET.drawEmbedded(
                         ox,
                         oy,
@@ -122,6 +136,15 @@ public class Chunk {
                 }
 
             }
+        }
+
+
+    }
+
+    public void drawEntities(float osx, float osy, float scale) {
+        Location player_location = World.getPlayer().getLocation();
+        for (int j = 0; j < CHUNK_SIZE; j++) {
+
 
         }
     }
