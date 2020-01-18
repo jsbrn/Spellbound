@@ -110,8 +110,8 @@ public class Chunk {
                 Assets.TILE_SPRITESHEET.endUse();
 
                 int[] range = player_location.getRegion().getEntityIndices(MiscMath.getIndex(
-                        (int)((coordinates[0] * CHUNK_SIZE) + i - 0.5),
-                        (int)((coordinates[1] * CHUNK_SIZE) + j - 0.5),
+                        (int)((coordinates[0] * CHUNK_SIZE) + i),
+                        (int)((coordinates[1] * CHUNK_SIZE) + j),
                         CHUNK_SIZE * player_location.getRegion().getSize()
                 ));
 

@@ -53,7 +53,7 @@ public class Mover {
         if (!moving) return;
 
         double[] coordinates = parent.getLocation().getCoordinates();
-        double multiplier = Definitions.getTile(World.getRegion().getTile((int)(coordinates[0] + 0.5), (int)(coordinates[1] + 0.5))[1]).getSpeedMultiplier();
+        double multiplier = Definitions.getTile(World.getRegion().getTile((int)(coordinates[0]), (int)(coordinates[1]))[1]).getSpeedMultiplier();
 
         double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(targetX - start[0], targetY - start[1]);
 

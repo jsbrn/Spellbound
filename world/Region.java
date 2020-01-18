@@ -112,7 +112,7 @@ public class Region {
     }
 
     public byte[] getTile(int wx, int wy) {
-        Chunk current = World.getPlayer().getLocation().getChunk();
+        Chunk current = getChunk(wx / Chunk.CHUNK_SIZE, wy / Chunk.CHUNK_SIZE);
         if (current == null) return new byte[2];
         return current.get(wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
     }

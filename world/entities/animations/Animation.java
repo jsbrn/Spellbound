@@ -3,6 +3,7 @@ package world.entities.animations;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import world.Chunk;
 
 public class Animation {
 
@@ -53,12 +54,12 @@ public class Animation {
     public void draw(float ex, float ey, float scale, int direction) {
         int frame = getFrame();
         sprite.startUse();
-        float y_offset = -(frame_height * scale / 2);
+        float y_offset = -(frame_height * scale), x_offset = -0.5f * scale * (float)Chunk.TILE_SIZE;
         int src_y = (int)(!directional ? 0 : direction * frame_height);
         sprite.drawEmbedded(
-                ex,
+                ex + x_offset,
                 ey + y_offset,
-                ex + (frame_width * scale),
+                ex + (frame_width * scale) + x_offset,
                 ey + (frame_height * scale) + y_offset,
                 frame * frame_width,
                 src_y,

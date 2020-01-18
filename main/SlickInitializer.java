@@ -8,7 +8,6 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import world.BinaryInsertTest;
 
 import java.io.IOException;
 
@@ -23,9 +22,6 @@ public class SlickInitializer extends StateBasedGame {
     }
 
     public static void main(String args[]) throws IOException {
-
-        BinaryInsertTest binaryInsertTest = new BinaryInsertTest();
-        binaryInsertTest.test();
 
         //initialize the window
         try {

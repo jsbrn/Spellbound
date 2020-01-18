@@ -58,14 +58,6 @@ public class Player extends HumanoidEntity {
                             actions.add(new SetAnimationAction("arms", "default", false));
                             getSpellbook().getParent().queueActions(actions);
                         }
-                        if (mce.getButton() == 1) {
-//                            getLocation().setLookDirection((int)MiscMath.angleBetween(
-//                                    getLocation().getCoordinates()[0] + 0.5,
-//                                    getLocation().getCoordinates()[1] + 0.5,
-//                                    mce.getX(),
-//                                    mce.getY()));
-                            that.queueAction(new MoveAction(mce.getX() - 0.5, mce.getY() - 0.5));
-                        }
                     }
                 })
         );
@@ -106,7 +98,7 @@ public class Player extends HumanoidEntity {
         for (double i = 0.5; i < Chunk.CHUNK_SIZE; i += 0.5) {
             double tx = coordinates[0] + (i * dx);
             double ty = coordinates[1] + (i * dy);
-            byte[] tile = World.getRegion().getTile((int)MiscMath.round(tx, 1), (int)MiscMath.round(ty, 1));
+            byte[] tile = World.getRegion().getTile((int)tx, (int)ty);
             boolean collides = Definitions.getTile(tile[0]).collides() || Definitions.getTile(tile[1]).collides();
             if (collides) break;
             potentialTarget[0] = tx;
