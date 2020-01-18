@@ -31,6 +31,9 @@ public class Hotbar extends GUIElement {
     }
 
     @Override
+    public boolean onMousePressed(int ogx, int ogy) { return false; }
+
+    @Override
     public boolean onKeyDown(int key) {
         if (key == Input.KEY_1) { target.getSpellbook().selectSpell(0); return true; }
         if (key == Input.KEY_2) { target.getSpellbook().selectSpell(1); return true; }

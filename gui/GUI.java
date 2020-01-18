@@ -8,6 +8,7 @@ import world.Camera;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;
+import world.events.event.MousePressedEvent;
 import world.events.event.MouseReleaseEvent;
 
 import java.util.ArrayList;
@@ -19,6 +20,15 @@ public final class GUI {
 
     public GUI() {
         this.elements = new ArrayList<>();
+    }
+
+    public boolean onMousePressed(int osx, int osy, int button) {
+        for (int i = elements.size() - 1; i >= 0; i--)
+            if (elements.get(i).onMousePressed((int)(osx/Window.getScale()), (int)(osy/Window.getScale())))
+                return true;
+        double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
+        EventDispatcher.invoke(new MousePressedEvent(wc[0], wc[1], button));
+        return false;
     }
 
     public boolean onMouseRelease(int osx, int osy, int button) {

@@ -23,6 +23,7 @@ import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;
+import world.events.event.MousePressedEvent;
 import world.events.event.MouseReleaseEvent;
 
 public class Player extends HumanoidEntity {
@@ -46,15 +47,16 @@ public class Player extends HumanoidEntity {
 
         Player that = this;
         EventDispatcher.register(new EventListener()
-                .on(MouseReleaseEvent.class.toString(), new EventHandler() {
+                .on(MousePressedEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
-                        MouseReleaseEvent mce = (MouseReleaseEvent)e;
+                        MousePressedEvent mce = (MousePressedEvent)e;
                         ActionGroup actions = new ActionGroup();
-                        if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0) {
+                        if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0
+                            && that.getActionQueue().isEmpty()) {
                             getLocation().lookAt(mce.getX(), mce.getY());
-                            actions.add(new SetAnimationAction("arms", "casting", true));
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
+                            actions.add(new SetAnimationAction("arms", "casting", true));
                             actions.add(new SetAnimationAction("arms", "default", false));
                             getSpellbook().getParent().queueActions(actions);
                         }

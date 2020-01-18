@@ -4,6 +4,7 @@ import assets.Assets;
 import assets.definitions.Definitions;
 import misc.Location;
 import misc.MiscMath;
+import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
@@ -149,17 +150,16 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                int loc_index = MiscMath.getIndex(
-                        ((coordinates[0] * CHUNK_SIZE) + i),
-                        ((coordinates[1] * CHUNK_SIZE) + j),
-                        CHUNK_SIZE * player_location.getRegion().getSize()
-                );
-                int[] range = player_location.getRegion().getEntityIndices(loc_index, loc_index);
-
-                for (int eindex = range[0]; eindex < range[1]; eindex++) {
-                    Entity e = player_location.getRegion().getEntities().get(eindex);
+                ArrayList<Entity> entities = player_location.getRegion()
+                        .getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
+                for (Entity e: entities) {
                     float[] eosc = Camera.getOnscreenCoordinates(e.getLocation().getCoordinates()[0], e.getLocation().getCoordinates()[1], scale);
-                    if (e.getLocation().getGlobalIndex() == loc_index) e.draw(eosc[0], eosc[1], scale);
+                    int padding = 4 * Chunk.TILE_SIZE;
+                    if (MiscMath.pointIntersectsRect(
+                            eosc[0], eosc[1],
+                            -padding, -padding,
+                            Window.getWidth() + padding, Window.getHeight() + padding))
+                        e.draw(eosc[0], eosc[1], scale);
                 }
 
             }

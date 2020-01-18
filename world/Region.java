@@ -64,15 +64,31 @@ public class Region {
 
     public ArrayList<Entity> getEntities(int wx, int wy, int width, int height) {
         ArrayList<Entity> subsection = new ArrayList<>();
-        for (int i = 0; i < width-1; i++) {
-            for (int j = 0; j < height; j++) {
-                int loc = MiscMath.getIndex(wx + i, wy + j, Chunk.CHUNK_SIZE * getSize());
-                int[] indices = getEntityIndices(loc, loc);
-                for (int e = indices[0]; e < indices[1]; e++) {
-                    Entity entity = entities.get(e);
-                    if (!subsection.contains(entity)) subsection.add(entity);
-                }
-            }
+//        for (int i = 0; i < width; i++) {
+//            for (int j = 0; j < height; j++) {
+//                int loc = MiscMath.getIndex(wx + i, wy + j, Chunk.CHUNK_SIZE * getSize());
+//                int[] indices = getEntityIndices(loc, loc);
+//                for (int e = indices[0]; e < indices[1]; e++) {
+//                    Entity entity = entities.get(e);
+//                    if (!subsection.contains(entity)) subsection.add(entity);
+//                }
+//            }
+//        }
+        int minloc = MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize());
+        int maxloc = MiscMath.getIndex(wx + width, wy + height, Chunk.CHUNK_SIZE * getSize());
+        int[] indices = getEntityIndices(minloc, maxloc);
+        for (int i = indices[0]; i < indices[1]; i++) {
+            Entity e = entities.get(i);
+            if (subsection.contains(e)) continue;
+            boolean intersects = MiscMath.pointIntersectsRect(
+                    e.getLocation().getCoordinates()[0],
+                    e.getLocation().getCoordinates()[1],
+                    wx,
+                    wy,
+                    width,
+                    height
+            );
+            if (intersects) subsection.add(e);
         }
         return subsection;
     }
@@ -80,7 +96,7 @@ public class Region {
     public int[] getEntityIndices(int min_location, int max_location) {
         return new int[]{
                 getEntityIndex(min_location-1, 0, entities.size()),
-                getEntityIndex(max_location+1, 0, entities.size()),
+                getEntityIndex(max_location + 1, 0, entities.size()),
         };
     }
 

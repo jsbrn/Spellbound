@@ -21,6 +21,7 @@ import world.entities.Entity;
 import world.entities.types.humanoids.npcs.Civilian;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameScreen extends BasicGameState {
 
@@ -54,6 +55,10 @@ public class GameScreen extends BasicGameState {
             public boolean onMouseRelease(int ogx, int ogy) {
                 return false;
             }
+            @Override
+            public boolean onMousePressed(int ogx, int ogy) {
+                return false;
+            }
         }, 4, 94, GUIAnchor.TOP_LEFT);
         Assets.load();
         Definitions.load();
@@ -73,7 +78,16 @@ public class GameScreen extends BasicGameState {
 
         if (debugMode) {
 
+            ArrayList<Entity> entities = World.getRegion().getEntities((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, 6, 6);
+            float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, Window.getScale());
+
+            g.setColor(Color.black);
+            g.drawRect(osc[0], osc[1], 6 * Window.getScale() * Chunk.TILE_SIZE, 6 * Window.getScale() * Chunk.TILE_SIZE);
+            for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
+
+
             String[] debugStrings = new String[]{
+                    "Entity count: "+World.getRegion().getEntities().size(),
                     World.getPlayer().getLocation().toString(),
                     World.getPlayer().getLocation().getChunk().debug(),
                     "Screen Center: "+(Window.getWidth()/2)+", "+(Window.getHeight()/2),
@@ -85,13 +99,6 @@ public class GameScreen extends BasicGameState {
 
             for (int i = 0; i < debugStrings.length; i++)
                 g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
-
-            ArrayList<Entity> entities = World.getRegion().getEntities((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, 6, 6);
-            float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, Window.getScale());
-
-            g.setColor(Color.black);
-            g.drawRect(osc[0], osc[1], 6 * Window.getScale() * Chunk.TILE_SIZE, 6 * Window.getScale() * Chunk.TILE_SIZE);
-            for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
 
             //World.getPlayer().drawDebug(origin[0], origin[1], Window.getScale(), g);
         }
@@ -123,20 +130,23 @@ public class GameScreen extends BasicGameState {
 
     @Override
     public void mousePressed(int button, int x, int y) {
-        super.mousePressed(button, x, y);
+        gui.onMousePressed(x, y, button);
     }
 
     @Override
     public void mouseReleased(int button, int x, int y) {
         double[] mouse_wcoords = Camera.getWorldCoordinates(x, y, Window.getScale());
         if (button == 2) {
+            Random rng = new Random();
+            for (int i = 0; i < 50; i++) {
                 Entity civ = new Civilian();
                 Location player = World.getPlayer().getLocation();
                 civ.moveTo(new Location(
                         player.getRegion(),
-                        mouse_wcoords[0],
-                        mouse_wcoords[1]));
+                        mouse_wcoords[0] + -8 + rng.nextInt(16),
+                        mouse_wcoords[1] + -8 + rng.nextInt(16)));
                 civ.enterState("idle");
+            }
         }
         gui.onMouseRelease(x, y, button);
     }
