@@ -44,6 +44,31 @@ public class Chunk {
 
     }
 
+    public void update() {
+        Location player_location = World.getPlayer().getLocation();
+        int test = 0;
+        for (int i = 0; i < CHUNK_SIZE; i++) {
+            for (int j = 0; j < CHUNK_SIZE; j++) {
+                int loc_index = MiscMath.getIndex(
+                        (int)((coordinates[0] * CHUNK_SIZE) + i),
+                        (int)((coordinates[1] * CHUNK_SIZE) + j),
+                        CHUNK_SIZE * player_location.getRegion().getSize()
+                );
+                int[] range = player_location.getRegion().getEntityIndices(loc_index, loc_index);
+                for (int eindex = range[0]; eindex < range[1]; eindex++) {
+                    Entity e = player_location.getRegion().getEntities().get(eindex);
+                    if (e.equals(World.getPlayer())) {
+                        test++;
+                        System.out.println((int)((coordinates[0] * CHUNK_SIZE) + i)+", "+
+                                (int)((coordinates[1] * CHUNK_SIZE) + j)+" ["+range[0]+", "+range[1]+"]");
+                    }
+                    e.update();
+                }
+            }
+        }
+        System.out.println("Updated player "+test+" times");
+    }
+
     public Portal getPortal(int tx, int ty) {
         return portals.get(MiscMath.getIndex(tx, ty, Chunk.CHUNK_SIZE));
     }
@@ -123,11 +148,12 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                int[] range = player_location.getRegion().getEntityIndices(MiscMath.getIndex(
+                int loc_index = MiscMath.getIndex(
                         (int)((coordinates[0] * CHUNK_SIZE) + i),
                         (int)((coordinates[1] * CHUNK_SIZE) + j),
                         CHUNK_SIZE * player_location.getRegion().getSize()
-                ));
+                );
+                int[] range = player_location.getRegion().getEntityIndices(loc_index, loc_index);
 
                 for (int eindex = range[0]; eindex < range[1]; eindex++) {
                     Entity e = player_location.getRegion().getEntities().get(eindex);
@@ -139,14 +165,6 @@ public class Chunk {
         }
 
 
-    }
-
-    public void drawEntities(float osx, float osy, float scale) {
-        Location player_location = World.getPlayer().getLocation();
-        for (int j = 0; j < CHUNK_SIZE; j++) {
-
-
-        }
     }
 
     public void drawDebug(float osx, float osy, float scale, Graphics g) {

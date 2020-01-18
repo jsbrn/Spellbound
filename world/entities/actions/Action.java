@@ -11,6 +11,7 @@ public abstract class Action {
     public final Entity getParent() { return this.parent; }
 
     public abstract void onStart();
+    public abstract void onCancel();
     public abstract void update();
     public abstract boolean finished();
     public final void start() { this.onStart(); started = true; }

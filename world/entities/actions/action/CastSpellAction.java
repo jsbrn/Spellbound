@@ -24,6 +24,11 @@ public class CastSpellAction extends Action {
     }
 
     @Override
+    public void onCancel() {
+
+    }
+
+    @Override
     public void update() {
 
     }

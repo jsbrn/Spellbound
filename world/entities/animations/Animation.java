@@ -47,6 +47,8 @@ public class Animation {
 
     public boolean finished() { return !loop && loopCount() > 0; }
 
+    public void setColor(Color color) { filter = color; }
+
     public void reset() {
         this.start_time = System.currentTimeMillis();
     }

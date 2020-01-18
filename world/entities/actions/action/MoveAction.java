@@ -8,7 +8,7 @@ import world.entities.actions.Action;
 
 public class MoveAction extends Action {
 
-    private double[] start, target, vel;
+    private double[] target;
 
     public MoveAction(double x, double y) {
         this.target = new double[]{x, y};
@@ -19,8 +19,12 @@ public class MoveAction extends Action {
         Entity parent = getParent();
         double[] coordinates = parent.getLocation().getCoordinates();
         parent.getLocation().setLookDirection((int)MiscMath.angleBetween(coordinates[0], coordinates[1], target[0], target[1]));
-        this.start = coordinates;
-        this.vel = MiscMath.getUnitVector(target[0] - start[0], target[1] - start[1]);
+        parent.getMover().setTarget(target[0], target[1]);
+    }
+
+    @Override
+    public void onCancel() {
+        getParent().getMover().stop();
     }
 
     @Override
@@ -30,14 +34,12 @@ public class MoveAction extends Action {
 
     @Override
     public boolean finished() {
-        return !getParent().getMover().isMoving();
-//
-//        byte[] tile = World.getRegion().getTile((int)target[0], (int)target[1]);
-//        if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
-//
-//        double[] coordinates = getParent().getLocation().getCoordinates();
-//
-//        return false;
+        if (!getParent().getMover().isMoving()) return true;
+
+        byte[] tile = getParent().getLocation().getRegion().getTile((int)target[0], (int)target[1]);
+        if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
+
+        return false;
     }
 
     public String toString() { return "Move("+target[0]+", "+target[1]+")"; }

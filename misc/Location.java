@@ -9,6 +9,13 @@ public class Location {
     private double[] coordinates;
     private int lookDirection;
 
+    public Location(Region region, double wx, double wy) {
+        this(
+            region,
+                (int)(wx / Chunk.CHUNK_SIZE), (int)(wy / Chunk.CHUNK_SIZE),
+            wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
+    }
+
     public Location(Region region, int cx, int cy, double tx, double ty) {
         this.region = region;
         this.coordinates = new double[]{(cx * Chunk.CHUNK_SIZE) + tx, (cy * Chunk.CHUNK_SIZE) + ty};
@@ -28,7 +35,7 @@ public class Location {
         this.coordinates[1] = wty;
     }
 
-    private int[] getChunkCoordinates() {
+    public int[] getChunkCoordinates() {
         return new int[]{(int)(coordinates[0] / Chunk.CHUNK_SIZE), (int)(coordinates[1] / Chunk.CHUNK_SIZE)};
     }
 

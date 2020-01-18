@@ -33,6 +33,11 @@ public class SetAnimationAction extends Action {
     }
 
     @Override
+    public void onCancel() {
+
+    }
+
+    @Override
     public void update() {
 
     }

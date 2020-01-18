@@ -55,17 +55,19 @@ public class Region {
     }
 
     public void addEntity(Entity e) {
-        entities.add(getEntityIndex(e.getLocation().getGlobalIndex(), 0, entities.size()), e);
+        int index = getEntityIndex(e.getLocation().getGlobalIndex(), 0, entities.size());
+        System.out.println("Adding entity to index "+index);
+        entities.add(index, e);
     }
 
     public void removeEntity(Entity e) {
         entities.remove(e);
     }
 
-    public int[] getEntityIndices(int location) {
+    public int[] getEntityIndices(int min_location, int max_location) {
         return new int[]{
-                getEntityIndex(location-1, 0, entities.size()),
-                getEntityIndex(location+1, 0, entities.size()),
+                getEntityIndex(min_location-1, 0, entities.size()),
+                getEntityIndex(max_location+1, 0, entities.size()),
         };
     }
 
@@ -145,8 +147,6 @@ public class Region {
             if (magicSource.getBody().isDepleted()) magic_sources.remove(i);
         }
 
-        World.getPlayer().update();
-
         int radius = 2;
         int[] pchcoords = World.getPlayer().getLocation().getChunk().getCoordinates();
         for (int j = -radius; j <= radius; j++) {
@@ -154,7 +154,7 @@ public class Region {
                 int cx = pchcoords[0] + i;
                 int cy = pchcoords[1] + j;
                 Chunk adj = getChunk(cx, cy);
-                //if (adj != null) adj.update();
+                if (adj != null) adj.update();
             }
         }
 
@@ -178,7 +178,6 @@ public class Region {
                     if (pass == 0) {
                         adj.drawBase(osx, osy, scale);
                     } else {
-                        adj.drawEntities(osx, osy, scale);
                         adj.drawTop(osx, osy, scale);
                         if (debug && cx == pchcoords[0] && cy == pchcoords[1]) adj.drawDebug(osx, osy, scale, g);
                     }
@@ -194,11 +193,12 @@ public class Region {
     public void drawDebug(float scale, Graphics g) {
         for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
+            e.drawDebug(scale, g);
             g.drawString(
                     e.getClass().getSimpleName()+" "+e.getLocation().getGlobalIndex(),
                     Window.getWidth() - 200, i * 20);
         }
-
+        for (MagicSource magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
     }
 
     @Override

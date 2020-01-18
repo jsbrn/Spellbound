@@ -1,5 +1,7 @@
 package world.entities.animations;
 
+import org.newdawn.slick.Color;
+
 import java.util.HashMap;
 
 public class AnimationLayer {
@@ -27,6 +29,11 @@ public class AnimationLayer {
         Animation get = this.animations.get(name);
         return get;
     }
+
+    public void setColor(Color color) {
+        for (Animation anim: animations.values()) anim.setColor(color);
+    }
+
     public String getCurrentAnimation() {
         return currentAnimation;
     }

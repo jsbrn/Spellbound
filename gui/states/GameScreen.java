@@ -17,6 +17,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import world.Camera;
 import world.Chunk;
 import world.World;
+import world.entities.Entity;
+import world.entities.types.humanoids.npcs.Civilian;
 
 public class GameScreen extends BasicGameState {
 
@@ -82,13 +84,6 @@ public class GameScreen extends BasicGameState {
             for (int i = 0; i < debugStrings.length; i++)
                 g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
 
-            g.setColor(Color.red);
-            g.drawLine(0, Window.getHeight()/2, Window.getWidth(), Window.getHeight()/2);
-            g.setColor(Color.blue);
-            g.drawLine(Window.getWidth()/2, 0, Window.getWidth()/2, Window.getHeight());
-            g.setColor(Color.white);
-            g.fillRect(Window.getWidth()/2 - 2, Window.getHeight()/2 - 2, 4, 4);
-
             //World.getPlayer().drawDebug(origin[0], origin[1], Window.getScale(), g);
         }
 
@@ -125,6 +120,17 @@ public class GameScreen extends BasicGameState {
     @Override
     public void mouseReleased(int button, int x, int y) {
         double[] mouse_wcoords = Camera.getWorldCoordinates(x, y, Window.getScale());
+        if (button == 2) {
+            for (int i = 0; i < 1000; i++) {
+                Entity civ = new Civilian();
+                Location player = World.getPlayer().getLocation();
+                civ.moveTo(new Location(
+                        player.getRegion(),
+                        mouse_wcoords[0],
+                        mouse_wcoords[1]));
+                civ.enterState("idle");
+            }
+        }
         gui.onMouseRelease(x, y, button);
     }
 

@@ -7,6 +7,7 @@ import gui.states.GameScreen;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import world.Camera;
 import world.Chunk;
 import world.Region;
 import world.World;
@@ -69,7 +70,7 @@ public class ParticleSource {
         }
     }
 
-    public void draw(float ox, float oy, float scale, Graphics g, boolean debug) {
+    public void draw(float ox, float oy, float scale, Graphics g) {
 
         for (int i = particles.size() - 1; i >= 0; i--) {
 
@@ -99,36 +100,38 @@ public class ParticleSource {
             );
         }
 
-        if (debug) drawDebug(ox, oy, scale, g);
-
         g.setColor(Color.white);
 
     }
 
-    private void drawDebug(float ox, float oy, float scale, Graphics g) {
+    public void drawDebug(double ox, double oy, float scale, Graphics g) {
+
+        float[] osc = Camera.getOnscreenCoordinates(ox + coordinates[0], oy + coordinates[1], scale);
+
         double mxosw = maxRadius * 2 * Chunk.TILE_SIZE * scale;
         double mnosw = minRadius * 2 * Chunk.TILE_SIZE * scale;
         double[] dir_offset = MiscMath.getRotatedOffset(0, -maxRadius * 2, direction);
 
         g.setColor(Color.red);
-        g.fillOval((float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - 2), (float) (oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - 2), 4, 4);
+        g.fillOval(osc[0] - 2, osc[1] - 2, 4, 4);
         g.drawLine(
-                (float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - 2),
-                (float) (oy + ((coordinates[1]) * Chunk.TILE_SIZE * scale) - 2),
-                (float) (ox + ((coordinates[0] + dir_offset[0]) * Chunk.TILE_SIZE * scale) - 2),
-                (float) (oy + ((coordinates[1] + dir_offset[1]) * Chunk.TILE_SIZE * scale) - 2));
+                osc[0] - 2,
+                (float) (osc[1] - 2),
+                (float) (osc[0] + (dir_offset[0] * Chunk.TILE_SIZE * scale) - 2),
+                (float) (osc[1] + (dir_offset[1] * Chunk.TILE_SIZE * scale) - 2));
         g.setColor(Color.blue);
         g.drawOval(
-                (float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - (mxosw / 2)),
-                (float) (oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - (mxosw / 2)),
+                osc[0] - (float)(mxosw / 2),
+                (float) (osc[1] - (mxosw / 2)),
                 (float) mxosw,
                 (float) mxosw);
         g.setColor(Color.cyan);
         g.drawOval(
-                (float) (ox + (coordinates[0] * Chunk.TILE_SIZE * scale) - (mnosw / 2)),
-                (float) (oy + (coordinates[1] * Chunk.TILE_SIZE * scale) - (mnosw / 2)),
+                osc[0] - (float)(mnosw / 2),
+                (float) (osc[1] - (mnosw / 2)),
                 (float) mnosw,
                 (float) mnosw);
+
     }
 
     public boolean isDepleted() { return particlesRemaining <= 0 && particles.size() == 0; }

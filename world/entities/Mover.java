@@ -18,7 +18,7 @@ public class Mover {
 
     public Mover(Entity parent) {
         this.parent = parent;
-        this.speed = 3; //tiles per second
+        this.speed = 2; //tiles per second
     }
 
     public void setTarget(double tx, double ty) {
@@ -71,16 +71,9 @@ public class Mover {
         }
     }
 
-//    public void refreshChunks() {
-//        int[] chcoords = parent.getLocation().getChunk().getCoordinates();
-//        for (int i = -1; i <= 1; i++) {
-//            for (int j = -1; j <= 1; j++) {
-//                Chunk c = parent.getLocation().getRegion().getChunk(chcoords[0] + i, chcoords[1] + j);
-//                if (c != null) c.addEntity(parent);
-//            }
-//        }
-//    }
+    public double[] getTarget() { return new double[]{ targetX, targetY}; }
 
+    public boolean isIndependent() { return independentAxes; }
     public boolean isMoving() { return moving; }
 
 }
