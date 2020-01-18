@@ -51,7 +51,7 @@ public class Location {
     public void lookAt(double tx, double ty) { setLookDirection((int)MiscMath.angleBetween(coordinates[0], coordinates[1], tx, ty)); }
     public void setLookDirection(int degrees) { this.lookDirection = degrees % 360; }
 
-    public int getGlobalIndex() { return MiscMath.getIndex((int)coordinates[0], (int)coordinates[1], region.getSize() * Chunk.CHUNK_SIZE); }
+    public double getGlobalIndex() { return MiscMath.getIndex((int)coordinates[0], (int)coordinates[1], region.getSize() * Chunk.CHUNK_SIZE); }
 
     public String toString() {
         return region.getName()+"@["+coordinates[0]+", "+coordinates[1]+"] " +

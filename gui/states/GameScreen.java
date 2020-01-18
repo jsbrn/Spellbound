@@ -121,7 +121,6 @@ public class GameScreen extends BasicGameState {
     public void mouseReleased(int button, int x, int y) {
         double[] mouse_wcoords = Camera.getWorldCoordinates(x, y, Window.getScale());
         if (button == 2) {
-            for (int i = 0; i < 1000; i++) {
                 Entity civ = new Civilian();
                 Location player = World.getPlayer().getLocation();
                 civ.moveTo(new Location(
@@ -129,7 +128,6 @@ public class GameScreen extends BasicGameState {
                         mouse_wcoords[0],
                         mouse_wcoords[1]));
                 civ.enterState("idle");
-            }
         }
         gui.onMouseRelease(x, y, button);
     }

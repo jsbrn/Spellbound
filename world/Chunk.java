@@ -37,7 +37,7 @@ public class Chunk {
                 if (p != null) {
                     p.setChunk(this);
                     p.setTileCoordinates(i, j);
-                    portals.put(MiscMath.getIndex(i, j, Chunk.CHUNK_SIZE), p);
+                    portals.put((int)MiscMath.getIndex(i, j, Chunk.CHUNK_SIZE), p);
                 }
             }
         }
@@ -46,10 +46,9 @@ public class Chunk {
 
     public void update() {
         Location player_location = World.getPlayer().getLocation();
-        int test = 0;
         for (int i = 0; i < CHUNK_SIZE; i++) {
             for (int j = 0; j < CHUNK_SIZE; j++) {
-                int loc_index = MiscMath.getIndex(
+                int loc_index = (int)MiscMath.getIndex(
                         (int)((coordinates[0] * CHUNK_SIZE) + i),
                         (int)((coordinates[1] * CHUNK_SIZE) + j),
                         CHUNK_SIZE * player_location.getRegion().getSize()
@@ -57,16 +56,10 @@ public class Chunk {
                 int[] range = player_location.getRegion().getEntityIndices(loc_index, loc_index);
                 for (int eindex = range[0]; eindex < range[1]; eindex++) {
                     Entity e = player_location.getRegion().getEntities().get(eindex);
-                    if (e.equals(World.getPlayer())) {
-                        test++;
-                        System.out.println((int)((coordinates[0] * CHUNK_SIZE) + i)+", "+
-                                (int)((coordinates[1] * CHUNK_SIZE) + j)+" ["+range[0]+", "+range[1]+"]");
-                    }
-                    e.update();
+                    if (e.getLocation().getGlobalIndex() == loc_index) e.update();
                 }
             }
         }
-        System.out.println("Updated player "+test+" times");
     }
 
     public Portal getPortal(int tx, int ty) {
@@ -120,6 +113,7 @@ public class Chunk {
         Color translucent = new Color(1f, 1f, 1f, 0.5f);
         Location player_location = World.getPlayer().getLocation();
         double[] player_coords = player_location.getLocalCoordinates();
+        int[] player_chcoords = player_location.getChunkCoordinates();
 
 
         for (int j = 0; j < CHUNK_SIZE; j++) {
@@ -133,6 +127,8 @@ public class Chunk {
 
                 boolean reveal =
                         Math.abs(player_coords[0] - i) < 1
+                                && player_chcoords[0] == coordinates[0]
+                                && player_chcoords[1] == coordinates[1]
                                 && j - player_coords[1] < height
                                 && j - player_coords[1] > 0.25f
                                 && Definitions.getTile(top[i][j]).peeking();
@@ -148,9 +144,9 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                int loc_index = MiscMath.getIndex(
-                        (int)((coordinates[0] * CHUNK_SIZE) + i),
-                        (int)((coordinates[1] * CHUNK_SIZE) + j),
+                int loc_index = (int)MiscMath.getIndex(
+                        ((coordinates[0] * CHUNK_SIZE) + i),
+                        ((coordinates[1] * CHUNK_SIZE) + j),
                         CHUNK_SIZE * player_location.getRegion().getSize()
                 );
                 int[] range = player_location.getRegion().getEntityIndices(loc_index, loc_index);
@@ -158,7 +154,7 @@ public class Chunk {
                 for (int eindex = range[0]; eindex < range[1]; eindex++) {
                     Entity e = player_location.getRegion().getEntities().get(eindex);
                     float[] eosc = Camera.getOnscreenCoordinates(e.getLocation().getCoordinates()[0], e.getLocation().getCoordinates()[1], scale);
-                    e.draw(eosc[0], eosc[1], scale);
+                    if (e.getLocation().getGlobalIndex() == loc_index) e.draw(eosc[0], eosc[1], scale);
                 }
 
             }

@@ -280,8 +280,8 @@ public class MiscMath {
         return false;
     }
 
-    public static int getIndex(int tx, int ty, int size) {
-        return (ty * size) + tx;
+    public static double getIndex(double x, double y, int size) {
+        return (y * size) + x;
     }
 
     public static int[] getTileCoordinatesFromIndex(int index) {

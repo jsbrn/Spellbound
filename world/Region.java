@@ -73,14 +73,14 @@ public class Region {
 
     public ArrayList<Entity> getEntities() { return entities; }
 
-    private int getEntityIndex(int location, int min, int max) {
+    private int getEntityIndex(double location, int min, int max) {
 
         if (entities.isEmpty()) return 0;
 
         int half = min + ((max-min) / 2);
-        int minloc = entities.get(min).getLocation().getGlobalIndex();
-        int maxloc = entities.get(max-1).getLocation().getGlobalIndex();
-        int halfloc = entities.get(half).getLocation().getGlobalIndex();
+        double minloc = entities.get(min).getLocation().getGlobalIndex();
+        double maxloc = entities.get(max-1).getLocation().getGlobalIndex();
+        double halfloc = entities.get(half).getLocation().getGlobalIndex();
 
         if (location >= maxloc) return max;
         if (location <= minloc) return min;

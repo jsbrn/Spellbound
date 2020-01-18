@@ -18,7 +18,7 @@ public class Mover {
 
     public Mover(Entity parent) {
         this.parent = parent;
-        this.speed = 2; //tiles per second
+        this.speed = 3; //tiles per second
     }
 
     public void setTarget(double tx, double ty) {
@@ -57,7 +57,7 @@ public class Mover {
 
         double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(targetX - start[0], targetY - start[1]);
 
-        int old_index = parent.getLocation().getGlobalIndex();
+        double old_index = parent.getLocation().getGlobalIndex();
         parent.getLocation().setCoordinates(
                 MiscMath.tween(start[0], coordinates[0], targetX, Math.abs(speed * multiplier * dir[0]), 1),
                 MiscMath.tween(start[1], coordinates[1], targetY, Math.abs(speed * multiplier * dir[1]), 1));
