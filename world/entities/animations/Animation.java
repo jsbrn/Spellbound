@@ -19,7 +19,7 @@ public class Animation {
             this.frame_count = frame_count;
             this.original_fps = fps;
             this.fps = original_fps;
-            this.start_time = 0;
+            this.start_time = System.currentTimeMillis();
             this.sprite = new Image("assets/animations/"+image, false, Image.FILTER_NEAREST);
             this.frame_width = this.sprite.getWidth() / (float)frame_count;
             this.frame_height = frame_height;

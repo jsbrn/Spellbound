@@ -115,6 +115,7 @@ public class Entity {
     }
 
     public void drawDebug(float scale, Graphics g) {
+
         float osc[] = Camera.getOnscreenCoordinates(getLocation().getCoordinates()[0], getLocation().getCoordinates()[1], scale);
 
         float tosc[] = Camera.getOnscreenCoordinates(getMover().getTarget()[0], getMover().getTarget()[1], scale);

@@ -37,7 +37,7 @@ public class Chunk {
                 if (p != null) {
                     p.setChunk(this);
                     p.setTileCoordinates(i, j);
-                    portals.put((int)MiscMath.getIndex(i, j, Chunk.CHUNK_SIZE), p);
+                    portals.put(MiscMath.getIndex(i, j, Chunk.CHUNK_SIZE), p);
                 }
             }
         }
@@ -46,7 +46,12 @@ public class Chunk {
 
     public void update() {
         Location player_location = World.getPlayer().getLocation();
-        for (int i = 0; i < CHUNK_SIZE; i++) {
+        ArrayList<Entity> entities = player_location.getRegion()
+                .getEntities((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
+        for (int i = entities.size() - 1; i >= 0; i--) {
+            entities.get(i).update();
+        }
+        /*for (int i = 0; i < CHUNK_SIZE; i++) {
             for (int j = 0; j < CHUNK_SIZE; j++) {
                 int loc_index = (int)MiscMath.getIndex(
                         (int)((coordinates[0] * CHUNK_SIZE) + i),
@@ -59,7 +64,7 @@ public class Chunk {
                     if (e.getLocation().getGlobalIndex() == loc_index) e.update();
                 }
             }
-        }
+        }*/
     }
 
     public Portal getPortal(int tx, int ty) {
@@ -144,7 +149,7 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                int loc_index = (int)MiscMath.getIndex(
+                int loc_index = MiscMath.getIndex(
                         ((coordinates[0] * CHUNK_SIZE) + i),
                         ((coordinates[1] * CHUNK_SIZE) + j),
                         CHUNK_SIZE * player_location.getRegion().getSize()

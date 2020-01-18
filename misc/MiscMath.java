@@ -280,7 +280,7 @@ public class MiscMath {
         return false;
     }
 
-    public static double getIndex(double x, double y, int size) {
+    public static int getIndex(int x, int y, int size) {
         return (y * size) + x;
     }
 

@@ -20,6 +20,8 @@ import world.World;
 import world.entities.Entity;
 import world.entities.types.humanoids.npcs.Civilian;
 
+import java.util.ArrayList;
+
 public class GameScreen extends BasicGameState {
 
     static StateBasedGame game;
@@ -65,7 +67,7 @@ public class GameScreen extends BasicGameState {
         World.draw(Window.getScale(), g, debugMode);
         gui.draw(g);
 
-        double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Mouse.getY(), Window.getScale());
+        double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Window.getHeight() - Mouse.getY(), Window.getScale());
         float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());
         float[] origin_osc = Camera.getOnscreenCoordinates(0, 0, Window.getScale());
 
@@ -83,6 +85,13 @@ public class GameScreen extends BasicGameState {
 
             for (int i = 0; i < debugStrings.length; i++)
                 g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
+
+            ArrayList<Entity> entities = World.getRegion().getEntities((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, 6, 6);
+            float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, Window.getScale());
+
+            g.setColor(Color.black);
+            g.drawRect(osc[0], osc[1], 6 * Window.getScale() * Chunk.TILE_SIZE, 6 * Window.getScale() * Chunk.TILE_SIZE);
+            for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
 
             //World.getPlayer().drawDebug(origin[0], origin[1], Window.getScale(), g);
         }

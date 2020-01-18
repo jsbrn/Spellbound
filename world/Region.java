@@ -1,5 +1,6 @@
 package world;
 
+import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
@@ -44,8 +45,6 @@ public class Region {
             EntityMovedEvent event = (EntityMovedEvent) e;
 
             if (entities.contains(event.getEntity())) {
-                //update sort
-                System.out.println("Moving to "+event.getEntity().getLocation().getGlobalIndex());
                 removeEntity(event.getEntity());
                 addEntity(event.getEntity());
             }
@@ -56,12 +55,26 @@ public class Region {
 
     public void addEntity(Entity e) {
         int index = getEntityIndex(e.getLocation().getGlobalIndex(), 0, entities.size());
-        System.out.println("Adding entity to index "+index);
         entities.add(index, e);
     }
 
     public void removeEntity(Entity e) {
         entities.remove(e);
+    }
+
+    public ArrayList<Entity> getEntities(int wx, int wy, int width, int height) {
+        ArrayList<Entity> subsection = new ArrayList<>();
+        for (int i = 0; i < width-1; i++) {
+            for (int j = 0; j < height; j++) {
+                int loc = MiscMath.getIndex(wx + i, wy + j, Chunk.CHUNK_SIZE * getSize());
+                int[] indices = getEntityIndices(loc, loc);
+                for (int e = indices[0]; e < indices[1]; e++) {
+                    Entity entity = entities.get(e);
+                    if (!subsection.contains(entity)) subsection.add(entity);
+                }
+            }
+        }
+        return subsection;
     }
 
     public int[] getEntityIndices(int min_location, int max_location) {
