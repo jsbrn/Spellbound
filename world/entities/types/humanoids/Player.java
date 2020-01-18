@@ -90,7 +90,6 @@ public class Player extends HumanoidEntity {
                 getAnimationLayer("legs").setAnimation("walking");
                 getMover().setTargetX(targetX);
                 getMover().setTargetY(targetY);
-                System.out.println(targetX+", "+targetY);
                 getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
                 getAnimationLayer("arms").setAnimation("default");
@@ -102,9 +101,9 @@ public class Player extends HumanoidEntity {
     }
 
     private double[] findMoveTarget(int dx, int dy) {
-        double[] coordinates = new double[]{getLocation().getCoordinates()[0], getLocation().getCoordinates()[1]};
+        double[] coordinates = getLocation().getCoordinates();
         double[] potentialTarget = new double[]{ coordinates[0], coordinates[1] };
-        for (double i = 0; i < Chunk.TILE_SIZE; i += 0.5) {
+        for (double i = 0.5; i < Chunk.CHUNK_SIZE; i += 0.5) {
             double tx = coordinates[0] + (i * dx);
             double ty = coordinates[1] + (i * dy);
             byte[] tile = World.getRegion().getTile((int)MiscMath.round(tx, 1), (int)MiscMath.round(ty, 1));

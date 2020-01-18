@@ -30,13 +30,14 @@ public class MoveAction extends Action {
 
     @Override
     public boolean finished() {
-
-        byte[] tile = World.getRegion().getTile((int)target[0], (int)target[1]);
-        if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
-
-        double[] coordinates = getParent().getLocation().getCoordinates();
-
-        return false;
+        return !getParent().getMover().isMoving();
+//
+//        byte[] tile = World.getRegion().getTile((int)target[0], (int)target[1]);
+//        if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
+//
+//        double[] coordinates = getParent().getLocation().getCoordinates();
+//
+//        return false;
     }
 
     public String toString() { return "Move("+target[0]+", "+target[1]+")"; }

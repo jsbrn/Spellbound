@@ -46,7 +46,7 @@ public class MagicSource {
     }
 
     public void draw(float ox, float oy, float scale, Graphics g) {
-        body.draw(ox, oy, scale, g);
+        body.draw(ox, oy, scale, g, true);
     }
 
     public Entity getCaster() { return caster; }

@@ -10,9 +10,11 @@ import gui.elements.Statusbar;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import world.Camera;
 import world.Chunk;
 import world.World;
 
@@ -58,22 +60,36 @@ public class GameScreen extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         graphics = g;
         g.setFont(Assets.FONT);
-        float[] origin = MiscMath.getWorldOnscreenOrigin();
-        World.draw(origin[0], origin[1], Window.getScale(), g);
+        World.draw(Window.getScale(), g, debugMode);
         gui.draw(g);
 
-        if (debugMode) {
-            for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-                for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                    float tile_osw = Chunk.TILE_SIZE * Window.getScale();
-                    g.drawRect(origin[0] + (i * tile_osw), origin[1] + (j * tile_osw), tile_osw, tile_osw);
-                }
-            }
-            int y = Window.getHeight()/2;
-            g.drawString(World.getPlayer().getLocation().toString(), 10, y+25);
-            g.drawString(World.getPlayer().getLocation().getChunk().debug(), 10, y+50);
+        double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Mouse.getY(), Window.getScale());
+        float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());
+        float[] origin_osc = Camera.getOnscreenCoordinates(0, 0, Window.getScale());
 
-            World.getPlayer().drawDebug(origin[0], origin[1], Window.getScale(), g);
+        if (debugMode) {
+
+            String[] debugStrings = new String[]{
+                    World.getPlayer().getLocation().toString(),
+                    World.getPlayer().getLocation().getChunk().debug(),
+                    "Screen Center: "+(Window.getWidth()/2)+", "+(Window.getHeight()/2),
+                    "ORIGIN: "+origin_osc[0]+", "+origin_osc[1],
+                    "OSC: "+Mouse.getX()+", "+Mouse.getY()+" @ "+Window.getScale(),
+                    "OSC->WC: "+mouse_wc[0]+", "+mouse_wc[1],
+                    "WC->OSC: "+mouse_osc[0]+", "+mouse_osc[1]
+            };
+
+            for (int i = 0; i < debugStrings.length; i++)
+                g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
+
+            g.setColor(Color.red);
+            g.drawLine(0, Window.getHeight()/2, Window.getWidth(), Window.getHeight()/2);
+            g.setColor(Color.blue);
+            g.drawLine(Window.getWidth()/2, 0, Window.getWidth()/2, Window.getHeight());
+            g.setColor(Color.white);
+            g.fillRect(Window.getWidth()/2 - 2, Window.getHeight()/2 - 2, 4, 4);
+
+            //World.getPlayer().drawDebug(origin[0], origin[1], Window.getScale(), g);
         }
 
     }
@@ -108,7 +124,7 @@ public class GameScreen extends BasicGameState {
 
     @Override
     public void mouseReleased(int button, int x, int y) {
-        double[] mouse_wcoords = MiscMath.getWorldCoordinates(x, y);
+        double[] mouse_wcoords = Camera.getWorldCoordinates(x, y, Window.getScale());
         gui.onMouseRelease(x, y, button);
     }
 
@@ -124,10 +140,6 @@ public class GameScreen extends BasicGameState {
     }
 
     public static Input getInput() { return input; }
-
-    public static boolean debugModeEnabled() { return debugMode; }
-
-    public static boolean showTopLayer() { return showTopLayer; }
 
     public static GUI getGUI() {
         return gui;

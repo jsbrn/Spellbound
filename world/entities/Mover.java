@@ -1,7 +1,10 @@
 package world.entities;
 
 import assets.definitions.Definitions;
+import misc.Location;
 import misc.MiscMath;
+import world.Chunk;
+import world.Region;
 import world.World;
 import world.events.EventDispatcher;
 import world.events.event.EntityMovedEvent;
@@ -54,16 +57,29 @@ public class Mover {
 
         double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(targetX - start[0], targetY - start[1]);
 
+        int old_index = parent.getLocation().getGlobalIndex();
         parent.getLocation().setCoordinates(
                 MiscMath.tween(start[0], coordinates[0], targetX, Math.abs(speed * multiplier * dir[0]), 1),
                 MiscMath.tween(start[1], coordinates[1], targetY, Math.abs(speed * multiplier * dir[1]), 1));
+        if (parent.getLocation().getGlobalIndex() != old_index) {
+            EventDispatcher.invoke(new EntityMovedEvent(parent));
+        }
 
         if (coordinates[0] == targetX && coordinates[1] == targetY) {
             EventDispatcher.invoke(new EntityMovedEvent(parent));
             moving = false;
         }
-
     }
+
+//    public void refreshChunks() {
+//        int[] chcoords = parent.getLocation().getChunk().getCoordinates();
+//        for (int i = -1; i <= 1; i++) {
+//            for (int j = -1; j <= 1; j++) {
+//                Chunk c = parent.getLocation().getRegion().getChunk(chcoords[0] + i, chcoords[1] + j);
+//                if (c != null) c.addEntity(parent);
+//            }
+//        }
+//    }
 
     public boolean isMoving() { return moving; }
 

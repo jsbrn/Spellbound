@@ -2,9 +2,10 @@ package world;
 
 import assets.Assets;
 import assets.definitions.Definitions;
-import gui.states.GameScreen;
+import misc.Location;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
@@ -20,7 +21,6 @@ public class Chunk {
     private byte[][] base;
     private byte[][] top;
     private HashMap<Integer, Portal> portals;
-    private ArrayList<Entity> entities;
 
     public Chunk(int x, int y, ChunkGenerator generator) {
 
@@ -28,8 +28,6 @@ public class Chunk {
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.portals = new HashMap<>();
-
-        this.entities = new ArrayList<>();
 
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
@@ -39,7 +37,7 @@ public class Chunk {
                 if (p != null) {
                     p.setChunk(this);
                     p.setTileCoordinates(i, j);
-                    portals.put(MiscMath.getTileIndex(i, j), p);
+                    portals.put(MiscMath.getIndex(i, j, Chunk.CHUNK_SIZE), p);
                 }
             }
         }
@@ -47,7 +45,7 @@ public class Chunk {
     }
 
     public Portal getPortal(int tx, int ty) {
-        return portals.get(MiscMath.getTileIndex(tx, ty));
+        return portals.get(MiscMath.getIndex(tx, ty, Chunk.CHUNK_SIZE));
     }
 
     public Portal findPortalTo(Region destination, String destination_name) {
@@ -57,37 +55,28 @@ public class Chunk {
         return null;
     }
 
-    public void update() {
-        for (int i = entities.size() - 1; i >= 0; i--)
-            entities.get(i).update();
-    }
-
     public void set(int x, int y, byte base, byte top) {
         this.base[x][y] = base;
         this.top[x][y] = top;
     }
 
-    public byte[] get(int x, int y) {
-        if (x < 0 || y < 0 || y >= Chunk.CHUNK_SIZE || x >= Chunk.CHUNK_SIZE)
+    public byte[] get(int tx, int ty) {
+        if (tx < 0 || ty < 0 || ty >= Chunk.CHUNK_SIZE || tx >= Chunk.CHUNK_SIZE)
             return new byte[2];
-        return new byte[]{this.base[x][y], this.top[x][y]};
+        return new byte[]{this.base[tx][ty], this.top[tx][ty]};
     }
-
-    public void addEntity(Entity e) { entities.add(e); }
-    public void removeEntity(Entity e) { entities.remove(e); }
 
     public int[] getCoordinates() { return coordinates; }
 
-    public void draw(float sx, float sy, float scale, boolean active) {
-        Color filter = new Color(0.3f, 0.3f, 0.3f);
+    public void draw(float osx, float osy, float scale) {
         Color translucent = new Color(1f, 1f, 1f, 0.5f);
-        double[] player_coords = World.getPlayer().getLocation().getCoordinates();
+        Location player_location = World.getPlayer().getLocation();
+        double[] player_coords = player_location.getLocalCoordinates();
         for (int j = 0; j < CHUNK_SIZE; j++) {
-            Assets.TILE_SPRITESHEET.startUse();
             for (int i = 0; i < CHUNK_SIZE; i++) {
-                //Assets.TILES.setFilter(Image.FILTER_NEAREST);
-                float ox = sx + (i * TILE_SIZE * scale);
-                float oy = sy + ((j - ((Assets.TILE_SPRITESHEET.getHeight() / TILE_SIZE) - 1)) * TILE_SIZE * scale);
+
+                float ox = osx + (i * TILE_SIZE * scale);
+                float oy = osy + ((j - ((Assets.TILE_SPRITESHEET.getHeight() / TILE_SIZE) - 1)) * TILE_SIZE * scale);
                 float btx = base[i][j] * TILE_SIZE;
                 float ttx = top[i][j] * TILE_SIZE;
 
@@ -97,9 +86,9 @@ public class Chunk {
                         Math.abs(player_coords[0] - i) < 1
                         && j - player_coords[1] < height
                         && j - player_coords[1] > 0.25f
-                        && active
                         && Definitions.getTile(top[i][j]).peeking();
 
+                Assets.TILE_SPRITESHEET.startUse();
                 Assets.TILE_SPRITESHEET.drawEmbedded(
                         ox,
                         oy,
@@ -108,8 +97,8 @@ public class Chunk {
                         btx,
                         0,
                         btx + TILE_SIZE,
-                        Assets.TILE_SPRITESHEET.getHeight(), active ? Color.white : filter);
-                if (!GameScreen.debugModeEnabled() || GameScreen.showTopLayer()) Assets.TILE_SPRITESHEET.drawEmbedded(
+                        Assets.TILE_SPRITESHEET.getHeight(), Color.white);
+                Assets.TILE_SPRITESHEET.drawEmbedded(
                         ox,
                         oy,
                         ox + (TILE_SIZE * scale),
@@ -117,15 +106,37 @@ public class Chunk {
                         ttx,
                         0,
                         ttx + TILE_SIZE,
-                        Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : (active ? Color.white : filter));
+                        Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
+                Assets.TILE_SPRITESHEET.endUse();
+
+                int[] range = player_location.getRegion().getEntityIndices(MiscMath.getIndex(
+                        (int)((coordinates[0] * CHUNK_SIZE) + i - 0.5),
+                        (int)((coordinates[1] * CHUNK_SIZE) + j - 0.5),
+                        CHUNK_SIZE * player_location.getRegion().getSize()
+                ));
+
+                for (int eindex = range[0]; eindex < range[1]; eindex++) {
+                    Entity e = player_location.getRegion().getEntities().get(eindex);
+                    float[] eosc = Camera.getOnscreenCoordinates(e.getLocation().getCoordinates()[0], e.getLocation().getCoordinates()[1], scale);
+                    e.draw(eosc[0], eosc[1], scale);
+                }
+
             }
-            Assets.TILE_SPRITESHEET.endUse();
-            for (Entity e: entities) if ((int)(e.getLocation().getCoordinates()[1] + 0.5f) == j) e.draw(sx, sy, scale);
+
+        }
+    }
+
+    public void drawDebug(float osx, float osy, float scale, Graphics g) {
+        g.setColor(Color.white);
+        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
+            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
+                g.drawRect(osx + (i * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale);
+            }
         }
     }
 
     public String debug() {
-        return "cx: "+coordinates[0]+", cy: "+coordinates[1]+", e: "+entities.size();
+        return "cx: "+coordinates[0]+", cy: "+coordinates[1];
     }
 
 }

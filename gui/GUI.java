@@ -4,6 +4,7 @@ import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import world.Camera;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;
@@ -24,7 +25,7 @@ public final class GUI {
         for (int i = elements.size() - 1; i >= 0; i--)
             if (elements.get(i).onMouseRelease((int)(osx/Window.getScale()), (int)(osy/Window.getScale())))
                 return true;
-        double[] wc = MiscMath.getWorldCoordinates(osx, osy);
+        double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
         EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
         return false;
     }

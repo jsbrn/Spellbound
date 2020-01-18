@@ -32,7 +32,8 @@ public class Entity {
     }
 
     public void update() {
-        getMover().update();
+        if (mover == null) mover = new Mover(this);
+        mover.update();
         if (action_queue.isEmpty()) return;
         action_queue.get(0).update();
         if (action_queue.get(0).finished()) action_queue.remove(0);
@@ -71,7 +72,6 @@ public class Entity {
     public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
     public Mover getMover() {
-        if (mover == null) mover = new Mover(this);
         return mover;
     }
 
@@ -79,25 +79,21 @@ public class Entity {
 
     public void moveTo(Location new_) {
         System.out.println("Setting "+this+" location to "+new_);
-        if (location != null) location.getChunk().removeEntity(this);
+        if (location != null && location.getRegion() != null) location.getRegion().removeEntity(this);
         location = new_;
-        location.getChunk().addEntity(this);
+        location.getRegion().addEntity(this);
     }
 
-    public void draw(float sx, float sy, float scale) {
-        float ex = sx + ((float)location.getCoordinates()[0] * scale * Chunk.TILE_SIZE);
-        float ey = sy + ((float)location.getCoordinates()[1] * scale * Chunk.TILE_SIZE);
-
+    public void draw(float osx, float osy, float scale) {
         for (AnimationLayer animationLayer: animationLayers.values()) {
             Animation anim = animationLayer.getAnimationByName(animationLayer.getCurrentAnimation());
             if (anim != null)
                 anim.draw(
-                        ex,
-                        ey,
+                        osx,
+                        osy,
                         scale,
                         (location.getLookDirection() + (360 / 16)) / (360 / 8));
         }
-
 
     }
 

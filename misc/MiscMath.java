@@ -2,6 +2,7 @@ package misc;
 
 import org.lwjgl.opengl.Display;
 import world.Chunk;
+import world.World;
 
 import java.util.Random;
 
@@ -84,7 +85,6 @@ public class MiscMath {
                 y = (y1 - y2);
                 new_rotation = (((float) Math.atan(y / x) * 60) + 180) + 90;
         }
-        System.out.println(new_rotation % 360);
         return new_rotation % 360;
     }
 
@@ -269,7 +269,7 @@ public class MiscMath {
             double dety = (b1 * d) - (b * b2);
             double x = detx / det, y = dety / det;
             if ((x >= p1[0] && x <= p2[0]) && (x >= p3[0] && x <= p4[0])) return true;
-        } else { //if no point to be found, then they are paralell
+        } else { //if no point to be found, then they are parallel
             if ((int) b1 != (int) b2) return false; //if they have different y-intercepts, no intersection
             //otherwise, check each x value to see if they are touching the other segment
             if (p1[0] >= p3[0] && p1[0] <= p4[0]) return true;
@@ -280,22 +280,8 @@ public class MiscMath {
         return false;
     }
 
-    public static float[] getWorldOnscreenOrigin() {
-        float scale = Window.getScale();
-        float size = scale * Chunk.TILE_SIZE * Chunk.CHUNK_SIZE;
-        float ox = (Window.getWidth()/2) - (size / 2);
-        float oy = (Window.getHeight() / 2) - (size/2);
-        return new float[]{ox, oy};
-    }
-
-    public static double[] getWorldCoordinates(int osx, int osy) {
-        float[] world_origin = getWorldOnscreenOrigin();
-        return new double[]{(osx - world_origin[0]) / Window.getScale() / Chunk.TILE_SIZE,
-                (osy - world_origin[1]) / Window.getScale() / Chunk.TILE_SIZE};
-    }
-
-    public static int getTileIndex(int tx, int ty) {
-        return (ty * Chunk.CHUNK_SIZE) + tx;
+    public static int getIndex(int tx, int ty, int size) {
+        return (ty * size) + tx;
     }
 
     public static int[] getTileCoordinatesFromIndex(int index) {

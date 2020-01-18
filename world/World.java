@@ -20,7 +20,9 @@ public class World {
         player = new Player();
         addRegion(new Region("world", 32, new DefaultWorldGenerator()));
         Region player_home = addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator()));
-        player.moveTo(new Location(player_home, player_home.getChunk(0, 0), Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2));
+        player.moveTo(new Location(getRegion("world"), 0, 0, Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2));
+        Camera.setTarget(player);
+
     }
 
     public static Region addRegion(Region region) {
@@ -40,8 +42,11 @@ public class World {
         getRegion().update();
     }
 
-    public static void draw(float ox, float oy, float scale, Graphics g) {
-        getRegion().draw(ox, oy, scale, g);
+    public static void draw(float scale, Graphics g, boolean debug) {
+        getRegion().draw(scale, g, debug);
+        if (debug) drawDebug(scale, g);
     }
+
+    public static void drawDebug(float scale, Graphics g) { getRegion().drawDebug(scale, g); }
 
 }
