@@ -13,6 +13,7 @@ import world.generators.chunk.ChunkGenerator;
 import world.generators.region.RegionGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Region {
 
@@ -22,6 +23,7 @@ public class Region {
     private int size;
 
     private ArrayList<MagicSource> magic_sources;
+    private HashMap<Integer, Portal> portals;
     private ArrayList<Entity> entities;
 
     public Region(String name, int size, RegionGenerator generator) {
@@ -39,6 +41,7 @@ public class Region {
 
         magic_sources = new ArrayList<>();
         entities = new ArrayList<>();
+        portals = new HashMap<>();
 
         Region that = this;
         EventDispatcher.register(new EventListener().on(EntityMovedEvent.class.toString(), e -> {
@@ -65,18 +68,8 @@ public class Region {
 
     public ArrayList<Entity> getEntities(int wx, int wy, int width, int height) {
         ArrayList<Entity> subsection = new ArrayList<>();
-//        for (int i = 0; i < width; i++) {
-//            for (int j = 0; j < height; j++) {
-//                int loc = MiscMath.getIndex(wx + i, wy + j, Chunk.CHUNK_SIZE * getSize());
-//                int[] indices = getEntityIndices(loc, loc);
-//                for (int e = indices[0]; e < indices[1]; e++) {
-//                    Entity entity = entities.get(e);
-//                    if (!subsection.contains(entity)) subsection.add(entity);
-//                }
-//            }
-//        }
-        int minloc = MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize());
-        int maxloc = MiscMath.getIndex(wx + width, wy + height, Chunk.CHUNK_SIZE * getSize());
+        double minloc = MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize());
+        double maxloc = MiscMath.getIndex(wx + width, wy + height, Chunk.CHUNK_SIZE * getSize());
         int[] indices = getEntityIndices(minloc, maxloc);
         for (int i = indices[0]; i < indices[1]; i++) {
             Entity e = entities.get(i);
@@ -94,7 +87,7 @@ public class Region {
         return subsection;
     }
 
-    public int[] getEntityIndices(int min_location, int max_location) {
+    public int[] getEntityIndices(double min_location, double max_location) {
         return new int[]{
                 getEntityIndex(min_location-1, 0, entities.size()),
                 getEntityIndex(max_location + 1, 0, entities.size()),
@@ -124,22 +117,36 @@ public class Region {
 
     }
 
-    /**
-     * Find the portal that links to the portal specified. Forcefully generates chunks until it finds the portal.
-     * @param destination Region of destination portal.
-     * @param portal_name Name of destination portal.
-     * @return Portal if found, null if not
-     */
-    public Portal findPortalTo(Region destination, String portal_name) {
-        for (int i = 0; i < chunkGenerators.length; i++) {
-            for (int j = 0; j < chunkGenerators[i].length; j++) {
-                Chunk c = getChunk(i, j);
-                if (c != null) {
-                    Portal p = c.findPortalTo(destination, portal_name);
-                    if (p != null) return p;
-                }
+    public void registerPortal(int index, Portal portal) {
+        portals.put(index, portal);
+    }
+
+    public Portal getPortal(int index) {
+        return portals.get(index);
+    }
+
+    public Portal getPortal(int wx, int wy) {
+        return getPortal((int)MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize()));
+    }
+
+    public void forceLoadChunks() {
+        for (int i = 0; i < getSize(); i++) {
+            for (int j = 0; j < getSize(); j++) {
+                getChunk(i, j);
             }
         }
+    }
+
+    /**
+     * Find the portal that links to the portal specified.
+     * @param destination Region of destination portal.
+     * @param destinationName Name of destination portal.
+     * @return Portal if found, null if not
+     */
+    public Portal findPortalTo(Region destination, String destinationName) {
+        for (Portal p: portals.values())
+            if (p.getDestination().equals(destination) && p.getDestinationName().equals(destinationName))
+                return p;
         return null;
     }
 
@@ -151,7 +158,7 @@ public class Region {
 
     public Chunk getChunk(int cx, int cy) {
         if (cx < 0 || cx >= chunkGenerators.length || cy < 0 || cy >= chunkGenerators[0].length) return null;
-        if (chunks[cx][cy] == null) chunks[cx][cy] = new Chunk(cx, cy, chunkGenerators[cx][cy]);
+        if (chunks[cx][cy] == null) chunks[cx][cy] = new Chunk(cx, cy, this, chunkGenerators[cx][cy]);
         return chunks[cx][cy];
     }
 
@@ -178,7 +185,7 @@ public class Region {
         }
 
         int radius = 2;
-        int[] pchcoords = World.getPlayer().getLocation().getChunk().getCoordinates();
+        int[] pchcoords = World.getPlayer().getLocation().getChunkCoordinates();
         for (int j = -radius; j <= radius; j++) {
             for (int i = -radius; i <= radius; i++) {
                 int cx = pchcoords[0] + i;
@@ -191,7 +198,7 @@ public class Region {
     }
 
     public void draw(float scale, Graphics g, boolean debug) {
-        int[] pchcoords = World.getPlayer().getLocation().getChunk().getCoordinates();
+        int[] pchcoords = World.getPlayer().getLocation().getChunkCoordinates();
         float[] oscoords = Camera.getOnscreenCoordinates(0, 0, scale);
 
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();

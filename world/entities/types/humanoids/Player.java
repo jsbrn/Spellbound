@@ -10,6 +10,7 @@ import world.Chunk;
 import world.Region;
 import world.World;
 import world.entities.actions.ActionGroup;
+import world.entities.actions.action.ActivateAction;
 import world.entities.actions.action.CastSpellAction;
 import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.SetAnimationAction;
@@ -59,6 +60,15 @@ public class Player extends HumanoidEntity {
                             actions.add(new SetAnimationAction("arms", "casting", true));
                             actions.add(new SetAnimationAction("arms", "default", false));
                             getSpellbook().getParent().queueActions(actions);
+                        }
+                    }
+                })
+                .on(KeyDownEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        KeyDownEvent kde = (KeyDownEvent)e;
+                        if (kde.getKey() == Input.KEY_E && that.getActionQueue().isEmpty()) {
+                            that.queueAction(new ActivateAction());
                         }
                     }
                 })

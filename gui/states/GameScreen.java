@@ -89,7 +89,7 @@ public class GameScreen extends BasicGameState {
             String[] debugStrings = new String[]{
                     "Entity count: "+World.getRegion().getEntities().size(),
                     World.getPlayer().getLocation().toString(),
-                    World.getPlayer().getLocation().getChunk().debug(),
+                    //World.getPlayer().getLocation().getChunk().debug(),
                     "Screen Center: "+(Window.getWidth()/2)+", "+(Window.getHeight()/2),
                     "ORIGIN: "+origin_osc[0]+", "+origin_osc[1],
                     "OSC: "+Mouse.getX()+", "+Mouse.getY()+" @ "+Window.getScale(),
@@ -97,6 +97,7 @@ public class GameScreen extends BasicGameState {
                     "WC->OSC: "+mouse_osc[0]+", "+mouse_osc[1]
             };
 
+            g.setColor(Color.white);
             for (int i = 0; i < debugStrings.length; i++)
                 g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
 
@@ -145,7 +146,7 @@ public class GameScreen extends BasicGameState {
                         player.getRegion(),
                         mouse_wcoords[0] + -8 + rng.nextInt(16),
                         mouse_wcoords[1] + -8 + rng.nextInt(16)));
-                civ.enterState("idle");
+                if (rng.nextBoolean()) civ.enterState("idle");
             }
         }
         gui.onMouseRelease(x, y, button);

@@ -6,7 +6,7 @@ public class Portal {
     private String name, destinationName;
 
     private Chunk chunk;
-    private int[] exitDirection, tileCoordinates;
+    private int[] exitDirection, coordinates;
 
     public Portal(String name, int dx, int dy, Region destination, String destination_name) {
         this.destination = destination;
@@ -27,20 +27,16 @@ public class Portal {
         return exitDirection;
     }
 
-    public Chunk getChunk() {
-        return chunk;
-    }
-
     public void setChunk(Chunk chunk) {
         this.chunk = chunk;
     }
 
-    public int[] getTileCoordinates() {
-        return tileCoordinates;
+    public int[] getCoordinates() {
+        return coordinates;
     }
 
-    public void setTileCoordinates(int x, int y) {
-        this.tileCoordinates = new int[]{x, y};
+    public void setCoordinates(int x, int y) {
+        this.coordinates = new int[]{x, y};
     }
 
 }

@@ -51,7 +51,6 @@ public class Entity {
     }
 
     public void queueAction(Action a) {
-        System.out.println("Queueing "+a);
         queueActions(new ActionGroup(a));
     }
 
@@ -63,6 +62,7 @@ public class Entity {
     }
 
     public void clearActions() {
+        cancelCurrentAction();
         action_queue.clear();
     }
 
@@ -74,7 +74,10 @@ public class Entity {
     public void enterState(String name) {
         if (currentState != null) currentState.onExit();
         currentState = states.get(name);
-        if (currentState != null) currentState.onEnter();
+        if (currentState != null) {
+            currentState.onEnter();
+            clearActions();
+        }
     }
 
     public void addAnimation(String layer, String name, Animation a) {
@@ -95,7 +98,6 @@ public class Entity {
     public Location getLocation() { return location; }
 
     public void moveTo(Location new_) {
-        System.out.println("Setting "+this+" location to "+new_);
         if (location != null && location.getRegion() != null) location.getRegion().removeEntity(this);
         location = new_;
         location.getRegion().addEntity(this);

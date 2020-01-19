@@ -18,6 +18,7 @@ public class Mover {
 
     public Mover(Entity parent) {
         this.parent = parent;
+        this.setTarget(parent.getLocation().getCoordinates()[0], parent.getLocation().getCoordinates()[1]);
         this.speed = 3; //tiles per second
     }
 

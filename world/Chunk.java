@@ -18,13 +18,15 @@ public class Chunk {
     public static final int TILE_SIZE = 16;
     public static final int CHUNK_SIZE = 13;
 
+    private Region region;
     private int[] coordinates;
+
     private byte[][] base;
     private byte[][] top;
     private HashMap<Integer, Portal> portals;
 
-    public Chunk(int x, int y, ChunkGenerator generator) {
-
+    public Chunk(int x, int y, Region region, ChunkGenerator generator) {
+        this.region = region;
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
@@ -37,8 +39,11 @@ public class Chunk {
                 Portal p = generator.getPortal(i, j);
                 if (p != null) {
                     p.setChunk(this);
-                    p.setTileCoordinates(i, j);
-                    portals.put(MiscMath.getIndex(i, j, Chunk.CHUNK_SIZE), p);
+                    p.setCoordinates((coordinates[0] * Chunk.CHUNK_SIZE) + i, (coordinates[1] * Chunk.CHUNK_SIZE) + j);
+                    region.registerPortal((int)MiscMath.getIndex(
+                            (coordinates[0] * Chunk.CHUNK_SIZE) + i,
+                            (coordinates[1] * Chunk.CHUNK_SIZE) + j,
+                            Chunk.CHUNK_SIZE * region.getSize()), p);
                 }
             }
         }
@@ -46,30 +51,9 @@ public class Chunk {
     }
 
     public void update() {
-        Location player_location = World.getPlayer().getLocation();
-        ArrayList<Entity> entities = player_location.getRegion()
+        ArrayList<Entity> entities = region
                 .getEntities((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
-        for (int i = entities.size() - 1; i >= 0; i--) {
-            entities.get(i).update();
-        }
-        /*for (int i = 0; i < CHUNK_SIZE; i++) {
-            for (int j = 0; j < CHUNK_SIZE; j++) {
-                int loc_index = (int)MiscMath.getIndex(
-                        (int)((coordinates[0] * CHUNK_SIZE) + i),
-                        (int)((coordinates[1] * CHUNK_SIZE) + j),
-                        CHUNK_SIZE * player_location.getRegion().getSize()
-                );
-                int[] range = player_location.getRegion().getEntityIndices(loc_index, loc_index);
-                for (int eindex = range[0]; eindex < range[1]; eindex++) {
-                    Entity e = player_location.getRegion().getEntities().get(eindex);
-                    if (e.getLocation().getGlobalIndex() == loc_index) e.update();
-                }
-            }
-        }*/
-    }
-
-    public Portal getPortal(int tx, int ty) {
-        return portals.get(MiscMath.getIndex(tx, ty, Chunk.CHUNK_SIZE));
+        for (int i = entities.size() - 1; i >= 0; i--) entities.get(i).update();
     }
 
     public Portal findPortalTo(Region destination, String destination_name) {
@@ -118,9 +102,8 @@ public class Chunk {
     public void drawTop(float osx, float osy, float scale) {
         Color translucent = new Color(1f, 1f, 1f, 0.5f);
         Location player_location = World.getPlayer().getLocation();
-        double[] player_coords = player_location.getLocalCoordinates();
-        int[] player_chcoords = player_location.getChunkCoordinates();
-
+        double[] playerLocalCoords = player_location.getLocalCoordinates();
+        int[] playerChunkCoords = player_location.getChunkCoordinates();
 
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
@@ -129,15 +112,14 @@ public class Chunk {
                 float oy = osy + ((j - ((Assets.TILE_SPRITESHEET.getHeight() / TILE_SIZE) - 1)) * TILE_SIZE * scale);
                 float ttx = top[i][j] * TILE_SIZE;
 
-                float height = Definitions.getTile(top[i][j]).getHeight();
-
                 boolean reveal =
-                        Math.abs(player_coords[0] - i) < 1
-                                && player_chcoords[0] == coordinates[0]
-                                && player_chcoords[1] == coordinates[1]
-                                && j - player_coords[1] < height
-                                && j - player_coords[1] > 0.25f
+                        Math.abs(playerLocalCoords[0] - i) < 1
+                                && playerChunkCoords[0] == coordinates[0]
+                                && playerChunkCoords[1] == coordinates[1]
+                                && j - playerLocalCoords[1] < Definitions.getTile(top[i][j]).getHeight() - 1
+                                && j - playerLocalCoords[1] > 0.25f
                                 && Definitions.getTile(top[i][j]).peeking();
+
                 Assets.TILE_SPRITESHEET.startUse();
                 Assets.TILE_SPRITESHEET.drawEmbedded(
                         ox,
@@ -150,15 +132,14 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                ArrayList<Entity> entities = player_location.getRegion()
-                        .getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
+                ArrayList<Entity> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
                 for (Entity e: entities) {
                     float[] eosc = Camera.getOnscreenCoordinates(e.getLocation().getCoordinates()[0], e.getLocation().getCoordinates()[1], scale);
-                    int padding = 4 * Chunk.TILE_SIZE;
+                    int padding = (int)(4 * Chunk.TILE_SIZE * scale);
                     if (MiscMath.pointIntersectsRect(
                             eosc[0], eosc[1],
                             -padding, -padding,
-                            Window.getWidth() + padding, Window.getHeight() + padding))
+                            Window.getWidth() + (2*padding), Window.getHeight() + (2*padding)))
                         e.draw(eosc[0], eosc[1], scale);
                 }
 
