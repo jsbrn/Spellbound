@@ -42,7 +42,7 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
     @Override
     public Portal getPortal(int x, int y) {
         return x == Chunk.CHUNK_SIZE/2 && y == getMinimum()
-                ? new Portal("door", 0, 1, World.getRegion("world"), "door")
+                ? new Portal("door", 0, 1, true, World.getRegion("world"), "door")
                 : null;
     }
 

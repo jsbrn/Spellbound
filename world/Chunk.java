@@ -38,7 +38,6 @@ public class Chunk {
                 top[i][j] = generator.getTop(i, j);
                 Portal p = generator.getPortal(i, j);
                 if (p != null) {
-                    p.setChunk(this);
                     p.setCoordinates((coordinates[0] * Chunk.CHUNK_SIZE) + i, (coordinates[1] * Chunk.CHUNK_SIZE) + j);
                     region.registerPortal((int)MiscMath.getIndex(
                             (coordinates[0] * Chunk.CHUNK_SIZE) + i,

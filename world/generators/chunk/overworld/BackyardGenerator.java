@@ -26,7 +26,7 @@ public class BackyardGenerator extends OpenFieldGenerator {
     @Override
     public Portal getPortal(int x, int y) {
         return (x == 6 && y == 5)
-                ? new Portal("door", 0, 1, World.getRegion("player_home"), "door")
+                ? new Portal("door", 0, 1, true, World.getRegion("player_home"), "door")
                 : null;
     }
 }

@@ -18,6 +18,7 @@ import world.Camera;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;
+import world.entities.pathfinding.LocalPathFinder;
 import world.entities.types.humanoids.npcs.Civilian;
 
 import java.util.ArrayList;
@@ -97,6 +98,16 @@ public class GameScreen extends BasicGameState {
                     "WC->OSC: "+mouse_osc[0]+", "+mouse_osc[1]
             };
 
+            ArrayList<Location> pathFromPlayer = LocalPathFinder.getPath(World.getRegion(),
+                    (int)World.getPlayer().getLocation().getCoordinates()[0], (int)World.getPlayer().getLocation().getCoordinates()[1],
+                    (int)mouse_wc[0], (int)mouse_wc[1]);
+
+            g.setColor(Color.yellow);
+            for (Location l: pathFromPlayer) {
+                float[] losc = Camera.getOnscreenCoordinates(l.getCoordinates()[0] + 0.5, l.getCoordinates()[1] + 0.5, Window.getScale());
+                g.drawRect(losc[0] - Window.getScale(), losc[1] - Window.getScale(), 2*Window.getScale(), 2*Window.getScale());
+            }
+
             g.setColor(Color.white);
             for (int i = 0; i < debugStrings.length; i++)
                 g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
@@ -139,7 +150,7 @@ public class GameScreen extends BasicGameState {
         double[] mouse_wcoords = Camera.getWorldCoordinates(x, y, Window.getScale());
         if (button == 2) {
             Random rng = new Random();
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 500; i++) {
                 Entity civ = new Civilian();
                 Location player = World.getPlayer().getLocation();
                 civ.moveTo(new Location(

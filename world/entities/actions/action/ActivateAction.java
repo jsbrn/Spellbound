@@ -18,6 +18,11 @@ public class ActivateAction extends Action {
         Portal origin = location.getRegion().getPortal((int)coords[0], (int)coords[1]);
         System.out.println("Searching for portal at "+coords[0]+", "+coords[1]);
         if (origin != null) {
+
+            if (origin.isEntranceDirectional()
+                    && !(MiscMath.clamp(origin.getExitDirection()[0], -1, 1) == -offset[0]
+                    && MiscMath.clamp(origin.getExitDirection()[1], -1, 1) == -offset[1])) return;
+
             System.out.println("Found portal leading to "+origin.getDestination()+", "+origin.getDestinationName());
             origin.getDestination().forceLoadChunks();
             Portal destination = origin.getDestination().findPortalTo(location.getRegion(), origin.getName());

@@ -32,7 +32,7 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
         return (x == entrance_x && y == entrance_y)
                 ? new Portal(
                         "trapdoor",
-                0, -1, World.addRegion(new Region(dungeon_name, 12, new DungeonGenerator())),
+                0, -1, false, World.addRegion(new Region(dungeon_name, 12, new DungeonGenerator())),
                         "ladder")
                 : super.getPortal(x, y);
     }

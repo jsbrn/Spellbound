@@ -234,7 +234,7 @@
   },
   {
     "name": "Stone Ladder, North",
-    "collision": false,
+    "collision": true,
     "peeking": false,
     "height": 2,
     "solid": true,

@@ -66,7 +66,7 @@ public class Window {
     }
 
     public static float getScale() {
-        return (float)(Window.getHeight() / (Chunk.CHUNK_SIZE * Chunk.TILE_SIZE));
+        return (float)(Window.getHeight() / (Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)) + 1;
     }
 
     public static int getFPS() {

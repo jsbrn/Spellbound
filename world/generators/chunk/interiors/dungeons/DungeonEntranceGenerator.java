@@ -23,7 +23,7 @@ public class DungeonEntranceGenerator extends DungeonRoomGenerator {
     @Override
     public Portal getPortal(int x, int y) {
         return x == Chunk.CHUNK_SIZE/2 && y == getMinimum()
-                ? new Portal("ladder", 0, 2, World.getRegion("world"), "trapdoor")
+                ? new Portal("ladder", 0, 2, true, World.getRegion("world"), "trapdoor")
                 : null;
     }
 
