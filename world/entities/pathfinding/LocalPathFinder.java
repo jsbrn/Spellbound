@@ -29,7 +29,7 @@ public class LocalPathFinder {
         targetNode = getNode(targetX, targetY, region);
         open.add(startNode);
 
-        if (startNode.equals(targetNode) || getGScoreMultiplier(targetNode) == Integer.MAX_VALUE) return path;
+        if (startNode.equals(targetNode) || targetNode.getDScore() == Integer.MAX_VALUE) return path;
 
         while (!open.contains(targetNode)) {
             Node current = getBestOpen();
@@ -79,8 +79,7 @@ public class LocalPathFinder {
             for (int j = -1; j <= 1; j++) {
                 if (Math.abs(i) - Math.abs(j) == 0) continue;
                 Node adj = getNode(node.getX() + i, node.getY() + j, node.getRegion());
-                if (getGScoreMultiplier(adj) == Integer.MAX_VALUE) continue;
-                adj.setGScore((int)(10 * getGScoreMultiplier(adj)));
+                if (adj.getDScore() == Integer.MAX_VALUE) continue;
                 adjacent.add(adj);
             }
         }
@@ -101,14 +100,6 @@ public class LocalPathFinder {
         return Math.abs((b.getX() - a.getX())) + Math.abs((b.getY() - a.getY()));
     }
 
-    private static double getGScoreMultiplier(Node n) {
-        byte[] tile = n.getRegion().getTile(n.getX(), n.getY());
-        TileDefinition base = Definitions.getTile(tile[0]);
-        TileDefinition top = Definitions.getTile(tile[1]);
-        if (base.collides() || top.collides()) return Integer.MAX_VALUE;
-        return 1 / (base.getSpeedMultiplier() * top.getSpeedMultiplier());
-    }
-
 }
 
 class Node {
@@ -121,6 +112,7 @@ class Node {
     public Node(int wx, int wy, Region region) {
         this.coordinates = new int[]{wx, wy};
         this.region = region;
+        this.G = 1;
     }
 
     public int getX() { return coordinates[0]; }
@@ -129,7 +121,15 @@ class Node {
     public void setGScore(int g) { this.G = g; }
     public void setHScore(int h) { this.H = h; }
 
-    public int getFinalGScore() { return parent == null ? getGScore() : getParent().getGScore() + getGScore(); }
+    public double getDScore() {
+        byte[] tile = region.getTile(coordinates[0], coordinates[1]);
+        TileDefinition base = Definitions.getTile(tile[0]);
+        TileDefinition top = Definitions.getTile(tile[1]);
+        if (base.collides() || top.collides()) return Integer.MAX_VALUE;
+        return (int)(1 / (base.getSpeedMultiplier() * top.getSpeedMultiplier()));
+    }
+
+    public int getFinalGScore() { return (int)(G * getDScore()) + (parent != null ? parent.getGScore() : 0); }
     public int getGScore() { return G; }
 
     public int getFScore() { return getFinalGScore() + H; }
