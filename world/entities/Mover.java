@@ -1,48 +1,51 @@
 package world.entities;
 
 import assets.definitions.Definitions;
+import assets.definitions.TileDefinition;
 import misc.Location;
 import misc.MiscMath;
 import world.Chunk;
-import world.Region;
 import world.World;
+import world.entities.pathfinding.LocalPathFinder;
 import world.events.EventDispatcher;
 import world.events.event.EntityMovedEvent;
+
+import java.util.LinkedList;
 
 public class Mover {
 
     private Entity parent;
-    private double[] start;
+    private boolean collidable, lookAtTarget;
     private boolean moving, independentAxes;
-    private double targetX, targetY, speed;
+    private double[] start;
+    private double speed;
 
-    public Mover(Entity parent) {
-        this.parent = parent;
-        this.setTarget(parent.getLocation().getCoordinates()[0], parent.getLocation().getCoordinates()[1]);
+    private LinkedList<Location> path;
+
+    public Mover() {
         this.speed = 3; //tiles per second
+        this.path = new LinkedList<>();
+    }
+
+    protected void setParent(Entity parent) {
+        this.parent = parent;
     }
 
     public void setTarget(double tx, double ty) {
-        if (targetX == tx && targetY == ty) return;
+
+        if (!isIndependent()) {
+            if (!path.isEmpty()) return;
+            if (canMoveDirectlyTo((int)tx, (int)ty)) path.add(new Location(parent.getLocation().getRegion(), tx, ty));
+            if (path.isEmpty()) path = LocalPathFinder.findPath(parent.getLocation(), (int)tx, (int)ty);
+            if (path.isEmpty()) return;
+        } else {
+            path.clear();
+            path.add(new Location(parent.getLocation().getRegion(), tx, ty));
+        }
+
         start = parent.getLocation().getCoordinates();
-        targetX = tx;
-        targetY = ty;
-        independentAxes = false;
         moving = true;
-    }
 
-    public void setTargetX(double tx) {
-        independentAxes = true;
-        start[0] = parent.getLocation().getCoordinates()[0];
-        targetX = tx;
-        moving = true;
-    }
-
-    public void setTargetY(double ty) {
-        independentAxes = true;
-        start[1] = parent.getLocation().getCoordinates()[1];
-        targetY = ty;
-        moving = true;
     }
 
     public void stop() {
@@ -50,31 +53,60 @@ public class Mover {
     }
 
     public void update() {
+        if (!path.isEmpty()){
+            moveToTarget(path.get(0).getCoordinates()[0], path.get(0).getCoordinates()[1]);
+        }
+    }
 
+    private void moveToTarget(double wx, double wy) {
         if (!moving) return;
 
         double[] coordinates = parent.getLocation().getCoordinates();
         double multiplier = Definitions.getTile(World.getRegion().getTile((int)(coordinates[0]), (int)(coordinates[1]))[1]).getSpeedMultiplier();
 
-        double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(targetX - start[0], targetY - start[1]);
+        double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(wx - start[0], wy - start[1]);
 
-        double old_index = parent.getLocation().getGlobalIndex();
+        int old_index = (int)parent.getLocation().getGlobalIndex();
+        if (lookAtTarget) parent.getLocation().lookAt(wx, wy);
         parent.getLocation().setCoordinates(
-                MiscMath.tween(start[0], coordinates[0], targetX, Math.abs(speed * multiplier * dir[0]), 1),
-                MiscMath.tween(start[1], coordinates[1], targetY, Math.abs(speed * multiplier * dir[1]), 1));
-        if (parent.getLocation().getGlobalIndex() != old_index) {
+                MiscMath.tween(start[0], coordinates[0], wx, Math.abs(speed * multiplier * dir[0]), 1),
+                MiscMath.tween(start[1], coordinates[1], wy, Math.abs(speed * multiplier * dir[1]), 1));
+        if ((int)parent.getLocation().getGlobalIndex() != old_index) EventDispatcher.invoke(new EntityMovedEvent(parent));
+
+        if (coordinates[0] == wx && coordinates[1] == wy) {
+            if (!path.isEmpty()) path.remove(0);
             EventDispatcher.invoke(new EntityMovedEvent(parent));
+            if (path.isEmpty()) moving = false;
         }
 
-        if (coordinates[0] == targetX && coordinates[1] == targetY) {
-            EventDispatcher.invoke(new EntityMovedEvent(parent));
-            moving = false;
-        }
     }
 
-    public double[] getTarget() { return new double[]{ targetX, targetY}; }
+    public double[] getTarget() { return path.isEmpty() ? parent.getLocation().getCoordinates() : path.get(0).getCoordinates(); }
+    public LinkedList<Location> getPath() { return path; }
 
+    public void setIndependent(boolean i) { this.independentAxes = i; }
     public boolean isIndependent() { return independentAxes; }
     public boolean isMoving() { return moving; }
+
+    private boolean canMoveDirectlyTo(int tx, int ty) {
+        double[] coords = parent.getLocation().getCoordinates();
+        int dist = 1;
+        double angle = MiscMath.angleBetween(coords[0], coords[1], tx, ty);
+        double[] offset;
+        while (dist < Chunk.CHUNK_SIZE) {
+            offset = MiscMath.getRotatedOffset(0, -dist, angle);
+            byte[] tile = parent.getLocation().getRegion().getTile((int)(coords[0] + offset[0]), (int)(coords[1] + offset[1]));
+            TileDefinition base = Definitions.getTile(tile[0]);
+            TileDefinition top = Definitions.getTile(tile[1]);
+            if (base.collides() || top.collides() || base.getSpeedMultiplier() < 1 || top.getSpeedMultiplier() < 1) return false;
+            if ((int)(coords[0] + offset[0]) == tx && (int)(coords[1] + offset[1]) == ty) return true;
+            dist++;
+        }
+        return false;
+    }
+
+    public void setLookAtTarget(boolean l) { this.lookAtTarget = true; }
+    public boolean isCollidable() { return collidable; }
+    public void setCollidable(boolean c) { this.collidable = c; }
 
 }

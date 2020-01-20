@@ -35,6 +35,8 @@ public class Player extends HumanoidEntity {
 
         super();
 
+        this.getMover().setIndependent(true);
+
         this.setMaxHP(10);
         this.setMaxMana(10);
         this.setHP(10);
@@ -92,8 +94,7 @@ public class Player extends HumanoidEntity {
             if (dx != 0 || dy != 0) {
                 getAnimationLayer("arms").setAnimation("walking");
                 getAnimationLayer("legs").setAnimation("walking");
-                getMover().setTargetX(targetX);
-                getMover().setTargetY(targetY);
+                getMover().setTarget(targetX, targetY);
                 getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
                 getAnimationLayer("arms").setAnimation("default");

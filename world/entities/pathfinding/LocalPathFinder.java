@@ -1,6 +1,7 @@
 package world.entities.pathfinding;
 
 import assets.definitions.Definitions;
+import assets.definitions.Tile;
 import assets.definitions.TileDefinition;
 import misc.Location;
 import misc.MiscMath;
@@ -11,6 +12,7 @@ import world.generators.chunk.interiors.InteriorRoomGenerator;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class LocalPathFinder {
 
@@ -18,15 +20,15 @@ public class LocalPathFinder {
     private static Node startNode, targetNode;
     private static ArrayList<Node> open, closed;
 
-    public static ArrayList<Location> getPath(Region region, int startX, int startY, int targetX, int targetY) {
+    public static LinkedList<Location> findPath(Location start, int targetX, int targetY) {
 
-        ArrayList<Location> path = new ArrayList<>();
+        LinkedList<Location> path = new LinkedList<>();
         nodeCache = new HashMap<>();
         open = new ArrayList<>();
         closed = new ArrayList<>();
 
-        startNode = getNode(startX, startY, region);
-        targetNode = getNode(targetX, targetY, region);
+        startNode = getNode((int)start.getCoordinates()[0], (int)start.getCoordinates()[1], start.getRegion());
+        targetNode = getNode(targetX, targetY, start.getRegion());
         open.add(startNode);
 
         if (startNode.equals(targetNode) || targetNode.getDScore() == Integer.MAX_VALUE) return path;
@@ -34,6 +36,7 @@ public class LocalPathFinder {
         while (!open.contains(targetNode)) {
             Node current = getBestOpen();
             ArrayList<Node> adjToBest = getAdjacentNodes(current);
+            if (adjToBest.isEmpty()) break;
             open.remove(current);
             closed.add(current);
             for (Node adj: adjToBest) {
@@ -53,8 +56,8 @@ public class LocalPathFinder {
         }
 
         //build the path
-        for (Node n = targetNode.getParent(); n != null; n = n.getParent()) {
-            path.add(new Location(region, n.getX(), n.getY()));
+        for (Node n = targetNode; n != null; n = n.getParent()) {
+            path.add(0, new Location(start.getRegion(), n.getX() + 0.5, n.getY() + 0.5));
         }
 
         return path;
@@ -75,6 +78,7 @@ public class LocalPathFinder {
 
     private static ArrayList<Node> getAdjacentNodes(Node node) {
         ArrayList<Node> adjacent = new ArrayList<>();
+        if (node == null) return adjacent;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (Math.abs(i) - Math.abs(j) == 0) continue;
@@ -118,6 +122,12 @@ class Node {
     public int getX() { return coordinates[0]; }
     public int getY() { return coordinates[1]; }
 
+    private boolean isOutOfBounds() {
+        int max = region.getSize() * Chunk.CHUNK_SIZE;
+        return coordinates[0] < 0 || coordinates[1] < 0
+                || coordinates[0] > max || coordinates[1] > max;
+    }
+
     public void setGScore(int g) { this.G = g; }
     public void setHScore(int h) { this.H = h; }
 
@@ -125,7 +135,7 @@ class Node {
         byte[] tile = region.getTile(coordinates[0], coordinates[1]);
         TileDefinition base = Definitions.getTile(tile[0]);
         TileDefinition top = Definitions.getTile(tile[1]);
-        if (base.collides() || top.collides()) return Integer.MAX_VALUE;
+        if (base.collides() || top.collides() || tile[0] == Tile.AIR || isOutOfBounds()) return Integer.MAX_VALUE;
         return (int)(1 / (base.getSpeedMultiplier() * top.getSpeedMultiplier()));
     }
 

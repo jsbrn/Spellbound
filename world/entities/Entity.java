@@ -3,6 +3,7 @@ package world.entities;
 import gui.states.GameScreen;
 import misc.Location;
 import misc.MiscMath;
+import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Camera;
@@ -34,11 +35,12 @@ public class Entity {
         this.states = new HashMap<>();
         this.action_queue = new ArrayList<>();
         this.animationLayers = new HashMap<>();
+        this.mover = new Mover();
+        this.mover.setParent(this);
     }
 
     public void update() {
         if (currentState != null) currentState.update();
-        if (mover == null) mover = new Mover(this);
         mover.update();
         if (action_queue.isEmpty()) return;
         action_queue.get(0).update();
@@ -140,6 +142,12 @@ public class Entity {
                 osc[1],
                 (float)(osc[0] + offsets[0]),
                 (float)(osc[1] + offsets[1]));
+
+        g.setColor(Color.yellow);
+        for (Location l: getMover().getPath()) {
+            float[] losc = Camera.getOnscreenCoordinates(l.getCoordinates()[0], l.getCoordinates()[1], Window.getScale());
+            g.drawRect(losc[0] - Window.getScale(), losc[1] - Window.getScale(), 2*Window.getScale(), 2*Window.getScale());
+        }
 
         g.setColor(Color.white);
     }

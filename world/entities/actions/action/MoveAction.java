@@ -9,16 +9,17 @@ import world.entities.actions.Action;
 public class MoveAction extends Action {
 
     private double[] target;
+    private boolean lookTowards;
 
-    public MoveAction(double x, double y) {
+    public MoveAction(double x, double y, boolean lookTowards) {
         this.target = new double[]{x, y};
+        this.lookTowards = lookTowards;
     }
 
     @Override
     public void onStart() {
         Entity parent = getParent();
-        double[] coordinates = parent.getLocation().getCoordinates();
-        parent.getLocation().setLookDirection((int)MiscMath.angleBetween(coordinates[0], coordinates[1], target[0], target[1]));
+        parent.getMover().setLookAtTarget(lookTowards);
         parent.getMover().setTarget(target[0], target[1]);
     }
 

@@ -10,6 +10,7 @@ public class HumanoidEntity extends Entity {
 
     private Spellbook spellbook;
     private double hp, mana, stamina, max_hp, max_mana, max_stamina;
+    private boolean hostile;
 
     public HumanoidEntity() {
         super();
@@ -49,9 +50,13 @@ public class HumanoidEntity extends Entity {
     public void setMaxMana(double amount) { this.max_mana = amount; }
     public void setMaxStamina(double amount) { this.max_stamina = amount; }
 
+    public boolean isHostile() { return hostile; }
+    public void setHostile(boolean h) { this.hostile = h; }
+
     public Spellbook getSpellbook() { return spellbook; }
     public void setSpellbook(Spellbook spellbook) {
         this.spellbook = spellbook;
     }
+
 
 }
