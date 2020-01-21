@@ -10,6 +10,7 @@ import world.entities.pathfinding.LocalPathFinder;
 import world.events.EventDispatcher;
 import world.events.event.EntityMovedEvent;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Mover {
@@ -50,6 +51,7 @@ public class Mover {
 
     public void stop() {
         path.clear();
+        moving = false;
     }
 
     public void update() {
@@ -60,12 +62,11 @@ public class Mover {
     private void moveToTarget(double wx, double wy) {
         if (!moving) return;
 
+        if (lookAtTarget) parent.getLocation().lookAt(path.get(0).getCoordinates()[0], path.get(0).getCoordinates()[1]);
+
         double[] coordinates = parent.getLocation().getCoordinates();
         double multiplier = Definitions.getTile(World.getRegion().getTile((int)(coordinates[0]), (int)(coordinates[1]))[1]).getSpeedMultiplier();
-
         double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(wx - start[0], wy - start[1]);
-
-        if (lookAtTarget) parent.getLocation().lookAt(path.get(0).getCoordinates()[0], path.get(0).getCoordinates()[1]);
 
         int old_index = (int)parent.getLocation().getGlobalIndex();
         parent.getLocation().setCoordinates(
@@ -95,11 +96,15 @@ public class Mover {
         double[] offset;
         while (dist < range) {
             offset = MiscMath.getRotatedOffset(0, -dist, angle);
-            byte[] tile = parent.getLocation().getRegion().getTile((int)(coords[0] + offset[0]), (int)(coords[1] + offset[1]));
+            int wx = (int)(coords[0] + offset[0]), wy = (int)(coords[1] + offset[1]);
+            byte[] tile = parent.getLocation().getRegion().getTile(wx, wy);
             TileDefinition base = Definitions.getTile(tile[0]);
             TileDefinition top = Definitions.getTile(tile[1]);
+
             if (base.collides() || top.collides() || base.getSpeedMultiplier() < 0.9 || top.getSpeedMultiplier() < 0.9) return false;
             if ((int)(coords[0] + offset[0]) == tx && (int)(coords[1] + offset[1]) == ty) return true;
+            ArrayList<Entity> entities = parent.getLocation().getRegion().getEntities(wx, wy, 1, 1);
+            for (Entity e: entities) if (e.getMover().isCollidable() && !e.equals(parent)) return false;
             dist+=0.5;
         }
         return true;

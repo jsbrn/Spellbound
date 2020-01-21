@@ -35,6 +35,7 @@ public class ActivateAction extends Action {
             parent.queueAction(new MoveAction(
                     destination.getCoordinates()[0] + 0.5 + (destination.getExitDirection()[0]),
                     destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1]),
+                    false,
                     true
             ));
 //            parent.getLocation().setLookDirection((int)MiscMath.angleBetween(

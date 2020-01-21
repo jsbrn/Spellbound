@@ -33,6 +33,7 @@ public class IdleState extends State {
             getParent().queueAction(new MoveAction(
                     original.getCoordinates()[0] + new_[0],
                     original.getCoordinates()[1] + new_[1],
+                    false,
                     true));
             getParent().queueAction(new SetAnimationAction("arms", "default", false));
             getParent().queueAction(new SetAnimationAction("legs", "default", false));

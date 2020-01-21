@@ -89,7 +89,7 @@ public class Region {
 
     public int[] getEntityIndices(double min_location, double max_location) {
         return new int[]{
-                getEntityIndex(min_location-1, 0, entities.size()),
+                getEntityIndex(min_location - 1, 0, entities.size()),
                 getEntityIndex(max_location + 1, 0, entities.size()),
         };
     }

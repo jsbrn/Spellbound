@@ -80,11 +80,11 @@ public class GameScreen extends BasicGameState {
 
         if (debugMode) {
 
-            ArrayList<Entity> entities = World.getRegion().getEntities((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, 6, 6);
-            float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0] - 3, (int)mouse_wc[1] - 3, Window.getScale());
+            ArrayList<Entity> entities = World.getRegion().getEntities((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
+            float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0], (int)mouse_wc[1], Window.getScale());
 
             g.setColor(Color.black);
-            g.drawRect(osc[0], osc[1], 6 * Window.getScale() * Chunk.TILE_SIZE, 6 * Window.getScale() * Chunk.TILE_SIZE);
+            g.drawRect(osc[0], osc[1], 1 * Window.getScale() * Chunk.TILE_SIZE, 1 * Window.getScale() * Chunk.TILE_SIZE);
             for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
 
 

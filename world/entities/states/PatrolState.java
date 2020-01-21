@@ -15,7 +15,7 @@ public class PatrolState extends IdleState {
     public void update() {
         super.update();
         if (getParent().canSee(target) > 0.5 && target.getLocation().distanceTo(getParent().getLocation()) < radius)
-            getParent().enterState(new AttackState(target, 3, 6));
+            getParent().enterState(new AttackState(target, 6, 12));
     }
 
 }

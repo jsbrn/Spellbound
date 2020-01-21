@@ -7,7 +7,11 @@ import world.entities.Entity;
 import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.SetAnimationAction;
 
+import java.util.Random;
+
 public class FollowState extends State {
+
+    private Random rng;
 
     private Entity following;
     private int minimumDistance;
@@ -20,6 +24,7 @@ public class FollowState extends State {
         this.following = following;
         this.lastSeen = following.getLocation();
         this.minimumDistance = distance;
+        this.rng = new Random();
     }
 
     @Override
@@ -33,7 +38,7 @@ public class FollowState extends State {
         boolean canSeeTarget = getParent().canSee(following) >= vision;
         boolean canHearTarget = getParent().getLocation().distanceTo(following.getLocation()) <= hearing;
         boolean canSeeLastPosition = getParent().canSee((int)lastSeen.getCoordinates()[0], (int)lastSeen.getCoordinates()[1]) > 0.5;
-        double min = canSeeLastPosition && canSeeTarget ? minimumDistance : 1;
+        double min = canSeeLastPosition && canSeeTarget ? minimumDistance : 0;
 
         System.out.println(canSeeTarget+" | "+canHearTarget+" | "+getParent().getActionQueue().isEmpty());
 
@@ -51,11 +56,11 @@ public class FollowState extends State {
         if (getParent().getActionQueue().isEmpty()) {
             double distanceTo = getParent().getLocation().distanceTo(following.getLocation());
             if (distanceTo > min + 1) {
-                double[] startCoords = getParent().getLocation().getCoordinates();
-                double[] direction = MiscMath.getRotatedOffset(0, -(distanceTo - min), getParent().getLocation().angleBetween(lastSeen));
+                double[] startCoords = following.getLocation().getCoordinates();
+                double[] direction = MiscMath.getRotatedOffset(0, -(distanceTo - min), -getParent().getLocation().angleBetween(lastSeen) - 45 + rng.nextInt(90));
                 getParent().queueAction(new SetAnimationAction("arms", "walking", false));
                 getParent().queueAction(new SetAnimationAction("legs", "walking", false));
-                getParent().queueAction(new MoveAction(startCoords[0] + direction[0], startCoords[1] + direction[1], true));
+                getParent().queueAction(new MoveAction(startCoords[0] + direction[0], startCoords[1] + direction[1], false, true));
                 getParent().queueAction(new SetAnimationAction("arms", "default", false));
                 getParent().queueAction(new SetAnimationAction("legs", "default", false));
             }

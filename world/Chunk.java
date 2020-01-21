@@ -44,10 +44,7 @@ public class Chunk {
                             Chunk.CHUNK_SIZE * region.getSize()), p);
                 }
                 Entity e = generator.getEntity(i, j);
-                if (e != null) {
-                    e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
-                    region.addEntity(e);
-                }
+                if (e != null) e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
             }
         }
 
