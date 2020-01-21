@@ -18,7 +18,8 @@ import world.Camera;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;
-import world.entities.pathfinding.LocalPathFinder;
+import world.entities.states.FollowState;
+import world.entities.states.PatrolState;
 import world.entities.types.humanoids.npcs.Civilian;
 
 import java.util.ArrayList;
@@ -95,14 +96,14 @@ public class GameScreen extends BasicGameState {
                     "ORIGIN: "+origin_osc[0]+", "+origin_osc[1],
                     "OSC: "+Mouse.getX()+", "+Mouse.getY()+" @ "+Window.getScale(),
                     "OSC->WC: "+mouse_wc[0]+", "+mouse_wc[1],
-                    "WC->OSC: "+mouse_osc[0]+", "+mouse_osc[1]
+                    "WC->OSC: "+mouse_osc[0]+", "+mouse_osc[1],
+                    "Player can see: "+World.getPlayer().canSee((int)mouse_wc[0], (int)mouse_wc[1])
             };
 
             g.setColor(Color.white);
             for (int i = 0; i < debugStrings.length; i++)
                 g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
 
-            //World.getPlayer().drawDebug(origin[0], origin[1], Window.getScale(), g);
         }
 
     }
@@ -147,7 +148,7 @@ public class GameScreen extends BasicGameState {
                         player.getRegion(),
                         mouse_wcoords[0],
                         mouse_wcoords[1]));
-                civ.enterState("idle");
+                civ.enterState(new PatrolState(World.getPlayer(), 4));
             }
         }
         gui.onMouseRelease(x, y, button);

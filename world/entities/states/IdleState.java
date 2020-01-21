@@ -1,6 +1,7 @@
 package world.entities.states;
 
 import misc.Location;
+import misc.MiscMath;
 import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.SetAnimationAction;
 import world.entities.actions.action.WaitAction;
@@ -23,12 +24,15 @@ public class IdleState extends State {
     @Override
     public void update() {
         if (getParent().getActionQueue().isEmpty()) {
+
+            double[] new_ = MiscMath.getRotatedOffset(0, -rng.nextInt(5), rng.nextInt(360));
+
             getParent().queueAction(new WaitAction(1000 + rng.nextInt(5000)));
             getParent().queueAction(new SetAnimationAction("arms", "walking", false));
             getParent().queueAction(new SetAnimationAction("legs", "walking", false));
             getParent().queueAction(new MoveAction(
-                    original.getCoordinates()[0] + (-2 + rng.nextInt(4)),
-                    original.getCoordinates()[1] + (-2 + rng.nextInt(4)),
+                    original.getCoordinates()[0] + new_[0],
+                    original.getCoordinates()[1] + new_[1],
                     true));
             getParent().queueAction(new SetAnimationAction("arms", "default", false));
             getParent().queueAction(new SetAnimationAction("legs", "default", false));

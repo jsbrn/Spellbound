@@ -1,15 +1,13 @@
 package world.entities.pathfinding;
 
 import assets.definitions.Definitions;
-import assets.definitions.Tile;
+import assets.definitions.TileType;
 import assets.definitions.TileDefinition;
 import misc.Location;
 import misc.MiscMath;
 import world.Chunk;
 import world.Region;
-import world.generators.chunk.interiors.InteriorRoomGenerator;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -135,7 +133,7 @@ class Node {
         byte[] tile = region.getTile(coordinates[0], coordinates[1]);
         TileDefinition base = Definitions.getTile(tile[0]);
         TileDefinition top = Definitions.getTile(tile[1]);
-        if (base.collides() || top.collides() || tile[0] == Tile.AIR || isOutOfBounds()) return Integer.MAX_VALUE;
+        if (base.collides() || top.collides() || tile[0] == TileType.AIR || isOutOfBounds()) return Integer.MAX_VALUE;
         return (int)(1 / (base.getSpeedMultiplier() * top.getSpeedMultiplier()));
     }
 

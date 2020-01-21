@@ -1,5 +1,7 @@
 package world.entities;
 
+import assets.definitions.Definitions;
+import assets.definitions.TileDefinition;
 import gui.states.GameScreen;
 import misc.Location;
 import misc.MiscMath;
@@ -27,12 +29,10 @@ public class Entity {
     private Location location;
     private State currentState;
 
-    private HashMap<String, State> states;
     private HashMap<String, AnimationLayer> animationLayers;
     private ArrayList<ActionGroup> action_queue;
 
     public Entity() {
-        this.states = new HashMap<>();
         this.action_queue = new ArrayList<>();
         this.animationLayers = new HashMap<>();
         this.mover = new Mover();
@@ -68,18 +68,21 @@ public class Entity {
         action_queue.clear();
     }
 
-    public void addState(String name, State state) {
-        this.states.put(name, state);
-        state.setParent(this);
-    }
-
-    public void enterState(String name) {
-        if (currentState != null) currentState.onExit();
-        currentState = states.get(name);
+    public void enterState(State state) {
+        exitState();
+        currentState = state;
         if (currentState != null) {
+            currentState.setParent(this);
             currentState.onEnter();
             clearActions();
         }
+    }
+
+    public State getCurrentState() { return currentState; }
+
+    public void exitState() {
+        if (currentState != null) currentState.onExit();
+        currentState = null;
     }
 
     public void addAnimation(String layer, String name, Animation a) {
@@ -98,6 +101,31 @@ public class Entity {
     }
 
     public Location getLocation() { return location; }
+
+    public double canSee(Entity e) { return canSee(
+            (int)e.getLocation().getCoordinates()[0],
+            (int)e.getLocation().getCoordinates()[1]);
+    }
+
+    public double canSee(int wx, int wy) {
+        double[] coords = getLocation().getCoordinates();
+        int dist = 1;
+        int range = 1 + (int)MiscMath.distance(coords[0], coords[1], wx, wy);
+        double visibility = 1;
+        double angle = MiscMath.angleBetween((int)coords[0], (int)coords[1], wx, wy);
+        double[] offset;
+        while (dist < range) {
+            offset = MiscMath.getRotatedOffset(0, -dist, angle);
+            byte[] tile = getLocation().getRegion().getTile((int)(coords[0] + offset[0]), (int)(coords[1] + offset[1]));
+            TileDefinition base = Definitions.getTile(tile[0]);
+            TileDefinition top = Definitions.getTile(tile[1]);
+            if ((int)(coords[0] + offset[0]) == (int)wx && (int)(coords[1] + offset[1]) == (int)wy) break;
+            if (base.getTransparency() == 0 || top.getTransparency() == 0) { visibility = 0; break; }
+            visibility *= (base.getTransparency() * top.getTransparency());
+            dist++;
+        }
+        return visibility;
+    }
 
     public void moveTo(Location new_) {
         if (location != null && location.getRegion() != null) location.getRegion().removeEntity(this);

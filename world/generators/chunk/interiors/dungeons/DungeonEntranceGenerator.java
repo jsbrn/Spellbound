@@ -1,11 +1,10 @@
 package world.generators.chunk.interiors.dungeons;
 
-import assets.definitions.Tile;
+import assets.definitions.TileType;
 import world.Chunk;
 import world.Portal;
 import world.World;
-
-import java.util.Random;
+import world.entities.Entity;
 
 public class DungeonEntranceGenerator extends DungeonRoomGenerator {
 
@@ -16,7 +15,7 @@ public class DungeonEntranceGenerator extends DungeonRoomGenerator {
     @Override
     public byte getTop(int x, int y) {
         int half = Chunk.CHUNK_SIZE / 2;
-        if (x == half && y == getMinimum()) return Tile.STONE_LADDER;
+        if (x == half && y == getMinimum()) return TileType.STONE_LADDER;
         return super.getTop(x, y);
     }
 
@@ -27,4 +26,8 @@ public class DungeonEntranceGenerator extends DungeonRoomGenerator {
                 : null;
     }
 
+    @Override
+    public Entity getEntity(int x, int y) {
+        return null;
+    }
 }

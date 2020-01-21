@@ -32,10 +32,10 @@ public class Mover {
     }
 
     public void setTarget(double tx, double ty) {
-
         if (!isIndependent()) {
             if (!path.isEmpty()) return;
-            if (canMoveDirectlyTo((int)tx, (int)ty)) path.add(new Location(parent.getLocation().getRegion(), tx, ty));
+            if (canMoveDirectlyTo((int)tx + 0.5, (int)ty + 0.5))
+                path.add(new Location(parent.getLocation().getRegion(), (int)tx + 0.5, (int)ty + 0.5));
             if (path.isEmpty()) path = LocalPathFinder.findPath(parent.getLocation(), (int)tx, (int)ty);
             if (path.isEmpty()) return;
         } else {
@@ -49,13 +49,12 @@ public class Mover {
     }
 
     public void stop() {
-        setTarget(parent.getLocation().getCoordinates()[0], parent.getLocation().getCoordinates()[1]);
+        path.clear();
     }
 
     public void update() {
-        if (!path.isEmpty()){
+        if (!path.isEmpty())
             moveToTarget(path.get(0).getCoordinates()[0], path.get(0).getCoordinates()[1]);
-        }
     }
 
     private void moveToTarget(double wx, double wy) {
@@ -66,8 +65,9 @@ public class Mover {
 
         double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(wx - start[0], wy - start[1]);
 
+        if (lookAtTarget) parent.getLocation().lookAt(path.get(0).getCoordinates()[0], path.get(0).getCoordinates()[1]);
+
         int old_index = (int)parent.getLocation().getGlobalIndex();
-        if (lookAtTarget) parent.getLocation().lookAt(wx, wy);
         parent.getLocation().setCoordinates(
                 MiscMath.tween(start[0], coordinates[0], wx, Math.abs(speed * multiplier * dir[0]), 1),
                 MiscMath.tween(start[1], coordinates[1], wy, Math.abs(speed * multiplier * dir[1]), 1));
@@ -75,7 +75,6 @@ public class Mover {
 
         if (coordinates[0] == wx && coordinates[1] == wy) {
             if (!path.isEmpty()) path.remove(0);
-            EventDispatcher.invoke(new EntityMovedEvent(parent));
             if (path.isEmpty()) moving = false;
         }
 
@@ -88,24 +87,25 @@ public class Mover {
     public boolean isIndependent() { return independentAxes; }
     public boolean isMoving() { return moving; }
 
-    private boolean canMoveDirectlyTo(int tx, int ty) {
+    private boolean canMoveDirectlyTo(double tx, double ty) {
         double[] coords = parent.getLocation().getCoordinates();
-        int dist = 1;
+        double dist = 1;
+        int range = 1+(int)MiscMath.distance(coords[0], coords[1], tx, ty);
         double angle = MiscMath.angleBetween(coords[0], coords[1], tx, ty);
         double[] offset;
-        while (dist < Chunk.CHUNK_SIZE) {
+        while (dist < range) {
             offset = MiscMath.getRotatedOffset(0, -dist, angle);
             byte[] tile = parent.getLocation().getRegion().getTile((int)(coords[0] + offset[0]), (int)(coords[1] + offset[1]));
             TileDefinition base = Definitions.getTile(tile[0]);
             TileDefinition top = Definitions.getTile(tile[1]);
-            if (base.collides() || top.collides() || base.getSpeedMultiplier() < 1 || top.getSpeedMultiplier() < 1) return false;
+            if (base.collides() || top.collides() || base.getSpeedMultiplier() < 0.9 || top.getSpeedMultiplier() < 0.9) return false;
             if ((int)(coords[0] + offset[0]) == tx && (int)(coords[1] + offset[1]) == ty) return true;
-            dist++;
+            dist+=0.5;
         }
-        return false;
+        return true;
     }
 
-    public void setLookAtTarget(boolean l) { this.lookAtTarget = true; }
+    public void setLookTowardsTarget(boolean l) { this.lookAtTarget = l; }
     public boolean isCollidable() { return collidable; }
     public void setCollidable(boolean c) { this.collidable = c; }
 

@@ -1,8 +1,6 @@
 package world.entities.actions.action;
 
 import assets.definitions.Definitions;
-import misc.MiscMath;
-import world.World;
 import world.entities.Entity;
 import world.entities.actions.Action;
 
@@ -19,7 +17,7 @@ public class MoveAction extends Action {
     @Override
     public void onStart() {
         Entity parent = getParent();
-        parent.getMover().setLookAtTarget(lookTowards);
+        parent.getMover().setLookTowardsTarget(lookTowards);
         parent.getMover().setTarget(target[0], target[1]);
     }
 

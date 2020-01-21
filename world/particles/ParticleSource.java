@@ -84,7 +84,7 @@ public class ParticleSource {
                 byte[] tile = World.getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
                 TileDefinition td = Definitions.getTile(tile[1]);
                 if (pcoords[1] > (pcoords[1] + t - td.getHeight())) {
-                    if (td.solid()) behind_something = true; else alpha /= 6;
+                    if (td.getTransparency() == 0) behind_something = true; else alpha = td.getTransparency();
                     break;
                 }
             }

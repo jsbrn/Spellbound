@@ -1,13 +1,14 @@
 package world.generators.chunk.interiors;
 
-import assets.definitions.Tile;
+import assets.definitions.TileType;
 import world.Chunk;
 import world.Portal;
+import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.Random;
 
-public class InteriorRoomGenerator extends ChunkGenerator {
+public abstract class InteriorRoomGenerator extends ChunkGenerator {
 
     private int min = 2, max = Chunk.CHUNK_SIZE - 3;
     private boolean north, south, east, west;
@@ -35,7 +36,7 @@ public class InteriorRoomGenerator extends ChunkGenerator {
     public byte getBase(int x, int y) {
         int half = Chunk.CHUNK_SIZE / 2;
 
-        byte floor = Tile.STONE_FLOOR;
+        byte floor = TileType.STONE_FLOOR;
 
         if (north)
             if (Math.abs(half-x) <= 2 && y < getMinimum()) return floor;
@@ -48,7 +49,7 @@ public class InteriorRoomGenerator extends ChunkGenerator {
 
         if (x >= getMinimum() && x <= getMaximum() && y >= getMinimum() && y <= getMaximum())
             return floor;
-        else return Tile.AIR;
+        else return TileType.AIR;
 
     }
 
@@ -58,49 +59,44 @@ public class InteriorRoomGenerator extends ChunkGenerator {
         int half = Chunk.CHUNK_SIZE / 2;
         //north entrance
         if (north && y <= getMinimum()) {
-            if (Math.abs(half-x) <= 1) return Tile.AIR;
-            if (x == half - 2) return Tile.STONE_WALL_WEST;
-            if (x == half + 2) return Tile.STONE_WALL_EAST;
+            if (Math.abs(half-x) <= 1) return TileType.AIR;
+            if (x == half - 2) return TileType.STONE_WALL_WEST;
+            if (x == half + 2) return TileType.STONE_WALL_EAST;
         }
         if (south && y >= getMaximum()) {
-            if (Math.abs(half-x) <= 1) return Tile.AIR;
-            if (x == half-2 && y == getMaximum()) return Tile.STONE_COLUMN_WEST;
-            if (x == half+2 && y == getMaximum()) return Tile.STONE_COLUMN_EAST;
-            if (y > getMaximum() && x == half - 2) return Tile.STONE_WALL_WEST;
-            if (y > getMaximum() && x == half + 2) return Tile.STONE_WALL_EAST;
+            if (Math.abs(half-x) <= 1) return TileType.AIR;
+            if (x == half-2 && y == getMaximum()) return TileType.STONE_COLUMN_WEST;
+            if (x == half+2 && y == getMaximum()) return TileType.STONE_COLUMN_EAST;
+            if (y > getMaximum() && x == half - 2) return TileType.STONE_WALL_WEST;
+            if (y > getMaximum() && x == half + 2) return TileType.STONE_WALL_EAST;
         }
         if (east && x >= getMaximum()) {
-            if (Math.abs(half-y) <= 1) return Tile.AIR;
-            if (x > getMaximum() && y == half - 2) return Tile.STONE_WALL_NORTH;
-            if (x == getMaximum() && (y == half - 1 || y == half + 1)) return Tile.STONE_WALL_EAST;
-            if (x == getMaximum() && y == half + 2) return Tile.STONE_COLUMN_EAST;
-            if (x > getMaximum() && y == half + 2) return Tile.STONE_WALL_SOUTH;
+            if (Math.abs(half-y) <= 1) return TileType.AIR;
+            if (x > getMaximum() && y == half - 2) return TileType.STONE_WALL_NORTH;
+            if (x == getMaximum() && (y == half - 1 || y == half + 1)) return TileType.STONE_WALL_EAST;
+            if (x == getMaximum() && y == half + 2) return TileType.STONE_COLUMN_EAST;
+            if (x > getMaximum() && y == half + 2) return TileType.STONE_WALL_SOUTH;
         }
         if (west && x <= getMinimum()) {
-            if (Math.abs(half-y) <= 1) return Tile.AIR;
-            if (x < getMinimum() && y == half - 2) return Tile.STONE_WALL_NORTH;
-            if (x == getMinimum() && (y == half - 1 || y == half + 1)) return Tile.STONE_WALL_WEST;
-            if (x == getMinimum() && y == half + 2) return Tile.STONE_COLUMN_WEST;
-            if (x < getMinimum() && y == half + 2) return Tile.STONE_WALL_SOUTH;
+            if (Math.abs(half-y) <= 1) return TileType.AIR;
+            if (x < getMinimum() && y == half - 2) return TileType.STONE_WALL_NORTH;
+            if (x == getMinimum() && (y == half - 1 || y == half + 1)) return TileType.STONE_WALL_WEST;
+            if (x == getMinimum() && y == half + 2) return TileType.STONE_COLUMN_WEST;
+            if (x < getMinimum() && y == half + 2) return TileType.STONE_WALL_SOUTH;
         }
 
-        if (x == getMinimum() && y > getMinimum() && y < getMaximum()) return Tile.STONE_WALL_WEST;
-        if (x == getMaximum() && y > getMinimum() && y < getMaximum()) return Tile.STONE_WALL_EAST;
+        if (x == getMinimum() && y > getMinimum() && y < getMaximum()) return TileType.STONE_WALL_WEST;
+        if (x == getMaximum() && y > getMinimum() && y < getMaximum()) return TileType.STONE_WALL_EAST;
         if (y == getMinimum()) {
-            if (x > getMinimum() && x < getMaximum()) return Tile.STONE_WALL_NORTH;
-            if (x == getMinimum()) return Tile.STONE_CORNER_NORTHWEST;
-            if (x == getMaximum()) return Tile.STONE_CORNER_NORTHEAST;
+            if (x > getMinimum() && x < getMaximum()) return TileType.STONE_WALL_NORTH;
+            if (x == getMinimum()) return TileType.STONE_CORNER_NORTHWEST;
+            if (x == getMaximum()) return TileType.STONE_CORNER_NORTHEAST;
         }
         if (y == getMaximum()) {
-            if (x >= getMinimum() && x <= getMaximum()) return Tile.STONE_WALL_SOUTH;
+            if (x >= getMinimum() && x <= getMaximum()) return TileType.STONE_WALL_SOUTH;
         }
 
-        return Tile.AIR;
-    }
-
-    @Override
-    public Portal getPortal(int x, int y) {
-        return null;
+        return TileType.AIR;
     }
 
 }

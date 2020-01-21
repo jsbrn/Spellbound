@@ -1,20 +1,22 @@
 package world.generators.chunk.overworld;
 
-import assets.definitions.Tile;
+import assets.definitions.TileType;
 
 import java.util.Random;
 
 public class ForestGenerator extends OpenFieldGenerator {
 
     private Random rng;
+    private float density;
 
     public ForestGenerator() {
         this.rng = new Random();
+        this.density = rng.nextFloat();
     }
 
     @Override
     public byte getTop(int x, int y) {
-        if (Math.random() > 0.5f) return Tile.TREE;
+        if (rng.nextFloat() > 1 - density) return TileType.TREE;
         return super.getTop(x, y);
     }
 

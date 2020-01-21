@@ -1,20 +1,15 @@
 package world.entities.types.humanoids;
 
 import assets.definitions.Definitions;
-import assets.definitions.TileDefinition;
 import gui.states.GameScreen;
 import misc.MiscMath;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.Chunk;
-import world.Region;
 import world.World;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.ActivateAction;
 import world.entities.actions.action.CastSpellAction;
-import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.SetAnimationAction;
-import world.entities.animations.Animation;
 import world.entities.magic.Spell;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.TechniqueName;
@@ -23,9 +18,7 @@ import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.KeyDownEvent;
-import world.events.event.KeyUpEvent;
 import world.events.event.MousePressedEvent;
-import world.events.event.MouseReleaseEvent;
 
 public class Player extends HumanoidEntity {
 
@@ -35,18 +28,12 @@ public class Player extends HumanoidEntity {
 
         super();
 
-        this.getMover().setIndependent(true);
-
-        this.setMaxHP(10);
         this.setMaxMana(10);
-        this.setHP(10);
-        this.setMana(5);
-        this.setMaxStamina(10);
+        this.setMana(10);
+        this.getMover().setIndependent(true);
+        this.getMover().setLookTowardsTarget(false);
 
-        Spell testSpell = new Spell();
-        testSpell.addTechnique(Technique.create(TechniqueName.PROPEL));
-        testSpell.addTechnique(Technique.create(TechniqueName.RADIATE));
-        this.getSpellbook().addSpell(testSpell);
+        this.getAnimationLayer("head").setColor(SKIN_COLORS[0]);
 
         Player that = this;
         EventDispatcher.register(new EventListener()
@@ -95,6 +82,7 @@ public class Player extends HumanoidEntity {
                 getAnimationLayer("arms").setAnimation("walking");
                 getAnimationLayer("legs").setAnimation("walking");
                 getMover().setTarget(targetX, targetY);
+                getMover().setLookTowardsTarget(false);
                 getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
                 getAnimationLayer("arms").setAnimation("default");

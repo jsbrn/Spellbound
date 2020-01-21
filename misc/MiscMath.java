@@ -101,7 +101,7 @@ public class MiscMath {
      */
     public static boolean pointIntersectsRect(double x, double y,
                                               double rx, double ry, int rw, int rh) {
-        return x > rx && x < rx + rw && y > ry && y < ry + rh;
+        return x >= rx && x < rx + rw && y >= ry && y < ry + rh;
     }
 
     /**

@@ -4,7 +4,10 @@ import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.entities.animations.Animation;
+import world.entities.magic.Spell;
 import world.entities.magic.Spellbook;
+import world.entities.magic.techniques.Technique;
+import world.entities.magic.techniques.TechniqueName;
 
 public class HumanoidEntity extends Entity {
 
@@ -12,9 +15,25 @@ public class HumanoidEntity extends Entity {
     private double hp, mana, stamina, max_hp, max_mana, max_stamina;
     private boolean hostile;
 
+    public static Color[] SKIN_COLORS
+            = new Color[]{new Color(230, 210, 155), new Color(110, 90, 72)};
+
     public HumanoidEntity() {
+
         super();
+
+        this.setMaxHP(10);
+        this.setMaxMana(Integer.MAX_VALUE);
+        this.setHP(10);
+        this.setMana(Integer.MAX_VALUE);
+        this.setMaxStamina(10);
+
         this.spellbook = new Spellbook(this);
+        Spell testSpell = new Spell();
+        testSpell.addTechnique(Technique.create(TechniqueName.PROPEL));
+        testSpell.addTechnique(Technique.create(TechniqueName.RADIATE));
+        this.getSpellbook().addSpell(testSpell);
+
         this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true, Color.red));
         this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
         this.addAnimation("legs", "default", new Animation("humanoid/legs_idle.png", 2, 1, 16, true, true, Color.orange));

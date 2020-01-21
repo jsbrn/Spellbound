@@ -23,26 +23,30 @@ public class Chunk {
 
     private byte[][] base;
     private byte[][] top;
-    private HashMap<Integer, Portal> portals;
 
     public Chunk(int x, int y, Region region, ChunkGenerator generator) {
         this.region = region;
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
-        this.portals = new HashMap<>();
 
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
+                int wx = (coordinates[0] * Chunk.CHUNK_SIZE) + i, wy = (coordinates[1] * Chunk.CHUNK_SIZE) + j;
                 base[i][j] = generator.getBase(i, j);
                 top[i][j] = generator.getTop(i, j);
                 Portal p = generator.getPortal(i, j);
                 if (p != null) {
-                    p.setCoordinates((coordinates[0] * Chunk.CHUNK_SIZE) + i, (coordinates[1] * Chunk.CHUNK_SIZE) + j);
+                    p.setCoordinates(wx, wy);
                     region.registerPortal((int)MiscMath.getIndex(
                             (coordinates[0] * Chunk.CHUNK_SIZE) + i,
                             (coordinates[1] * Chunk.CHUNK_SIZE) + j,
                             Chunk.CHUNK_SIZE * region.getSize()), p);
+                }
+                Entity e = generator.getEntity(i, j);
+                if (e != null) {
+                    e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
+                    region.addEntity(e);
                 }
             }
         }
@@ -53,13 +57,6 @@ public class Chunk {
         ArrayList<Entity> entities = region
                 .getEntities((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
         for (int i = entities.size() - 1; i >= 0; i--) entities.get(i).update();
-    }
-
-    public Portal findPortalTo(Region destination, String destination_name) {
-        for (Portal p: portals.values())
-            if (p.getDestination().equals(destination) && p.getDestinationName().equals(destination_name))
-                return p;
-        return null;
     }
 
     public void set(int x, int y, byte base, byte top) {
@@ -149,12 +146,20 @@ public class Chunk {
     }
 
     public void drawDebug(float osx, float osy, float scale, Graphics g) {
-        g.setColor(Color.white);
         for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                g.drawRect(osx + (i * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale);
+                g.setLineWidth(j == 0 && i == 0 ? 3 : 1);
+                g.setColor(Color.white);
+                g.drawLine(osx + (i * TILE_SIZE * scale), osy, osx + (i * TILE_SIZE * scale), osy + (CHUNK_SIZE * scale * TILE_SIZE));
+                g.drawLine(osx, osy + (j * TILE_SIZE * scale), osx + (CHUNK_SIZE * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale));
+                g.setColor(new Color(0, 0, 0, 1-(float)World.getPlayer().canSee(
+                        (coordinates[0] * Chunk.CHUNK_SIZE) + i,
+                        (coordinates[1] * Chunk.CHUNK_SIZE) + j)));
+                g.fillRect(osx + (i * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale);
             }
         }
+        g.setColor(Color.white);
+        g.setLineWidth(1);
     }
 
     public String debug() {

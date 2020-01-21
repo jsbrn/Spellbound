@@ -1,6 +1,6 @@
 package world.generators.chunk.overworld;
 
-import assets.definitions.Tile;
+import assets.definitions.TileType;
 import world.Chunk;
 import world.Portal;
 import world.Region;
@@ -23,7 +23,7 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
 
     @Override
     public byte getTop(int x, int y) {
-        return (x == entrance_x && y == entrance_y) ? Tile.TRAP_DOOR : super.getTop(x, y);
+        return (x == entrance_x && y == entrance_y) ? TileType.TRAP_DOOR : super.getTop(x, y);
     }
 
     @Override

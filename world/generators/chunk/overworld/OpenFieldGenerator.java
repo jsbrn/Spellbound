@@ -1,7 +1,8 @@
 package world.generators.chunk.overworld;
 
-import assets.definitions.Tile;
+import assets.definitions.TileType;
 import world.Portal;
+import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.Random;
@@ -21,11 +22,16 @@ public class OpenFieldGenerator extends ChunkGenerator {
 
     @Override
     public byte getTop(int x, int y) {
-        return (byte)(rng.nextFloat() > 0.6 ? (rng.nextFloat() < 0.2 ? Tile.FLOWERS : Tile.TALL_GRASS) : 0);
+        return (byte)(rng.nextFloat() > 0.6 ? (rng.nextFloat() < 0.2 ? TileType.FLOWERS : TileType.TALL_GRASS) : 0);
     }
 
     @Override
     public Portal getPortal(int x, int y) {
+        return null;
+    }
+
+    @Override
+    public Entity getEntity(int x, int y) {
         return null;
     }
 }

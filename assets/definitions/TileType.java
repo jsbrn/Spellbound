@@ -1,6 +1,6 @@
 package assets.definitions;
 
-public class Tile {
+public class TileType {
 
     public static final int
             AIR = 0, GRASS = 1, WELL = 2, TALL_GRASS = 3, FLOWERS = 4,
