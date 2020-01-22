@@ -1,6 +1,7 @@
 package world;
 
 import misc.Location;
+import misc.MiscMath;
 import org.newdawn.slick.Graphics;
 import world.entities.types.humanoids.Player;
 import world.generators.region.DefaultWorldGenerator;
@@ -15,7 +16,12 @@ public class World {
     private static HashMap<String, Region> regions;
     private static Player player;
 
+    private static long time;
+    private static double timeMultiplier;
+
     public static void init() {
+        time = 0;
+        timeMultiplier = 1;
         regions = new HashMap<>();
         player = new Player();
         addRegion(new Region("world", 32, new DefaultWorldGenerator()));
@@ -39,8 +45,15 @@ public class World {
     public static Player getPlayer() { return player; }
 
     public static void update() {
+        time += MiscMath.getConstant(1000, 1 / timeMultiplier);
         getRegion().update();
     }
+
+    public static void setTimeMultiplier(double tm) { timeMultiplier = tm; }
+
+    public static double getTimeMultiplier() { return timeMultiplier; }
+
+    public static long getCurrentTime() { return time; }
 
     public static void draw(float scale, Graphics g, boolean debug) {
         getRegion().draw(scale, g, debug);

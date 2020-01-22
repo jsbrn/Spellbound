@@ -49,24 +49,15 @@ public class GameScreen extends BasicGameState {
         game = sbg;
         gui = new GUI();
 
-        spellbook = new Modal("spellbook_bg.png");
+        spellbook = new Journal();
 
-        Button b = new Button(32, 8) {
-            @Override
-            public boolean onMousePressed(int ogx, int ogy, int button) {
-                System.out.println("OK COOL!");
-                return true;
-            }
-        };
         gui.addElement(new Statusbar(World.getPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
         gui.addElement(new Hotbar(World.getPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
-
         gui.addElement(new Button("spellbook.png") {
             @Override
             public boolean onKeyUp(int key) {
                 if (key == Input.KEY_TAB) {
                     gui.setModal(spellbook);
-                    paused = true;
                     return true;
                 }
                 return false;
@@ -74,19 +65,13 @@ public class GameScreen extends BasicGameState {
             @Override
             public boolean onMousePressed(int ogx, int ogy, int button) {
                 gui.setModal(spellbook);
-                System.out.println("OK COOL THEN");
-                paused = true;
+                System.out.println("Opened spellbook");
                 return true;
             }
         }, 4, 94, GUIAnchor.TOP_LEFT);
 
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
-        gui.addElement(b, 8, 12, GUIAnchor.TOP_LEFT);
-        b.setParent(spellbook);
-
-        Label title = new Label("Create a spell", 5, Color.black);
-        gui.addElement(title, 12, 4, GUIAnchor.TOP_LEFT);
-        title.setParent(spellbook);
+        spellbook.hide();
 
         Assets.load();
         Definitions.load();
@@ -136,7 +121,8 @@ public class GameScreen extends BasicGameState {
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
-        MiscMath.DELTA_TIME = delta;
+        World.setTimeMultiplier(gc.getInput().isKeyDown(Input.KEY_LSHIFT) ? 0.5 : 1);
+        MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
         input = gc.getInput();
         if (!paused) World.update();
 
@@ -159,7 +145,7 @@ public class GameScreen extends BasicGameState {
 
     @Override
     public void mousePressed(int button, int x, int y) {
-        gui.onMousePressed(x, y, button);
+        gui.handleMousePressed(x, y, button);
     }
 
     @Override
@@ -177,7 +163,7 @@ public class GameScreen extends BasicGameState {
                 civ.enterState(new PatrolState(World.getPlayer(), 4));
             }
         }
-        gui.onMouseRelease(x, y, button);
+        gui.handleMouseRelease(x, y, button);
     }
 
     @Override

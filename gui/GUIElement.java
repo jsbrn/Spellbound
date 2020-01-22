@@ -1,5 +1,6 @@
 package gui;
 
+import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -14,6 +15,7 @@ public abstract class GUIElement {
     private GUIAnchor anchor = GUIAnchor.TOP_LEFT;
     private GUIElement parent;
     private Image buffer;
+    private ArrayList<GUIElement> children = new ArrayList<>();
     private boolean inactive;
 
     public final void setAnchor(GUIAnchor anchor) { this.anchor = anchor; }
@@ -54,12 +56,70 @@ public abstract class GUIElement {
     public void show() { inactive = false; }
     public void hide() { inactive = true; }
 
+
+    public final boolean handleMousePressed(int osx, int osy, int button) {
+        for (int i = children.size() - 1; i >= 0; i--) {
+            GUIElement e = children.get(i);
+            if (e.handleMousePressed(osx, osy, button)) return true;
+        }
+        if (isActive() && MiscMath.pointIntersectsRect(
+                osx / Window.getScale(), osy / Window.getScale(),
+                getCoordinates()[0],
+                getCoordinates()[1],
+                getDimensions()[0],
+                getDimensions()[1])) {
+            return onMousePressed(osx, osy, button);
+        } else { return false; }
+    }
+
+    public final boolean handleMouseRelease(int osx, int osy, int button) {
+        for (int i = children.size() - 1; i >= 0; i--) {
+            GUIElement e = children.get(i);
+            if (e.handleMouseRelease(osx, osy, button)) return true;
+        }
+        if (isActive() && MiscMath.pointIntersectsRect(
+                osx / Window.getScale(), osy / Window.getScale(),
+                getCoordinates()[0],
+                getCoordinates()[1],
+                getDimensions()[0],
+                getDimensions()[1])) {
+            return onMouseRelease(osx, osy, button);
+        } else { return false; }
+    }
+
+    public final boolean handleKeyUp(int key) {
+        for (int i = children.size() - 1; i >= 0; i--) {
+            GUIElement e = children.get(i);
+            if (e.isActive())
+                if (e.handleKeyUp(key)) return true;
+        }
+        return isActive() && onKeyUp(key);
+    }
+
+    public final boolean handleKeyDown(int key) {
+        for (int i = children.size() - 1; i >= 0; i--) {
+            GUIElement e = children.get(i);
+            if (e.isActive())
+                if (e.handleKeyDown(key)) return true;
+        }
+        return isActive() && onKeyDown(key);
+    }
+
     public abstract boolean onMouseRelease(int ogx, int ogy, int button);
     public abstract boolean onMousePressed(int ogx, int ogy, int button);
     public abstract boolean onKeyDown(int key);
     public abstract boolean onKeyUp(int key);
 
+    public final GUIElement addChild(GUIElement element, int ogx, int ogy, GUIAnchor anchor) {
+        children.add(element);
+        element.setParent(this);
+        element.setOffset(ogx, ogy);
+        element.setAnchor(anchor);
+        return this;
+    }
+
     public final void draw(Graphics g) {
+        drawUnder(g);
         try {
             int[] dimensions = getDimensions();
             float[] coordinates = getOnscreenCoordinates();
@@ -69,6 +129,8 @@ public abstract class GUIElement {
         } catch (SlickException e) {
             e.printStackTrace();
         }
+        for (int i = 0; i < children.size(); i++) children.get(i).draw(g);
+        drawOver(g);
     }
 
     public void drawUnder(Graphics g) {}

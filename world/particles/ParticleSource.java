@@ -29,7 +29,7 @@ public class ParticleSource {
     private ArrayList<Particle> particles;
 
     public ParticleSource() {
-        this.lastParticleSpawn = System.currentTimeMillis();
+        this.lastParticleSpawn = World.getCurrentTime();
         this.coordinates = new double[2];
         this.direction = 0;
         this.minRadius = 0;
@@ -47,10 +47,10 @@ public class ParticleSource {
 
         if (particlesRemaining <= 0) return;
 
-        int amountToSpawn = (int)((System.currentTimeMillis() - lastParticleSpawn) / (1000 / ratePerSecond));
+        int amountToSpawn = (int)((World.getCurrentTime() - lastParticleSpawn) / (1000 / ratePerSecond));
 
         for (int i = 0; i < amountToSpawn; i++) {
-            lastParticleSpawn = System.currentTimeMillis();
+            lastParticleSpawn = World.getCurrentTime();
             particlesRemaining--;
             double pdir = direction + MiscMath.random(-fov/2, fov/2);
             double[] p_off = MiscMath.getRotatedOffset(
@@ -180,7 +180,7 @@ class Particle {
     private Color color;
 
     public Particle(double velocity, double direction, int lifetime, double[] startPosition, double[] startOffset, Color color) {
-        this.emissionTime = System.currentTimeMillis();
+        this.emissionTime = World.getCurrentTime();
         this.startPosition = startPosition;
         this.startOffset = startOffset;
         this.velocity = velocity;
@@ -190,9 +190,9 @@ class Particle {
     }
 
     public Color getColor() { return color; }
-    public double percentComplete() { return (System.currentTimeMillis() - emissionTime) / (double)lifetime; }
-    public boolean isExpired() { return System.currentTimeMillis() - emissionTime > lifetime; }
-    public double getElapsedSeconds() { return (System.currentTimeMillis() - emissionTime) / 1000f; }
+    public double percentComplete() { return (World.getCurrentTime() - emissionTime) / (double)lifetime; }
+    public boolean isExpired() { return World.getCurrentTime() - emissionTime > lifetime; }
+    public double getElapsedSeconds() { return (World.getCurrentTime() - emissionTime) / 1000f; }
     public double[] getCoordinates() {
         return getRelativeCoordinates(startPosition);
     }

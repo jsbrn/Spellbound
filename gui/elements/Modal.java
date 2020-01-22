@@ -39,24 +39,11 @@ public class Modal extends GUIElement {
     }
 
     @Override
-    public boolean isActive() {
-        return getGUI().isModal(this);
-    }
-
-    @Override
     public boolean onKeyUp(int key) {
         if (key == Input.KEY_TAB) {
-            getGUI().setModal(getGUI().isModal(this) ? null : this);
-            hide();
-            GameScreen.setPaused(false);
+            getGUI().setModal(null);
         }
         return true;
-    }
-
-    @Override
-    public void drawUnder(Graphics g) {
-        g.setColor(background);
-        g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import world.Chunk;
+import world.World;
 
 public class Animation {
 
@@ -19,7 +20,7 @@ public class Animation {
             this.frame_count = frame_count;
             this.original_fps = fps;
             this.fps = original_fps;
-            this.start_time = System.currentTimeMillis();
+            this.start_time = World.getCurrentTime();
             this.sprite = new Image("assets/animations/"+image, false, Image.FILTER_NEAREST);
             this.frame_width = this.sprite.getWidth() / (float)frame_count;
             this.frame_height = frame_height;
@@ -32,14 +33,14 @@ public class Animation {
     }
 
     private int getFrame() {
-        int mills = (int)((System.currentTimeMillis() - start_time) % 1000);
+        int mills = (int)((World.getCurrentTime() - start_time) % 1000);
         int frame = (mills / (1000 / (frame_count * fps))) % frame_count;
         return frame;
     }
 
     public int loopCount() {
         long frame_duration = 1000 / fps;
-        long time_since_start = System.currentTimeMillis() - start_time;
+        long time_since_start = World.getCurrentTime() - start_time;
         return (int)(time_since_start / frame_duration);
     }
 
@@ -50,7 +51,7 @@ public class Animation {
     public void setColor(Color color) { filter = color; }
 
     public void reset() {
-        this.start_time = System.currentTimeMillis();
+        this.start_time = World.getCurrentTime();
     }
 
     public void draw(float ex, float ey, float scale, int direction) {

@@ -1,5 +1,6 @@
 package world.entities.actions.action;
 
+import world.World;
 import world.entities.actions.Action;
 import world.entities.types.humanoids.HumanoidEntity;
 
@@ -14,7 +15,7 @@ public class WaitAction extends Action {
 
     @Override
     public void onStart() {
-        this.start = System.currentTimeMillis();
+        this.start = World.getCurrentTime();
     }
 
     @Override
@@ -29,7 +30,7 @@ public class WaitAction extends Action {
 
     @Override
     public boolean finished() {
-        return System.currentTimeMillis() >= start + mills;
+        return World.getCurrentTime() >= start + mills;
     }
 
     public String toString() { return "Wait("+mills+")"; }
