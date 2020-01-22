@@ -10,29 +10,40 @@ import org.newdawn.slick.TrueTypeFont;
 
 import java.awt.*;
 import java.io.*;
+import java.util.HashMap;
 
 public class Assets {
 
     public static int GAME_SCREEN = 0;
     public static Image TILE_SPRITESHEET, PARTICLE;
-    public static TrueTypeFont FONT;
+
+    private static HashMap<Float, TrueTypeFont> fonts;
 
     public static void load() {
         try {
             TILE_SPRITESHEET = new Image("assets/tiles.png", false, Image.FILTER_NEAREST);
             PARTICLE = new Image("assets/particle.png", false, Image.FILTER_NEAREST);
-            Font awtFont = Font.createFont(Font.PLAIN, Assets.class.getResourceAsStream("/assets/fonts/font.ttf"))
-                    .deriveFont(14f)
-                    .deriveFont(Font.TRUETYPE_FONT);
-            //new Font("Arial", Font.PLAIN, 8 + ((pass - 6) * 4));
-            FONT = new TrueTypeFont(awtFont, false);
         } catch (SlickException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static TrueTypeFont getFont(float size) {
+        if (fonts == null) fonts = new HashMap<>();
+        if (fonts.get(size) != null) return fonts.get(size);
+        Font awtFont = null;
+        try {
+            awtFont = Font.createFont(Font.PLAIN, Assets.class.getResourceAsStream("/assets/fonts/font.ttf"))
+                    .deriveFont(size)
+                    .deriveFont(Font.TRUETYPE_FONT);
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        TrueTypeFont font = new TrueTypeFont(awtFont, false);
+        fonts.put(size, font);
+        return font;
     }
 
     public static String read(String internal) {

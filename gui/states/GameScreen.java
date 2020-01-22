@@ -4,9 +4,7 @@ import assets.Assets;
 import assets.definitions.Definitions;
 import gui.GUI;
 import gui.GUIAnchor;
-import gui.elements.Button;
-import gui.elements.Hotbar;
-import gui.elements.Statusbar;
+import gui.elements.*;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -18,7 +16,6 @@ import world.Camera;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;
-import world.entities.states.FollowState;
 import world.entities.states.PatrolState;
 import world.entities.types.humanoids.npcs.Civilian;
 
@@ -29,10 +26,11 @@ public class GameScreen extends BasicGameState {
 
     static StateBasedGame game;
     private static Input input;
-    private boolean initialized;
+    private static boolean initialized, paused;
     private Graphics graphics;
 
     private static GUI gui;
+    private static Modal spellbook;
     private static boolean debugMode, showTopLayer;
 
     public GameScreen(int state) {
@@ -50,18 +48,46 @@ public class GameScreen extends BasicGameState {
         World.init();
         game = sbg;
         gui = new GUI();
-        gui.addChild(new Statusbar(World.getPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
-        gui.addChild(new Hotbar(World.getPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
-        gui.addChild(new Button("spellbook.png") {
+
+        spellbook = new Modal("spellbook_bg.png");
+
+        Button b = new Button(32, 8) {
             @Override
-            public boolean onMouseRelease(int ogx, int ogy) {
+            public boolean onMousePressed(int ogx, int ogy, int button) {
+                System.out.println("OK COOL!");
+                return true;
+            }
+        };
+        gui.addElement(new Statusbar(World.getPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
+        gui.addElement(new Hotbar(World.getPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
+
+        gui.addElement(new Button("spellbook.png") {
+            @Override
+            public boolean onKeyUp(int key) {
+                if (key == Input.KEY_TAB) {
+                    gui.setModal(spellbook);
+                    paused = true;
+                    return true;
+                }
                 return false;
             }
             @Override
-            public boolean onMousePressed(int ogx, int ogy) {
-                return false;
+            public boolean onMousePressed(int ogx, int ogy, int button) {
+                gui.setModal(spellbook);
+                System.out.println("OK COOL THEN");
+                paused = true;
+                return true;
             }
         }, 4, 94, GUIAnchor.TOP_LEFT);
+
+        gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
+        gui.addElement(b, 8, 12, GUIAnchor.TOP_LEFT);
+        b.setParent(spellbook);
+
+        Label title = new Label("Create a spell", 5, Color.black);
+        gui.addElement(title, 12, 4, GUIAnchor.TOP_LEFT);
+        title.setParent(spellbook);
+
         Assets.load();
         Definitions.load();
 
@@ -70,7 +96,7 @@ public class GameScreen extends BasicGameState {
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         graphics = g;
-        g.setFont(Assets.FONT);
+        g.setFont(Assets.getFont(14));
         World.draw(Window.getScale(), g, debugMode);
         gui.draw(g);
 
@@ -112,7 +138,7 @@ public class GameScreen extends BasicGameState {
 
         MiscMath.DELTA_TIME = delta;
         input = gc.getInput();
-        World.update();
+        if (!paused) World.update();
 
     }
 
@@ -141,7 +167,7 @@ public class GameScreen extends BasicGameState {
         double[] mouse_wcoords = Camera.getWorldCoordinates(x, y, Window.getScale());
         if (button == 2) {
             Random rng = new Random();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 100; i++) {
                 Entity civ = new Civilian();
                 Location player = World.getPlayer().getLocation();
                 civ.moveTo(new Location(
@@ -170,5 +196,7 @@ public class GameScreen extends BasicGameState {
     public static GUI getGUI() {
         return gui;
     }
+
+    public static void setPaused(boolean p) { paused = p; }
 
 }

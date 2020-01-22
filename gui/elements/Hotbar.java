@@ -26,12 +26,12 @@ public class Hotbar extends GUIElement {
     }
 
     @Override
-    public boolean onMouseRelease(int ogx, int ogy) {
+    public boolean onMouseRelease(int ogx, int ogy, int button) {
         return false;
     }
 
     @Override
-    public boolean onMousePressed(int ogx, int ogy) { return false; }
+    public boolean onMousePressed(int ogx, int ogy, int button) { return false; }
 
     @Override
     public boolean onKeyDown(int key) {

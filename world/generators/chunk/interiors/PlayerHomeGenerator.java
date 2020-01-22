@@ -51,7 +51,6 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
     @Override
     public Entity getEntity(int x, int y) {
-        return new Civilian();
+        return null;
     }
-
 }

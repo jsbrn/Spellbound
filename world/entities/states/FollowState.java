@@ -18,12 +18,13 @@ public class FollowState extends State {
     private Location lastSeen;
 
     private float vision = 0.5f;
-    private int hearing = 8;
+    private int hearing;
 
-    public FollowState(Entity following, int distance) {
+    public FollowState(Entity following, int distance, int hearing) {
         this.following = following;
         this.lastSeen = following.getLocation();
         this.minimumDistance = distance;
+        this.hearing = hearing;
         this.rng = new Random();
     }
 
@@ -57,7 +58,7 @@ public class FollowState extends State {
             double distanceTo = getParent().getLocation().distanceTo(following.getLocation());
             if (distanceTo > min + 1) {
                 double[] startCoords = following.getLocation().getCoordinates();
-                double[] direction = MiscMath.getRotatedOffset(0, -(distanceTo - min), -getParent().getLocation().angleBetween(lastSeen) - 45 + rng.nextInt(90));
+                double[] direction = MiscMath.getRotatedOffset(0, -(distanceTo - min), getParent().getLocation().angleBetween(lastSeen) - 45 + rng.nextInt(90));
                 getParent().queueAction(new SetAnimationAction("arms", "walking", false));
                 getParent().queueAction(new SetAnimationAction("legs", "walking", false));
                 getParent().queueAction(new MoveAction(startCoords[0] + direction[0], startCoords[1] + direction[1], false, true));

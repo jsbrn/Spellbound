@@ -1,5 +1,6 @@
 package world.entities.states;
 
+import misc.MiscMath;
 import world.entities.Entity;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.CastSpellAction;
@@ -13,20 +14,22 @@ public class AttackState extends FollowState {
 
     private Random rng;
     private int attackDistance;
+    private int moveCount = 0;
 
-    public AttackState(Entity target, int followDistance, int attackDistance) {
-        super(target, followDistance);
+    public AttackState(Entity target, int followDistance, int attackDistance, int hearing) {
+        super(target, followDistance, hearing);
         this.rng = new Random();
         this.attackDistance = attackDistance;
     }
 
     public void update() {
+        double distanceTo = getParent().getLocation().distanceTo(getFollowing().getLocation());
+        if (distanceTo > attackDistance || getParent().canSee(getFollowing()) < 0.5) super.update();
         if (getParent().getActionQueue().isEmpty()
-                && getParent().getLocation().distanceTo(getFollowing().getLocation()) < attackDistance
+                && distanceTo < attackDistance
                 && getParent().canSee(getFollowing()) > 0.5) {
-            getParent().queueActions(rng.nextFloat() < 0.35 ? move() : cast());
+            getParent().queueActions(moveCount < 0 ? move() : cast());
         }
-        super.update();
         getParent().getLocation().lookAt(getFollowing().getLocation());
     }
 
@@ -35,7 +38,8 @@ public class AttackState extends FollowState {
         group.add(new CastSpellAction(getFollowing().getLocation().getCoordinates()[0], getFollowing().getLocation().getCoordinates()[1]));
         group.add(new SetAnimationAction("arms", "casting", true));
         group.add(new SetAnimationAction("arms", "default", false));
-        group.add(new WaitAction(250 + rng.nextInt(500)));
+        group.add(new WaitAction(100 + rng.nextInt(400)));
+        moveCount--;
         return group;
     }
 
@@ -43,10 +47,18 @@ public class AttackState extends FollowState {
         ActionGroup group = new ActionGroup();
         group.add(new SetAnimationAction("arms", "walking", false));
         group.add(new SetAnimationAction("legs", "walking", false));
-        group.add(new MoveAction(-3 + rng.nextInt(6), -3 + rng.nextInt(6), true, false));
+        group.add(new MoveAction(
+                - 3 + rng.nextInt(6),
+                - 3 + rng.nextInt(6),
+                true, false));
+//        group.add(new MoveAction(
+//                getFollowing().getLocation().getCoordinates()[0] - attackDistance/2 + rng.nextInt(attackDistance),
+//                getFollowing().getLocation().getCoordinates()[1] - attackDistance/2 + rng.nextInt(attackDistance),
+//                false, false));
         group.add(new SetAnimationAction("arms", "default", false));
         group.add(new SetAnimationAction("legs", "default", false));
         group.add(new WaitAction(rng.nextInt(1000)));
+        moveCount += MiscMath.random(0, 4);
         return group;
     }
 

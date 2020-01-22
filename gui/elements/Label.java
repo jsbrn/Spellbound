@@ -5,36 +5,37 @@ import gui.GUIElement;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 
 import java.lang.annotation.Inherited;
 
 public class Label extends GUIElement {
 
     private String text;
-    private int font_size;
     private Color color;
+    private float font_size;
 
-    public Label(String text, int font_size, Color color) {
+    public Label(String text, int height, Color color) {
         this.text = text;
-        this.font_size = font_size;
         this.color = color;
+        this.font_size = height;
     }
 
     @Override
     public int[] getDimensions() {
         return new int[]{
-                (int)(Assets.FONT.getWidth(text) / Window.getScale()),
-                (int)(Assets.FONT.getHeight() / Window.getScale())
+                (int)(Assets.getFont(font_size * Window.getScale()).getWidth(text) / Window.getScale()),
+                (int)font_size
         };
     }
 
     @Override
-    public boolean onMouseRelease(int ogx, int ogy) {
+    public boolean onMouseRelease(int ogx, int ogy, int button) {
         return false;
     }
 
     @Override
-    public boolean onMousePressed(int ogx, int ogy) { return false; }
+    public boolean onMousePressed(int ogx, int ogy, int button) { return false; }
 
     @Override
     public boolean onKeyDown(int key) {
@@ -47,11 +48,9 @@ public class Label extends GUIElement {
     }
 
     @Override
-    public void draw(Graphics g) {
-        int[] coords = getCoordinates();
-        coords[0] *= Window.getScale();
-        coords[1] *= Window.getScale();
-        g.setFont(Assets.FONT);
+    public void drawOver(Graphics g) {
+        float[] coords = getOnscreenCoordinates();
+        g.setFont(Assets.getFont(font_size * Window.getScale()));
         g.setColor(color);
         g.drawString(text, coords[0], coords[1]);
     }
