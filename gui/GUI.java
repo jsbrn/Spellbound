@@ -27,7 +27,7 @@ public final class GUI {
     public GUI() {
 
         this.elements = new ArrayList<>();
-        speechBubble = new SpeechBubble(null, "");
+        speechBubble = new SpeechBubble();
         this.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
         speechBubble.hide();
 
@@ -38,7 +38,7 @@ public final class GUI {
                     NPCSpeakEvent cse = (NPCSpeakEvent)e;
                     if (cse.getPlayer().equals(World.getLocalPlayer())) {
                         speechBubble.setSpeaker(cse.getNPC());
-                        speechBubble.setText(cse.getMessage());
+                        speechBubble.setDialogue(cse.getDialogue());
                         speechBubble.show();
                     }
                 }
@@ -53,6 +53,7 @@ public final class GUI {
                 }
             })
         );
+
     }
 
     public SpeechBubble getSpeechBubble() {

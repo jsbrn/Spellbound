@@ -1,5 +1,6 @@
 package world.events.event;
 
+import assets.definitions.DialogueDefinition;
 import world.entities.Entity;
 import world.entities.types.humanoids.Player;
 import world.events.Event;
@@ -9,14 +10,13 @@ public class NPCSpeakEvent extends Event {
     private Entity npc;
     private Player player;
 
-    private String message;
+    private DialogueDefinition dialogue;
     private String[] options;
 
-    public NPCSpeakEvent(Entity npc, Player player, String text, String[] options) {
+    public NPCSpeakEvent(Entity npc, Player player, DialogueDefinition dialogue) {
         this.npc = npc;
         this.player = player;
-        this.message = text;
-        this.options = options;
+        this.dialogue = dialogue;
     }
 
     public Entity getNPC() {
@@ -25,12 +25,5 @@ public class NPCSpeakEvent extends Event {
     public Entity getPlayer() {
         return player;
     }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String[] getOptions() {
-        return options;
-    }
+    public DialogueDefinition getDialogue() { return dialogue; }
 }

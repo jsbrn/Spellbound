@@ -1,5 +1,7 @@
 package world.entities.states;
 
+import assets.definitions.Definitions;
+import assets.definitions.DialogueDefinition;
 import world.World;
 import world.entities.Entity;
 import world.entities.types.humanoids.Player;
@@ -22,12 +24,15 @@ public class TalkingToState extends State {
                 public void handle(Event e) {
                     PlayerReplyEvent eae = (PlayerReplyEvent)e;
                     if (eae.getNPC().equals(getParent())) {
-                        if (eae.getOption() == -1) {
+
+                        DialogueDefinition dd = eae.getDialogue().getOptionDestination(eae.getOption());
+                        if (dd != null) {
+                            EventDispatcher.invoke(new NPCSpeakEvent(getParent(), eae.getPlayer(), dd));
+                        } else {
                             EventDispatcher.invoke(new ConversationEndedEvent(getParent(), eae.getPlayer()));
                             getParent().exitState();
                         }
-                        if (eae.getOption() == 0)
-                            EventDispatcher.invoke(new NPCSpeakEvent(getParent(), eae.getPlayer(), "The current time is "+ World.getCurrentTime()+".", new String[]{}));
+
                     }
                 }
             });
@@ -35,9 +40,11 @@ public class TalkingToState extends State {
 
     @Override
     public void onEnter() {
+        getParent().getAnimationLayer("arms").setAnimation("default");
+        getParent().getAnimationLayer("legs").setAnimation("default");
         EventDispatcher.register(talker);
         EventDispatcher.invoke(new ConversationStartedEvent(getParent(), to));
-        EventDispatcher.invoke(new NPCSpeakEvent(getParent(), to, "Generic greeting", new String[]{}));
+        EventDispatcher.invoke(new NPCSpeakEvent(getParent(), to, Definitions.getDialogue("greeting")));
     }
 
     @Override

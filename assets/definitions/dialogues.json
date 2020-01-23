@@ -1,0 +1,29 @@
+[
+  {
+    "id": "greeting",
+    "texts": [
+      "Hi!",
+      "What do you want?",
+      "Hello.",
+      "Nice weather we're having."
+    ],
+    "options": [
+      { "label": "What's your story?", "pointsTo": "backstory" },
+      { "label": "Never mind.", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "backstory",
+    "texts": [
+      "I'm just a humble farmer.",
+      "I'm a blacksmith by day, and a vigilante assassin by night.",
+      "I came to this land many years ago. It's a lovely place.",
+      "I'm nothing special. You, on the other hand...",
+      "Sorry, I'm quite busy.",
+      "Leave me alone!"
+    ],
+    "options": [
+      { "label": "OK", "pointsTo": null }
+    ]
+  }
+]

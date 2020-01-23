@@ -1,5 +1,6 @@
 package gui.elements;
 
+import assets.definitions.DialogueDefinition;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import misc.Window;
@@ -13,16 +14,16 @@ import world.events.event.PlayerReplyEvent;
 public class SpeechBubble extends GUIElement {
 
     private Entity speaker;
-    private String text;
+    private DialogueDefinition dialogue;
     private Image background;
     private Label label;
+    private Label options;
 
-    public SpeechBubble(Entity speaker, String text) {
-        this.speaker = speaker;
-        this.text = "\""+text+"\"";
-        this.label = new Label(this.text, 4, Chunk.TILE_SIZE * 5, 4, Color.black);
+    public SpeechBubble() {
+        this.label = new Label("", 4, Chunk.TILE_SIZE * 5, 4, Color.black);
+        this.options = new Label("", 3, Color.gray);
         this.addChild(label, 0, 0, GUIAnchor.CENTER);
-        this.addChild(new Label("[ENTER] Continue", 3, Color.gray), 0, -6, GUIAnchor.BOTTOM_MIDDLE);
+        this.addChild(options, 0, -4, GUIAnchor.BOTTOM_MIDDLE);
         try {
             this.background = new Image("assets/gui/dialogue.png", false, Image.FILTER_NEAREST);
         } catch (SlickException e) {
@@ -34,8 +35,13 @@ public class SpeechBubble extends GUIElement {
         this.speaker = speaker;
     }
 
-    public void setText(String text) {
-        this.label.setText(text);
+    public void setDialogue(DialogueDefinition dialogue) {
+        this.label.setText(dialogue.getRandomText());
+        String optionsLabel = "";
+        for (int o = 0; o < dialogue.getOptionCount(); o++)
+            optionsLabel += "["+(o+1)+"] "+dialogue.getOptionText(o)+" ";
+        this.options.setText(optionsLabel.trim());
+        this.dialogue = dialogue;
     }
 
     @Override
@@ -60,11 +66,14 @@ public class SpeechBubble extends GUIElement {
 
     @Override
     public boolean onKeyUp(int key) {
-        if (key == Input.KEY_ENTER) {
-            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), 0));
+        if (key >= 2 && key <= 9) {
+            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue,0));
+        }
+        if (key == Input.KEY_ENTER && dialogue.getOptionCount() == 1) {
+            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue,0));
         }
         if (key == Input.KEY_ESCAPE) {
-            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), -1));
+            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, -1));
         }
         return true;
     }

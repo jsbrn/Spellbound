@@ -40,7 +40,7 @@ public class Civilian extends HumanoidEntity {
                 @Override
                 public void handle(Event e) {
                     EntityActivatedEvent eae = (EntityActivatedEvent)e;
-                    if (getCurrentState() instanceof TalkingToState) return;
+                    if (!(getCurrentState() instanceof IdleState)) return;
                     if (eae.getEntity().equals(that) && eae.getActivatedBy() instanceof Player) {
                         enterState(new TalkingToState((Player)eae.getActivatedBy()));
                     }
