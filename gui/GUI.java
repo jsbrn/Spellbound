@@ -17,7 +17,7 @@ import world.events.event.*;
 
 import java.util.ArrayList;
 
-public final class GUI {
+public class GUI {
 
     private ArrayList<GUIElement> elements;
     private Modal modal;
@@ -25,35 +25,36 @@ public final class GUI {
     private float darkness;
 
     public GUI() {
-
         this.elements = new ArrayList<>();
+    }
+
+    public void setSpeechBubble() {
         speechBubble = new SpeechBubble();
         this.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
         speechBubble.hide();
 
         EventDispatcher.register(new EventListener()
-            .on(NPCSpeakEvent.class.toString(), new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    NPCSpeakEvent cse = (NPCSpeakEvent)e;
-                    if (cse.getPlayer().equals(World.getLocalPlayer())) {
-                        speechBubble.setSpeaker(cse.getNPC());
-                        speechBubble.setDialogue(cse.getDialogue());
-                        speechBubble.show();
+                .on(NPCSpeakEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        NPCSpeakEvent cse = (NPCSpeakEvent)e;
+                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
+                            speechBubble.setSpeaker(cse.getNPC());
+                            speechBubble.setDialogue(cse.getDialogue());
+                            speechBubble.show();
+                        }
                     }
-                }
-            })
-            .on(ConversationEndedEvent.class.toString(), new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    ConversationEndedEvent cse = (ConversationEndedEvent)e;
-                    if (cse.getPlayer().equals(World.getLocalPlayer())) {
-                        speechBubble.hide();
+                })
+                .on(ConversationEndedEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        ConversationEndedEvent cse = (ConversationEndedEvent)e;
+                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
+                            speechBubble.hide();
+                        }
                     }
-                }
-            })
+                })
         );
-
     }
 
     public SpeechBubble getSpeechBubble() {

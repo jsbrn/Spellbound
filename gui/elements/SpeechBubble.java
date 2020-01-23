@@ -22,7 +22,7 @@ public class SpeechBubble extends GUIElement {
     public SpeechBubble() {
         this.label = new Label("", 4, Chunk.TILE_SIZE * 5, 4, Color.black);
         this.options = new Label("", 3, Color.gray);
-        this.addChild(label, 0, 0, GUIAnchor.CENTER);
+        this.addChild(label, Chunk.TILE_SIZE * 2, 6, GUIAnchor.TOP_LEFT);
         this.addChild(options, 0, -4, GUIAnchor.BOTTOM_MIDDLE);
         try {
             this.background = new Image("assets/gui/dialogue.png", false, Image.FILTER_NEAREST);
@@ -67,12 +67,8 @@ public class SpeechBubble extends GUIElement {
     @Override
     public boolean onKeyUp(int key) {
         if (key >= 2 && key <= 9) {
-            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue,0));
-        }
-        if (key == Input.KEY_ENTER && dialogue.getOptionCount() == 1) {
-            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue,0));
-        }
-        if (key == Input.KEY_ESCAPE) {
+            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, key - 2));
+        } else if (key == Input.KEY_ESCAPE) {
             EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, -1));
         }
         return true;

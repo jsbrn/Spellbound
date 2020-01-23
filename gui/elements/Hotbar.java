@@ -35,7 +35,6 @@ public class Hotbar extends GUIElement {
 
     @Override
     public boolean onKeyDown(int key) {
-        if (getGUI().getSpeechBubble().isActive()) return false;
         if (key == Input.KEY_1) { target.getSpellbook().selectSpell(0); return true; }
         if (key == Input.KEY_2) { target.getSpellbook().selectSpell(1); return true; }
         if (key == Input.KEY_3) { target.getSpellbook().selectSpell(2); return true; }

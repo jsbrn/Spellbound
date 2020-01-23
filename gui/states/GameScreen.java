@@ -75,6 +75,8 @@ public class GameScreen extends BasicGameState {
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
         spellbook.hide();
 
+        gui.setSpeechBubble();
+
         Assets.load();
         Definitions.load();
 
