@@ -66,6 +66,24 @@ public class Region {
         entities.remove(e);
     }
 
+    public Entity getEntity(double wx, double wy) {
+        ArrayList<Entity> found = getEntities((int)(wx - 2), (int)(wy - 2), 4, 4);
+        for (int i = found.size() - 1; i >= 0; i--) {
+            Entity e = found.get(i);
+            if (MiscMath.pointIntersectsRect(
+                    wx,
+                    wy,
+                    e.getLocation().getCoordinates()[0] - 0.5,
+                    e.getLocation().getCoordinates()[1] - 0.5,
+                    1,
+                    1
+                )) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Entity> getEntities(int wx, int wy, int width, int height) {
         ArrayList<Entity> subsection = new ArrayList<>();
         double minloc = MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize());
@@ -185,7 +203,7 @@ public class Region {
         }
 
         int radius = 2;
-        int[] pchcoords = World.getPlayer().getLocation().getChunkCoordinates();
+        int[] pchcoords = World.getLocalPlayer().getLocation().getChunkCoordinates();
         for (int j = -radius; j <= radius; j++) {
             for (int i = -radius; i <= radius; i++) {
                 int cx = pchcoords[0] + i;
@@ -198,7 +216,7 @@ public class Region {
     }
 
     public void draw(float scale, Graphics g, boolean debug) {
-        int[] pchcoords = World.getPlayer().getLocation().getChunkCoordinates();
+        int[] pchcoords = World.getLocalPlayer().getLocation().getChunkCoordinates();
         float[] oscoords = Camera.getOnscreenCoordinates(0, 0, scale);
 
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();

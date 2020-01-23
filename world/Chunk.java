@@ -11,7 +11,6 @@ import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Chunk {
 
@@ -94,7 +93,7 @@ public class Chunk {
 
     public void drawTop(float osx, float osy, float scale) {
         Color translucent = new Color(1f, 1f, 1f, 0.5f);
-        Location player_location = World.getPlayer().getLocation();
+        Location player_location = World.getLocalPlayer().getLocation();
         double[] playerLocalCoords = player_location.getLocalCoordinates();
         int[] playerChunkCoords = player_location.getChunkCoordinates();
 
@@ -149,7 +148,7 @@ public class Chunk {
                 g.setColor(Color.white);
                 g.drawLine(osx + (i * TILE_SIZE * scale), osy, osx + (i * TILE_SIZE * scale), osy + (CHUNK_SIZE * scale * TILE_SIZE));
                 g.drawLine(osx, osy + (j * TILE_SIZE * scale), osx + (CHUNK_SIZE * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale));
-                g.setColor(new Color(0, 0, 0, 1-(float)World.getPlayer().canSee(
+                g.setColor(new Color(0, 0, 0, 1-(float)World.getLocalPlayer().canSee(
                         (coordinates[0] * Chunk.CHUNK_SIZE) + i,
                         (coordinates[1] * Chunk.CHUNK_SIZE) + j)));
                 g.fillRect(osx + (i * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale);

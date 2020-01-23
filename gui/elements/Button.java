@@ -32,7 +32,18 @@ public abstract class Button extends GUIElement {
     public int[] getDimensions() { return image == null ? dims : new int[]{ image.getWidth(), image.getHeight() }; }
 
     @Override
-    public boolean onMouseRelease(int ogx, int ogy, int button) { return false; }
+    public final boolean onMouseRelease(int ogx, int ogy, int button) { return false; }
+
+    @Override
+    public final boolean onMousePressed(int ogx, int ogy, int button) {
+        if (mouseIntersects()) {
+            onClick(button);
+            return true;
+        }
+        return false;
+    }
+
+    public abstract boolean onClick(int button);
 
     @Override
     public boolean onKeyDown(int key) {

@@ -23,7 +23,7 @@ public class Bandit extends HumanoidEntity {
     @Override
     public void update() {
         super.update();
-        if (getCurrentState() == null) enterState(new PatrolState(World.getPlayer(), 4));
+        if (getCurrentState() == null) enterState(new PatrolState(World.getLocalPlayer(), 4));
     }
 
 }

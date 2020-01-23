@@ -1,12 +1,10 @@
 package gui;
 
+import gui.elements.SpeechBubble;
 import gui.states.GameScreen;
 import misc.MiscMath;
 import misc.Window;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 
 import java.util.ArrayList;
 
@@ -30,6 +28,7 @@ public abstract class GUIElement {
                 (int)(Window.getWidth() / Window.getScale()),
                 (int)(Window.getHeight() / Window.getScale())
         };
+
         switch(anchor) {
             case TOP_LEFT: return new double[]{ p_coords[0] + offset[0], p_coords[1] + offset[1] };
             case TOP_MIDDLE: return new double[]{ p_coords[0] + ((double)p_dims[0]/2f) - (dims[0] - 2) + offset[0], p_coords[1] + offset[1] };
@@ -58,9 +57,9 @@ public abstract class GUIElement {
     public void show() { inactive = false; }
     public void hide() { inactive = true; }
 
-    public boolean mouseIntersects(int osx, int osy) {
+    public boolean mouseIntersects() {
         return MiscMath.pointIntersectsRect(
-                osx / Window.getScale(), osy / Window.getScale(),
+                GameScreen.getInput().getMouseX() / Window.getScale(), GameScreen.getInput().getMouseY() / Window.getScale(),
                 getCoordinates()[0],
                 getCoordinates()[1],
                 getDimensions()[0],
@@ -72,7 +71,7 @@ public abstract class GUIElement {
             GUIElement e = children.get(i);
             if (e.handleMousePressed(osx, osy, button)) return true;
         }
-        if (isActive() && mouseIntersects(osx, osy)) {
+        if (isActive()) {
             return onMousePressed(osx, osy, button);
         } else { return false; }
     }
@@ -82,7 +81,7 @@ public abstract class GUIElement {
             GUIElement e = children.get(i);
             if (e.handleMouseRelease(osx, osy, button)) return true;
         }
-        if (isActive() && mouseIntersects(osx, osy)) {
+        if (isActive()) {
             return onMouseRelease(osx, osy, button);
         } else { return false; }
     }
@@ -125,7 +124,7 @@ public abstract class GUIElement {
             float[] coordinates = getOnscreenCoordinates();
             if (buffer == null) buffer = new Image((int)dimensions[0], (int)dimensions[1]);
             drawBuffered(buffer.getGraphics(),
-                    mouseIntersects(GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY()),
+                    mouseIntersects(),
                     GameScreen.getInput().isMouseButtonDown(0));
             g.drawImage(buffer.getScaledCopy(Window.getScale()),coordinates[0], coordinates[1]);
         } catch (SlickException e) {

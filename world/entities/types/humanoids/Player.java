@@ -10,23 +10,22 @@ import world.entities.actions.ActionGroup;
 import world.entities.actions.action.ActivateAction;
 import world.entities.actions.action.CastSpellAction;
 import world.entities.actions.action.SetAnimationAction;
-import world.entities.magic.Spell;
-import world.entities.magic.techniques.Technique;
-import world.entities.magic.techniques.TechniqueName;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
-import world.events.event.KeyDownEvent;
-import world.events.event.MousePressedEvent;
+import world.events.event.*;
 
 public class Player extends HumanoidEntity {
 
     private double[] moveTarget;
+    private boolean allowUserMovement;
 
     public Player() {
 
         super();
+
+        this.allowUserMovement = true;
 
         this.setMaxMana(10);
         this.setMana(10);
@@ -61,6 +60,25 @@ public class Player extends HumanoidEntity {
                         }
                     }
                 })
+                .on(ConversationStartedEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        ConversationStartedEvent cse = (ConversationStartedEvent)e;
+                        if (cse.getPlayer().equals(that)) {
+                            that.allowUserMovement = false;
+                            that.getLocation().lookAt(cse.getNPC().getLocation());
+                        }
+                    }
+                })
+                .on(ConversationEndedEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        ConversationEndedEvent cse = (ConversationEndedEvent)e;
+                        if (cse.getPlayer().equals(that)) {
+                            that.allowUserMovement = true;
+                        }
+                    }
+                })
         );
 
     }
@@ -78,7 +96,7 @@ public class Player extends HumanoidEntity {
         double targetX = findMoveTarget(dx, 0)[0];
         double targetY = findMoveTarget(0, dy)[1];
         if (getActionQueue().isEmpty()) {
-            if (dx != 0 || dy != 0) {
+            if ((dx != 0 || dy != 0) && allowUserMovement) {
                 getAnimationLayer("arms").setAnimation("walking");
                 getAnimationLayer("legs").setAnimation("walking");
                 getMover().setTarget(targetX, targetY);

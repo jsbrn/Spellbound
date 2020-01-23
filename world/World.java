@@ -43,7 +43,7 @@ public class World {
 
     public static Region getRegion() { return player.getLocation().getRegion(); }
 
-    public static Player getPlayer() { return player; }
+    public static Player getLocalPlayer() { return player; }
 
     public static void update() {
         if (paused) return;

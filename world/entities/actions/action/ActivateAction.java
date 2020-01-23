@@ -5,6 +5,12 @@ import misc.MiscMath;
 import world.Portal;
 import world.entities.Entity;
 import world.entities.actions.Action;
+import world.entities.types.humanoids.Player;
+import world.events.EventDispatcher;
+import world.events.EventListener;
+import world.events.event.EntityActivatedEvent;
+
+import java.util.ArrayList;
 
 public class ActivateAction extends Action {
 
@@ -13,10 +19,10 @@ public class ActivateAction extends Action {
         Entity parent = getParent();
         Location location = parent.getLocation();
         double[] offset = MiscMath.getRotatedOffset(0, -1, location.getLookDirection());
-        double[] coords = new double[]{location.getCoordinates()[0] + offset[0], location.getCoordinates()[1] + offset[1]};
+        double[] activateCoords = new double[]{location.getCoordinates()[0] + offset[0], location.getCoordinates()[1] + offset[1]};
 
-        Portal origin = location.getRegion().getPortal((int)coords[0], (int)coords[1]);
-        System.out.println("Searching for portal at "+coords[0]+", "+coords[1]);
+        Portal origin = location.getRegion().getPortal((int)activateCoords[0], (int)activateCoords[1]);
+        System.out.println("Searching for portal at "+activateCoords[0]+", "+activateCoords[1]);
         if (origin != null) {
 
             if (origin.isEntranceDirectional()
@@ -38,14 +44,11 @@ public class ActivateAction extends Action {
                     false,
                     true
             ));
-//            parent.getLocation().setLookDirection((int)MiscMath.angleBetween(
-//                    parent.getLocation().getCoordinates()[0],
-//                    parent.getLocation().getCoordinates()[1],
-//                    parent.getLocation().getCoordinates()[0] + destination.getExitDirection()[0],
-//                    parent.getLocation().getCoordinates()[0] + destination.getExitDirection()[1]
-//            ));
             return;
         }
+
+        Entity at = location.getRegion().getEntity(activateCoords[0], activateCoords[1]);
+        if (at != null) EventDispatcher.invoke(new EntityActivatedEvent(at, getParent()));
 
     }
 

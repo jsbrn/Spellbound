@@ -16,6 +16,7 @@ import world.Camera;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;
+import world.entities.states.IdleState;
 import world.entities.states.PatrolState;
 import world.entities.types.humanoids.npcs.Civilian;
 
@@ -51,8 +52,8 @@ public class GameScreen extends BasicGameState {
 
         spellbook = new Journal();
 
-        gui.addElement(new Statusbar(World.getPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Hotbar(World.getPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
+        gui.addElement(new Statusbar(World.getLocalPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
+        gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
         gui.addElement(new Button("spellbook.png") {
             @Override
             public boolean onKeyDown(int key) {
@@ -64,7 +65,7 @@ public class GameScreen extends BasicGameState {
                 return false;
             }
             @Override
-            public boolean onMousePressed(int ogx, int ogy, int button) {
+            public boolean onClick(int button) {
                 gui.setModal(spellbook);
                 World.setPaused(true);
                 return true;
@@ -73,8 +74,6 @@ public class GameScreen extends BasicGameState {
 
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
         spellbook.hide();
-
-        gui.addElement(new SpeechBubble(World.getPlayer(), "The quick brown fox jumped over the lazy dog, and boy did that make him mad. It made him so mad that he got up and chased down the fox until it tired out."), 0, -10, GUIAnchor.BOTTOM_MIDDLE);
 
         Assets.load();
         Definitions.load();
@@ -107,14 +106,14 @@ public class GameScreen extends BasicGameState {
 
             String[] debugStrings = new String[]{
                     "Entity count: "+World.getRegion().getEntities().size(),
-                    World.getPlayer().getLocation().toString(),
+                    World.getLocalPlayer().getLocation().toString(),
                     //World.getPlayer().getLocation().getChunk().debug(),
                     "Screen Center: "+(Window.getWidth()/2)+", "+(Window.getHeight()/2),
                     "ORIGIN: "+origin_osc[0]+", "+origin_osc[1],
                     "OSC: "+Mouse.getX()+", "+Mouse.getY()+" @ "+Window.getScale(),
                     "OSC->WC: "+mouse_wc[0]+", "+mouse_wc[1],
                     "WC->OSC: "+mouse_osc[0]+", "+mouse_osc[1],
-                    "Player can see: "+World.getPlayer().canSee((int)mouse_wc[0], (int)mouse_wc[1])
+                    "Player can see: "+World.getLocalPlayer().canSee((int)mouse_wc[0], (int)mouse_wc[1])
             };
 
             g.setColor(Color.white);
@@ -159,14 +158,13 @@ public class GameScreen extends BasicGameState {
         double[] mouse_wcoords = Camera.getWorldCoordinates(x, y, Window.getScale());
         if (button == 2) {
             Random rng = new Random();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 1; i++) {
                 Entity civ = new Civilian();
-                Location player = World.getPlayer().getLocation();
+                Location player = World.getLocalPlayer().getLocation();
                 civ.moveTo(new Location(
                         player.getRegion(),
                         mouse_wcoords[0],
                         mouse_wcoords[1]));
-                civ.enterState(new PatrolState(World.getPlayer(), 4));
             }
         }
         gui.handleMouseRelease(x, y, button);

@@ -8,14 +8,20 @@ public class EventDispatcher {
 
     public static void invoke(Event e) {
         if (listeners == null) listeners = new ArrayList<>();
-        for (EventListener listener: listeners) {
-            listener.invoke(e);
+        for (int i = 0; i < listeners.size(); i++) {
+            if (i < 0 || i >= listeners.size()) continue;
+            listeners.get(i).invoke(e);
         }
     }
 
     public static void register(EventListener listener) {
         if (listeners == null) listeners = new ArrayList<>();
         listeners.add(listener);
+    }
+
+    public static void unregister(EventListener listener) {
+        if (listeners == null) return;
+        listeners.remove(listener);
     }
 
 }

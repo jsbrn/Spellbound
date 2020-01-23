@@ -1,16 +1,19 @@
 package gui;
 
 import gui.elements.Modal;
+import gui.elements.SpeechBubble;
+import gui.states.GameScreen;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Camera;
+import world.World;
+import world.events.Event;
 import world.events.EventDispatcher;
-import world.events.event.KeyDownEvent;
-import world.events.event.KeyUpEvent;
-import world.events.event.MousePressedEvent;
-import world.events.event.MouseReleaseEvent;
+import world.events.EventHandler;
+import world.events.EventListener;
+import world.events.event.*;
 
 import java.util.ArrayList;
 
@@ -18,10 +21,42 @@ public final class GUI {
 
     private ArrayList<GUIElement> elements;
     private Modal modal;
+    private SpeechBubble speechBubble;
     private float darkness;
 
     public GUI() {
+
         this.elements = new ArrayList<>();
+        speechBubble = new SpeechBubble(null, "");
+        this.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
+        speechBubble.hide();
+
+        EventDispatcher.register(new EventListener()
+            .on(NPCSpeakEvent.class.toString(), new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    NPCSpeakEvent cse = (NPCSpeakEvent)e;
+                    if (cse.getPlayer().equals(World.getLocalPlayer())) {
+                        speechBubble.setSpeaker(cse.getNPC());
+                        speechBubble.setText(cse.getMessage());
+                        speechBubble.show();
+                    }
+                }
+            })
+            .on(ConversationEndedEvent.class.toString(), new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    ConversationEndedEvent cse = (ConversationEndedEvent)e;
+                    if (cse.getPlayer().equals(World.getLocalPlayer())) {
+                        speechBubble.hide();
+                    }
+                }
+            })
+        );
+    }
+
+    public SpeechBubble getSpeechBubble() {
+        return speechBubble;
     }
 
     public boolean handleMousePressed(int osx, int osy, int button) {
