@@ -5,6 +5,7 @@ import assets.definitions.Definitions;
 import assets.definitions.TileDefinition;
 import gui.states.GameScreen;
 import misc.MiscMath;
+import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Camera;
@@ -93,7 +94,9 @@ public class ParticleSource {
             p.getColor().a = alpha;
             float osx = (float)(ox + (pcoords[0] * Chunk.TILE_SIZE * scale) - (scale / 2));
             float osy = (float)(oy + (pcoords[1] * Chunk.TILE_SIZE * scale) - (scale / 2));
+
             Assets.PARTICLE.drawEmbedded(osx, osy, osx + scale, osy + scale, 0, 0, 1, 1, p.getColor());
+
         }
 
     }

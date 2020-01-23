@@ -18,6 +18,7 @@ public class World {
 
     private static long time;
     private static double timeMultiplier;
+    private static boolean paused;
 
     public static void init() {
         time = 0;
@@ -45,8 +46,14 @@ public class World {
     public static Player getPlayer() { return player; }
 
     public static void update() {
+        if (paused) return;
         time += MiscMath.getConstant(1000, 1 / timeMultiplier);
         getRegion().update();
+    }
+
+    public static boolean isPaused() { return paused; }
+    public static void setPaused(boolean p) {
+        paused = p;
     }
 
     public static void setTimeMultiplier(double tm) { timeMultiplier = tm; }

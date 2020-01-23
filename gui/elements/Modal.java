@@ -1,13 +1,11 @@
 package gui.elements;
 
 import gui.GUIElement;
-import gui.states.GameScreen;
-import misc.Window;
 import org.newdawn.slick.*;
+import world.World;
 
 public class Modal extends GUIElement {
 
-    private Color background = new Color(0, 0, 0, 0.5f);
     private Image image;
 
     public Modal(String image) {
@@ -34,20 +32,31 @@ public class Modal extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
-        return true;
+    public void drawUnder(Graphics g) {
+
+    }
+
+    @Override
+    public void drawOver(Graphics g) {
+
     }
 
     @Override
     public boolean onKeyUp(int key) {
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int key) {
         if (key == Input.KEY_TAB) {
             getGUI().setModal(null);
+            World.setPaused(false);
         }
         return true;
     }
 
     @Override
-    protected void drawBuffered(Graphics b) {
+    protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
         b.drawImage(image, 0, 0);
     }
 

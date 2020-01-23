@@ -20,7 +20,7 @@ public class Spellbook {
 
     public void cast(double wx, double wy) { getSelectedSpell().cast(wx, wy, parent); }
 
-    public Spell getSpell(int index) { return this.spells.get(index); }
+    public Spell getSpell(int index) { return index >= 0 && index < spells.size() ? this.spells.get(index) : null; }
     public Spell getSelectedSpell() { return getSpell(selected); }
     public void selectSpell(int index) { this.selected = index; }
     public void addSpell(Spell spell) { this.spells.add(spell); }

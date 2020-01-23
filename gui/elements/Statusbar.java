@@ -1,5 +1,6 @@
 package gui.elements;
 
+import gui.GUIAnchor;
 import gui.GUIElement;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -13,8 +14,16 @@ public class Statusbar extends GUIElement {
     private Image image;
     private HumanoidEntity target;
 
+    private Label healthLabel, manaLabel, staminaLabel;
+
     public Statusbar(HumanoidEntity target) {
         this.target = target;
+        healthLabel = new Label("0/0", 3, Color.white);
+        manaLabel = new Label("0/0", 3, Color.white);
+        staminaLabel = new Label("0/0", 3, Color.white);
+        this.addChild(healthLabel, 5, -8, GUIAnchor.CENTER);
+        this.addChild(manaLabel, 5, -1, GUIAnchor.CENTER);
+        this.addChild(staminaLabel, 5, 6, GUIAnchor.CENTER);
         try {
             this.image = new Image("assets/gui/statusbar.png", false, Image.FILTER_NEAREST);
             this.healthColor = new Color(1f, 0f, 0f, 0.5f);
@@ -49,7 +58,12 @@ public class Statusbar extends GUIElement {
     }
 
     @Override
-    protected void drawBuffered(Graphics b) {
+    protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
+
+        healthLabel.setText((int)target.getHP()+"/"+(int)target.getMaxHP());
+        manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxHP());
+        staminaLabel.setText((int)target.getStamina()+"/"+(int)target.getMaxStamina());
+
         b.drawImage(image, 0, 0);
         b.setColor(healthColor);
         b.fillRect(16, 8, (int)(32 * (target.getHP() / target.getMaxHP())), 3);

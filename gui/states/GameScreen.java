@@ -55,9 +55,10 @@ public class GameScreen extends BasicGameState {
         gui.addElement(new Hotbar(World.getPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
         gui.addElement(new Button("spellbook.png") {
             @Override
-            public boolean onKeyUp(int key) {
+            public boolean onKeyDown(int key) {
                 if (key == Input.KEY_TAB) {
                     gui.setModal(spellbook);
+                    World.setPaused(true);
                     return true;
                 }
                 return false;
@@ -65,13 +66,15 @@ public class GameScreen extends BasicGameState {
             @Override
             public boolean onMousePressed(int ogx, int ogy, int button) {
                 gui.setModal(spellbook);
-                System.out.println("Opened spellbook");
+                World.setPaused(true);
                 return true;
             }
         }, 4, 94, GUIAnchor.TOP_LEFT);
 
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
         spellbook.hide();
+
+        gui.addElement(new SpeechBubble(World.getPlayer(), "The quick brown fox jumped over the lazy dog, and boy did that make him mad. It made him so mad that he got up and chased down the fox until it tired out."), 0, -10, GUIAnchor.BOTTOM_MIDDLE);
 
         Assets.load();
         Definitions.load();
@@ -81,9 +84,12 @@ public class GameScreen extends BasicGameState {
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         graphics = g;
+        input = gc.getInput();
         g.setFont(Assets.getFont(14));
         World.draw(Window.getScale(), g, debugMode);
-        gui.draw(g);
+        gui.draw(g, debugMode);
+
+        g.setFont(Assets.getFont(14));
 
         double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Window.getHeight() - Mouse.getY(), Window.getScale());
         float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());

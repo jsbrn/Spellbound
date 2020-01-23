@@ -83,22 +83,29 @@ public final class GUI {
         this.elements.add(element);
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics g, boolean debug) {
+
         darkness = (float)MiscMath.tween(1f, darkness, 0f, 1f, 0.6f);
         if (darkness > 0) {
             g.setColor(new Color(0, 0, 0, darkness));
             g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
             g.setColor(Color.white);
         }
-        for (GUIElement element: elements)
+
+        for (GUIElement element: elements) {
             if (element.isActive() && !element.equals(modal)) {
                 element.draw(g);
+                if (debug) element.drawDebug(g);
             }
+        }
+
         if (modal != null) {
             g.setColor(new Color(0, 0, 0, 0.5f));
             g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
             modal.draw(g);
+            if (debug) modal.drawDebug(g);
         }
+
     }
 
 }

@@ -47,7 +47,7 @@ public class Hotbar extends GUIElement {
     }
 
     @Override
-    protected void drawBuffered(Graphics b) {
+    protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
         b.drawImage(image, 0, 0);
     }
 

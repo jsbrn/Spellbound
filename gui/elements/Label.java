@@ -7,25 +7,71 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
 
-import java.lang.annotation.Inherited;
+import java.util.ArrayList;
 
 public class Label extends GUIElement {
 
     private String text;
     private Color color;
-    private float font_size;
+    private int maxWidth, maxLines;
+    private float lineHeight;
+    private ArrayList<String> lines;
 
-    public Label(String text, int height, Color color) {
+    public Label(String text, int lineHeight, Color color) {
+        this(text, lineHeight, Integer.MAX_VALUE, 16, color);
+    }
+
+    public Label(String text, int lineHeight, int maxWidth, int maxLines, Color color) {
         this.text = text;
         this.color = color;
-        this.font_size = height;
+        this.maxWidth = maxWidth;
+        this.maxLines = maxLines;
+        this.lineHeight = lineHeight;
+        this.lines = getLines(text);
     }
+
+    private ArrayList<String> getLines(String text) {
+        String[] words = text.split("\\s");
+        ArrayList<String> rows = new ArrayList<String>();
+        rows.add("");
+        int currentRowSize = 0;
+        int currentRowIndex = 0;
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            int size = (int)(getFont().getWidth(" "+word) / Window.getScale());
+            if (currentRowSize + size < maxWidth) {
+                rows.set(currentRowIndex, rows.get(currentRowIndex) + " " + word);
+                currentRowSize += size;
+            } else {
+                i--;
+                if (currentRowIndex + 1 < maxLines) {
+                    currentRowIndex += 1;
+                    currentRowSize = 0;
+                    rows.add("");
+                } else {
+                    rows.set(currentRowIndex, rows.get(currentRowIndex) + "...");
+                    break;
+                }
+            }
+        }
+        return rows;
+    }
+
+    public void setText(String newtext) {
+        if (!newtext.equals(text)) {
+            lines = getLines(newtext);
+            text = newtext;
+        }
+    }
+
+    private TrueTypeFont getFont() { return Assets.getFont(lineHeight * Window.getScale()); }
 
     @Override
     public int[] getDimensions() {
+        int textWidth = (int)(getFont().getWidth(text) / Window.getScale());
         return new int[]{
-                (int)(Assets.getFont(font_size * Window.getScale()).getWidth(text) / Window.getScale()),
-                (int)font_size
+                textWidth < maxWidth ? textWidth : maxWidth,
+                lines.size() * (int)lineHeight
         };
     }
 
@@ -48,16 +94,21 @@ public class Label extends GUIElement {
     }
 
     @Override
-    public void drawOver(Graphics g) {
-        float[] coords = getOnscreenCoordinates();
-        g.setFont(Assets.getFont(font_size * Window.getScale()));
-        g.setColor(color);
-        g.drawString(text, coords[0], coords[1]);
+    public void draw(Graphics g) {
+        drawUnder(g);
+        drawOver(g);
     }
 
     @Override
-    protected void drawBuffered(Graphics b) {
-        return;
+    public void drawOver(Graphics g) {
+        float[] coords = getOnscreenCoordinates();
+        g.setFont(Assets.getFont(lineHeight * Window.getScale()));
+        g.setColor(color);
+        for (int i = 0; i < lines.size(); i++)
+            g.drawString(lines.get(i), coords[0] - Window.getScale(), coords[1] + (i * lineHeight * Window.getScale()));
     }
+
+    @Override
+    protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {}
 
 }

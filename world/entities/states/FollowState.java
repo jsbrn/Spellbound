@@ -30,7 +30,7 @@ public class FollowState extends State {
 
     @Override
     public void onEnter() {
-        System.out.println("Following target!");
+
     }
 
     @Override
@@ -40,8 +40,6 @@ public class FollowState extends State {
         boolean canHearTarget = getParent().getLocation().distanceTo(following.getLocation()) <= hearing;
         boolean canSeeLastPosition = getParent().canSee((int)lastSeen.getCoordinates()[0], (int)lastSeen.getCoordinates()[1]) > 0.5;
         double min = canSeeLastPosition && canSeeTarget ? minimumDistance : 0;
-
-        System.out.println(canSeeTarget+" | "+canHearTarget+" | "+getParent().getActionQueue().isEmpty());
 
         if (canSeeTarget || canHearTarget) {
             lastSeen = following.getLocation().copy();
@@ -73,7 +71,7 @@ public class FollowState extends State {
 
     @Override
     public void onExit() {
-        System.out.println("Lost target!");
+
     }
 
 }
