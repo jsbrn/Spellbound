@@ -44,7 +44,7 @@ public class TalkingToState extends State {
         getParent().getAnimationLayer("legs").setAnimation("default");
         EventDispatcher.register(talker);
         EventDispatcher.invoke(new ConversationStartedEvent(getParent(), to));
-        EventDispatcher.invoke(new NPCSpeakEvent(getParent(), to, Definitions.getDialogue("greeting")));
+        EventDispatcher.invoke(new NPCSpeakEvent(getParent(), to, Definitions.getDialogue(getParent().getConversationStartingPoint())));
     }
 
     @Override

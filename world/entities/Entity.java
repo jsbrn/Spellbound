@@ -29,6 +29,8 @@ public class Entity {
     private Location location;
     private State currentState;
 
+    private String conversationStartingPoint;
+
     private HashMap<String, AnimationLayer> animationLayers;
     private ArrayList<ActionGroup> action_queue;
 
@@ -37,6 +39,7 @@ public class Entity {
         this.animationLayers = new HashMap<>();
         this.mover = new Mover();
         this.mover.setParent(this);
+        this.conversationStartingPoint = "greeting";
     }
 
     public void update() {
@@ -46,6 +49,12 @@ public class Entity {
         action_queue.get(0).update();
         if (action_queue.get(0).finished()) action_queue.remove(0);
     }
+
+    public void setConversationStartingPoint(String dialogue_id) {
+        this.conversationStartingPoint = dialogue_id;
+    }
+
+    public String getConversationStartingPoint() { return conversationStartingPoint; }
 
     public void queueActions(ActionGroup actions) {
         this.action_queue.add(actions);
