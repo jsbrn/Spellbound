@@ -9,25 +9,28 @@ import org.newdawn.slick.TrueTypeFont;
 
 import java.util.ArrayList;
 
-public class Label extends GUIElement {
+public class TextLabel extends GUIElement {
 
     private String text;
     private Color color;
+    private boolean shadow;
     private int maxWidth, maxLines;
     private float lineHeight;
     private ArrayList<String> lines;
 
-    public Label(String text, int lineHeight, Color color) {
-        this(text, lineHeight, Integer.MAX_VALUE, 16, color);
+    public TextLabel(String text, int lineHeight, Color color, boolean shadow) {
+        this(text, lineHeight, Integer.MAX_VALUE, 16, color, shadow);
     }
 
-    public Label(String text, int lineHeight, int maxWidth, int maxLines, Color color) {
+    public TextLabel(String text, int lineHeight, int maxWidth, int maxLines, Color color, boolean shadow) {
         this.text = text;
         this.color = color;
         this.maxWidth = maxWidth;
         this.maxLines = maxLines;
         this.lineHeight = lineHeight;
         this.lines = getLines(text);
+        this.shadow = shadow;
+        this.setBuffered(false);
     }
 
     private ArrayList<String> getLines(String text) {
@@ -94,18 +97,19 @@ public class Label extends GUIElement {
     }
 
     @Override
-    public void draw(Graphics g) {
-        drawUnder(g);
-        drawOver(g);
-    }
-
-    @Override
     public void drawOver(Graphics g) {
         float[] coords = getOnscreenCoordinates();
         g.setFont(Assets.getFont(lineHeight * Window.getScale()));
-        g.setColor(color);
-        for (int i = 0; i < lines.size(); i++)
-            g.drawString(lines.get(i), coords[0] - Window.getScale(), coords[1] + (i * lineHeight * Window.getScale()));
+        for (int i = 0; i < lines.size(); i++) {
+            float x = coords[0] - Window.getScale();
+            float y = coords[1] + (i * lineHeight * Window.getScale());
+            if (shadow) {
+                g.setColor(color.darker().darker());
+                g.drawString(lines.get(i), x + 1, y + 1);
+            }
+            g.setColor(color);
+            g.drawString(lines.get(i), x, y);
+        }
     }
 
     @Override

@@ -97,16 +97,20 @@ public class Mover {
         while (dist < range) {
             offset = MiscMath.getRotatedOffset(0, -dist, angle);
             int wx = (int)(coords[0] + offset[0]), wy = (int)(coords[1] + offset[1]);
-            byte[] tile = parent.getLocation().getRegion().getTile(wx, wy);
-            TileDefinition base = Definitions.getTile(tile[0]);
-            TileDefinition top = Definitions.getTile(tile[1]);
-
-            if (base.collides() || top.collides() || base.getSpeedMultiplier() < 0.9 || top.getSpeedMultiplier() < 0.9) return false;
-            if ((int)(coords[0] + offset[0]) == tx && (int)(coords[1] + offset[1]) == ty) return true;
-            ArrayList<Entity> entities = parent.getLocation().getRegion().getEntities(wx, wy, 1, 1);
-            for (Entity e: entities) if (e.getMover().isCollidable() && !e.equals(parent)) return false;
+            if (!canPassThrough(wx, wy)) return false;
             dist+=0.5;
         }
+        return true;
+    }
+
+    public boolean canPassThrough(double wx, double wy) {
+        byte[] tile = parent.getLocation().getRegion().getTile((int)wx, (int)wy);
+        TileDefinition base = Definitions.getTile(tile[0]);
+        TileDefinition top = Definitions.getTile(tile[1]);
+
+        if (base.collides() || top.collides() || base.getSpeedMultiplier() < 0.9 || top.getSpeedMultiplier() < 0.9) return false;
+        ArrayList<Entity> entities = parent.getLocation().getRegion().getEntities((int)wx, (int)wy, 1, 1);
+        for (Entity e: entities) if (e.getMover().isCollidable() && !e.equals(parent)) return false;
         return true;
     }
 

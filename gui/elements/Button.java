@@ -14,7 +14,7 @@ public abstract class Button extends GUIElement {
     private Color color, highlightColor;
 
     public Button(String text, int w, int h) {
-        this.addChild(new Label(text, 3, w, 1, Color.white), 0, 0, GUIAnchor.CENTER);
+        this.addChild(new TextLabel(text, 3, w, 1, Color.white, true), 0, -1, GUIAnchor.CENTER);
         this.dims = new int[]{w, h};
         this.color = new Color(170, 115, 65);
         this.highlightColor = new Color(105, 196, 235);

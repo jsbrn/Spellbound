@@ -16,12 +16,12 @@ public class SpeechBubble extends GUIElement {
     private Entity speaker;
     private DialogueDefinition dialogue;
     private Image background;
-    private Label label;
-    private Label options;
+    private TextLabel label;
+    private TextLabel options;
 
     public SpeechBubble() {
-        this.label = new Label("", 4, Chunk.TILE_SIZE * 5, 4, Color.black);
-        this.options = new Label("", 3, Color.gray);
+        this.label = new TextLabel("", 4, Chunk.TILE_SIZE * 5, 4, Color.black, false);
+        this.options = new TextLabel("", 3, Color.gray, false);
         this.addChild(label, Chunk.TILE_SIZE * 2, 6, GUIAnchor.TOP_LEFT);
         this.addChild(options, 0, -4, GUIAnchor.BOTTOM_MIDDLE);
         try {

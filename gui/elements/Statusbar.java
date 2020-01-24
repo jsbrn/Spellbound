@@ -14,13 +14,13 @@ public class Statusbar extends GUIElement {
     private Image image;
     private HumanoidEntity target;
 
-    private Label healthLabel, manaLabel, staminaLabel;
+    private TextLabel healthLabel, manaLabel, staminaLabel;
 
     public Statusbar(HumanoidEntity target) {
         this.target = target;
-        healthLabel = new Label("0/0", 3, Color.white);
-        manaLabel = new Label("0/0", 3, Color.white);
-        staminaLabel = new Label("0/0", 3, Color.white);
+        healthLabel = new TextLabel("0/0", 3, Color.white, false);
+        manaLabel = new TextLabel("0/0", 3, Color.white, false);
+        staminaLabel = new TextLabel("0/0", 3, Color.white, false);
         this.addChild(healthLabel, 5, -8, GUIAnchor.CENTER);
         this.addChild(manaLabel, 5, -1, GUIAnchor.CENTER);
         this.addChild(staminaLabel, 5, 6, GUIAnchor.CENTER);

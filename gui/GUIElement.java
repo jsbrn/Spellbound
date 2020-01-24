@@ -15,6 +15,7 @@ public abstract class GUIElement {
     private GUIAnchor anchor = GUIAnchor.TOP_LEFT;
     private GUIElement parent;
     private Image buffer;
+    private boolean buffered = true;
     private ArrayList<GUIElement> children = new ArrayList<>();
     private boolean inactive;
 
@@ -121,22 +122,26 @@ public abstract class GUIElement {
         children.remove(element);
     }
 
-    public void draw(Graphics g) {
+    public final void draw(Graphics g) {
         drawUnder(g);
         try {
             int[] dimensions = getDimensions();
             float[] coordinates = getOnscreenCoordinates();
-            if (buffer == null) buffer = new Image((int)dimensions[0], (int)dimensions[1]);
-            drawBuffered(buffer.getGraphics(),
-                    mouseIntersects(),
-                    GameScreen.getInput().isMouseButtonDown(0));
-            g.drawImage(buffer.getScaledCopy(Window.getScale()),coordinates[0], coordinates[1]);
+            if (buffered) {
+                if (buffer == null) buffer = new Image((int)dimensions[0], (int)dimensions[1]);
+                drawBuffered(buffer.getGraphics(),
+                        mouseIntersects(),
+                        GameScreen.getInput().isMouseButtonDown(0));
+                g.drawImage(buffer.getScaledCopy(Window.getScale()),coordinates[0], coordinates[1]);
+            }
         } catch (SlickException e) {
             e.printStackTrace();
         }
         for (int i = 0; i < children.size(); i++) children.get(i).draw(g);
         drawOver(g);
     }
+
+    public void setBuffered(boolean b) { buffered = b; }
 
     public void drawUnder(Graphics g) {}
     public void drawOver(Graphics g) {}

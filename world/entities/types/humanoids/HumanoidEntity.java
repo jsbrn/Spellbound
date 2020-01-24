@@ -15,6 +15,8 @@ public class HumanoidEntity extends Entity {
     private double hp, mana, stamina, max_hp, max_mana, max_stamina;
     private boolean hostile;
 
+    private int crystals, gold, dyes;
+
     public static Color[] SKIN_COLORS
             = new Color[]{new Color(230, 210, 155), new Color(110, 90, 72)};
 
@@ -59,6 +61,14 @@ public class HumanoidEntity extends Entity {
     public double getMaxHP() { return max_hp; }
     public double getMaxMana() { return max_mana; }
     public double getMaxStamina() { return max_stamina; }
+
+    public int getCrystalCount() { return crystals; }
+    public int getGoldCount() { return gold; }
+    public int getDyeCount() { return dyes; }
+
+    public void addGold(int gold) { this.gold += gold; }
+    public void addCrystals(int crystals) { this.crystals += crystals; }
+    public void addDyes(int dyes) { this.dyes += dyes; }
 
     public void setMana(double mana) { this.mana = MiscMath.clamp(mana, 0, max_mana); }
     public void addMana(double amount) { setMana(mana + amount); }
