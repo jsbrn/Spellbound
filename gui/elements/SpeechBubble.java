@@ -86,6 +86,6 @@ public class SpeechBubble extends GUIElement {
         speaker.draw(
                 (float)(getCoordinates()[0] + Chunk.TILE_SIZE) * Window.getScale(),
                 (float)(getCoordinates()[1] + (getDimensions()[1]/2) + Chunk.TILE_SIZE/2) * Window.getScale(),
-                Window.getScale());
+                Window.getScale(), 3);
     }
 }

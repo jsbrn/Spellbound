@@ -26,10 +26,14 @@ public class Region {
     private HashMap<Integer, Portal> portals;
     private ArrayList<Entity> entities;
 
+    private long time;
+
     public Region(String name, int size, RegionGenerator generator) {
 
         this.name = name;
         this.size = size;
+
+        this.time = 0;
 
         chunks = new Chunk[size][size];
         chunkGenerators = new ChunkGenerator[size][size];
@@ -56,6 +60,8 @@ public class Region {
         }));
 
     }
+
+    public long getCurrentTime() { return time; }
 
     public void addEntity(Entity e) {
         int index = getEntityIndex(e.getLocation().getGlobalIndex(), 0, entities.size());
@@ -195,6 +201,8 @@ public class Region {
     }
 
     public void update() {
+
+        time += MiscMath.getConstant(1000, 1 / World.getTimeMultiplier());
 
         for (int i = magic_sources.size() - 1; i >= 0; i--) {
             MagicSource magicSource = magic_sources.get(i);

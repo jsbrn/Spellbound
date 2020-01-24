@@ -35,19 +35,21 @@ public class HumanoidEntity extends Entity {
         this.getSpellbook().addSpell(testSpell);
 
         this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true, Color.red));
-        this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
         this.addAnimation("legs", "default", new Animation("humanoid/legs_idle.png", 2, 1, 16, true, true, Color.orange));
         this.addAnimation("arms", "default", new Animation("humanoid/arms_idle.png", 2, 1, 16, true, true, Color.red));
         this.addAnimation("legs", "walking", new Animation("humanoid/legs_walking.png", 2, 4, 16, true, true, Color.orange));
         this.addAnimation("arms", "walking", new Animation("humanoid/arms_walking.png", 2, 4, 16, true, true, Color.red));
         this.addAnimation("arms", "casting", new Animation("humanoid/arms_casting.png", 4, 3, 16, false, true, Color.red));
+        this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
+        this.addAnimation("head", "talking", new Animation("humanoid/head_talking.png", 3, 2, 16, true, true, Color.white));
+
     }
 
     @Override
     public void update() {
         super.update();
         addHP(MiscMath.getConstant(max_hp, 180));
-        addMana(MiscMath.getConstant(max_mana, 1));
+        addMana(MiscMath.getConstant(max_mana, 10));
         addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
 

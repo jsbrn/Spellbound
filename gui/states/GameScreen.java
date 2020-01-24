@@ -50,7 +50,7 @@ public class GameScreen extends BasicGameState {
         game = sbg;
         gui = new GUI();
 
-        spellbook = new Journal();
+        spellbook = new Journal(World.getLocalPlayer());
 
         gui.addElement(new Statusbar(World.getLocalPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
         gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 38, GUIAnchor.TOP_LEFT);

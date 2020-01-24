@@ -9,7 +9,7 @@ import world.World;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.ActivateAction;
 import world.entities.actions.action.CastSpellAction;
-import world.entities.actions.action.SetAnimationAction;
+import world.entities.actions.action.ChangeAnimationAction;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
@@ -45,8 +45,7 @@ public class Player extends HumanoidEntity {
                             && that.getActionQueue().isEmpty()) {
                             getLocation().lookAt(mce.getX(), mce.getY());
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
-                            actions.add(new SetAnimationAction("arms", "casting", true));
-                            actions.add(new SetAnimationAction("arms", "default", false));
+                            actions.add(new ChangeAnimationAction("arms", "casting", true, true));
                             getSpellbook().getParent().queueActions(actions);
                         }
                     }
@@ -97,14 +96,14 @@ public class Player extends HumanoidEntity {
         double targetY = findMoveTarget(0, dy)[1];
         if (getActionQueue().isEmpty()) {
             if ((dx != 0 || dy != 0) && allowUserMovement) {
-                getAnimationLayer("arms").setAnimation("walking");
-                getAnimationLayer("legs").setAnimation("walking");
+                getAnimationLayer("arms").setBaseAnimation("walking");
+                getAnimationLayer("legs").setBaseAnimation("walking");
                 getMover().setTarget(targetX, targetY);
                 getMover().setLookTowardsTarget(false);
                 getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
-                getAnimationLayer("arms").setAnimation("default");
-                getAnimationLayer("legs").setAnimation("default");
+                getAnimationLayer("arms").setBaseAnimation("default");
+                getAnimationLayer("legs").setBaseAnimation("default");
                 getMover().stop();
             }
         }

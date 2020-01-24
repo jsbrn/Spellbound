@@ -7,15 +7,16 @@ import world.entities.animations.AnimationLayer;
 
 import java.util.ArrayList;
 
-public class SetAnimationAction extends Action {
+public class ChangeAnimationAction extends Action {
 
     private String anim, layer;
-    private boolean wait;
+    private boolean wait, stack;
 
-    public SetAnimationAction(String layer, String name, boolean waitUntilFinished) {
+    public ChangeAnimationAction(String layer, String name, boolean waitUntilFinished, boolean stack) {
         this.anim = name;
         this.layer = layer;
         this.wait = waitUntilFinished;
+        this.stack = stack;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class SetAnimationAction extends Action {
             if (animation == null) continue;
             if (!animation.loops()
                     || !animationLayer.getCurrentAnimation().equals(anim))
-                animationLayer.setAnimation(anim);
+                if (!stack) animationLayer.setBaseAnimation(anim); else animationLayer.stackAnimation(anim);
         }
     }
 

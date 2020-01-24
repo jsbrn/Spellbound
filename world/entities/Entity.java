@@ -22,6 +22,7 @@ import world.entities.states.State;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Entity {
 
@@ -31,12 +32,12 @@ public class Entity {
 
     private String conversationStartingPoint;
 
-    private HashMap<String, AnimationLayer> animationLayers;
+    private LinkedHashMap<String, AnimationLayer> animationLayers;
     private ArrayList<ActionGroup> action_queue;
 
     public Entity() {
         this.action_queue = new ArrayList<>();
-        this.animationLayers = new HashMap<>();
+        this.animationLayers = new LinkedHashMap<>();
         this.mover = new Mover();
         this.mover.setParent(this);
         this.conversationStartingPoint = "greeting";
@@ -143,6 +144,10 @@ public class Entity {
     }
 
     public void draw(float osx, float osy, float scale) {
+        draw(osx, osy, scale, (location.getLookDirection() + (360 / 16)) / (360 / 8));
+    }
+
+    public void draw(float osx, float osy, float scale, int direction) {
         for (AnimationLayer animationLayer: animationLayers.values()) {
             Animation anim = animationLayer.getAnimationByName(animationLayer.getCurrentAnimation());
             if (anim != null)
@@ -150,9 +155,8 @@ public class Entity {
                         osx,
                         osy,
                         scale,
-                        (location.getLookDirection() + (360 / 16)) / (360 / 8));
+                        direction);
         }
-
     }
 
     public void drawDebug(float scale, Graphics g) {

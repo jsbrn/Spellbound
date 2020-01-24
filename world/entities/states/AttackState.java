@@ -5,7 +5,7 @@ import world.entities.Entity;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.action.CastSpellAction;
 import world.entities.actions.action.MoveAction;
-import world.entities.actions.action.SetAnimationAction;
+import world.entities.actions.action.ChangeAnimationAction;
 import world.entities.actions.action.WaitAction;
 
 import java.util.Random;
@@ -36,8 +36,8 @@ public class AttackState extends FollowState {
     private ActionGroup cast() {
         ActionGroup group = new ActionGroup();
         group.add(new CastSpellAction(getFollowing().getLocation().getCoordinates()[0], getFollowing().getLocation().getCoordinates()[1]));
-        group.add(new SetAnimationAction("arms", "casting", true));
-        group.add(new SetAnimationAction("arms", "default", false));
+        group.add(new ChangeAnimationAction("arms", "casting", true, false));
+        group.add(new ChangeAnimationAction("arms", "default", false, false));
         group.add(new WaitAction(100 + rng.nextInt(400)));
         moveCount--;
         return group;
@@ -45,8 +45,8 @@ public class AttackState extends FollowState {
 
     private ActionGroup move() {
         ActionGroup group = new ActionGroup();
-        group.add(new SetAnimationAction("arms", "walking", false));
-        group.add(new SetAnimationAction("legs", "walking", false));
+        group.add(new ChangeAnimationAction("arms", "walking", false, false));
+        group.add(new ChangeAnimationAction("legs", "walking", false, false));
         group.add(new MoveAction(
                 - 3 + rng.nextInt(6),
                 - 3 + rng.nextInt(6),
@@ -55,8 +55,8 @@ public class AttackState extends FollowState {
 //                getFollowing().getLocation().getCoordinates()[0] - attackDistance/2 + rng.nextInt(attackDistance),
 //                getFollowing().getLocation().getCoordinates()[1] - attackDistance/2 + rng.nextInt(attackDistance),
 //                false, false));
-        group.add(new SetAnimationAction("arms", "default", false));
-        group.add(new SetAnimationAction("legs", "default", false));
+        group.add(new ChangeAnimationAction("arms", "default", false, false));
+        group.add(new ChangeAnimationAction("legs", "default", false, false));
         group.add(new WaitAction(rng.nextInt(1000)));
         moveCount += MiscMath.random(0, 4);
         return group;
