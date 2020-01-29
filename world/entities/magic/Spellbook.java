@@ -29,7 +29,9 @@ public class Spellbook {
     public void addSpell(Spell spell) { this.spells.add(spell); }
     public ArrayList<Spell> getSpells() { return spells; }
 
+    public int getTechniqueCount() { return discovered_techniques.size(); }
     public void discoverTechnique(TechniqueName technique) { this.discovered_techniques.add(technique); }
+    public void discoverAllTechniques() { for (TechniqueName t: TechniqueName.values()) discoverTechnique(t); }
     public boolean hasTechnique(TechniqueName technique) { return this.discovered_techniques.contains(technique); }
 
     public void setParent(HumanoidEntity parent) { this.parent = parent; }

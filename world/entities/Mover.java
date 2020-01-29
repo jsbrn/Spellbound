@@ -108,7 +108,7 @@ public class Mover {
         TileDefinition base = Definitions.getTile(tile[0]);
         TileDefinition top = Definitions.getTile(tile[1]);
 
-        if (base.collides() || top.collides() || base.getSpeedMultiplier() < 0.9 || top.getSpeedMultiplier() < 0.9) return false;
+        if (base.collides() || top.collides()) return false;
         ArrayList<Entity> entities = parent.getLocation().getRegion().getEntities((int)wx, (int)wy, 1, 1);
         for (Entity e: entities) if (e.getMover().isCollidable() && !e.equals(parent)) return false;
         return true;

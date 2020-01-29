@@ -32,8 +32,8 @@ public class HumanoidEntity extends Entity {
 
         this.spellbook = new Spellbook(this);
         Spell testSpell = new Spell();
-        testSpell.addTechnique(Technique.create(TechniqueName.PROPEL));
-        testSpell.addTechnique(Technique.create(TechniqueName.RADIATE));
+        testSpell.addTechnique(TechniqueName.PROPEL);
+        testSpell.addTechnique(TechniqueName.RADIATE);
         this.getSpellbook().addSpell(testSpell);
 
         this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true, Color.red));

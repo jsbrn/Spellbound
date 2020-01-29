@@ -52,7 +52,7 @@ public abstract class GUIElement {
     public final GUIElement getParent() { return parent; }
 
     public final void setGUI(GUI parent) { this.gui = parent; }
-    public final GUI getGUI() { return gui; }
+    public final GUI getGUI() { return parent != null ? parent.getGUI() : gui; }
 
     public boolean isActive() { return parent != null ? parent.isActive() : !inactive; }
     public void show() { inactive = false; }

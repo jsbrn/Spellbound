@@ -18,6 +18,7 @@ public class Assets {
     public static Image TILE_SPRITESHEET, PARTICLE;
 
     private static HashMap<Float, TrueTypeFont> fonts;
+    private static HashMap<String, Image> images;
 
     public static void load() {
         try {
@@ -26,6 +27,19 @@ public class Assets {
         } catch (SlickException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Image getImage(String image) {
+        if (images == null) images = new HashMap<>();
+        if (images.containsKey(image)) return images.get(image);
+        try {
+            Image instance = new Image(image, false, Image.FILTER_NEAREST);
+            images.put(image, instance);
+            return instance;
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static TrueTypeFont getFont(float size) {

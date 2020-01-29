@@ -16,8 +16,6 @@ import world.Camera;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;
-import world.entities.states.IdleState;
-import world.entities.states.PatrolState;
 import world.entities.types.humanoids.npcs.Civilian;
 
 import java.util.ArrayList;
@@ -50,15 +48,18 @@ public class GameScreen extends BasicGameState {
         game = sbg;
         gui = new GUI();
 
-        spellbook = new Journal(World.getLocalPlayer());
+        World.getLocalPlayer().getSpellbook().discoverAllTechniques();
+
+        SpellcraftingMenu spellcasting = new SpellcraftingMenu(World.getLocalPlayer());
+        spellbook = new Journal(World.getLocalPlayer(), spellcasting);
 
         gui.addElement(new Statusbar(World.getLocalPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
         gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Button("spellbook.png") {
+        gui.addElement(new Button(null, 16, 16, "spellbook.png", false) {
             @Override
             public boolean onKeyDown(int key) {
                 if (key == Input.KEY_TAB) {
-                    gui.setModal(spellbook);
+                    gui.stackModal(spellbook);
                     World.setPaused(true);
                     return true;
                 }
@@ -66,14 +67,16 @@ public class GameScreen extends BasicGameState {
             }
             @Override
             public boolean onClick(int button) {
-                gui.setModal(spellbook);
+                gui.stackModal(spellbook);
                 World.setPaused(true);
                 return true;
             }
         }, 4, 94, GUIAnchor.TOP_LEFT);
 
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
+        gui.addElement(spellcasting, 0, 0, GUIAnchor.CENTER);
         spellbook.hide();
+        spellcasting.hide();
 
         gui.setSpeechBubble();
 

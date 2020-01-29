@@ -1,5 +1,6 @@
 package gui.elements;
 
+import assets.Assets;
 import gui.GUIElement;
 import misc.Window;
 import org.newdawn.slick.Graphics;
@@ -8,21 +9,15 @@ import org.newdawn.slick.SlickException;
 
 public class IconLabel extends GUIElement {
 
-    private int density, size;
     private Image image;
 
-    public IconLabel(String image, int size) {
-        this.size = size;
-        try {
-            this.image = new Image("assets/gui/icons/"+image, false, Image.FILTER_NEAREST);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+    public IconLabel(String image) {
+        this.image = Assets.getImage("assets/gui/" + image);
     }
 
     @Override
     public int[] getDimensions() {
-        return new int[]{size, size};
+        return new int[]{image.getWidth(), image.getHeight()};
     }
 
     @Override
@@ -47,17 +42,6 @@ public class IconLabel extends GUIElement {
 
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
-
-    }
-
-    private int[] getScaledSize() {
-        float scale = ((float)size / (float)image.getHeight()) * Window.getScale();
-        return new int[]{(int)(image.getWidth() * scale), (int)(image.getHeight() * scale)};
-    }
-
-    @Override
-    public void drawOver(Graphics g) {
-        float[] osc = getOnscreenCoordinates();
-        g.drawImage(image.getScaledCopy(getScaledSize()[0], getScaledSize()[1]), osc[0], osc[1]);
+        b.drawImage(image, 0, 0);
     }
 }

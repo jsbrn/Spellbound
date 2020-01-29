@@ -1,5 +1,6 @@
 package gui.elements;
 
+import assets.Assets;
 import assets.definitions.DialogueDefinition;
 import gui.GUIAnchor;
 import gui.GUIElement;
@@ -24,11 +25,7 @@ public class SpeechBubble extends GUIElement {
         this.options = new TextLabel("", 3, Color.gray, false);
         this.addChild(label, Chunk.TILE_SIZE * 2, 6, GUIAnchor.TOP_LEFT);
         this.addChild(options, 0, -4, GUIAnchor.BOTTOM_MIDDLE);
-        try {
-            this.background = new Image("assets/gui/dialogue.png", false, Image.FILTER_NEAREST);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+        this.background = Assets.getImage("assets/gui/dialogue.png");
     }
 
     public void setSpeaker(Entity speaker) {

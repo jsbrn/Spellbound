@@ -4,7 +4,9 @@ import gui.GUIAnchor;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import world.Chunk;
+import world.World;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;
@@ -14,18 +16,19 @@ public class Journal extends Modal {
     private HumanoidEntity target;
     private ArrayList<TextLabel> strings;
 
-    public Journal(HumanoidEntity target) {
+    public Journal(HumanoidEntity target, SpellcraftingMenu spellcraftingMenu) {
         super("spellbook_bg.png");
         this.target = target;
         this.strings = new ArrayList<>();
         addChild(new TextLabel("Player", 5, Color.black, false), 12, 4, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Your Spells", 5, Color.black, false), 24, 4, GUIAnchor.TOP_MIDDLE);
-        addChild(new IconLabel("gold.png", 16), 32, 16, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("crystal.png", 16), 32, 32, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("dyes.png", 16), 32, 48, GUIAnchor.TOP_LEFT);
-        addChild(new Button("Spellcrafting", 32, 8) {
+        addChild(new IconLabel("icons/gold.png"), 32, 16, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/crystal.png"), 32, 32, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/dyes.png"), 32, 48, GUIAnchor.TOP_LEFT);
+        addChild(new Button("Spellcrafting", 32, 8, null, true) {
             @Override
             public boolean onClick(int button) {
+                getGUI().stackModal(spellcraftingMenu);
                 return true;
             }
         }, 12, -10, GUIAnchor.BOTTOM_LEFT);
@@ -58,6 +61,14 @@ public class Journal extends Modal {
     public boolean onKeyUp(int key) {
         refresh();
         return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int key) {
+        if (key == Input.KEY_TAB || key == Input.KEY_ESCAPE) {
+            World.setPaused(false);
+        }
+        return super.onKeyDown(key);
     }
 
     @Override

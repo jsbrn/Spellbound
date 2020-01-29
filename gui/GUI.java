@@ -2,7 +2,6 @@ package gui;
 
 import gui.elements.Modal;
 import gui.elements.SpeechBubble;
-import gui.states.GameScreen;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
@@ -16,16 +15,18 @@ import world.events.EventListener;
 import world.events.event.*;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class GUI {
 
     private ArrayList<GUIElement> elements;
-    private Modal modal;
+    private Stack<Modal> modals;
     private SpeechBubble speechBubble;
     private float darkness;
 
     public GUI() {
         this.elements = new ArrayList<>();
+        this.modals = new Stack<>();
     }
 
     public void setSpeechBubble() {
@@ -62,7 +63,7 @@ public class GUI {
     }
 
     public boolean handleMousePressed(int osx, int osy, int button) {
-        if (modal != null) return modal.handleMousePressed(osx, osy, button);
+        if (!modals.isEmpty()) return modals.peek().handleMousePressed(osx, osy, button);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
             if (e.handleMousePressed(osx, osy, button)) return true;
@@ -73,7 +74,7 @@ public class GUI {
     }
 
     public boolean handleMouseRelease(int osx, int osy, int button) {
-        if (modal != null) return modal.handleMouseRelease(osx, osy, button);
+        if (!modals.isEmpty()) return modals.peek().handleMouseRelease(osx, osy, button);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
             if (e.handleMouseRelease(osx, osy, button)) return true;
@@ -84,7 +85,7 @@ public class GUI {
     }
 
     public boolean onKeyDown(int key) {
-        if (modal != null) return modal.handleKeyDown(key);
+        if (!modals.isEmpty()) return modals.peek().handleKeyDown(key);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
             if (e.handleKeyDown(key)) return true;
@@ -94,7 +95,7 @@ public class GUI {
     }
 
     public boolean onKeyUp(int key) {
-        if (modal != null) return modal.handleKeyUp(key);
+        if (!modals.isEmpty()) return modals.peek().handleKeyUp(key);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
             if (e.handleKeyUp(key)) return true;
@@ -103,10 +104,16 @@ public class GUI {
         return false;
     }
 
-    public void setModal(Modal element) {
-        if (modal != null) modal.hide();
-        modal = element;
-        if (modal != null) modal.show();
+    public void stackModal(Modal element) {
+        if (element != null) {
+            modals.add(element);
+            element.show();
+        }
+    }
+
+    public void popModal() {
+        if (!modals.isEmpty()) modals.peek().hide();
+        modals.pop();
     }
 
     public void setFade(float alpha) {
@@ -130,13 +137,13 @@ public class GUI {
         }
 
         for (GUIElement element: elements) {
-            if (element.isActive() && !element.equals(modal)) {
+            if (element.isActive() && !element.equals(modals)) {
                 element.draw(g);
                 if (debug) element.drawDebug(g);
             }
         }
 
-        if (modal != null) {
+        for (Modal modal: modals) {
             g.setColor(new Color(0, 0, 0, 0.5f));
             g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
             modal.draw(g);

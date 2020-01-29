@@ -48,9 +48,8 @@ public class Modal extends GUIElement {
 
     @Override
     public boolean onKeyDown(int key) {
-        if (key == Input.KEY_TAB) {
-            getGUI().setModal(null);
-            World.setPaused(false);
+        if (key == Input.KEY_TAB || key == Input.KEY_ESCAPE) {
+            getGUI().popModal();
         }
         return true;
     }
