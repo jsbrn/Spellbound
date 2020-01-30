@@ -1,6 +1,7 @@
 package world.entities.magic;
 
 import misc.MiscMath;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
@@ -17,7 +18,9 @@ public class MagicSource {
     private double moveSpeed, rotateSpeed, targetDirection;
     private MagicSource next;
 
-    public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques) {
+    private Color color;
+
+    public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
         this.castCoordinates = new double[]{x, y};
         this.moveTarget = new double[]{caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1]};
         this.targetDirection = 0;
@@ -26,6 +29,7 @@ public class MagicSource {
         this.caster = caster;
         this.techniques = techniques;
         this.body = new ParticleSource();
+        this.body.setColor(color);
         this.body.setCoordinates(caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5f);
         for (Technique t: techniques) t.applyTo(this);
     }

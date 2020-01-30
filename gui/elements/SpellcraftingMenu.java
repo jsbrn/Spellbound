@@ -13,6 +13,8 @@ public class SpellcraftingMenu extends Modal {
 
     private HumanoidEntity target;
     private ArrayList<Button> buttons;
+    private TextBox nameField;
+    private Canvas canvas;
 
     private Spell spell;
 
@@ -21,30 +23,33 @@ public class SpellcraftingMenu extends Modal {
         this.target = target;
         this.buttons = new ArrayList<>();
         this.spell = new Spell();
-        addChild(new TextBox(60, 8), 8, 12, GUIAnchor.TOP_LEFT);
+        nameField = new TextBox(60, 8);
+        addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("New Spell", 5, Color.white, true), 8, 4, GUIAnchor.TOP_LEFT);
+        canvas = new Canvas(15, 15, 4);
+        addChild(canvas, 8, 32, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Discovered Techniques", 5, Color.white, true), 24, 4, GUIAnchor.TOP_MIDDLE);
-        addChild(new Button("Cancel", 32, 8, null, true) {
+        addChild(new Button("Cancel", 24, 8, null, true) {
             @Override
             public boolean onClick(int button) {
                 getGUI().popModal(); return true;
             }
         }, 12, -10, GUIAnchor.BOTTOM_LEFT);
-    }
-
-    @Override
-    public boolean onKeyUp(int key) {
-        refresh();
-        return super.onKeyUp(key);
-    }
-
-    @Override
-    public boolean onMouseRelease(int ogx, int ogy, int button) {
-        return super.onMouseRelease(ogx, ogy, button);
+        addChild(new Button("Create!", 24, 8, null, true) {
+            @Override
+            public boolean onClick(int button) {
+                spell.setColor(canvas.getColor());
+                spell.setPixels(canvas.getGrid());
+                spell.setName(nameField.getText());
+                target.getSpellbook().addSpell(spell);
+                getGUI().popModal();
+                return true;
+            }
+        }, 38, -10, GUIAnchor.BOTTOM_LEFT);
     }
 
     private void refreshButtons() {
-        if (buttons.size() == target.getSpellbook().getTechniqueCount()) return;
+
         for (int i = 0; i < buttons.size(); i++) { removeChild(buttons.get(i)); buttons.remove(i); }
         int techniquesCount = TechniqueName.values().length;
         for (int i = 0; i < techniquesCount; i++) {
@@ -72,7 +77,21 @@ public class SpellcraftingMenu extends Modal {
         }
     }
 
+    @Override
+    public void onShow() {
+        super.onShow();
+        reset();
+    }
+
+    private void reset() {
+        this.spell = new Spell();
+        this.nameField.setText("");
+        this.canvas.reset();
+        refreshButtons();
+    }
+
     private void refresh() {
+        if (buttons.size() == target.getSpellbook().getTechniqueCount()) return;
         refreshButtons();
     }
 

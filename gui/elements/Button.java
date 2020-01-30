@@ -22,6 +22,18 @@ public abstract class Button extends GUIElement {
             this.addChild(new IconLabel(icon), 0, 0, GUIAnchor.CENTER);
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setHighlightColor(Color color) {
+        this.highlightColor = color;
+    }
+
     @Override
     public int[] getDimensions() { return dims; }
 
@@ -41,6 +53,9 @@ public abstract class Button extends GUIElement {
     public void setToggled(boolean t) { toggled = t; }
 
     public abstract boolean onClick(int button);
+
+    @Override
+    public boolean onMouseMoved(int ogx, int ogy) { return false; }
 
     @Override
     public boolean onKeyDown(int key) {

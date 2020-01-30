@@ -2,9 +2,11 @@ package gui;
 
 import gui.elements.Modal;
 import gui.elements.SpeechBubble;
+import gui.states.GameScreen;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import world.Camera;
 import world.World;
@@ -23,10 +25,12 @@ public class GUI {
     private Stack<Modal> modals;
     private SpeechBubble speechBubble;
     private float darkness;
+    private int[] lastMousePosition;
 
     public GUI() {
         this.elements = new ArrayList<>();
         this.modals = new Stack<>();
+        this.lastMousePosition = new int[]{0, 0};
     }
 
     public void setSpeechBubble() {
@@ -62,11 +66,24 @@ public class GUI {
         return speechBubble;
     }
 
-    public boolean handleMousePressed(int osx, int osy, int button) {
-        if (!modals.isEmpty()) return modals.peek().handleMousePressed(osx, osy, button);
+    public boolean handleMouseMoved(int osx, int osy) {
+        int ogx = (int)(osx / Window.getScale()), ogy = (int)(osy / Window.getScale());
+        if (!modals.isEmpty()) return modals.peek().handleMouseMoved(ogx, ogy);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
-            if (e.handleMousePressed(osx, osy, button)) return true;
+            if (e.handleMouseMoved(ogx, ogy)) return true;
+        }
+        //double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
+        //EventDispatcher.invoke(new MousePressedEvent(wc[0], wc[1]));
+        return false;
+    }
+
+    public boolean handleMousePressed(int osx, int osy, int button) {
+        int ogx = (int)(osx / Window.getScale()), ogy = (int)(osy / Window.getScale());
+        if (!modals.isEmpty()) return modals.peek().handleMousePressed(ogx, ogy, button);
+        for (int i = elements.size() - 1; i >= 0; i--) {
+            GUIElement e = elements.get(i);
+            if (e.handleMousePressed(ogx, ogy, button)) return true;
         }
         double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
         EventDispatcher.invoke(new MousePressedEvent(wc[0], wc[1], button));
@@ -74,10 +91,11 @@ public class GUI {
     }
 
     public boolean handleMouseRelease(int osx, int osy, int button) {
-        if (!modals.isEmpty()) return modals.peek().handleMouseRelease(osx, osy, button);
+        int ogx = (int)(osx / Window.getScale()), ogy = (int)(osy / Window.getScale());
+        if (!modals.isEmpty()) return modals.peek().handleMouseRelease(ogx, ogy, button);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
-            if (e.handleMouseRelease(osx, osy, button)) return true;
+            if (e.handleMouseRelease(ogx, ogy, button)) return true;
         }
         double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
         EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
@@ -128,6 +146,13 @@ public class GUI {
     }
 
     public void draw(Graphics g, boolean debug) {
+
+        int mouseGX = (int)(GameScreen.getInput().getMouseX() / Window.getScale()), mouseGY = (int)(GameScreen.getInput().getMouseY() / Window.getScale());
+        if (lastMousePosition[0] != mouseGX || lastMousePosition[1] != mouseGY) {
+            handleMouseMoved(GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY());
+            lastMousePosition[0] = mouseGX;
+            lastMousePosition[1] = mouseGY;
+        }
 
         darkness = (float)MiscMath.tween(1f, darkness, 0f, 1f, 0.6f);
         if (darkness > 0) {

@@ -40,6 +40,11 @@ public class Statusbar extends GUIElement {
     }
 
     @Override
+    public boolean onMouseMoved(int ogx, int ogy) {
+        return false;
+    }
+
+    @Override
     public boolean onMouseRelease(int ogx, int ogy, int button) {
         return false;
     }

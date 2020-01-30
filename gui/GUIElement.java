@@ -55,8 +55,18 @@ public abstract class GUIElement {
     public final GUI getGUI() { return parent != null ? parent.getGUI() : gui; }
 
     public boolean isActive() { return parent != null ? parent.isActive() : !inactive; }
-    public void show() { inactive = false; }
-    public void hide() { inactive = true; }
+    public void show() {
+        if (inactive) onShow();
+        inactive = false;
+    }
+    public void hide() {
+        if (!inactive) onHide();
+        inactive = true;
+    }
+
+    public void onShow() {}
+
+    public void onHide() {}
 
     public boolean mouseIntersects() {
         return MiscMath.pointIntersectsRect(
@@ -67,23 +77,33 @@ public abstract class GUIElement {
                 getDimensions()[1]);
     }
 
-    public final boolean handleMousePressed(int osx, int osy, int button) {
+    public final boolean handleMouseMoved(int ogx, int ogy) {
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
-            if (e.handleMousePressed(osx, osy, button)) return true;
+            if (e.handleMouseMoved(ogx, ogy)) return true;
         }
         if (isActive()) {
-            return onMousePressed(osx, osy, button);
+            return onMouseMoved(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1]);
         } else { return false; }
     }
 
-    public final boolean handleMouseRelease(int osx, int osy, int button) {
+    public final boolean handleMousePressed(int ogx, int ogy, int button) {
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
-            if (e.handleMouseRelease(osx, osy, button)) return true;
+            if (e.handleMousePressed(ogx, ogy, button)) return true;
         }
         if (isActive()) {
-            return onMouseRelease(osx, osy, button);
+            return onMousePressed(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1], button);
+        } else { return false; }
+    }
+
+    public final boolean handleMouseRelease(int ogx, int ogy, int button) {
+        for (int i = children.size() - 1; i >= 0; i--) {
+            GUIElement e = children.get(i);
+            if (e.handleMouseRelease(ogx, ogy, button)) return true;
+        }
+        if (isActive()) {
+            return onMouseRelease(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1], button);
         } else { return false; }
     }
 
@@ -105,6 +125,7 @@ public abstract class GUIElement {
         return isActive() && onKeyDown(key);
     }
 
+    public abstract boolean onMouseMoved(int ogx, int ogy);
     public abstract boolean onMouseRelease(int ogx, int ogy, int button);
     public abstract boolean onMousePressed(int ogx, int ogy, int button);
     public abstract boolean onKeyDown(int key);

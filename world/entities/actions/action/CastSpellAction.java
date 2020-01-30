@@ -16,6 +16,7 @@ public class CastSpellAction extends Action {
     public void onStart() {
         if (getParent() instanceof HumanoidEntity) {
             HumanoidEntity parent = ((HumanoidEntity)getParent());
+            if (parent.getSpellbook().getSelectedSpell() == null) return;
             if (parent.getMana() >= 1) {
                 parent.getSpellbook().cast(wx, wy);
                 parent.addMana(-1);

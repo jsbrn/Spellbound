@@ -24,9 +24,23 @@ public class TextBox extends GUIElement {
         addChild(label, 1, 1, GUIAnchor.TOP_LEFT);
     }
 
+    public void setText(String text) {
+        this.text = text;
+        label.setText(text);
+    }
+
+    public String getText() {
+        return text;
+    }
+
     @Override
     public int[] getDimensions() {
         return dims;
+    }
+
+    @Override
+    public boolean onMouseMoved(int ogx, int ogy) {
+        return false;
     }
 
     @Override

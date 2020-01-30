@@ -150,6 +150,10 @@ public class ParticleSource {
         this.coordinates[1] = y;
     }
 
+    public void setColor(Color base) {
+        this.colors = new Color[]{base, base.darker(), base.brighter()};
+    }
+
     public void addCoordinates(double dx, double dy) {
         setCoordinates(coordinates[0] + dx, coordinates[1] + dy);
     }
