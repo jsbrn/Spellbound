@@ -67,7 +67,7 @@ public class Assets {
             while (true) {
                 String line = bf.readLine();
                 if (line == null) break;
-                contents += line;
+                contents += line.trim()+"\n";
             }
             bf.close();
         } catch (IOException e) {

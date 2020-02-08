@@ -16,6 +16,8 @@ public class SpellcraftingMenu extends Modal {
     private TextBox nameField;
     private Canvas canvas;
 
+    private TextLabel crystalCost, dyesCost, manaCost;
+
     private Spell spell;
 
     public SpellcraftingMenu(HumanoidEntity target) {
@@ -23,18 +25,26 @@ public class SpellcraftingMenu extends Modal {
         this.target = target;
         this.buttons = new ArrayList<>();
         this.spell = new Spell();
-        nameField = new TextBox(60, 8);
+
+        canvas = new Canvas(16, 16, 4);
+        nameField = new TextBox(64, 8);
+        crystalCost = new TextLabel("0 Crystals", 4, Color.cyan, true);
+        dyesCost = new TextLabel("0 Dyes", 4, Color.red, true);
+        manaCost = new TextLabel("0 Mana", 4, Color.pink.darker(0.1f), true);
+
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
+        addChild(canvas, 8, 26, GUIAnchor.TOP_LEFT);
+        addChild(crystalCost, 8, -32, GUIAnchor.BOTTOM_LEFT);
+        addChild(dyesCost, 8, -26, GUIAnchor.BOTTOM_LEFT);
+        addChild(manaCost, 8, -20, GUIAnchor.BOTTOM_LEFT);
         addChild(new TextLabel("New Spell", 5, Color.white, true), 8, 4, GUIAnchor.TOP_LEFT);
-        canvas = new Canvas(15, 15, 4);
-        addChild(canvas, 8, 32, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Discovered Techniques", 5, Color.white, true), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new Button("Cancel", 24, 8, null, true) {
             @Override
             public boolean onClick(int button) {
                 getGUI().popModal(); return true;
             }
-        }, 12, -10, GUIAnchor.BOTTOM_LEFT);
+        }, 12, -6, GUIAnchor.BOTTOM_LEFT);
         addChild(new Button("Create!", 24, 8, null, true) {
             @Override
             public boolean onClick(int button) {
@@ -45,7 +55,7 @@ public class SpellcraftingMenu extends Modal {
                 getGUI().popModal();
                 return true;
             }
-        }, 38, -10, GUIAnchor.BOTTOM_LEFT);
+        }, 40, -6, GUIAnchor.BOTTOM_LEFT);
     }
 
     private void refreshButtons() {
@@ -78,6 +88,11 @@ public class SpellcraftingMenu extends Modal {
     }
 
     @Override
+    public boolean onMouseMoved(int ogx, int ogy) {
+        return false;
+    }
+
+    @Override
     public void onShow() {
         super.onShow();
         reset();
@@ -85,14 +100,16 @@ public class SpellcraftingMenu extends Modal {
 
     private void reset() {
         this.spell = new Spell();
-        this.nameField.setText("");
-        this.canvas.reset();
-        refreshButtons();
+        refresh();
     }
 
     private void refresh() {
-        if (buttons.size() == target.getSpellbook().getTechniqueCount()) return;
+        this.nameField.setText(spell.getName());
+        this.canvas.reset();
         refreshButtons();
+        this.crystalCost.setText(target.getCrystalCount()+"/0 Crystals");
+        this.dyesCost.setText(target.getDyeCount()+"/0 Dyes");
+        this.manaCost.setText("0 Mana");
     }
 
 }

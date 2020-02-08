@@ -5,6 +5,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import world.entities.magic.techniques.TechniqueName;
+import world.entities.magic.techniques.Techniques;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +15,7 @@ public class Definitions {
 
     private static ArrayList<TileDefinition> tileDefinitions;
     private static HashMap<String, DialogueDefinition> dialogueDefinitions;
+    private static HashMap<TechniqueName, Techniques> techniqueDefinitions;
 
     public static void load() {
         tileDefinitions = new ArrayList<>();
@@ -23,7 +26,7 @@ public class Definitions {
             for (Object o: tiles) tileDefinitions.add(new TileDefinition((JSONObject)o));
             JSONArray dialogues = (JSONArray)parser.parse(Assets.read("definitions/dialogues.json"));
             for (Object o: dialogues) dialogueDefinitions.put((String)((JSONObject)o).get("id"), new DialogueDefinition((JSONObject)o));
-
+            Techniques.load();
         } catch (ParseException e) {
             e.printStackTrace();
         }

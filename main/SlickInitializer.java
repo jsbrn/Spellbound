@@ -3,7 +3,6 @@ package main;
 import assets.Assets;
 import gui.states.GameScreen;
 import misc.*;
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;

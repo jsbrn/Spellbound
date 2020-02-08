@@ -63,7 +63,7 @@ public class Hotbar extends GUIElement {
         b.drawImage(selected, 3, 3 + (17 * target.getSpellbook().getSelectedIndex()));
         for (int i = 0; i < target.getSpellbook().getSpells().size(); i++) {
             Image icon = target.getSpellbook().getSpell(i).getIcon();
-            b.drawImage(icon, 3, 3 + (i * 20));
+            b.drawImage(icon, 2, 2 + (i * 17));
         }
     }
 
