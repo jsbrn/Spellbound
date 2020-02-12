@@ -1,26 +1,26 @@
 ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;ConflictsWith;Requires;Description
-target_point;Aim;Target Selectors;1;1;0;1;-;-;Target the click location.
-target_mouse;Guide;Target Selectors;5;10;0;1;-;-;Target the active mouse location.
-target_radius;Shotgun;Target Selectors;5;2;0;1;-;-;Target all enemies within a radius.
-target_nearest;Target;Target Selectors;1;1;0;1;-;-;Target enemy closest to mouse location.
-target_marked;???;Target Selectors;3;1;0;1;-;-;Target all previously marked enemies.
-move_directional;Propel;Movement;1;1;1;1;-;-;Move indefinitely towards initial target direction
-move_follow;Follow;Movement;0;1;0;1;-;-;Follow the target.
-rotate_follow;Track;Rotation;0;1;0;1;-;-;Look towards the target.
-rotate_spin;Spin;Rotation;0;1;0;1;-;-;Spin clockwise.
-rotate_counterspin;Counterspin;Rotation;0;1;0;1;-;-;Spin counterclockwise.
-arc_narrow;Narrow;Arc Length;0;1;0;1;-;-;Narrow arc to 90 degrees.
-arc_spread;Spread;Arc Length;0;1;0;3;-;-;Increase arc by 30 degrees per level.
+target_point;Aim;Target Selectors;1;2;0;1;-;-;Target the click location.
+target_mouse;Guide;Target Selectors;5;10;2;1;-;-;Target the active mouse location.
+target_radius;Shotgun;Target Selectors;3;5;0;1;-;-;Target all enemies within a radius.
+target_nearest;Target;Target Selectors;2;3;0;1;-;-;Target enemy closest to mouse location.
+target_marked;???;Target Selectors;5;5;0;1;-;-;Target all previously marked enemies.
+move_directional;Propel;Movement;0;1;1;1;-;-;Move indefinitely towards initial target direction.
+move_follow;Follow;Movement;1;1;0;1;-;-;Follow the target.
+rotate_follow;Track;Rotation;1;1;0;1;-;-;Look towards the target.
+rotate_spin;Spin;Rotation;1;1;0;1;-;-;Spin clockwise.
+rotate_counterspin;Counterspin;Rotation;1;1;0;1;-;-;Spin counterclockwise.
+arc_narrow;Narrow;Arc Length;1;1;0;1;-;-;Narrow arc to 90 degrees.
+arc_spread;Spread;Arc Length;1;1;0;3;-;-;Increase arc by 30 degrees per level.
 radius_min;Reach;Radius;1;1;0;5;-;-;Increase min radius by 1 tile per level.
 radius_max;Depth;Radius;1;1;0;5;-;-;Increase max radius by 1 tile per level.
 radius_expand;Expand;Radius;1;2;1;5;-;-;Increase min and max radius over time by 1 tile per level per second.
 radius_shrink;Shrink;Radius;1;2;0;5;-;-;Decrease min and max radius over time by 1 tile per level per second.
-emission_radiate;Radiate;Emission;0;0;0;1;-;-;Particles radiate outwards.
-emission_gravitate;Gravitate;Emission;0;0;0;1;-;-;Particles radiate inwards.
+emission_radiate;Radiate;Emission;1;0;0;1;-;-;Particles radiate outwards.
+emission_gravitate;Gravitate;Emission;1;0;0;1;-;-;Particles radiate inwards.
 physical_barrier;Barrier;Physical;1;1;0;5;-;-;Drains/slows intersecting magic based on density.
 physical_collision;Collision;Physical;1;2;0;1;-;-;Energy depletes on collision.
-physical_weight;Weight;Physical;1;1;1;1;-;-;Push any colliding enemies (apply knockback based on Speed)
-physical_energy;Charge;Physical;2;3;0;10;-;-;Increase starting energy by 2 per level. Energy depletes at a rate of 1 per second.
+physical_weight;Weight;Physical;1;1;1;1;-;-;Push any colliding enemies (apply knockback based on Speed).
+physical_energy;Charge;Physical;1;3;0;10;-;-;Increase starting energy by 2 per level. Energy depletes at a rate of 1 per second.
 effects_absorb;Absorb;Effects;1;1;1;3;-;-;Drain a numerical value on the target(s) to fill the caster’s.
 effects_decrease;Drain;Effects;1;1;1;3;-;-;Reduce a numerical value on the target(s).
 effects_increase;Fill;Effects;1;1;1;3;-;-;Increase a numerical value on the target(s).

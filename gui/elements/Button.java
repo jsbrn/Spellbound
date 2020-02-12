@@ -8,8 +8,8 @@ import org.newdawn.slick.Graphics;
 public abstract class Button extends GUIElement {
 
     private int[] dims;
-    private Color color, highlightColor;
-    private boolean toggled, showBackground;
+    private Color color, highlightColor, disabledColor;
+    private boolean toggled, showBackground, disabled;
 
     public Button(String text, int w, int h, String icon, boolean showBackground) {
         if (text != null)
@@ -18,6 +18,7 @@ public abstract class Button extends GUIElement {
         this.dims = new int[]{w, h};
         this.color = new Color(170, 115, 65);
         this.highlightColor = new Color(105, 196, 235);
+        this.disabledColor = new Color(100, 100, 100);
         if (icon != null)
             this.addChild(new IconLabel(icon), 0, 0, GUIAnchor.CENTER);
     }
@@ -42,12 +43,14 @@ public abstract class Button extends GUIElement {
 
     @Override
     public final boolean onMousePressed(int ogx, int ogy, int button) {
-        if (mouseIntersects()) {
+        if (mouseIntersects() && !disabled) {
             onClick(button);
             return true;
         }
         return false;
     }
+
+    public void setEnabled(boolean e) { this.disabled = !e; }
 
     public boolean isToggled() { return toggled; }
     public void setToggled(boolean t) { toggled = t; }
@@ -70,7 +73,7 @@ public abstract class Button extends GUIElement {
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
         if (!showBackground) return;
-        Color c = mouseHovering || toggled ? highlightColor : color;
+        Color c = disabled ? disabledColor : (mouseHovering || toggled ? highlightColor : color);
         Color darker = c.darker(), lighter = c.brighter();
         for (int i = 0; i < dims[0]; i++) {
             for (int j = 0; j < dims[1]; j++) {

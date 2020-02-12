@@ -58,6 +58,11 @@ public class Journal extends Modal {
     }
 
     @Override
+    public void onShow() {
+        refresh();
+    }
+
+    @Override
     public boolean onKeyUp(int key) {
         refresh();
         return false;

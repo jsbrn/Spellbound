@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import world.World;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
+import world.entities.magic.techniques.Techniques;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class Spell {
         return name;
     }
 
-    public void addTechnique(String technique) { this.techniques.add(technique); }
+    public void addTechnique(String technique) { if (technique != null) this.techniques.add(technique); }
     public void removeTechnique(String technique) { this.techniques.remove(technique); }
     public boolean hasTechnique(String techniqueName) { return techniques.contains(techniqueName); }
 
@@ -70,9 +71,18 @@ public class Spell {
         return null;
     }
 
+    public boolean isEmpty() { return techniques.isEmpty(); }
+
     public int getCrystalCost() {
         int cost = 0;
-        for (String technique: techniques) cost += Techniques.getCrystalCost(0);
+        for (String technique: techniques) cost += Techniques.getCrystalCost(technique);
+        return cost;
+    }
+
+    public int getManaCost() {
+        int cost = 0;
+        for (String technique: techniques) cost += Techniques.getManaCost(technique);
+        return cost;
     }
 
 }

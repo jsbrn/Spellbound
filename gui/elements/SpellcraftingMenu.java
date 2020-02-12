@@ -1,7 +1,6 @@
 package gui.elements;
 
 import gui.GUIAnchor;
-import gui.GUIElement;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.magic.Spell;
@@ -22,6 +21,7 @@ public class SpellcraftingMenu extends Modal {
     private Canvas canvas;
 
     private TextLabel crystalCost, dyesCost, manaCost;
+    private Button createButton;
 
     private Spell spell;
 
@@ -33,13 +33,31 @@ public class SpellcraftingMenu extends Modal {
         this.spell = new Spell();
 
         canvas = new Canvas(16, 16, 4);
-        nameField = new TextBox(64, 8);
+        nameField = new TextBox(64, 8) {
+            @Override
+            public boolean onKeyUp(int key) {
+                refreshRequirements();
+                return super.onKeyUp(key);
+            }
+        };
         crystalCost = new TextLabel("0 Crystals", 4, Color.cyan, true);
         dyesCost = new TextLabel("0 Dyes", 4, Color.red, true);
         manaCost = new TextLabel("0 Mana", 4, Color.pink.darker(0.1f), true);
         categoryLabel = new TextLabel("...", 4, Color.gray, false);
         techniqueName = new TextLabel("-", 5, Color.black, false);
         techniqueDescription = new TextLabel("", 4, 100, 4, Color.gray, false);
+        createButton = new Button("Create!", 24, 8, null, true) {
+            @Override
+            public boolean onClick(int button) {
+                spell.setColor(canvas.getColor());
+                spell.setPixels(canvas.getGrid());
+                spell.setName(nameField.getText());
+                target.getSpellbook().addSpell(spell);
+                target.addCrystals(-spell.getCrystalCost());
+                getGUI().popModal();
+                return true;
+            }
+        };
 
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
         addChild(canvas, 8, 26, GUIAnchor.TOP_LEFT);
@@ -54,23 +72,14 @@ public class SpellcraftingMenu extends Modal {
                 getGUI().popModal(); return true;
             }
         }, 12, -6, GUIAnchor.BOTTOM_LEFT);
-        addChild(new Button("Create!", 24, 8, null, true) {
-            @Override
-            public boolean onClick(int button) {
-                spell.setColor(canvas.getColor());
-                spell.setPixels(canvas.getGrid());
-                spell.setName(nameField.getText());
-                target.getSpellbook().addSpell(spell);
-                getGUI().popModal();
-                return true;
-            }
-        }, 40, -6, GUIAnchor.BOTTOM_LEFT);
+
+        addChild(createButton, 40, -6, GUIAnchor.BOTTOM_LEFT);
 
         addChild(new Button(null, 8, 8, "icons/arrow_left.png", true) {
             @Override
             public boolean onClick(int button) {
                 currentCategory = (int)MiscMath.clamp(currentCategory-1, 0, categories.size()-1);
-                refreshButtons();
+                refreshTechniquesPanel();
                 return true;
             }
         }, -21, 16, GUIAnchor.TOP_RIGHT);
@@ -78,7 +87,7 @@ public class SpellcraftingMenu extends Modal {
             @Override
             public boolean onClick(int button) {
                 currentCategory = (int)MiscMath.clamp(currentCategory+1, 0, categories.size()-1);
-                refreshButtons();
+                refreshTechniquesPanel();
                 return true;
             }
         }, -9, 16, GUIAnchor.TOP_RIGHT);
@@ -87,12 +96,12 @@ public class SpellcraftingMenu extends Modal {
         addChild(techniqueDescription, 85, 100, GUIAnchor.TOP_LEFT);
     }
 
-    private void refreshButtons() {
+    private void refreshTechniquesPanel() {
         categories = Techniques.getAllCategories();
         categoryLabel.setText(categories.get(currentCategory));
         String[] techniques = Techniques.getAll();
         for (int i = buttons.size() - 1; i > -1; i--) { removeChild(buttons.get(i)); buttons.remove(i); }
-        int reali = 0;
+        int p = 0;
         for (int i = 0; i < techniques.length; i++) {
             String technique = techniques[i];
             System.out.println(technique);
@@ -109,6 +118,7 @@ public class SpellcraftingMenu extends Modal {
                             spell.addTechnique(technique);
                             setToggled(true);
                         }
+                        refreshRequirements();
                         return true;
                     }
 
@@ -122,15 +132,27 @@ public class SpellcraftingMenu extends Modal {
                 };
                 buttons.add(chooseButton);
                 chooseButton.setToggled(spell.hasTechnique(technique));
-                addChild(chooseButton, ((reali % 5) * 18), 19 + 8 + ((reali / 5) * 19), GUIAnchor.TOP_MIDDLE);
-                reali++;
+                addChild(chooseButton, ((p % 5) * 18), 19 + 8 + ((p / 5) * 19), GUIAnchor.TOP_MIDDLE);
+                p++;
             }
         }
     }
 
+    private void refreshRequirements() {
+        this.crystalCost.setText(target.getCrystalCount()+"/"+spell.getCrystalCost()+" Crystals");
+        this.dyesCost.setText(target.getDyeCount()+"/0 Dyes");
+        this.manaCost.setText((int)target.getMana()+"/"+spell.getManaCost()+" Mana");
+        this.createButton.setEnabled(
+                target.getCrystalCount() >= spell.getCrystalCost()
+                && !nameField.getText().trim().isEmpty()
+                && !spell.isEmpty());
+    }
+
     @Override
     public boolean onMouseMoved(int ogx, int ogy) {
-        return false;
+        techniqueName.setText("");
+        techniqueDescription.setText("");
+        return true;
     }
 
     @Override
@@ -145,12 +167,10 @@ public class SpellcraftingMenu extends Modal {
     }
 
     private void refresh() {
+        refreshRequirements();
         this.nameField.setText(spell.getName());
         this.canvas.reset();
-        refreshButtons();
-        this.crystalCost.setText(target.getCrystalCount()+"/0 Crystals");
-        this.dyesCost.setText(target.getDyeCount()+"/0 Dyes");
-        this.manaCost.setText("0 Mana");
+        refreshTechniquesPanel();
     }
 
 }

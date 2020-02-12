@@ -29,6 +29,8 @@ public class HumanoidEntity extends Entity {
         this.setMana(Integer.MAX_VALUE);
         this.setMaxStamina(10);
 
+        this.addCrystals((int)MiscMath.random(10, 25));
+
         this.spellbook = new Spellbook(this);
 
         this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true, Color.red));

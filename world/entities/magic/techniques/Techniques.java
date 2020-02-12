@@ -20,6 +20,7 @@ public class Techniques {
     public static String getCategory(String id) { return reader().get("Category", id); }
 
     public static int getManaCost(String id) { return reader().getInteger("ManaCost", id); }
+    public static int getCrystalCost(String id) { return reader().getInteger("CrystalCost", id); }
 
     public static String[] getAll() {
         String[] ids = new String[reader().getRowCount() - 1];
