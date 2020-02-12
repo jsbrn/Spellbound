@@ -15,6 +15,7 @@ public class Techniques {
     public static String getName(String id) {
         return reader().get("Name", id);
     }
+    public static String getDescription(String id) { return reader().get("Description", id); }
 
     public static String getCategory(String id) { return reader().get("Category", id); }
 
@@ -24,7 +25,6 @@ public class Techniques {
         String[] ids = new String[reader().getRowCount() - 1];
         for (int i = 1; i < reader().getRowCount(); i++) {
             ids[i-1] = reader().get(0, i);
-            System.out.println(ids[i-1]);
         }
         return ids;
     }

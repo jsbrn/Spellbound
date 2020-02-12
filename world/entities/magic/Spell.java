@@ -70,4 +70,9 @@ public class Spell {
         return null;
     }
 
+    public int getCrystalCost() {
+        int cost = 0;
+        for (String technique: techniques) cost += Techniques.getCrystalCost(0);
+    }
+
 }

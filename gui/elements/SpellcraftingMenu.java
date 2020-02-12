@@ -2,6 +2,7 @@ package gui.elements;
 
 import gui.GUIAnchor;
 import gui.GUIElement;
+import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.magic.Spell;
 import world.entities.magic.techniques.Techniques;
@@ -14,6 +15,8 @@ public class SpellcraftingMenu extends Modal {
     private HumanoidEntity target;
     private ArrayList<String> categories;
     private int currentCategory;
+    private TextLabel categoryLabel;
+    private TextLabel techniqueName, techniqueDescription;
     private ArrayList<Button> buttons;
     private TextBox nameField;
     private Canvas canvas;
@@ -34,6 +37,9 @@ public class SpellcraftingMenu extends Modal {
         crystalCost = new TextLabel("0 Crystals", 4, Color.cyan, true);
         dyesCost = new TextLabel("0 Dyes", 4, Color.red, true);
         manaCost = new TextLabel("0 Mana", 4, Color.pink.darker(0.1f), true);
+        categoryLabel = new TextLabel("...", 4, Color.gray, false);
+        techniqueName = new TextLabel("-", 5, Color.black, false);
+        techniqueDescription = new TextLabel("", 4, 100, 4, Color.gray, false);
 
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
         addChild(canvas, 8, 26, GUIAnchor.TOP_LEFT);
@@ -59,12 +65,34 @@ public class SpellcraftingMenu extends Modal {
                 return true;
             }
         }, 40, -6, GUIAnchor.BOTTOM_LEFT);
+
+        addChild(new Button(null, 8, 8, "icons/arrow_left.png", true) {
+            @Override
+            public boolean onClick(int button) {
+                currentCategory = (int)MiscMath.clamp(currentCategory-1, 0, categories.size()-1);
+                refreshButtons();
+                return true;
+            }
+        }, -21, 16, GUIAnchor.TOP_RIGHT);
+        addChild(new Button(null, 8, 8, "icons/arrow_right.png", true) {
+            @Override
+            public boolean onClick(int button) {
+                currentCategory = (int)MiscMath.clamp(currentCategory+1, 0, categories.size()-1);
+                refreshButtons();
+                return true;
+            }
+        }, -9, 16, GUIAnchor.TOP_RIGHT);
+        addChild(categoryLabel, 84, 16, GUIAnchor.TOP_LEFT);
+        addChild(techniqueName, 84, -32, GUIAnchor.BOTTOM_LEFT);
+        addChild(techniqueDescription, 85, 100, GUIAnchor.TOP_LEFT);
     }
 
     private void refreshButtons() {
         categories = Techniques.getAllCategories();
+        categoryLabel.setText(categories.get(currentCategory));
         String[] techniques = Techniques.getAll();
-        for (int i = 0; i < buttons.size(); i++) { removeChild(buttons.get(i)); buttons.remove(i); }
+        for (int i = buttons.size() - 1; i > -1; i--) { removeChild(buttons.get(i)); buttons.remove(i); }
+        int reali = 0;
         for (int i = 0; i < techniques.length; i++) {
             String technique = techniques[i];
             System.out.println(technique);
@@ -83,10 +111,19 @@ public class SpellcraftingMenu extends Modal {
                         }
                         return true;
                     }
+
+                    @Override
+                    public boolean onMouseMoved(int ogx, int ogy) {
+                        if (!mouseIntersects()) return false;
+                        techniqueName.setText(Techniques.getName(technique));
+                        techniqueDescription.setText(Techniques.getDescription(technique));
+                        return true;
+                    }
                 };
                 buttons.add(chooseButton);
                 chooseButton.setToggled(spell.hasTechnique(technique));
-                addChild(chooseButton, ((i % 5) * 18), 19 + ((i / 5) * 19), GUIAnchor.TOP_MIDDLE);
+                addChild(chooseButton, ((reali % 5) * 18), 19 + 8 + ((reali / 5) * 19), GUIAnchor.TOP_MIDDLE);
+                reali++;
             }
         }
     }
