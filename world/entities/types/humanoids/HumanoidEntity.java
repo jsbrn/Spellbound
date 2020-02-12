@@ -7,7 +7,6 @@ import world.entities.animations.Animation;
 import world.entities.magic.Spell;
 import world.entities.magic.Spellbook;
 import world.entities.magic.techniques.Technique;
-import world.entities.magic.techniques.TechniqueName;
 
 public class HumanoidEntity extends Entity {
 

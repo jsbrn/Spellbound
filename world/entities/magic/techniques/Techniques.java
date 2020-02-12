@@ -2,18 +2,40 @@ package world.entities.magic.techniques;
 
 import assets.CSVReader;
 
+import java.util.ArrayList;
+
 public class Techniques {
 
     private static CSVReader reader;
-
-    public static void load() {
-        reader = new CSVReader("definitions/techniques.csv", ';');
+    private static CSVReader reader() {
+        if (reader == null) reader = new CSVReader("definitions/techniques.csv", ';');
+        return reader;
     }
 
     public static String getName(String id) {
-        return reader.get("Name", id);
+        return reader().get("Name", id);
     }
 
-    public static int getManaCost(String id) { return reader.getInteger("ManaCost", id); }
+    public static String getCategory(String id) { return reader().get("Category", id); }
+
+    public static int getManaCost(String id) { return reader().getInteger("ManaCost", id); }
+
+    public static String[] getAll() {
+        String[] ids = new String[reader().getRowCount() - 1];
+        for (int i = 1; i < reader().getRowCount(); i++) {
+            ids[i-1] = reader().get(0, i);
+            System.out.println(ids[i-1]);
+        }
+        return ids;
+    }
+
+    public static ArrayList<String> getAllCategories() {
+        ArrayList<String> cats = new ArrayList<>();
+        for (int i = 1; i < reader().getRowCount(); i++) {
+            String cat = reader().get(2, i);
+            if (!cats.contains(cat)) cats.add(cat);
+        }
+        return cats;
+    }
 
 }

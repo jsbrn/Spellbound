@@ -3,8 +3,6 @@ package world.entities.types.humanoids.npcs;
 import org.newdawn.slick.Color;
 import world.World;
 import world.entities.magic.Spell;
-import world.entities.magic.Spellbook;
-import world.entities.magic.techniques.TechniqueName;
 import world.entities.states.PatrolState;
 import world.entities.types.humanoids.HumanoidEntity;
 
@@ -23,8 +21,8 @@ public class Bandit extends HumanoidEntity {
         getAnimationLayer("head").setColor(new Color(SKIN_COLORS[rng.nextInt(SKIN_COLORS.length)]));
 
         Spell testSpell = new Spell();
-        testSpell.addTechnique(TechniqueName.PROPEL);
-        testSpell.addTechnique(TechniqueName.RADIATE);
+        testSpell.addTechnique("movement_directional");
+        testSpell.addTechnique("emission_radiate");
         this.getSpellbook().addSpell(testSpell);
 
     }

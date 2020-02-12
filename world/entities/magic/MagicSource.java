@@ -13,12 +13,11 @@ public class MagicSource {
 
     private Entity caster;
     private ArrayList<Technique> techniques;
+    private ArrayList<Entity> targets;
     private ParticleSource body;
     private double[] castCoordinates, moveTarget;
     private double moveSpeed, rotateSpeed, targetDirection;
     private MagicSource next;
-
-    private Color color;
 
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
         this.castCoordinates = new double[]{x, y};
@@ -44,7 +43,7 @@ public class MagicSource {
             unitVector[1] * MiscMath.getConstant(moveSpeed, 1)
         );
 
-        double rdx = rotateSpeed; //Math.min(rotateSpeed, Math.abs(targetDirection - body.getDirection()));
+        double rdx = rotateSpeed;
         body.addDirection(MiscMath.getConstant(targetDirection > body.getDirection() ? rdx : -rdx, 1));
         body.update();
     }

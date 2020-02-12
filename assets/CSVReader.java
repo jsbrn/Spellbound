@@ -25,10 +25,17 @@ public class CSVReader {
         }
     }
 
+    public int getRowCount() { return rowIndices.size(); }
+    public int getColumnCount() { return columnHeaders.size(); }
+
+    public String get(int column, int row) {
+        return contents[row][column];
+    }
+
     public String get(String header, String index) {
         int headerIndex = columnHeaders.indexOf(header);
         int rowIndex = rowIndices.indexOf(index);
-        return contents[rowIndex][headerIndex];
+        return get(headerIndex, rowIndex);
     }
 
     public double getDouble(String header, String index) {

@@ -4,7 +4,7 @@ import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
 import world.particles.EmissionMode;
 
-public class PointTechnique extends Technique {
+public class ArcNarrowTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource source) {

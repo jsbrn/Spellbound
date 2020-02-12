@@ -1,14 +1,14 @@
 package world.entities.magic;
 
+import world.entities.magic.techniques.Techniques;
 import world.entities.types.humanoids.HumanoidEntity;
-import world.entities.magic.techniques.TechniqueName;
 
 import java.util.ArrayList;
 
 public class Spellbook {
 
     private ArrayList<Spell> spells;
-    private ArrayList<TechniqueName> discovered_techniques;
+    private ArrayList<String> discovered_techniques;
     private int selected;
     private HumanoidEntity parent;
 
@@ -30,9 +30,9 @@ public class Spellbook {
     public ArrayList<Spell> getSpells() { return spells; }
 
     public int getTechniqueCount() { return discovered_techniques.size(); }
-    public void discoverTechnique(TechniqueName technique) { this.discovered_techniques.add(technique); }
-    public void discoverAllTechniques() { for (TechniqueName t: TechniqueName.values()) discoverTechnique(t); }
-    public boolean hasTechnique(TechniqueName technique) { return this.discovered_techniques.contains(technique); }
+    public void discoverTechnique(String technique) { this.discovered_techniques.add(technique); }
+    public void discoverAllTechniques() { for (String t: Techniques.getAll()) discoverTechnique(t); }
+    public boolean hasTechnique(String technique) { return technique != null && this.discovered_techniques.contains(technique); }
 
     public void setParent(HumanoidEntity parent) { this.parent = parent; }
     public HumanoidEntity getParent() { return parent; }

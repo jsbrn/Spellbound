@@ -4,7 +4,7 @@ target_mouse;Guide;Target Selector;5;10;0;1;-;-;Target the active mouse location
 target_radius;Shotgun;Target Selector;5;2;0;1;-;-;Target all enemies within a radius.
 target_nearest;Target;Target Selector;1;1;0;1;-;;Target enemy closest to mouse location.
 target_marked;???;Target Selector;3;1;0;1;-;-;Target all previously marked enemies.
-move_directional;Propel;Movement;1;1;0;1;-;-;Move indefinitely towards initial target direction
+move_directional;Propel;Movement;1;1;1;1;-;-;Move indefinitely towards initial target direction
 move_follow;Follow;Movement;0;1;0;1;-;-;Follow the target.
 rotate_follow;Track;Rotation;0;1;0;1;-;-;Look towards the target.
 rotate_spin;Spin;Rotation;0;1;0;1;-;-;Spin clockwise.
@@ -17,7 +17,6 @@ radius_expand;Expand;Radius;1;2;1;5;-;-;Increase min and max radius over time by
 radius_shrink;Shrink;Radius;1;2;0;5;-;-;Decrease min and max radius over time by 1 tile per level per second.
 emission_radiate;Radiate;Emission;0;0;0;1;-;-;Particles radiate outwards.
 emission_gravitate;Gravitate;Emission;0;0;0;1;-;-;Particles radiate inwards.
-emission_scatter;Scatter;Emission;0;0;0;1;-;-;Particles emit scattered with no velocity.
 physical_barrier;Barrier;Physical;1;1;0;5;-;-;Drains/slows intersecting magic based on density.
 physical_collision;Collision;Physical;1;2;0;1;-;-;Energy depletes on collision.
 physical_weight;Weight;Physical;1;1;1;1;-;-;Push any colliding enemies (apply knockback based on Speed)

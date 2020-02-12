@@ -4,18 +4,16 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import world.Region;
 import world.World;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
-import world.entities.magic.techniques.TechniqueName;
 
 import java.util.ArrayList;
 
 public class Spell {
 
     private String name;
-    private ArrayList<TechniqueName> techniques;
+    private ArrayList<String> techniques;
 
     private Image icon;
     private boolean[][] pixels;
@@ -35,13 +33,13 @@ public class Spell {
         return name;
     }
 
-    public void addTechnique(TechniqueName technique) { this.techniques.add(technique); }
-    public void removeTechnique(TechniqueName technique) { this.techniques.remove(technique); }
-    public boolean hasTechnique(TechniqueName techniqueName) { return techniques.contains(techniqueName); }
+    public void addTechnique(String technique) { this.techniques.add(technique); }
+    public void removeTechnique(String technique) { this.techniques.remove(technique); }
+    public boolean hasTechnique(String techniqueName) { return techniques.contains(techniqueName); }
 
     private ArrayList<Technique> loadTechniques() {
         ArrayList<Technique> loaded = new ArrayList<>();
-        for (TechniqueName techniqueName: techniques) loaded.add(Technique.create(techniqueName));
+        for (String techniqueName: techniques) loaded.add(Technique.createFrom(techniqueName));
         return loaded;
     }
 

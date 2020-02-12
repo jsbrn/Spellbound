@@ -1,13 +1,13 @@
 package world.entities.magic.techniques;
 
 import world.entities.magic.MagicSource;
-import world.entities.magic.techniques.arc.PointTechnique;
+import world.entities.magic.techniques.arc.ArcNarrowTechnique;
 import world.entities.magic.techniques.emission.GravitateTechnique;
 import world.entities.magic.techniques.emission.RadiateTechnique;
 import world.entities.magic.techniques.emission.ScatterTechnique;
-import world.entities.magic.techniques.movement.HoverTechnique;
+import world.entities.magic.techniques.movement.FollowTechnique;
 import world.entities.magic.techniques.movement.PropelTechnique;
-import world.entities.magic.techniques.rotation.AimTechnique;
+import world.entities.magic.techniques.rotation.LookAtTechnique;
 import world.entities.magic.techniques.rotation.CounterSpinTechnique;
 import world.entities.magic.techniques.rotation.SpinTechnique;
 
@@ -22,17 +22,17 @@ public abstract class Technique {
     public abstract void applyTo(MagicSource cast);
     public abstract void update(MagicSource cast);
 
-    public static Technique create(TechniqueName name) {
-        if (name == TechniqueName.PROPEL) return new PropelTechnique();
-        if (name == TechniqueName.HOVER) return new HoverTechnique();
-        if (name == TechniqueName.SPIN) return new SpinTechnique();
-        if (name == TechniqueName.COUNTER_SPIN) return new CounterSpinTechnique();
-        if (name == TechniqueName.AIM) return new AimTechnique();
-        if (name == TechniqueName.GRAVITATE) return new GravitateTechnique();
-        if (name == TechniqueName.RADIATE) return new RadiateTechnique();
-        if (name == TechniqueName.SCATTER) return new ScatterTechnique();
-        if (name == TechniqueName.POINT) return new PointTechnique();
-        return null;
+    public static Technique createFrom(String name) {
+        switch(name) {
+            case "movement_directional": return new PropelTechnique();
+            case "rotate_spin": return new CounterSpinTechnique();
+            case "rotate_follow": return new LookAtTechnique();
+            case "move_follow": return new FollowTechnique();
+            case "emission_gravitate": return new GravitateTechnique();
+            case "emission_radiate": return new RadiateTechnique();
+            case "arc_narrow": return new ArcNarrowTechnique();
+            default: return null;
+        }
     }
 
 }

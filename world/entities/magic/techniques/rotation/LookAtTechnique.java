@@ -6,7 +6,7 @@ import org.newdawn.slick.Game;
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
 
-public class AimTechnique extends Technique {
+public class LookAtTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource source) {

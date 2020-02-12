@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class ParticleSource {
 
-    public static final int UPDATES_PER_SECOND = 8;
-
     private double[] coordinates;
     private double direction, minRadius, maxRadius, fov, particleVelocity;
     private int ratePerSecond, particlesRemaining;
@@ -39,7 +37,7 @@ public class ParticleSource {
         this.ratePerSecond = 300;
         this.fov = 360;
         this.particleVelocity = 0.5f;
-        this.emissionMode = EmissionMode.RADIATE;
+        this.emissionMode = EmissionMode.SCATTER;
         this.colors = new Color[]{Color.white, Color.gray, Color.lightGray};
         this.particles = new ArrayList<>();
     }
