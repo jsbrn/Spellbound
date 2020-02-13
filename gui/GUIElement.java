@@ -88,23 +88,21 @@ public abstract class GUIElement {
     }
 
     public final boolean handleMousePressed(int ogx, int ogy, int button) {
+        if (!isActive()) return false;
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
             if (e.handleMousePressed(ogx, ogy, button)) return true;
         }
-        if (isActive()) {
-            return onMousePressed(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1], button);
-        } else { return false; }
+        return onMousePressed(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1], button);
     }
 
     public final boolean handleMouseRelease(int ogx, int ogy, int button) {
+        if (!isActive()) return false;
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
             if (e.handleMouseRelease(ogx, ogy, button)) return true;
         }
-        if (isActive()) {
-            return onMouseRelease(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1], button);
-        } else { return false; }
+        return onMouseRelease(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1], button);
     }
 
     public final boolean handleKeyUp(int key) {
@@ -130,7 +128,7 @@ public abstract class GUIElement {
     public abstract boolean onKeyUp(int key);
 
     public final GUIElement addChild(GUIElement element, int ogx, int ogy, GUIAnchor anchor) {
-        children.add(element);
+        if (!children.contains(element)) children.add(element);
         element.setParent(this);
         element.setOffset(ogx, ogy);
         element.setAnchor(anchor);

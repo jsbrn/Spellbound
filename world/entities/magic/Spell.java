@@ -92,6 +92,21 @@ public class Spell {
 
     public boolean isEmpty() { return techniques.isEmpty(); }
 
+    public ArrayList<String> getConflicts(String technique) {
+        ArrayList<String> conflicts = new ArrayList<>();
+        for (String t: techniques) {
+            if (!t.equals(technique) && t.matches(Techniques.getConflictsWith(technique)))
+                conflicts.add(t);
+        }
+        return conflicts;
+    }
+
+    public float getVolatility() {
+        float conflicting = 0;
+        for (String technique: techniques) conflicting += getConflicts(technique).isEmpty() ? 0 : 1;
+        return conflicting / (float)techniques.size();
+    }
+
     public int getCrystalCost() {
         int cost = 0;
         for (String technique: techniques) cost += Techniques.getCrystalCost(technique) * getLevel(technique);
