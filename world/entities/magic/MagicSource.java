@@ -61,6 +61,10 @@ public class MagicSource {
         moveTarget[1] = y;
     }
 
+    public void setEntityTargets(ArrayList<Entity> entities) {
+        targets = entities;
+    }
+
     public double getRotationSpeed() { return rotateSpeed; }
     public double getTargetDirection() { return targetDirection; }
 

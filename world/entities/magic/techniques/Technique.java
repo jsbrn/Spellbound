@@ -24,7 +24,7 @@ public abstract class Technique {
 
     public static Technique createFrom(String name) {
         switch(name) {
-            case "movement_directional": return new PropelTechnique();
+            case "move_directional": return new PropelTechnique();
             case "rotate_spin": return new CounterSpinTechnique();
             case "rotate_follow": return new LookAtTechnique();
             case "move_follow": return new FollowTechnique();

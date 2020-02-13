@@ -4,8 +4,9 @@ target_mouse;Guide;Target Selectors;5;10;2;1;target\_\w+;-;Target the active mou
 target_radius;Shotgun;Target Selectors;3;5;0;1;target\_\w+;-;Target all enemies within a radius.
 target_nearest;Target;Target Selectors;2;3;0;1;target\_\w+;-;Target enemy closest to mouse location.
 target_marked;Recall;Target Selectors;5;5;0;1;target\_\w+;-;Target all previously marked enemies.
-move_directional;Propel;Movement;0;1;1;1;move\_\w+;-;Move indefinitely towards initial target direction.
+move_directional;Propel;Movement;0;1;1;1;move\_\w+|target_guide;-;Move indefinitely towards initial target direction.
 move_follow;Follow;Movement;1;1;0;1;move\_\w+;-;Follow the target.
+move_bounce;Bounce;Movement;2;4;2;1;move\_\w+;-;Bounce between targets.
 rotate_follow;Track;Rotation;1;1;0;1;rotate\_\w+;-;Look towards the target.
 rotate_spin;Spin;Rotation;1;1;0;1;rotate\_\w+;-;Spin clockwise.
 rotate_counterspin;Counterspin;Rotation;1;1;0;1;rotate\_\w+;-;Spin counterclockwise.
