@@ -21,7 +21,7 @@ public class SpellcraftingMenu extends Modal {
     private Canvas canvas;
 
     private TextLabel crystalCost, dyesCost, manaCost;
-    private Button createButton;
+    private Button createButton, leftButton, rightButton;
 
     private Spell spell;
 
@@ -77,22 +77,26 @@ public class SpellcraftingMenu extends Modal {
 
         addChild(createButton, 40, -6, GUIAnchor.BOTTOM_LEFT);
 
-        addChild(new Button(null, 8, 8, "icons/arrow_left.png", true) {
+        leftButton = new Button(null, 8, 8, "icons/arrow_left.png", true) {
             @Override
             public boolean onClick(int button) {
                 currentCategory = (int)MiscMath.clamp(currentCategory-1, 0, categories.size()-1);
                 refreshTechniquesPanel();
                 return true;
             }
-        }, -21, 16, GUIAnchor.TOP_RIGHT);
-        addChild(new Button(null, 8, 8, "icons/arrow_right.png", true) {
+        };
+
+        rightButton = new Button(null, 8, 8, "icons/arrow_right.png", true) {
             @Override
             public boolean onClick(int button) {
                 currentCategory = (int)MiscMath.clamp(currentCategory+1, 0, categories.size()-1);
                 refreshTechniquesPanel();
                 return true;
             }
-        }, -9, 16, GUIAnchor.TOP_RIGHT);
+        };
+
+        addChild(leftButton, -21, 16, GUIAnchor.TOP_RIGHT);
+        addChild(rightButton, -9, 16, GUIAnchor.TOP_RIGHT);
         addChild(categoryLabel, 84, 16, GUIAnchor.TOP_LEFT);
         addChild(techniqueName, 84, -32, GUIAnchor.BOTTOM_LEFT);
         addChild(techniqueDescription, 85, 100, GUIAnchor.TOP_LEFT);
@@ -149,6 +153,8 @@ public class SpellcraftingMenu extends Modal {
     private void refreshTechniquesPanel() {
         categories = Techniques.getAllCategories();
         categoryLabel.setText(categories.get(currentCategory));
+        leftButton.setEnabled(currentCategory > 0);
+        rightButton.setEnabled(currentCategory < categories.size() - 1);
         String[] techniques = Techniques.getAll();
         int p = 0;
         for (int i = 0; i < techniques.length; i++) {
