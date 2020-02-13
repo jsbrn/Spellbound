@@ -10,11 +10,13 @@ import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Spell {
 
     private String name;
     private ArrayList<String> techniques;
+    private HashMap<String, Integer> levels;
 
     private Image icon;
     private boolean[][] pixels;
@@ -23,6 +25,7 @@ public class Spell {
     public Spell() {
         this.name = "Unnamed Spell";
         this.techniques = new ArrayList<>();
+        this.levels = new HashMap<>();
         this.color = Color.white;
         this.pixels = new boolean[1][1];
     }
@@ -53,6 +56,19 @@ public class Spell {
         World.getRegion().addMagicSource(cast);
     }
 
+    public void addLevel(String technique) {
+        levels.put(technique, getLevel(technique) + 1);
+    }
+
+    public void resetLevel(String technique) {
+        levels.put(technique, 1);
+    }
+
+    public int getLevel(String technique) {
+        if (levels.get(technique) == null) return 1;
+        return levels.get(technique);
+    }
+
     public void setColor(Color c) { this.color = c; }
     public void setPixels(boolean[][] grid) { this.pixels = grid; }
 
@@ -78,13 +94,13 @@ public class Spell {
 
     public int getCrystalCost() {
         int cost = 0;
-        for (String technique: techniques) cost += Techniques.getCrystalCost(technique);
+        for (String technique: techniques) cost += Techniques.getCrystalCost(technique) * getLevel(technique);
         return cost;
     }
 
     public int getManaCost() {
         int cost = 0;
-        for (String technique: techniques) cost += Techniques.getManaCost(technique);
+        for (String technique: techniques) cost += Techniques.getManaCost(technique) * getLevel(technique);
         return cost;
     }
 

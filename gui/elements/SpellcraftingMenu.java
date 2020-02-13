@@ -59,6 +59,8 @@ public class SpellcraftingMenu extends Modal {
             }
         };
 
+        createTechniqueButtons();
+
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
         addChild(canvas, 8, 26, GUIAnchor.TOP_LEFT);
         addChild(crystalCost, 8, -32, GUIAnchor.BOTTOM_LEFT);
@@ -96,43 +98,67 @@ public class SpellcraftingMenu extends Modal {
         addChild(techniqueDescription, 85, 100, GUIAnchor.TOP_LEFT);
     }
 
+    private void createTechniqueButtons() {
+        String[] techniques = Techniques.getAll();
+        for (int i = 0; i < techniques.length; i++) {
+            String technique = techniques[i];
+            System.out.println(technique);
+            Button chooseButton = new Button(null, 16, 16, "icons/techniques/" + technique.toLowerCase() + ".png", true) {
+                private TextLabel levelLabel = new TextLabel("", 4, Color.white, true);
+                @Override
+                public boolean onClick(int button) {
+                    if (spell.hasTechnique(technique)) {
+                        spell.addLevel(technique);
+                        if (Techniques.getMaxLevel(technique) < spell.getLevel(technique)) {
+                            spell.resetLevel(technique);
+                            spell.removeTechnique(technique);
+                            removeChild(levelLabel);
+                        }
+                    } else {
+                        spell.addTechnique(technique);
+                        addChild(levelLabel, -1, -1, GUIAnchor.BOTTOM_RIGHT);
+                    }
+                    levelLabel.setText(Techniques.getMaxLevel(technique) > 1 ? spell.getLevel(technique)+"" : "");
+                    setToggled(spell.hasTechnique(technique));
+                    refreshRequirements();
+                    return true;
+                }
+
+                @Override
+                public void onShow() {
+                    super.onShow();
+                    levelLabel.setText(Techniques.getMaxLevel(technique) > 1 ? spell.getLevel(technique)+"" : "");
+                    if (!spell.hasTechnique(technique)) removeChild(levelLabel);
+                }
+
+                @Override
+                public boolean onMouseMoved(int ogx, int ogy) {
+                    if (!mouseIntersects()) return false;
+                    techniqueName.setText(Techniques.getName(technique));
+                    techniqueDescription.setText(Techniques.getDescription(technique));
+                    return true;
+                }
+            };
+            buttons.add(chooseButton);
+            chooseButton.setToggled(spell.hasTechnique(technique));
+            addChild(chooseButton, 0, 0, GUIAnchor.TOP_MIDDLE);
+            chooseButton.hide();
+        }
+    }
+
     private void refreshTechniquesPanel() {
         categories = Techniques.getAllCategories();
         categoryLabel.setText(categories.get(currentCategory));
         String[] techniques = Techniques.getAll();
-        for (int i = buttons.size() - 1; i > -1; i--) { removeChild(buttons.get(i)); buttons.remove(i); }
         int p = 0;
         for (int i = 0; i < techniques.length; i++) {
             String technique = techniques[i];
-            System.out.println(technique);
-            if (target.getSpellbook().hasTechnique(techniques[i])
-                    && Techniques.getCategory(technique).equals(categories.get(currentCategory))) {
-                System.out.println("Target has "+techniques[i]);
-                Button chooseButton = new Button(null, 16, 16, "icons/techniques/" + technique.toLowerCase() + ".png", true) {
-                    @Override
-                    public boolean onClick(int button) {
-                        if (spell.hasTechnique(technique)) {
-                            spell.removeTechnique(technique);
-                            setToggled(false);
-                        } else {
-                            spell.addTechnique(technique);
-                            setToggled(true);
-                        }
-                        refreshRequirements();
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onMouseMoved(int ogx, int ogy) {
-                        if (!mouseIntersects()) return false;
-                        techniqueName.setText(Techniques.getName(technique));
-                        techniqueDescription.setText(Techniques.getDescription(technique));
-                        return true;
-                    }
-                };
-                buttons.add(chooseButton);
-                chooseButton.setToggled(spell.hasTechnique(technique));
-                addChild(chooseButton, ((p % 5) * 18), 19 + 8 + ((p / 5) * 19), GUIAnchor.TOP_MIDDLE);
+            Button b = buttons.get(i);
+            b.hide();
+            if (Techniques.getCategory(technique).equals(categories.get(currentCategory))) {
+                b.show();
+                b.setToggled(spell.hasTechnique(technique));
+                b.setOffset(((p % 5) * 18), 19 + 8 + ((p / 5) * 19));
                 p++;
             }
         }

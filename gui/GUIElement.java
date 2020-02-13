@@ -54,7 +54,7 @@ public abstract class GUIElement {
     public final void setGUI(GUI parent) { this.gui = parent; }
     public final GUI getGUI() { return parent != null ? parent.getGUI() : gui; }
 
-    public boolean isActive() { return parent != null ? parent.isActive() : !inactive; }
+    public boolean isActive() { return !inactive; }
     public void show() {
         if (inactive) onShow();
         inactive = false;
@@ -110,8 +110,7 @@ public abstract class GUIElement {
     public final boolean handleKeyUp(int key) {
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
-            if (e.isActive())
-                if (e.handleKeyUp(key)) return true;
+            if (e.handleKeyUp(key)) return true;
         }
         return isActive() && onKeyUp(key);
     }
@@ -119,8 +118,7 @@ public abstract class GUIElement {
     public final boolean handleKeyDown(int key) {
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
-            if (e.isActive())
-                if (e.handleKeyDown(key)) return true;
+            if (e.handleKeyDown(key)) return true;
         }
         return isActive() && onKeyDown(key);
     }
@@ -143,7 +141,10 @@ public abstract class GUIElement {
         children.remove(element);
     }
 
+    public final void removeAllChildren() { children.clear(); }
+
     public final void draw(Graphics g) {
+        if (!isActive()) return;
         drawUnder(g);
         try {
             int[] dimensions = getDimensions();

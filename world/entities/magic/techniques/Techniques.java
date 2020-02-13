@@ -22,6 +22,8 @@ public class Techniques {
     public static int getManaCost(String id) { return reader().getInteger("ManaCost", id); }
     public static int getCrystalCost(String id) { return reader().getInteger("CrystalCost", id); }
 
+    public static int getMaxLevel(String id) { return reader().getInteger("MaxLevel", id); }
+
     public static String[] getAll() {
         String[] ids = new String[reader().getRowCount() - 1];
         for (int i = 1; i < reader().getRowCount(); i++) {
