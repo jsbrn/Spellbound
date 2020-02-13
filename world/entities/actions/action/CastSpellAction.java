@@ -1,5 +1,6 @@
 package world.entities.actions.action;
 
+import world.entities.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.entities.actions.Action;
 
@@ -16,10 +17,11 @@ public class CastSpellAction extends Action {
     public void onStart() {
         if (getParent() instanceof HumanoidEntity) {
             HumanoidEntity parent = ((HumanoidEntity)getParent());
-            if (parent.getSpellbook().getSelectedSpell() == null) return;
-            if (parent.getMana() >= 1) {
+            Spell selected = parent.getSpellbook().getSelectedSpell();
+            if (selected == null) return;
+            if (parent.getMana() >= selected.getManaCost()) {
                 parent.getSpellbook().cast(wx, wy);
-                parent.addMana(-1);
+                parent.addMana(-selected.getManaCost());
             }
         }
     }

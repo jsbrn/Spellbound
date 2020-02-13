@@ -34,13 +34,16 @@ public class Spell {
         return name;
     }
 
-    public void addTechnique(String technique) { if (technique != null) this.techniques.add(technique); }
+    public void addTechnique(String technique) { this.techniques.add(technique); }
     public void removeTechnique(String technique) { this.techniques.remove(technique); }
     public boolean hasTechnique(String techniqueName) { return techniques.contains(techniqueName); }
 
     private ArrayList<Technique> loadTechniques() {
         ArrayList<Technique> loaded = new ArrayList<>();
-        for (String techniqueName: techniques) loaded.add(Technique.createFrom(techniqueName));
+        for (String techniqueName: techniques) {
+            Technique instance = Technique.createFrom(techniqueName);
+            if (instance != null) loaded.add(instance);
+        }
         return loaded;
     }
 
