@@ -29,6 +29,12 @@ public class Player extends HumanoidEntity {
 
         this.setMaxMana(10);
         this.setMana(10);
+
+        this.addCrystals(1000);
+        this.setMaxMana(1000);
+        this.setMana(1000);
+        this.addCrystals((int)MiscMath.random(250, 750));
+
         this.getMover().setIndependent(true);
         this.getMover().setLookTowardsTarget(false);
 

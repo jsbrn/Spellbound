@@ -43,11 +43,15 @@ public class Spell {
 
     private ArrayList<Technique> loadTechniques() {
         ArrayList<Technique> loaded = new ArrayList<>();
-        for (String techniqueName: techniques) {
-            Technique instance = Technique.createFrom(techniqueName);
-            if (instance != null) {
-                loaded.add(instance);
-                instance.setLevel(getLevel(techniqueName));
+        String[] allTechs = Techniques.getAll();
+        //maintain proper order of techniques
+        for (String techniqueName: allTechs) {
+            if (hasTechnique(techniqueName)) {
+                Technique instance = Technique.createFrom(techniqueName);
+                if (instance != null) {
+                    loaded.add(instance);
+                    instance.setLevel(getLevel(techniqueName));
+                }
             }
         }
         return loaded;

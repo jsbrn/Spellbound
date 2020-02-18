@@ -10,6 +10,7 @@ import world.entities.magic.techniques.movement.PropelTechnique;
 import world.entities.magic.techniques.rotation.LookAtTechnique;
 import world.entities.magic.techniques.rotation.CounterSpinTechnique;
 import world.entities.magic.techniques.rotation.SpinTechnique;
+import world.entities.magic.techniques.targeting.GuideTechnique;
 
 
 public abstract class Technique {
@@ -24,6 +25,7 @@ public abstract class Technique {
 
     public static Technique createFrom(String name) {
         switch(name) {
+            case "target_mouse": return new GuideTechnique();
             case "move_directional": return new PropelTechnique();
             case "rotate_spin": return new CounterSpinTechnique();
             case "rotate_follow": return new LookAtTechnique();

@@ -12,9 +12,7 @@ public class FollowTechnique extends Technique {
 
     @Override
     public void update(MagicSource source) {
-        source.setMoveTarget(
-                source.getCaster().getLocation().getCoordinates()[0] + 0.5,
-                source.getCaster().getLocation().getCoordinates()[1]);
+        source.setMoveTarget(source.getTarget()[0], source.getTarget()[1]);
     }
 
 }
