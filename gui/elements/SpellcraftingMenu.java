@@ -4,6 +4,7 @@ import gui.GUIAnchor;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.magic.Spell;
+import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;
 import world.entities.types.humanoids.HumanoidEntity;
 
@@ -167,6 +168,7 @@ public class SpellcraftingMenu extends Modal {
             };
             buttons.add(chooseButton);
             chooseButton.setToggled(spell.hasTechnique(technique));
+            chooseButton.setEnabled(Technique.createFrom(technique) != null);
             addChild(chooseButton, 0, 0, GUIAnchor.TOP_MIDDLE);
             chooseButton.hide();
         }

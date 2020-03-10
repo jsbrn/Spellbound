@@ -58,7 +58,6 @@ public class Spell {
     }
 
     public void cast(double wx, double wy, Entity caster) {
-        //maybe add something to catch the spell-level techniques (like spawn patterns and chaining)
         MagicSource cast = new MagicSource(wx, wy, caster, loadTechniques(), color);
         World.getRegion().addMagicSource(cast);
     }

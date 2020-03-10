@@ -7,7 +7,7 @@ import world.entities.magic.techniques.Technique;
 
 import java.util.ArrayList;
 
-public class ShotgunTechnique extends Technique {
+public class TargetRadiusTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource cast) {

@@ -162,6 +162,30 @@ public class ParticleSource {
 
     public void setEmissionMode(EmissionMode emissionMode) { this.emissionMode = emissionMode; }
 
+    public void setMinRadius(double minRadius) {
+        this.minRadius = minRadius;
+    }
+
+    public void setMaxRadius(double maxRadius) {
+        this.maxRadius = maxRadius;
+    }
+
+    public double getMinRadius() {
+        return minRadius;
+    }
+
+    public double getMaxRadius() {
+        return maxRadius;
+    }
+
+    public void addMinRadius(double amount) {
+        this.minRadius = MiscMath.clamp(minRadius + amount, 0, Integer.MAX_VALUE);
+    }
+
+    public void addMaxRadius(double amount) {
+        this.maxRadius = MiscMath.clamp(maxRadius + amount, 0, Integer.MAX_VALUE);
+    }
+
     public String debug() {
         double[] pos = MiscMath.getRotatedOffset(
                 0,

@@ -1,14 +1,13 @@
-package world.entities.magic.techniques.arc;
+package world.entities.magic.techniques.radius;
 
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
-import world.particles.EmissionMode;
 
-public class ArcNarrowTechnique extends Technique {
+public class RadiusMinTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource source) {
-        source.getBody().setArcLength(45);
+        source.getBody().setMinRadius(getLevel());
     }
 
     @Override

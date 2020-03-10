@@ -1,39 +1,40 @@
-ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;ConflictsWith;Requires;Description;Implemented
-origin_caster;Caster;Origin;0;0;0;1;origin_\w+;-;Originate at caster’s location.;FALSE
-origin_mouse;Remote;Origin;0;0;0;1;origin_\w+;-;Originate at mouse location.;FALSE
-target_mouse;Guide;Target Selectors;5;10;2;1;target\_\w+;-;Target the active mouse location.;TRUE
-target_radius;Shotgun;Target Selectors;3;5;0;5;target\_\w+;-;Target all enemies within a radius.;TRUE
-target_nearest;Target;Target Selectors;2;3;0;1;target\_\w+;-;Target nearest enemy.;FALSE
-target_marked;Recall;Target Selectors;5;5;0;1;target\_\w+;-;Target all previously marked enemies.;FALSE
-move_directional;Propel;Movement;0;1;1;1;(move\_\w+)|(target_radius);-;Move indefinitely towards initial target direction.;FALSE
-move_follow;Follow;Movement;1;1;0;1;(move\_\w+)|(target_radius);-;Follow the target.;TRUE
-move_bounce;Bounce;Movement;2;4;2;1;move\_\w+;-;Bounce between targets.;FALSE
-rotate_follow;Track;Rotation;1;1;0;1;rotate\_\w+;-;Look towards the target.;FALSE
-rotate_spin;Spin;Rotation;1;1;0;1;rotate\_\w+;-;Spin clockwise.;FALSE
-rotate_counterspin;Counterspin;Rotation;1;1;0;1;rotate\_\w+;-;Spin counterclockwise.;FALSE
-arc_narrow;Narrow;Arc Length;1;1;0;1;-;-;Narrow arc to 90 degrees.;FALSE
-arc_spread;Spread;Arc Length;1;1;0;3;-;arc_narrow;Increase arc by 30 degrees per level.;FALSE
-radius_min;Reach;Radius;1;1;0;5;-;-;Increase min radius by 1 tile per level.;FALSE
-radius_max;Depth;Radius;1;1;0;5;-;-;Increase max radius by 1 tile per level.;FALSE
-radius_expand;Expand;Radius;1;2;1;5;radius_shrink;-;Increase min and max radius over time by 1 tile per level per second.;FALSE
-radius_shrink;Shrink;Radius;1;2;0;5;radius_expand;-;Decrease min and max radius over time by 1 tile per level per second.;FALSE
-emission_radiate;Radiate;Emission;1;0;0;1;emission_gravitate;-;Particles radiate outwards.;TRUE
-emission_gravitate;Gravitate;Emission;1;0;0;1;emission_radiate;-;Particles radiate inwards.;TRUE
-physical_barrier;Barrier;Physical;1;1;0;5;-;-;Drains/slows intersecting magic based on density.;FALSE
-physical_collision;Collision;Physical;1;2;0;1;-;-;Energy depletes on collision.;FALSE
-physical_weight;Weight;Physical;1;1;1;1;-;-;Push any colliding enemies (apply knockback based on Speed).;FALSE
-physical_energy;Charge;Physical;1;3;0;10;-;-;Increase starting energy by 2 per level. Energy depletes at a rate of 1 per second.;FALSE
-effects_absorb;Absorb;Effects;1;1;1;3;-;trait_\w+;Drain a numerical value on the target(s) to fill the caster’s.;FALSE
-effects_decrease;Drain;Effects;1;1;1;3;effects_\w+rease;trait_\w+;Reduce a numerical value on the target(s).;FALSE
-effects_increase;Fill;Effects;1;1;1;3;effects_\w+rease;trait_\w+;Increase a numerical value on the target(s).;FALSE
-effects_randomize;Randomize;Effects;1;1;1;5;effects_\w+rease;trait_\w+;Randomize the selected value on the target (relative to original value);FALSE
-effects_bind;Mark;Effects;1;1;1;1;-;trait_\w+;Mark the selected targets for the next spell cast.;FALSE
-modifier_torque;Torque;Modifiers;1;1;0;5;-;-;Increase rotation speed per level.;FALSE
-modifier_speed;Speed;Modifiers;1;1;1;5;-;-;Increase movement speed per level.;FALSE
-modifier_density;Density;Modifiers;1;1;1;5;-;-;Increase magic absorption;FALSE
-trait_hp;Health;Trait Selectors;1;1;0;1;trait_maxhp;effects_\w+;Select target’s HP.;FALSE
-trait_mana;Mana;Trait Selectors;1;1;0;1;trait_maxmana;effects_\w+;Select target’s mana.;FALSE
-trait_maxhp;Max Health;Trait Selectors;1;1;0;1;trait_hp;effects_\w+;Select target’s Max Health.;FALSE
-trait_maxmana;Max Mana;Trait Selectors;1;1;0;1;trait_mana;effects_\w+;Select target’s Max Mana.;FALSE
-trait_x;Latitude;Trait Selectors;1;1;0;1;-;effects_\w+;Select target’s X coordinate.;FALSE
-trait_y;Longtitude;Trait Selectors;1;1;0;1;-;effects_\w+;Select target’s Y coordinate.;FALSE
+ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;ConflictsWith;Requires;Description
+origin_caster;Caster;Origin;0;0;0;1;origin_\w+;-;Originate at caster’s location.
+origin_mouse;Remote;Origin;0;0;0;1;origin_\w+;-;Originate at mouse location.
+target_caster;Self;Target Selectors;1;1;1;1;target\_\w+;-;Target the caster.
+target_point;Aim;Target Selectors;1;1;1;1;target\_\w+;-;Target the mouse location.
+target_radius;Shotgun;Target Selectors;3;5;0;5;target\_\w+;-;Target all enemies within a radius.
+target_nearest;Target;Target Selectors;2;3;0;1;target\_\w+;-;Target nearest enemy.
+target_marked;Recall;Target Selectors;5;5;0;1;target\_\w+;-;Target all previously marked enemies.
+move_directional;Propel;Movement;0;1;1;1;(move\_\w+)|(target_radius);-;Move indefinitely towards initial target’s direction.
+move_follow;Follow;Movement;1;1;0;1;(move\_\w+)|(target_radius);-;Follow the target.
+move_bounce;Bounce;Movement;2;4;2;1;move\_\w+;-;Bounce between targets.
+rotate_follow;Track;Rotation;1;1;0;1;rotate\_\w+;-;Look towards the target.
+rotate_spin;Spin;Rotation;1;1;0;1;rotate\_\w+;-;Spin clockwise at a fixed rate.
+rotate_counterspin;Counterspin;Rotation;1;1;0;1;rotate\_\w+;-;Spin counterclockwise at a fixed rate
+arc_narrow;Narrow;Arc Length;1;1;0;1;-;-;Narrow arc to 45 degrees.
+arc_spread;Spread;Arc Length;1;1;0;3;-;arc_narrow;Increase arc by 30 degrees per level.
+radius_min;Reach;Radius;1;1;0;5;-;-;Increase min radius by 1 tile per level.
+radius_max;Depth;Radius;1;1;0;5;-;-;Increase max radius by 1 tile per level.
+radius_expand;Expand;Radius;1;2;1;5;radius_shrink;-;Increase size over time by 1 tile per level per second.
+radius_shrink;Shrink;Radius;1;2;0;5;radius_expand;-;Decrease size over time by 1 tile per level per second.
+emission_radiate;Radiate;Emission;1;0;0;1;emission_gravitate;-;Particles radiate outwards.
+emission_gravitate;Gravitate;Emission;1;0;0;1;emission_radiate;-;Particles radiate inwards.
+physical_barrier;Barrier;Physical;1;1;0;5;-;-;Drain the energy of intersecting magic based on density.
+physical_collision;Collision;Physical;1;2;0;1;-;-;Spell energy depletes after any collision.
+physical_weight;Weight;Physical;1;1;1;1;-;-;Push any colliding enemies (apply knockback based on Speed).
+physical_energy;Charge;Physical;1;3;0;10;-;-;Increase starting energy by 2 per level. Energy depletes at a rate of 1 per second.
+effects_absorb;Absorb;Effects;1;1;1;3;-;trait_\w+;Drain a numerical value on the target(s) to fill the caster’s.
+effects_decrease;Drain;Effects;1;1;1;3;effects_\w+rease;trait_\w+;Reduce a numerical value on the target(s).
+effects_increase;Fill;Effects;1;1;1;3;effects_\w+rease;trait_\w+;Increase a numerical value on the target(s).
+effects_randomize;Randomize;Effects;1;1;1;5;effects_\w+rease;trait_\w+;Randomize the selected value on the target (relative to original value)
+effects_bind;Mark;Effects;1;1;1;1;-;trait_\w+;Mark the selected targets for the next spell cast.
+modifier_torque;Torque;Modifiers;1;1;0;5;-;-;Increase rotation speed per level.
+modifier_speed;Speed;Modifiers;1;1;1;5;-;-;Increase movement speed per level.
+modifier_density;Density;Modifiers;1;1;1;5;-;-;Increase magic absorption
+trait_hp;Health;Trait Selectors;1;1;0;1;trait_maxhp;effects_\w+;Select target’s HP.
+trait_mana;Mana;Trait Selectors;1;1;0;1;trait_maxmana;effects_\w+;Select target’s mana.
+trait_maxhp;Max Health;Trait Selectors;1;1;0;1;trait_hp;effects_\w+;Select target’s Max Health.
+trait_maxmana;Max Mana;Trait Selectors;1;1;0;1;trait_mana;effects_\w+;Select target’s Max Mana.
+trait_x;Latitude;Trait Selectors;1;1;0;1;-;effects_\w+;Select target’s X coordinate.
+trait_y;Longtitude;Trait Selectors;1;1;0;1;-;effects_\w+;Select target’s Y coordinate.

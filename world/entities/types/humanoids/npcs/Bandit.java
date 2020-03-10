@@ -21,9 +21,10 @@ public class Bandit extends HumanoidEntity {
         getAnimationLayer("head").setColor(new Color(SKIN_COLORS[rng.nextInt(SKIN_COLORS.length)]));
 
         Spell testSpell = new Spell();
-        testSpell.addTechnique("target_mouse");
+        testSpell.addTechnique("target_point");
         testSpell.addTechnique("move_directional");
         testSpell.addTechnique("emission_radiate");
+        testSpell.addTechnique("origin_caster");
         this.getSpellbook().addSpell(testSpell);
 
     }

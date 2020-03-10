@@ -22,8 +22,8 @@ public class MagicSource {
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
         this.castCoordinates = new double[]{x, y};
         this.targets = new ArrayList<>();
-        this.moveTarget = new double[]{caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5};
-        this.target = new double[]{moveTarget[0], moveTarget[1]};
+        this.moveTarget = new double[]{caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5f};
+        this.target = new double[]{caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5f};
         this.targetDirection = 0;
         this.moveSpeed = 5;
         this.rotateSpeed = 45;
