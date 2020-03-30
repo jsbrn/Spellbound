@@ -207,7 +207,7 @@ public class Region {
         for (int i = magic_sources.size() - 1; i >= 0; i--) {
             MagicSource magicSource = magic_sources.get(i);
             magicSource.update();
-            if (magicSource.getBody().isDepleted()) magic_sources.remove(i);
+            if (magicSource.getBody().isEmpty() && !magicSource.getBody().isSpawning()) magic_sources.remove(i);
         }
 
         int radius = 2;

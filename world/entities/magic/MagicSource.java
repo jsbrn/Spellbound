@@ -16,12 +16,13 @@ public class MagicSource {
     private ArrayList<Entity> targets;
     private ParticleSource body;
     private double[] castCoordinates, target, moveTarget;
-    private double moveSpeed, rotateSpeed, targetDirection;
+    private double moveSpeed, rotateSpeed, targetDirection, energy;
     private MagicSource next;
 
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
         this.castCoordinates = new double[]{x, y};
         this.targets = new ArrayList<>();
+        this.energy = 1;
         this.moveTarget = new double[]{caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5f};
         this.target = new double[]{caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5f};
         this.targetDirection = 0;
@@ -36,7 +37,7 @@ public class MagicSource {
     }
 
     public void update() {
-        for (Technique t: techniques) t.update(this);
+        if (energy > 0) for (Technique t: techniques) t.update(this);
         double[] unitVector = MiscMath.getUnitVector(
                 (float)(moveTarget[0] - body.getCoordinates()[0]),
                 (float)(moveTarget[1] - body.getCoordinates()[1]));
@@ -48,6 +49,10 @@ public class MagicSource {
         double rdx = rotateSpeed;
         body.addDirection(MiscMath.getConstant(targetDirection > body.getDirection() ? rdx : -rdx, 1));
         body.update();
+
+        energy = MiscMath.clamp(energy + MiscMath.getConstant(-1, 1), 0, Integer.MAX_VALUE);
+        if (energy <= 0) body.stop();
+
     }
 
     public void draw(float osx, float osy, float scale) {
@@ -59,6 +64,7 @@ public class MagicSource {
         moveTarget[1] = y;
     }
 
+    public double getEnergy() { return energy; }
     public Entity getCaster() { return caster; }
     public double[] getCastCoordinates() { return castCoordinates; }
     public void setTarget(double wx, double wy) { this.target[0] = wx; this.target[1] = wy; }

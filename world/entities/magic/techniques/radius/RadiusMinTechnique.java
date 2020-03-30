@@ -7,7 +7,7 @@ public class RadiusMinTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource source) {
-        source.getBody().setMinRadius(getLevel());
+        source.getBody().setMinRadius(getLevel() / 2f);
     }
 
     @Override

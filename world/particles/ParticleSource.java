@@ -19,9 +19,10 @@ public class ParticleSource {
 
     private double[] coordinates;
     private double direction, minRadius, maxRadius, fov, particleVelocity;
-    private int ratePerSecond, particlesRemaining;
+    private int ratePerSecond;
     private EmissionMode emissionMode;
     private Color[] colors;
+    private boolean allowParticleSpawning;
 
     private long lastParticleSpawn;
 
@@ -33,10 +34,10 @@ public class ParticleSource {
         this.direction = 0;
         this.minRadius = 0;
         this.maxRadius = 0.25f;
-        this.particlesRemaining = 500;
-        this.ratePerSecond = 300;
+        this.ratePerSecond = 3000;
+        this.allowParticleSpawning = true;
         this.fov = 360;
-        this.particleVelocity = 0.5f;
+        this.particleVelocity = 1;
         this.emissionMode = EmissionMode.SCATTER;
         this.colors = new Color[]{Color.white, Color.gray, Color.lightGray};
         this.particles = new ArrayList<>();
@@ -44,13 +45,11 @@ public class ParticleSource {
 
     public void update() {
 
-        if (particlesRemaining <= 0) return;
+        if (!allowParticleSpawning) return;
+        double amountToSpawn = ((World.getRegion().getCurrentTime() - lastParticleSpawn) / (1000f / ratePerSecond));
 
-        int amountToSpawn = (int)((World.getRegion().getCurrentTime() - lastParticleSpawn) / (1000 / ratePerSecond));
-
-        for (int i = 0; i < amountToSpawn; i++) {
+        for (int i = 0; i < (int)amountToSpawn; i++) {
             lastParticleSpawn = World.getRegion().getCurrentTime();
-            particlesRemaining--;
             double pdir = direction + MiscMath.random(-fov/2, fov/2);
             double[] p_off = MiscMath.getRotatedOffset(
                     0,
@@ -96,7 +95,6 @@ public class ParticleSource {
             Assets.PARTICLE.drawEmbedded(osx, osy, osx + scale, osy + scale, 0, 0, 1, 1, p.getColor());
 
         }
-
     }
 
     public void drawDebug(double ox, double oy, float scale, Graphics g) {
@@ -128,8 +126,6 @@ public class ParticleSource {
                 (float) mnosw);
 
     }
-
-    public boolean isDepleted() { return particlesRemaining <= 0 && particles.size() == 0; }
 
     public double getDirection() { return direction; }
 
@@ -185,6 +181,16 @@ public class ParticleSource {
     public void addMaxRadius(double amount) {
         this.maxRadius = MiscMath.clamp(maxRadius + amount, 0, Integer.MAX_VALUE);
     }
+
+    public void stop() {
+        allowParticleSpawning = false;
+    }
+
+    public boolean isSpawning() {
+        return allowParticleSpawning;
+    }
+
+    public boolean isEmpty() { return particles.isEmpty(); }
 
     public String debug() {
         double[] pos = MiscMath.getRotatedOffset(
