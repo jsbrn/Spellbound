@@ -27,6 +27,8 @@ public class Techniques {
     public static String getConflictsWith(String id) { return reader().get("ConflictsWith", id); }
     public static String getRequires(String id) { return reader().get("Requires", id); }
 
+    public static boolean getRequiresEnergy(String id) { return reader().getBoolean("RequiresEnergy", id); }
+
     public static String[] getAll() {
         String[] ids = new String[reader().getRowCount() - 1];
         for (int i = 1; i < reader().getRowCount(); i++) {

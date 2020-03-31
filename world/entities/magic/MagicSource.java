@@ -6,6 +6,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
+import world.entities.magic.techniques.Techniques;
 import world.particles.ParticleSource;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class MagicSource {
 
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
         this.castCoordinates = new double[]{x, y};
-        this.energy = 1;
+        this.energy = 0.5;
         this.moveSpeed = 3;
         this.torque = 1;
         this.caster = caster;
@@ -53,7 +54,7 @@ public class MagicSource {
 
         body.update();
 
-        if (energy > 0) for (Technique t: techniques) t.update(this);
+        for (Technique t: techniques) if (energy > 0 || !Techniques.getRequiresEnergy(t.getID())) t.update(this);
         energy = MiscMath.clamp(energy + MiscMath.getConstant(-1, 1), 0, Integer.MAX_VALUE);
         if (energy <= 0) body.stop();
 

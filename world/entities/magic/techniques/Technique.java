@@ -7,6 +7,7 @@ import world.entities.magic.techniques.emission.GravitateTechnique;
 import world.entities.magic.techniques.emission.RadiateTechnique;
 import world.entities.magic.techniques.modifiers.SpeedModifierTechnique;
 import world.entities.magic.techniques.modifiers.TorqueModifierTechnique;
+import world.entities.magic.techniques.movement.AuraTechnique;
 import world.entities.magic.techniques.movement.FollowTechnique;
 import world.entities.magic.techniques.movement.PropelTechnique;
 import world.entities.magic.techniques.radius.*;
@@ -18,36 +19,47 @@ public abstract class Technique {
 
     private int level = 1;
 
+    private String id;
+
     public int getLevel() { return level; }
+
+    public String getID() {
+        return id;
+    }
+
     public void setLevel(int new_level) { level = new_level; }
 
     public abstract void applyTo(MagicSource cast);
     public abstract void update(MagicSource cast);
 
     public static Technique createFrom(String name) {
+        Technique creation;
         switch(name) {
-            case "trigger_caster": return new CastTriggerTechnique();
-            case "movement_directional": return new PropelTechnique();
-            case "movement_follow": return new FollowTechnique();
-            case "rotation_directional": return new RotateDirectionalTechnique();
-            case "rotation_aim": return new AimTechnique();
-            case "rotation_spin": return new SpinTechnique();
-            case "rotation_counterspin": return new CounterSpinTechnique();
-            case "rotation_caster": return new RotateCasterTechnique();
-            case "rotation_target": return new TrackTechnique();
-            case "arc_narrow": return new ArcNarrowTechnique();
-            case "arc_spread": return new ArcSpreadTechnique();
-            case "radius_min": return new RadiusMinTechnique();
-            case "radius_max": return new RadiusMaxTechnique();
-            case "radius_reach": return new RadiusReachTechnique();
-            case "radius_expand": return new RadiusExpandTechnique();
-            case "radius_shrink": return new RadiusShrinkTechnique();
-            case "emission_gravitate": return new GravitateTechnique();
-            case "emission_radiate": return new RadiateTechnique();
-            case "modifier_torque": return new TorqueModifierTechnique();
-            case "modifier_speed": return new SpeedModifierTechnique();
-            default: return null;
+            case "trigger_caster": creation = new CastTriggerTechnique(); break;
+            case "movement_caster": creation = new AuraTechnique(); break;
+            case "movement_directional": creation = new PropelTechnique(); break;
+            case "movement_follow": creation = new FollowTechnique(); break;
+            case "rotation_directional": creation = new RotateDirectionalTechnique(); break;
+            case "rotation_aim": creation = new AimTechnique(); break;
+            case "rotation_spin": creation = new SpinTechnique(); break;
+            case "rotation_counterspin": creation = new CounterSpinTechnique(); break;
+            case "rotation_caster": creation = new RotateCasterTechnique(); break;
+            case "rotation_target": creation = new TrackTechnique(); break;
+            case "arc_narrow": creation = new ArcNarrowTechnique(); break;
+            case "arc_spread": creation = new ArcSpreadTechnique(); break;
+            case "radius_min": creation = new RadiusMinTechnique(); break;
+            case "radius_max": creation = new RadiusMaxTechnique(); break;
+            case "radius_reach": creation = new RadiusReachTechnique(); break;
+            case "radius_expand": creation = new RadiusExpandTechnique(); break;
+            case "radius_shrink": creation = new RadiusShrinkTechnique(); break;
+            case "emission_gravitate": creation = new GravitateTechnique(); break;
+            case "emission_radiate": creation = new RadiateTechnique(); break;
+            case "modifier_torque": creation = new TorqueModifierTechnique(); break;
+            case "modifier_speed": creation = new SpeedModifierTechnique(); break;
+            default: creation = null;
         }
+        if (creation != null) creation.id = name;
+        return creation;
     }
 
 }
