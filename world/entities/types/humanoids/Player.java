@@ -3,6 +3,7 @@ package world.entities.types.humanoids;
 import assets.definitions.Definitions;
 import gui.states.GameScreen;
 import misc.MiscMath;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.Chunk;
 import world.World;
@@ -10,6 +11,7 @@ import world.entities.actions.ActionGroup;
 import world.entities.actions.action.ActivateAction;
 import world.entities.actions.action.CastSpellAction;
 import world.entities.actions.action.ChangeAnimationAction;
+import world.entities.magic.Spell;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
@@ -34,6 +36,15 @@ public class Player extends HumanoidEntity {
         this.setMaxMana(1000);
         this.setMana(1000);
         this.addCrystals((int)MiscMath.random(250, 750));
+
+        Spell spell = new Spell();
+        spell.addTechnique("movement_caster");
+        spell.addTechnique("trigger_collision");
+        spell.addTechnique("effects_decrease");
+        spell.addTechnique("trait_hp");
+        spell.addLevel("effects_decrease");
+        spell.setColor(Color.red);
+        this.getSpellbook().addSpell(spell);
 
         this.getMover().setIndependent(true);
         this.getMover().setLookTowardsTarget(false);

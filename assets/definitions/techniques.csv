@@ -1,14 +1,9 @@
 ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;RequiresEnergy;ConflictsWith;Requires;Description
-trigger_impact;Impact;Triggers;1;1;1;1;TRUE;-;-;Apply effects on impact with an enemy.
-trigger_collision;Intersection;Triggers;1;1;1;1;TRUE;-;-;Apply continuous effects to enemies in range.
-trigger_damage;Draining;Triggers;1;1;1;1;TRUE;-;-;Apply continuous effects to enemies in range while spell is being drained.
-trigger_cast;Cast;Triggers;1;1;1;1;TRUE;-;-;Apply effects once on cast.
-trigger_depletion;Depletion;Triggers;1;1;1;1;TRUE;-;-;Apply effects once when spell dissipates.
 movement_caster;Aura;Movement;1;1;1;1;FALSE;-;-;Follow the caster.
 movement_follow;Follow;Movement;1;1;1;1;FALSE;-;-;Follow the target.
 movement_directional;Directional;Movement;1;1;1;1;FALSE;-;-;Propel towards the direction of the cast.
 movement_steering;Guided;Movement;1;1;1;1;TRUE;-;-;Steer the spell. Effectiveness improves with level.
-movement_point;Hover;Movement;1;1;1;1;FALSE;-;-;Move towards a single point and hover.
+movement_hover;Hover;Movement;1;1;1;1;FALSE;-;-;Move towards a single point and hover.
 rotation_directional;Forward;Rotation;1;1;1;1;TRUE;-;-;Look towards the direction of movement.
 rotation_spin;Spin;Rotation;1;1;1;1;TRUE;-;-;Rotate clockwise at a constant rate.
 rotation_counterspin;Counterspin;Rotation;1;1;1;1;TRUE;-;-;Rotate counterclockwise at a constant rate.
@@ -34,10 +29,14 @@ effects_absorb;Absorb;Effects;1;1;1;3;TRUE;-;trait_\w+;Drain a numerical value o
 effects_decrease;Drain;Effects;1;1;1;3;TRUE;effects_\w+rease;trait_\w+;Reduce a numerical value on the target(s).
 effects_increase;Fill;Effects;1;1;1;3;TRUE;effects_\w+rease;trait_\w+;Increase a numerical value on the target(s).
 effects_randomize;Randomize;Effects;1;1;1;5;TRUE;effects_\w+rease;trait_\w+;Randomize the selected value on the target (relative to original value)
-effects_bind;Mark;Effects;1;1;1;1;TRUE;-;trait_\w+;Mark the selected targets for the next spell cast.
 trait_hp;Health;Trait Selectors;1;1;0;1;TRUE;trait_maxhp;effects_\w+;Select target’s HP.
 trait_mana;Mana;Trait Selectors;1;1;0;1;TRUE;trait_maxmana;effects_\w+;Select target’s mana.
 trait_maxhp;Max Health;Trait Selectors;1;1;0;1;TRUE;trait_hp;effects_\w+;Select target’s Max Health.
 trait_maxmana;Max Mana;Trait Selectors;1;1;0;1;TRUE;trait_mana;effects_\w+;Select target’s Max Mana.
 trait_x;Latitude;Trait Selectors;1;1;0;1;TRUE;-;effects_\w+;Select target’s X coordinate.
 trait_y;Longtitude;Trait Selectors;1;1;0;1;TRUE;-;effects_\w+;Select target’s Y coordinate.
+trigger_cast;Cast;Triggers;1;1;1;1;TRUE;-;-;Apply effects once on cast.
+trigger_damage;Draining;Triggers;1;1;1;1;TRUE;-;-;Apply continuous effects to enemies in range while spell is being drained.
+trigger_depletion;Depletion;Triggers;1;1;1;1;TRUE;-;-;Apply effects once when spell dissipates.
+trigger_impact;Impact;Triggers;1;1;1;1;TRUE;-;-;Apply effects on impact with an enemy.
+trigger_collision;Intersection;Triggers;1;1;1;1;TRUE;-;-;Apply continuous effects to enemies in range.

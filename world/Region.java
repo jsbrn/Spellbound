@@ -14,6 +14,8 @@ import world.generators.region.RegionGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Region {
 
@@ -109,6 +111,19 @@ public class Region {
             if (intersects) subsection.add(e);
         }
         return subsection;
+    }
+
+    public List<Entity> getEntities(double wx, double wy, double radius) {
+        ArrayList<Entity> entities = getEntities(
+                (int)(wx - radius), (int)(wy - radius),
+                (int)(radius + 2), (int)(radius + 2));
+        return entities.stream().filter(e -> MiscMath.circlesIntersect(
+                e.getLocation().getCoordinates()[0],
+                e.getLocation().getCoordinates()[1],
+                0.5,
+                wx,
+                wy,
+                radius)).collect(Collectors.toList());
     }
 
     public int[] getEntityIndices(double min_location, double max_location) {

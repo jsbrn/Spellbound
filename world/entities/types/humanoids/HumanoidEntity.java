@@ -47,7 +47,7 @@ public class HumanoidEntity extends Entity {
     @Override
     public void update() {
         super.update();
-        addHP(MiscMath.getConstant(max_hp, 180));
+        addHP(MiscMath.getConstant(max_hp, 20));
         addMana(MiscMath.getConstant(max_mana, 10));
         addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }

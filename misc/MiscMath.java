@@ -40,20 +40,6 @@ public class MiscMath {
     }
 
     /**
-     * Performs the same function as MiscMath.getConstant, however, the second parameter specifies the
-     * number of from-game minutes that will pass before the amount to add is reached. Divides the second
-     * parameter by 1.6, because each from-game minute takes roughly 0.625 seconds.
-     *
-     * @param amount_to_add         The amount to add.
-     * @param per_ingame_minutes    The number of from-game minutes it should take to add.
-     * @return The amount to add per frame.
-     */
-    public static double get24HourConstant(double amount_to_add, double per_ingame_minutes) {
-        //divides the second parameter by 1.6 because each minute from game takes 1/1.6 seconds from real life
-        return MiscMath.getConstant(amount_to_add, per_ingame_minutes / 1.6);
-    }
-
-    /**
      * Calculates distance between two points. sqrt()
      *
      * @return The distance between (x1, y1) and (x2, y2).
@@ -102,6 +88,10 @@ public class MiscMath {
     public static boolean pointIntersectsRect(double x, double y,
                                               double rx, double ry, int rw, int rh) {
         return x >= rx && x < rx + rw && y >= ry && y < ry + rh;
+    }
+
+    public static boolean circlesIntersect(double x1, double y1, double r1, double x2, double y2, double r2) {
+        return distance(x1, y1, x2, y2) < r1 + r2;
     }
 
     /**

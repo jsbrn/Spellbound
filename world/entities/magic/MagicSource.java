@@ -7,11 +7,16 @@ import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;
+import world.entities.magic.techniques.effects.EffectTechnique;
+import world.events.EventDispatcher;
+import world.events.event.MagicDepletedEvent;
+import world.events.event.MagicImpactEvent;
 import world.particles.ParticleSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MagicSource {
@@ -23,7 +28,10 @@ public class MagicSource {
     private double moveSpeed, torque, energy;
     private MagicSource next;
 
+    private List<Entity> lastColliding;
+
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
+        this.lastColliding = new ArrayList<Entity>();
         this.castCoordinates = new double[]{x, y};
         this.energy = 0.5;
         this.moveSpeed = 3;
@@ -42,6 +50,15 @@ public class MagicSource {
     }
 
     public void update() {
+
+        //invoke collision events
+        List<Entity> colliding = getCollidingEntities();
+        colliding.stream().filter(e -> !lastColliding.contains(e)).forEach(e -> {
+            EventDispatcher.invoke(new MagicImpactEvent(this, e));
+        });
+        lastColliding = colliding;
+
+        //move and update particle body
         double[] unitVector = MiscMath.getUnitVector(
                 (float)(moveTarget[0] - body.getLocation().getCoordinates()[0]),
                 (float)(moveTarget[1] - body.getLocation().getCoordinates()[1]));
@@ -51,13 +68,25 @@ public class MagicSource {
         );
         if (body.getLocation().distanceTo(moveTarget[0], moveTarget[1]) < 0.1)
             body.getLocation().setCoordinates(moveTarget[0], moveTarget[1]);
-
         body.update();
 
+        //update techniques
         for (Technique t: techniques) if (energy > 0 || !Techniques.getRequiresEnergy(t.getID())) t.update(this);
-        energy = MiscMath.clamp(energy + MiscMath.getConstant(-1, 1), 0, Integer.MAX_VALUE);
-        if (energy <= 0) body.stop();
 
+        //handle energy depletion and events
+        double energyDelta = MiscMath.getConstant(-1, 1);
+        if (energy > 0 && energy + energyDelta <= 0) {
+            EventDispatcher.invoke(new MagicDepletedEvent(this));
+        }
+        energy = MiscMath.clamp(energy + energyDelta, 0, Integer.MAX_VALUE);
+        if (energy <= 0) {
+            body.stop();
+        }
+
+    }
+
+    public boolean hasTechnique(String id) {
+        return techniques.stream().anyMatch(t -> t.getID().equals(id));
     }
 
     public void draw(float osx, float osy, float scale) {
@@ -67,6 +96,31 @@ public class MagicSource {
     public void setMoveTarget(double x, double y) {
         moveTarget[0] = x;
         moveTarget[1] = y;
+    }
+
+    public void affectOnce() {
+        for (Technique t: techniques)
+            if (t instanceof EffectTechnique && (energy > 0 || !Techniques.getRequiresEnergy(t.getID())))
+                ((EffectTechnique) t).affectOnce(this);
+    }
+
+    public void affectContinuous() {
+        for (Technique t: techniques)
+            if (t instanceof EffectTechnique && (energy > 0 || !Techniques.getRequiresEnergy(t.getID())))
+                ((EffectTechnique) t).affectContinuous(this);
+    }
+
+    public List<Entity> getCollidingEntities() {
+        List<Entity> inner = body.getLocation().getRegion().getEntities(
+                body.getLocation().getCoordinates()[0],
+                body.getLocation().getCoordinates()[1],
+                body.getMinRadius()
+        ), outer = body.getLocation().getRegion().getEntities(
+                body.getLocation().getCoordinates()[0],
+                body.getLocation().getCoordinates()[1],
+                body.getMaxRadius()
+        );
+        return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());
     }
 
     public double getEnergy() { return energy; }

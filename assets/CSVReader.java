@@ -33,7 +33,6 @@ public class CSVReader {
     }
 
     public String get(String header, String index) {
-        System.out.println("Getting "+header+" of "+index);
         int headerIndex = columnHeaders.indexOf(header);
         int rowIndex = rowIndices.indexOf(index);
         return get(headerIndex, rowIndex);
