@@ -5,15 +5,16 @@ import world.entities.magic.techniques.Technique;
 import world.events.EventDispatcher;
 import world.events.EventListener;
 
-public class CasterTriggerTechnique extends Technique {
+public class CastTriggerTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource cast) {
-        cast.setTarget(cast.getCaster());
+
     }
 
     @Override
     public void update(MagicSource cast) {
 
     }
+
 }

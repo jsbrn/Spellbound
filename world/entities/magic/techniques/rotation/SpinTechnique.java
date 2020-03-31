@@ -13,7 +13,7 @@ public class SpinTechnique extends Technique {
 
     @Override
     public void update(MagicSource source) {
-        source.setTargetDirection(source.getTargetDirection() + MiscMath.getConstant(source.getRotationSpeed(), 1));
+        source.addDirection(MiscMath.getConstant(90 * source.getTorque(), 1));
     }
 
 }

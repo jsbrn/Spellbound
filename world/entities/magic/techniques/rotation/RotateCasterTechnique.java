@@ -1,10 +1,11 @@
 package world.entities.magic.techniques.rotation;
 
-import misc.MiscMath;
+import misc.Location;
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
 
-public class CounterSpinTechnique extends Technique {
+public class RotateCasterTechnique extends Technique {
+
 
     @Override
     public void applyTo(MagicSource source) {
@@ -13,7 +14,7 @@ public class CounterSpinTechnique extends Technique {
 
     @Override
     public void update(MagicSource source) {
-        source.addDirection(MiscMath.getConstant(-90 * source.getTorque(), 1));
+        source.setDirection(source.getBody().getLocation().angleBetween(source.getCaster().getLocation()));
     }
 
 }

@@ -22,7 +22,6 @@ public class PropelTechnique extends Technique {
 
         double angle = MiscMath.angleBetween(source.getBody().getLocation().getCoordinates()[0], source.getBody().getLocation().getCoordinates()[1], moveTarget[0], moveTarget[1]);
         source.setDirection(angle);
-        source.setTargetDirection(angle);
     }
 
     @Override
