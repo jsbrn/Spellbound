@@ -11,7 +11,7 @@ public class PropelTechnique extends Technique {
     public void applyTo(MagicSource source) {
 
         Entity caster = source.getCaster();
-        double[] castTarget = source.getTarget();
+        double[] castTarget = source.getCastCoordinates();
 
         double[] moveTarget = MiscMath.getUnitVector(
                 (float)castTarget[0] - (float)source.getBody().getCoordinates()[0],

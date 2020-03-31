@@ -8,6 +8,8 @@ import world.World;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;
+import world.events.EventDispatcher;
+import world.events.event.SpellCastEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +62,7 @@ public class Spell {
     public void cast(double wx, double wy, Entity caster) {
         MagicSource cast = new MagicSource(wx, wy, caster, loadTechniques(), color);
         World.getRegion().addMagicSource(cast);
+        EventDispatcher.invoke(new SpellCastEvent(this, cast));
     }
 
     public void addLevel(String technique) {
