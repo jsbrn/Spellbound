@@ -9,6 +9,11 @@ public class Location {
     private double[] coordinates;
     private int lookDirection;
 
+    public Location(Location location) {
+        this(location.region, location.coordinates[0], location.coordinates[1]);
+        this.lookDirection = location.lookDirection;
+    }
+
     public Location(Region region, double wx, double wy) {
         this(region, (int)(wx / Chunk.CHUNK_SIZE), (int)(wy / Chunk.CHUNK_SIZE), wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
     }
@@ -45,12 +50,14 @@ public class Location {
         this.coordinates[1] = wty;
     }
 
+    public void addCoordinates(double wtx, double wty) {
+        setCoordinates(coordinates[0] + wtx, coordinates[1] + wty);
+    }
+
     public int getLookDirection() { return lookDirection; }
     public void lookAt(Location l) { lookAt(l.coordinates[0], l.coordinates[1]); }
     public void lookAt(double tx, double ty) { setLookDirection((int)MiscMath.angleBetween(coordinates[0], coordinates[1], tx, ty)); }
     public void setLookDirection(int degrees) { this.lookDirection = degrees % 360; }
-
-    public Location copy() { return new Location(region, coordinates[0], coordinates[1]); }
 
     public String toString() {
         return region.getName()+"@["+coordinates[0]+", "+coordinates[1]+"] " +

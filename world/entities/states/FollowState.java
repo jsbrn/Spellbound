@@ -41,7 +41,7 @@ public class FollowState extends State {
         double min = canSeeLastPosition && canSeeTarget ? minimumDistance : 0;
 
         if (canSeeTarget || canHearTarget) {
-            lastSeen = following.getLocation().copy();
+            lastSeen = new Location(following.getLocation());
         } else {
             if (getParent().getActionQueue().isEmpty()
                     && getParent().getLocation().distanceTo(following.getLocation()) >= hearing) {

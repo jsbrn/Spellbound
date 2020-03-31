@@ -1,5 +1,6 @@
 package world.entities.magic;
 
+import misc.Location;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -29,16 +30,17 @@ public class MagicSource {
         this.techniques = techniques;
         this.body = new ParticleSource();
         this.body.setColor(color);
-        this.body.setCoordinates(caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5f);
+        this.body.setLocation(new Location(caster.getLocation()));
+        this.body.getLocation().addCoordinates(0, -0.5);
         for (Technique t: techniques) t.applyTo(this);
     }
 
     public void update() {
         if (energy > 0) for (Technique t: techniques) t.update(this);
         double[] unitVector = MiscMath.getUnitVector(
-                (float)(moveTarget[0] - body.getCoordinates()[0]),
-                (float)(moveTarget[1] - body.getCoordinates()[1]));
-        body.addCoordinates(
+                (float)(moveTarget[0] - body.getLocation().getCoordinates()[0]),
+                (float)(moveTarget[1] - body.getLocation().getCoordinates()[1]));
+        body.getLocation().addCoordinates(
             unitVector[0] * MiscMath.getConstant(moveSpeed, 1),
             unitVector[1] * MiscMath.getConstant(moveSpeed, 1)
         );

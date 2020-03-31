@@ -4,6 +4,7 @@ import assets.Assets;
 import assets.definitions.Definitions;
 import assets.definitions.TileDefinition;
 import gui.states.GameScreen;
+import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 public class ParticleSource {
 
-    private double[] coordinates;
+    private Location location;
     private double direction, minRadius, maxRadius, fov, particleVelocity;
     private int ratePerSecond;
     private EmissionMode emissionMode;
@@ -30,7 +31,6 @@ public class ParticleSource {
 
     public ParticleSource() {
         this.lastParticleSpawn = World.getRegion().getCurrentTime();
-        this.coordinates = new double[2];
         this.direction = 0;
         this.minRadius = 0;
         this.maxRadius = 0.25f;
@@ -60,7 +60,7 @@ public class ParticleSource {
                                 : MiscMath.random(minRadius, maxRadius))),
                     pdir);
             boolean fixed = Math.random() < 0.85;
-            double[] p_pos = fixed ? coordinates : new double[]{coordinates[0], coordinates[1]};
+            double[] p_pos = fixed ? location.getCoordinates() : new double[]{location.getCoordinates()[0], location.getCoordinates()[1]};
             particles.add(new Particle(
                     emissionMode != EmissionMode.SCATTER ? particleVelocity : 0,
                             pdir + (emissionMode == EmissionMode.GRAVITATE ? 180 : 0),
@@ -99,7 +99,7 @@ public class ParticleSource {
 
     public void drawDebug(double ox, double oy, float scale, Graphics g) {
 
-        float[] osc = Camera.getOnscreenCoordinates(ox + coordinates[0], oy + coordinates[1], scale);
+        float[] osc = Camera.getOnscreenCoordinates(ox + location.getCoordinates()[0], oy + location.getCoordinates()[1], scale);
 
         double mxosw = maxRadius * 2 * Chunk.TILE_SIZE * scale;
         double mnosw = minRadius * 2 * Chunk.TILE_SIZE * scale;
@@ -137,19 +137,12 @@ public class ParticleSource {
         this.direction = angle;
     }
 
-    public double[] getCoordinates() { return coordinates; }
+    public void setLocation(Location l) { this.location = l; }
 
-    public void setCoordinates(double x, double y) {
-        this.coordinates[0] = x;
-        this.coordinates[1] = y;
-    }
+    public Location getLocation() { return location; }
 
     public void setColor(Color base) {
         this.colors = new Color[]{base, base.darker(), base.brighter()};
-    }
-
-    public void addCoordinates(double dx, double dy) {
-        setCoordinates(coordinates[0] + dx, coordinates[1] + dy);
     }
 
     public void setArcLength(double degrees) { this.fov = degrees; }

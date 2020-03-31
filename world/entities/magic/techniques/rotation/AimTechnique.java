@@ -16,7 +16,7 @@ public class AimTechnique extends Technique {
     @Override
     public void update(MagicSource source) {
         double angle = MiscMath.angleBetween(GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY(),
-                source.getBody().getCoordinates()[0], source.getBody().getCoordinates()[1]);
+                source.getBody().getLocation().getCoordinates()[0], source.getBody().getLocation().getCoordinates()[1]);
         source.setTargetDirection(angle);
     }
 
