@@ -4,12 +4,15 @@ import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.arc.ArcNarrowTechnique;
 import world.entities.magic.techniques.arc.ArcSpreadTechnique;
 import world.entities.magic.techniques.effects.EffectDecreaseTechnique;
+import world.entities.magic.techniques.effects.EffectIncreaseTechnique;
 import world.entities.magic.techniques.effects.EffectRandomizeTechnique;
 import world.entities.magic.techniques.effects.TraitSelectorTechnique;
 import world.entities.magic.techniques.emission.GravitateTechnique;
 import world.entities.magic.techniques.emission.RadiateTechnique;
-import world.entities.magic.techniques.modifiers.SpeedModifierTechnique;
-import world.entities.magic.techniques.modifiers.TorqueModifierTechnique;
+import world.entities.magic.techniques.physical.CollisionTechnique;
+import world.entities.magic.techniques.physical.EnergyModifierTechnique;
+import world.entities.magic.techniques.physical.SpeedModifierTechnique;
+import world.entities.magic.techniques.physical.TorqueModifierTechnique;
 import world.entities.magic.techniques.movement.AuraTechnique;
 import world.entities.magic.techniques.movement.FollowTechnique;
 import world.entities.magic.techniques.movement.HoverTechnique;
@@ -18,8 +21,8 @@ import world.entities.magic.techniques.radius.*;
 import world.entities.magic.techniques.rotation.*;
 import world.entities.magic.techniques.triggers.CastTriggerTechnique;
 import world.entities.magic.techniques.triggers.DepletionTriggerTechnique;
+import world.entities.magic.techniques.triggers.ImpactTriggerTechnique;
 import world.entities.magic.techniques.triggers.IntersectionTriggerTechnique;
-
 
 public abstract class Technique {
 
@@ -44,6 +47,7 @@ public abstract class Technique {
             case "trigger_cast": creation = new CastTriggerTechnique(); break;
             case "trigger_depletion": creation = new DepletionTriggerTechnique(); break;
             case "trigger_collision": creation = new IntersectionTriggerTechnique(); break;
+            case "trigger_impact": creation = new ImpactTriggerTechnique(); break;
             case "movement_caster": creation = new AuraTechnique(); break;
             case "movement_directional": creation = new PropelTechnique(); break;
             case "movement_follow": creation = new FollowTechnique(); break;
@@ -63,9 +67,11 @@ public abstract class Technique {
             case "radius_shrink": creation = new RadiusShrinkTechnique(); break;
             case "emission_gravitate": creation = new GravitateTechnique(); break;
             case "emission_radiate": creation = new RadiateTechnique(); break;
+            case "physical_collision": creation = new CollisionTechnique(); break;
             case "physical_torque": creation = new TorqueModifierTechnique(); break;
+            case "physical_energy": creation = new EnergyModifierTechnique(); break;
             case "physical_speed": creation = new SpeedModifierTechnique(); break;
-            case "effects_increase": creation = new EffectDecreaseTechnique(); break;
+            case "effects_increase": creation = new EffectIncreaseTechnique(); break;
             case "effects_decrease": creation = new EffectDecreaseTechnique(); break;
             case "effects_randomize": creation = new EffectRandomizeTechnique(); break;
             case "trait_hp": creation = new TraitSelectorTechnique(); break;

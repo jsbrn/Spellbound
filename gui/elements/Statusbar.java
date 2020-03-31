@@ -65,7 +65,7 @@ public class Statusbar extends GUIElement {
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
 
-        healthLabel.setText((int)target.getHP()+"/"+(int)target.getMaxHP());
+        healthLabel.setText(target.getHP() < 1 ? "!!!" : (int)target.getHP()+"/"+(int)target.getMaxHP());
         manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxMana());
         staminaLabel.setText((int)target.getStamina()+"/"+(int)target.getMaxStamina());
 

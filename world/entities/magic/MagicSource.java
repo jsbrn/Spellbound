@@ -123,6 +123,7 @@ public class MagicSource {
         return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());
     }
 
+    public void setEnergy(double e) { energy = e; }
     public double getEnergy() { return energy; }
     public double getTorque() { return torque; }
     public void setTorque(double t) { torque = t; }

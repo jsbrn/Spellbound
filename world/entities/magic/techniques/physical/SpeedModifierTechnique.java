@@ -1,13 +1,13 @@
-package world.entities.magic.techniques.modifiers;
+package world.entities.magic.techniques.physical;
 
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
 
-public class TorqueModifierTechnique extends Technique {
+public class SpeedModifierTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource cast) {
-        cast.setTorque(getLevel());
+        cast.setMoveSpeed(getLevel() * 3);
     }
 
     @Override
