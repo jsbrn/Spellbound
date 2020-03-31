@@ -25,7 +25,6 @@ public class MagicSource {
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
         this.castCoordinates = new double[]{x, y};
         this.energy = 1;
-        this.moveTarget = new double[]{caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1] - 0.5f};
         this.moveSpeed = 3;
         this.torque = 1;
         this.caster = caster;
@@ -34,6 +33,8 @@ public class MagicSource {
         this.body.setColor(color);
         this.body.setLocation(new Location(caster.getLocation()));
         this.body.getLocation().addCoordinates(0, -0.5);
+        double[] offset = MiscMath.getRotatedOffset(0, -0.6, MiscMath.angleBetween(caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1], x, y));
+        this.moveTarget = new double[]{body.getLocation().getCoordinates()[0] + offset[0], body.getLocation().getCoordinates()[1] + offset[1]};
         List<Entity> found = caster.getLocation().getRegion().getEntities((int)x-1, (int)y-1, 3, 3).stream().filter(e -> !e.equals(caster)).collect(Collectors.toList());
         this.target = found.isEmpty() ? null : found.get(0);
         for (Technique t: techniques) t.applyTo(this);
@@ -47,6 +48,9 @@ public class MagicSource {
             unitVector[0] * MiscMath.getConstant(moveSpeed, 1),
             unitVector[1] * MiscMath.getConstant(moveSpeed, 1)
         );
+        if (body.getLocation().distanceTo(moveTarget[0], moveTarget[1]) < 0.1)
+            body.getLocation().setCoordinates(moveTarget[0], moveTarget[1]);
+
         body.update();
 
         if (energy > 0) for (Technique t: techniques) t.update(this);

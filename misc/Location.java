@@ -38,7 +38,11 @@ public class Location {
     public double getGlobalIndex() { return MiscMath.getIndex(coordinates[0], coordinates[1], region.getSize() * Chunk.CHUNK_SIZE); }
 
     public double distanceTo(Location location) {
-        return MiscMath.distance(coordinates[0], coordinates[1], location.coordinates[0], location.coordinates[1]);
+        return distanceTo(location.coordinates[0], location.coordinates[1]);
+    }
+
+    public double distanceTo(double wx, double wy) {
+        return MiscMath.distance(coordinates[0], coordinates[1], wx, wy);
     }
 
     public int angleBetween(Location location) {
