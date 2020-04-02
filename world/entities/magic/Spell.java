@@ -66,8 +66,9 @@ public class Spell {
     }
 
     public void addLevel(String technique) {
-        levels.put(technique, getLevel(technique) + 1);
+        setLevel(technique, getLevel(technique) + 1);
     }
+    public void setLevel(String technique, int l) { levels.put(technique, l); }
 
     public void resetLevel(String technique) {
         levels.put(technique, 1);

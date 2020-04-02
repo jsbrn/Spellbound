@@ -1,6 +1,5 @@
 package world.entities.magic.techniques.effects;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import world.entities.Entity;
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
@@ -13,7 +12,6 @@ public abstract class EffectTechnique extends Technique {
     public void affectOnce(MagicSource cast) {
         List<Entity> colliding = cast.getCollidingEntities();
         for (Entity e: colliding) {
-            System.out.println("Affecting "+e);
             if (e instanceof HumanoidEntity) affectOnce(cast, (HumanoidEntity)e);
         }
     }

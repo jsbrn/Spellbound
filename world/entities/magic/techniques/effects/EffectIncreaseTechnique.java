@@ -25,6 +25,6 @@ public class EffectIncreaseTechnique extends EffectTechnique {
 
     @Override
     public void affectContinuous(MagicSource cast, HumanoidEntity e) {
-        e.addHP(MiscMath.getConstant(-getLevel(), 1));
+        e.addHP(MiscMath.getConstant(getLevel(), 1));
     }
 }

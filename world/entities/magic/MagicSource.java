@@ -113,11 +113,11 @@ public class MagicSource {
     public List<Entity> getCollidingEntities() {
         List<Entity> inner = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
-                body.getLocation().getCoordinates()[1],
+                body.getLocation().getCoordinates()[1] + 0.5f,
                 body.getMinRadius()
         ), outer = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
-                body.getLocation().getCoordinates()[1],
+                body.getLocation().getCoordinates()[1] + 0.5f,
                 body.getMaxRadius()
         );
         return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());

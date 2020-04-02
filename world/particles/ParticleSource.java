@@ -34,7 +34,7 @@ public class ParticleSource {
         this.direction = 0;
         this.minRadius = 0;
         this.maxRadius = 0.25f;
-        this.ratePerSecond = 3000;
+        this.ratePerSecond = 1000;
         this.allowParticleSpawning = true;
         this.fov = 360;
         this.particleVelocity = 1;
@@ -64,7 +64,7 @@ public class ParticleSource {
             particles.add(new Particle(
                     emissionMode != EmissionMode.SCATTER ? particleVelocity : 0,
                             pdir + (emissionMode == EmissionMode.GRAVITATE ? 180 : 0),
-                    (int)(1000 * ((maxRadius - minRadius) / particleVelocity)), p_pos, p_off, new Color(colors[(int)MiscMath.random(0, colors.length - 1)])));
+                    !fixed ? 500 : (int)(1000 * ((maxRadius - minRadius) / particleVelocity)), p_pos, p_off, new Color(colors[(int)MiscMath.random(0, colors.length - 1)])));
         }
     }
 
