@@ -55,7 +55,9 @@ public class MagicSource {
         List<Entity> colliding = getCollidingEntities();
         colliding.stream()
                 .filter(e -> !e.equals(caster) && !lastColliding.contains(e))
-                .forEach(e -> EventDispatcher.invoke(new MagicImpactEvent(this, e)));
+                .forEach(e -> {
+                    EventDispatcher.invoke(new MagicImpactEvent(this, e));
+                });
         lastColliding = colliding;
 
         //move and update particle body

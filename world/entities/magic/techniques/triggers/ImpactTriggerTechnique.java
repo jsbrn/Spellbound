@@ -17,6 +17,7 @@ public class ImpactTriggerTechnique extends Technique {
                 .on(MagicImpactEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
+                        if (cast.getEnergy() <= 0) return;
                         MagicImpactEvent mie = (MagicImpactEvent)e;
                         if (!mie.getMagicSource().equals(cast)) return;
                         cast.affectOnce();
