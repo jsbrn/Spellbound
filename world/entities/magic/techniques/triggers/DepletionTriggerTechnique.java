@@ -16,7 +16,8 @@ public class DepletionTriggerTechnique extends Technique {
             .on(MagicDepletedEvent.class.toString(), new EventHandler() {
                 @Override
                 public void handle(Event e) {
-                    cast.affectOnce();
+                    MagicDepletedEvent mde = (MagicDepletedEvent)e;
+                    if (mde.getMagicSource().equals(cast)) mde.getMagicSource().affectOnce();
                 }
             })
         );

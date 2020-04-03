@@ -24,6 +24,7 @@ public class Bandit extends HumanoidEntity {
         testSpell.addTechnique("movement_directional");
         testSpell.addTechnique("emission_radiate");
         testSpell.addTechnique("trigger_impact");
+        testSpell.addTechnique("physical_collision");
         testSpell.addTechnique("effects_decrease");
         testSpell.addTechnique("trait_hp");
         testSpell.addTechnique("physical_energy");

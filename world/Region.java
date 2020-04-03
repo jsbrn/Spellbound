@@ -15,6 +15,7 @@ import world.generators.region.RegionGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Region {
@@ -154,6 +155,18 @@ public class Region {
             return getEntityIndex(location, half, max);
         }
 
+    }
+
+    public List<MagicSource> getMagicSources(double wx, double wy, double radius) {
+        List<MagicSource> outer = magic_sources.stream().filter(ms -> {
+            double[] coords = ms.getBody().getLocation().getCoordinates();
+            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getMaxRadius(), wx, wy, radius);
+        }).collect(Collectors.toList()),
+        inner = magic_sources.stream().filter(ms -> {
+            double[] coords = ms.getBody().getLocation().getCoordinates();
+            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getMinRadius(), wx, wy, radius);
+        }).collect(Collectors.toList());;
+        return outer.stream().filter(ms -> !(inner.contains(ms) && !outer.contains(ms))).collect(Collectors.toList());
     }
 
     public void registerPortal(int index, Portal portal) {

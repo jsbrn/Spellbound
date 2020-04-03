@@ -17,7 +17,8 @@ public class CollisionTechnique extends Technique {
             .on(MagicImpactEvent.class.toString(), new EventHandler() {
                 @Override
                 public void handle(Event e) {
-                    if (((MagicImpactEvent)e).getEntity().equals(cast.getCaster())) return;
+                    MagicImpactEvent mie = (MagicImpactEvent)e;
+                    if (!mie.getMagicSource().equals(cast)) return;
                     EventDispatcher.invoke(new MagicDepletedEvent(cast));
                     cast.setEnergy(0);
                 }

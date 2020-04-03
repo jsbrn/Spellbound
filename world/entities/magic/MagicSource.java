@@ -53,9 +53,9 @@ public class MagicSource {
 
         //invoke collision events
         List<Entity> colliding = getCollidingEntities();
-        colliding.stream().filter(e -> !lastColliding.contains(e)).forEach(e -> {
-            EventDispatcher.invoke(new MagicImpactEvent(this, e));
-        });
+        colliding.stream()
+                .filter(e -> !e.equals(caster) && !lastColliding.contains(e))
+                .forEach(e -> EventDispatcher.invoke(new MagicImpactEvent(this, e)));
         lastColliding = colliding;
 
         //move and update particle body
@@ -100,13 +100,13 @@ public class MagicSource {
 
     public void affectOnce() {
         for (Technique t: techniques)
-            if (t instanceof EffectTechnique && (energy > 0 || !Techniques.getRequiresEnergy(t.getID())))
+            if (t instanceof EffectTechnique)
                 ((EffectTechnique) t).affectOnce(this);
     }
 
     public void affectContinuous() {
         for (Technique t: techniques)
-            if (t instanceof EffectTechnique && (energy > 0 || !Techniques.getRequiresEnergy(t.getID())))
+            if (t instanceof EffectTechnique)
                 ((EffectTechnique) t).affectContinuous(this);
     }
 
