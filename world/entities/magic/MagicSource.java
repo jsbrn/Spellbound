@@ -127,7 +127,7 @@ public class MagicSource {
         List<Entity> inner = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
                 body.getLocation().getCoordinates()[1] + 0.5f,
-                body.getMinRadius()
+                body.getReachRadius()
         ), outer = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
                 body.getLocation().getCoordinates()[1] + 0.5f,
@@ -140,7 +140,7 @@ public class MagicSource {
         List<MagicSource> inner = body.getLocation().getRegion().getMagicSources(
                 body.getLocation().getCoordinates()[0],
                 body.getLocation().getCoordinates()[1] + 0.5f,
-                body.getMinRadius()
+                body.getReachRadius()
         ), outer = body.getLocation().getRegion().getMagicSources(
                 body.getLocation().getCoordinates()[0],
                 body.getLocation().getCoordinates()[1] + 0.5f,

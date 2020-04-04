@@ -25,6 +25,7 @@ public class Mover {
 
     public Mover() {
         this.speed = 3; //tiles per second
+        this.ignoreCollision = false;
         this.path = new LinkedList<>();
     }
 
@@ -33,9 +34,9 @@ public class Mover {
     }
 
     public void setTarget(double tx, double ty) {
-        if (!isIndependent() && !ignoreCollision) {
+        if (!isIndependent()) {
             if (!path.isEmpty()) return;
-            if (canMoveDirectlyTo((int)tx + 0.5, (int)ty + 0.5))
+            if (ignoreCollision || canMoveDirectlyTo((int)tx + 0.5, (int)ty + 0.5))
                 path.add(new Location(parent.getLocation().getRegion(), tx, ty));
             if (path.isEmpty()) path = LocalPathFinder.findPath(parent.getLocation(), (int)tx, (int)ty);
             if (path.isEmpty()) return;
@@ -123,7 +124,7 @@ public class Mover {
         for (double i = 0.5; i < maxDistance; i += 0.5) {
             double tx = coordinates[0] + (i * dx);
             double ty = coordinates[1] + (i * dy);
-            if (!canMoveDirectlyTo(tx, ty)) break;
+            if (!canMoveDirectlyTo(tx, ty) || !canPassThrough(tx, ty)) break;
             potentialTarget[0] = tx;
             potentialTarget[1] = ty;
         }

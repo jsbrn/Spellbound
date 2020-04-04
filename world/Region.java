@@ -163,7 +163,7 @@ public class Region {
         }).collect(Collectors.toList()),
         inner = magic_sources.stream().filter(ms -> {
             double[] coords = ms.getBody().getLocation().getCoordinates();
-            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getMinRadius(), wx, wy, radius);
+            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getReachRadius(), wx, wy, radius);
         }).collect(Collectors.toList());;
         return outer.stream().filter(ms -> !(inner.contains(ms) && !outer.contains(ms))).collect(Collectors.toList());
     }

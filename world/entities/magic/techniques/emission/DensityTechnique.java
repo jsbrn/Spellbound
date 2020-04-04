@@ -1,13 +1,14 @@
-package world.entities.magic.techniques.radius;
+package world.entities.magic.techniques.emission;
 
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
+import world.particles.EmissionMode;
 
-public class RadiusMinTechnique extends Technique {
+public class DensityTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource source) {
-        source.getBody().setReachRadius(getLevel() / 2f);
+        source.getBody().setDensity(getLevel());
     }
 
     @Override
