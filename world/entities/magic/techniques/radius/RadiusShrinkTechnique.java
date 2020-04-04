@@ -12,7 +12,8 @@ public class RadiusShrinkTechnique extends Technique {
 
     @Override
     public void update(MagicSource source) {
-        source.getBody().addMaxRadius(MiscMath.getConstant(-getLevel(), 0.5));
+        if (source.getBody().getDepthRadius() > 0)
+            source.getBody().addDepthRadius(MiscMath.getConstant(-Math.max(0.5, source.getLevel("physical_speed")), 1));
     }
 
 }

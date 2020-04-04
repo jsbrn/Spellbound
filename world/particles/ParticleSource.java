@@ -5,6 +5,7 @@ import assets.definitions.Definitions;
 import assets.definitions.TileDefinition;
 import misc.Location;
 import misc.MiscMath;
+import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Camera;
@@ -40,11 +41,14 @@ public class ParticleSource {
 
     public void update() {
 
+        if (!isOnScreen()) return;
+
         if (!allowParticleSpawning) return;
         double area = 3.14 * (Math.pow(depthRadius + reachRadius, 2) - Math.pow(reachRadius, 2));
-        double amountToSpawn = MiscMath.getConstant((area * Chunk.TILE_SIZE) * density * 30, 0.5f); //one "pixel"
+        double maxAtOnce = (area * Chunk.TILE_SIZE) * density * 15;
+        double amountToSpawn = MiscMath.getConstant(maxAtOnce, 1); //one "pixel"
         nextParticleReady += amountToSpawn;
-        if (nextParticleReady < 1) return;
+        if (nextParticleReady < 1 || particles.size() > maxAtOnce) return;
         for (int i = 0; i < nextParticleReady; i++) {
             double pdir = direction + MiscMath.random(-fov/2, fov/2);
             double[] p_off = MiscMath.getRotatedOffset(
@@ -69,6 +73,8 @@ public class ParticleSource {
     }
 
     public void draw(float ox, float oy, float scale) {
+
+        if (!isOnScreen()) return;
 
         for (int i = particles.size() - 1; i >= 0; i--) {
 
@@ -127,6 +133,14 @@ public class ParticleSource {
 
     }
 
+    private boolean isOnScreen() {
+        float[] osc = Camera.getOnscreenCoordinates(location.getCoordinates()[0], location.getCoordinates()[1], Window.getScale());
+        return MiscMath.circlesIntersect(
+                osc[0], osc[1],
+                (getDepthRadius() + getReachRadius()) * Window.getScale(), Window.getWidth() / 2, Window.getHeight() / 2, Window.getWidth());
+
+    }
+
     public double getDirection() { return direction; }
 
     public void addDirection(double angle) {
@@ -173,7 +187,7 @@ public class ParticleSource {
         this.reachRadius = MiscMath.clamp(reachRadius + amount, 0, Integer.MAX_VALUE);
     }
 
-    public void addMaxRadius(double amount) {
+    public void addDepthRadius(double amount) {
         this.depthRadius = MiscMath.clamp(depthRadius + amount, 0, Integer.MAX_VALUE);
     }
 
