@@ -93,8 +93,13 @@ public class MagicSource {
 
     }
 
-    public boolean hasTechnique(String id) {
-        return techniques.stream().anyMatch(t -> t.getID().equals(id));
+    public boolean hasTechnique(String technique) {
+        return !techniques.stream().filter(t -> t.getID().equals(technique)).collect(Collectors.toList()).isEmpty();
+    }
+
+    public int getLevel(String technique) {
+        List<Technique> matches = techniques.stream().filter(t -> t.getID().equals(technique)).collect(Collectors.toList());
+        return matches.isEmpty() ? 0 : matches.get(0).getLevel();
     }
 
     public void draw(float osx, float osy, float scale) {

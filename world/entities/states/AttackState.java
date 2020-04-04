@@ -30,7 +30,6 @@ public class AttackState extends FollowState {
                 && getParent().canSee(getFollowing()) > 0.5) {
             getParent().queueActions(moveCount < 0 ? move() : cast());
         }
-        getParent().getLocation().lookAt(getFollowing().getLocation());
     }
 
     private ActionGroup cast() {
@@ -40,6 +39,7 @@ public class AttackState extends FollowState {
         group.add(new ChangeAnimationAction("arms", "default", false, false));
         group.add(new WaitAction(100 + rng.nextInt(400)));
         moveCount--;
+        getParent().getLocation().lookAt(getFollowing().getLocation());
         return group;
     }
 

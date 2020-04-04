@@ -9,22 +9,28 @@ import world.entities.types.humanoids.HumanoidEntity;
 public class KnockbackAction extends Action {
 
     private double[] target;
-    private double direction, strength;
+    private double direction, force;
+    private boolean previouslyIndependent;
 
-    public KnockbackAction(double strength, double direction) {
+    public KnockbackAction(double force, double direction) {
         this.direction = direction;
-        this.strength = strength;
+        this.force = force;
     }
 
     @Override
     public void onStart() {
         Entity parent = getParent();
-        double[] offset = MiscMath.getRotatedOffset(0, -strength, direction);
+        parent.getMover().setSpeed(force * 2);
+        previouslyIndependent = parent.getMover().isIndependent();
+        parent.getMover().setIndependent(false);
+        parent.getMover().setIgnoreCollision(true);
+        getParent().getMover().stop();
+        double[] offset = MiscMath.getRotatedOffset(0, -force, direction);
         target = new double[]{
                 getParent().getLocation().getCoordinates()[0] + offset[0],
                 getParent().getLocation().getCoordinates()[1] + offset[1]};
         parent.getMover().setLookTowardsTarget(false);
-        double[] nearestOpen = parent.getMover().findMoveTarget(offset[0], offset[1], strength);
+        double[] nearestOpen = parent.getMover().findMoveTarget(offset[0], offset[1], force);
         parent.getMover().setTarget(nearestOpen[0], nearestOpen[1]);
         parent.getLocation().setLookDirection((int)((direction + 180 ) % 360));
         if (parent instanceof HumanoidEntity) {
@@ -42,6 +48,8 @@ public class KnockbackAction extends Action {
             getParent().getAnimationLayer("arms").setBaseAnimation("default");
             getParent().getAnimationLayer("legs").setBaseAnimation("default");
         }
+        getParent().getMover().setIndependent(previouslyIndependent);
+        getParent().getMover().setIgnoreCollision(false);
     }
 
     @Override
@@ -65,6 +73,8 @@ public class KnockbackAction extends Action {
             getParent().getAnimationLayer("arms").setBaseAnimation("default");
             getParent().getAnimationLayer("legs").setBaseAnimation("default");
         }
+        getParent().getMover().setIndependent(previouslyIndependent);
+        getParent().getMover().setIgnoreCollision(false);
     }
 
     public String toString() { return "Move("+target[0]+", "+target[1]+")"; }

@@ -21,9 +21,12 @@ public class WeightTechnique extends Technique {
                     MagicImpactEvent mie = (MagicImpactEvent)e;
                     if (!mie.isEntityCollision()
                             || !mie.getMagicSource().equals(cast)) return;
+
+                    double force = ((double)Math.max(1, cast.getLevel("physical_speed")) * ((double)cast.getLevel("physical_weight") / 5.0) / 2.0) + 0.5;
+
                     mie.getEntity().clearActions();
                     mie.getEntity().queueAction(new KnockbackAction(
-                            getLevel() + 0.5,
+                            force,
                             MiscMath.angleBetween(
                                     cast.getBody().getLocation().getCoordinates()[0],
                                     cast.getBody().getLocation().getCoordinates()[1],

@@ -110,6 +110,8 @@ public class Player extends HumanoidEntity {
         double targetX = getMover().findMoveTarget(dx, 0, Chunk.CHUNK_SIZE)[0];
         double targetY = getMover().findMoveTarget(0, dy, Chunk.CHUNK_SIZE)[1];
         if (getActionQueue().isEmpty()) {
+            getMover().setSpeed(3);
+            getMover().setIndependent(true);
             if ((dx != 0 || dy != 0) && allowUserMovement) {
                 getAnimationLayer("arms").setBaseAnimation("walking");
                 getAnimationLayer("legs").setBaseAnimation("walking");

@@ -17,7 +17,7 @@ public class Mover {
 
     private Entity parent;
     private boolean collidable, lookAtTarget;
-    private boolean moving, independentAxes;
+    private boolean moving, independentAxes, ignoreCollision;
     private double[] start;
     private double speed;
 
@@ -33,10 +33,10 @@ public class Mover {
     }
 
     public void setTarget(double tx, double ty) {
-        if (!isIndependent()) {
+        if (!isIndependent() && !ignoreCollision) {
             if (!path.isEmpty()) return;
             if (canMoveDirectlyTo((int)tx + 0.5, (int)ty + 0.5))
-                path.add(new Location(parent.getLocation().getRegion(), (int)tx + 0.5, (int)ty + 0.5));
+                path.add(new Location(parent.getLocation().getRegion(), tx, ty));
             if (path.isEmpty()) path = LocalPathFinder.findPath(parent.getLocation(), (int)tx, (int)ty);
             if (path.isEmpty()) return;
         } else {
@@ -88,6 +88,9 @@ public class Mover {
     public boolean isIndependent() { return independentAxes; }
     public boolean isMoving() { return moving; }
 
+    public double getSpeed() { return speed; }
+    public void setSpeed(double s) { speed = s; }
+
     private boolean canMoveDirectlyTo(double tx, double ty) {
         double[] coords = parent.getLocation().getCoordinates();
         double dist = 1;
@@ -120,7 +123,7 @@ public class Mover {
         for (double i = 0.5; i < maxDistance; i += 0.5) {
             double tx = coordinates[0] + (i * dx);
             double ty = coordinates[1] + (i * dy);
-            if (!canPassThrough(tx, ty)) break;
+            if (!canMoveDirectlyTo(tx, ty)) break;
             potentialTarget[0] = tx;
             potentialTarget[1] = ty;
         }
@@ -130,5 +133,8 @@ public class Mover {
     public void setLookTowardsTarget(boolean l) { this.lookAtTarget = l; }
     public boolean isCollidable() { return collidable; }
     public void setCollidable(boolean c) { this.collidable = c; }
+
+    public boolean isIgnoringCollision() { return ignoreCollision; }
+    public void setIgnoreCollision(boolean i) { ignoreCollision = i; }
 
 }
