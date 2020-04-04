@@ -28,6 +28,7 @@ public class Bandit extends HumanoidEntity {
         testSpell.addTechnique("effects_decrease");
         testSpell.addTechnique("trait_hp");
         testSpell.addTechnique("physical_energy");
+        testSpell.addTechnique("physical_weight");
         testSpell.setLevel("physical_energy", 5);
         testSpell.setColor(Color.yellow);
         this.getSpellbook().addSpell(testSpell);

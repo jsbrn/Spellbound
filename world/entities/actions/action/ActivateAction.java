@@ -58,6 +58,11 @@ public class ActivateAction extends Action {
     }
 
     @Override
+    public void onFinish() {
+
+    }
+
+    @Override
     public void update() {
 
     }

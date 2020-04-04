@@ -14,6 +14,8 @@ public class MagicImpactEvent extends Event {
         this.impacted = e;
     }
 
+    public boolean isEntityCollision() { return getEntity() != null; }
+
     public MagicSource getMagicSource() {
         return magicSource;
     }

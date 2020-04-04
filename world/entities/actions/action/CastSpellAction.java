@@ -32,6 +32,11 @@ public class CastSpellAction extends Action {
     }
 
     @Override
+    public void onFinish() {
+
+    }
+
+    @Override
     public void update() {
 
     }

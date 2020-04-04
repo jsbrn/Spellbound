@@ -12,6 +12,7 @@ public abstract class Action {
 
     public abstract void onStart();
     public abstract void onCancel();
+    public abstract void onFinish();
     public abstract void update();
     public abstract boolean finished();
     public final void start() { this.onStart(); started = true; }

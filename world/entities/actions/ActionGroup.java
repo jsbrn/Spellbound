@@ -25,7 +25,7 @@ public final class ActionGroup {
         if (actions.isEmpty()) return;
         Action a = actions.get(0);
         if (!a.started()) a.start();
-        if (a.finished()) { actions.remove(0); return; }
+        if (a.finished()) { a.onFinish(); actions.remove(0); return; }
         a.update();
     }
 

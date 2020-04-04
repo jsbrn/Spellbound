@@ -37,17 +37,15 @@ public class Player extends HumanoidEntity {
         this.setMana(1000);
         this.addCrystals((int)MiscMath.random(250, 750));
 
-        Spell spell = new Spell();
-        spell.addTechnique("movement_caster");
-        spell.addTechnique("trigger_collision");
-        spell.addTechnique("effects_decrease");
-        spell.addTechnique("trait_hp");
-        spell.addLevel("effects_decrease");
-        spell.setColor(Color.red);
-        this.getSpellbook().addSpell(spell);
-
         this.getMover().setIndependent(true);
         this.getMover().setLookTowardsTarget(false);
+
+        Spell kb = new Spell();
+        kb.addTechnique("physical_weight");
+        kb.addTechnique("movement_directional");
+        kb.addTechnique("physical_speed");
+        kb.addTechnique("physical_collision");
+        getSpellbook().addSpell(kb);
 
         this.getAnimationLayer("head").setColor(SKIN_COLORS[0]);
 
@@ -109,8 +107,8 @@ public class Player extends HumanoidEntity {
         if (GameScreen.getInput().isKeyDown(Input.KEY_S)) dy += 1;
         if (GameScreen.getInput().isKeyDown(Input.KEY_D)) dx += 1;
 
-        double targetX = findMoveTarget(dx, 0)[0];
-        double targetY = findMoveTarget(0, dy)[1];
+        double targetX = getMover().findMoveTarget(dx, 0, Chunk.CHUNK_SIZE)[0];
+        double targetY = getMover().findMoveTarget(0, dy, Chunk.CHUNK_SIZE)[1];
         if (getActionQueue().isEmpty()) {
             if ((dx != 0 || dy != 0) && allowUserMovement) {
                 getAnimationLayer("arms").setBaseAnimation("walking");
@@ -125,19 +123,6 @@ public class Player extends HumanoidEntity {
             }
         }
 
-    }
-
-    private double[] findMoveTarget(int dx, int dy) {
-        double[] coordinates = getLocation().getCoordinates();
-        double[] potentialTarget = new double[]{ coordinates[0], coordinates[1] };
-        for (double i = 0.5; i < Chunk.CHUNK_SIZE; i += 0.5) {
-            double tx = coordinates[0] + (i * dx);
-            double ty = coordinates[1] + (i * dy);
-            if (!getMover().canPassThrough(tx, ty)) break;
-            potentialTarget[0] = tx;
-            potentialTarget[1] = ty;
-        }
-        return potentialTarget;
     }
 
 }

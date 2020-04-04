@@ -1,9 +1,9 @@
 package world.entities.magic;
 
+import assets.definitions.Definitions;
 import misc.Location;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;
@@ -14,9 +14,7 @@ import world.events.event.MagicImpactEvent;
 import world.particles.ParticleSource;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MagicSource {
@@ -29,6 +27,7 @@ public class MagicSource {
     private MagicSource next;
 
     private List<Entity> lastColliding;
+    private boolean lastLocationSolid;
 
     public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
         this.lastColliding = new ArrayList<Entity>();
@@ -59,6 +58,13 @@ public class MagicSource {
                     EventDispatcher.invoke(new MagicImpactEvent(this, e));
                 });
         lastColliding = colliding;
+        byte[] currentTile = getBody().getLocation().getRegion().getTile(
+                (int)getBody().getLocation().getCoordinates()[0],
+                (int)getBody().getLocation().getCoordinates()[1]
+        );
+        boolean currentSolid = Definitions.getTile(currentTile[1]).collides();
+        if (!lastLocationSolid && currentSolid) EventDispatcher.invoke(new MagicImpactEvent(this, null));
+        lastLocationSolid = currentSolid;
 
         //move and update particle body
         double[] unitVector = MiscMath.getUnitVector(
@@ -120,16 +126,31 @@ public class MagicSource {
         ), outer = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
                 body.getLocation().getCoordinates()[1] + 0.5f,
-                body.getMaxRadius()
+                body.getDepthRadius()
+        );
+        return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());
+    }
+
+    public List<MagicSource> getCollidingMagic() {
+        List<MagicSource> inner = body.getLocation().getRegion().getMagicSources(
+                body.getLocation().getCoordinates()[0],
+                body.getLocation().getCoordinates()[1] + 0.5f,
+                body.getMinRadius()
+        ), outer = body.getLocation().getRegion().getMagicSources(
+                body.getLocation().getCoordinates()[0],
+                body.getLocation().getCoordinates()[1] + 0.5f,
+                body.getDepthRadius()
         );
         return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());
     }
 
     public void setEnergy(double e) { energy = e; }
     public double getEnergy() { return energy; }
+    public void addEnergy(double amount) { setEnergy(energy + amount);}
     public double getTorque() { return torque; }
     public void setTorque(double t) { torque = t; }
-    public void setMoveSpeed(double t) { moveSpeed = t; }
+    public void setMoveSpeed(double t) { moveSpeed = MiscMath.clamp(t, 0, Integer.MAX_VALUE); }
+    public void addMoveSpeed(double t) { setMoveSpeed(moveSpeed + t); }
 
     public Entity getCaster() { return caster; }
     public double[] getCastCoordinates() { return castCoordinates; }

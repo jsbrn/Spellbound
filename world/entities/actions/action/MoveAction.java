@@ -45,6 +45,11 @@ public class MoveAction extends Action {
         return false;
     }
 
+    @Override
+    public void onFinish() {
+
+    }
+
     public String toString() { return "Move("+target[0]+", "+target[1]+")"; }
 
 }

@@ -7,7 +7,7 @@ public class RadiusMaxTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource source) {
-        source.getBody().setMaxRadius(getLevel() / 2f);
+        source.getBody().setDepthRadius(getLevel() / 2f);
     }
 
     @Override

@@ -2,6 +2,7 @@ package world.entities.states;
 
 import misc.Location;
 import misc.MiscMath;
+import world.entities.actions.ActionGroup;
 import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.ChangeAnimationAction;
 import world.entities.actions.action.WaitAction;
@@ -27,16 +28,18 @@ public class IdleState extends State {
 
             double[] new_ = MiscMath.getRotatedOffset(0, -rng.nextInt(5), rng.nextInt(360));
 
-            getParent().queueAction(new WaitAction(1000 + rng.nextInt(5000)));
-            getParent().queueAction(new ChangeAnimationAction("arms", "walking", false, false));
-            getParent().queueAction(new ChangeAnimationAction("legs", "walking", false, false));
-            getParent().queueAction(new MoveAction(
+            ActionGroup ag = new ActionGroup();
+            ag.add(new WaitAction(1000 + rng.nextInt(5000)));
+            ag.add(new ChangeAnimationAction("arms", "walking", false, false));
+            ag.add(new ChangeAnimationAction("legs", "walking", false, false));
+            ag.add(new MoveAction(
                     original.getCoordinates()[0] + new_[0],
                     original.getCoordinates()[1] + new_[1],
                     false,
                     true));
-            getParent().queueAction(new ChangeAnimationAction("arms", "default", false, false));
-            getParent().queueAction(new ChangeAnimationAction("legs", "default", false, false));
+            ag.add(new ChangeAnimationAction("arms", "default", false, false));
+            ag.add(new ChangeAnimationAction("legs", "default", false, false));
+            getParent().queueActions(ag);
         }
     }
 

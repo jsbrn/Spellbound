@@ -39,6 +39,10 @@ public class HumanoidEntity extends Entity {
         this.addAnimation("legs", "walking", new Animation("humanoid/legs_walking.png", 2, 4, 16, true, true, Color.orange));
         this.addAnimation("arms", "walking", new Animation("humanoid/arms_walking.png", 2, 4, 16, true, true, Color.red));
         this.addAnimation("arms", "casting", new Animation("humanoid/arms_casting.png", 4, 3, 16, false, true, Color.red));
+        this.addAnimation("arms", "falling", new Animation("humanoid/arms_falling.png", 1, 1, 16, true, true, Color.red));
+        this.addAnimation("arms", "pushed", new Animation("humanoid/arms_pushed.png", 6, 3, 16, false, true, Color.red));
+        this.addAnimation("legs", "falling", new Animation("humanoid/legs_falling.png", 1, 1, 16, true, true, Color.orange));
+        this.addAnimation("legs", "pushed", new Animation("humanoid/legs_pushed.png", 6, 3, 16, false, true, Color.orange));
         this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
         this.addAnimation("head", "talking", new Animation("humanoid/head_talking.png", 3, 2, 16, true, true, Color.white));
 

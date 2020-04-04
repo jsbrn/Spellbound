@@ -114,6 +114,19 @@ public class Mover {
         return true;
     }
 
+    public double[] findMoveTarget(double dx, double dy, double maxDistance) {
+        double[] coordinates = parent.getLocation().getCoordinates();
+        double[] potentialTarget = new double[]{ coordinates[0], coordinates[1] };
+        for (double i = 0.5; i < maxDistance; i += 0.5) {
+            double tx = coordinates[0] + (i * dx);
+            double ty = coordinates[1] + (i * dy);
+            if (!canPassThrough(tx, ty)) break;
+            potentialTarget[0] = tx;
+            potentialTarget[1] = ty;
+        }
+        return potentialTarget;
+    }
+
     public void setLookTowardsTarget(boolean l) { this.lookAtTarget = l; }
     public boolean isCollidable() { return collidable; }
     public void setCollidable(boolean c) { this.collidable = c; }

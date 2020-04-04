@@ -21,6 +21,7 @@ public class CollisionTechnique extends Technique {
                     if (!mie.getMagicSource().equals(cast)) return;
                     EventDispatcher.invoke(new MagicDepletedEvent(cast));
                     cast.getBody().stop();
+                    cast.setMoveSpeed(0);
                 }
             })
         );

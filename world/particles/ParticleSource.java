@@ -3,15 +3,12 @@ package world.particles;
 import assets.Assets;
 import assets.definitions.Definitions;
 import assets.definitions.TileDefinition;
-import gui.states.GameScreen;
 import misc.Location;
 import misc.MiscMath;
-import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Camera;
 import world.Chunk;
-import world.Region;
 import world.World;
 
 import java.util.ArrayList;
@@ -19,7 +16,7 @@ import java.util.ArrayList;
 public class ParticleSource {
 
     private Location location;
-    private double direction, minRadius, maxRadius, fov, particleVelocity;
+    private double direction, minRadius, depthRadius, fov, particleVelocity;
     private int ratePerSecond;
     private EmissionMode emissionMode;
     private Color[] colors;
@@ -33,7 +30,7 @@ public class ParticleSource {
         this.lastParticleSpawn = World.getRegion().getCurrentTime();
         this.direction = 0;
         this.minRadius = 0;
-        this.maxRadius = 0.25f;
+        this.depthRadius = 0.25f;
         this.ratePerSecond = 1000;
         this.allowParticleSpawning = true;
         this.fov = 360;
@@ -46,7 +43,7 @@ public class ParticleSource {
     public void update() {
 
         if (!allowParticleSpawning) return;
-        double amountToSpawn = ((World.getRegion().getCurrentTime() - lastParticleSpawn) / (1000f / ratePerSecond));
+        double amountToSpawn = (int)Math.ceil((MiscMath.getConstant(ratePerSecond, 1)));
 
         for (int i = 0; i < (int)amountToSpawn; i++) {
             lastParticleSpawn = World.getRegion().getCurrentTime();
@@ -56,15 +53,15 @@ public class ParticleSource {
                     -(emissionMode == EmissionMode.RADIATE
                             ? minRadius + MiscMath.random(0, 0.2f)
                             : (emissionMode == EmissionMode.GRAVITATE
-                                ? maxRadius
-                                : MiscMath.random(minRadius, maxRadius))),
+                                ? depthRadius
+                                : MiscMath.random(minRadius, minRadius + depthRadius))),
                     pdir);
             boolean fixed = Math.random() < 0.85;
             double[] p_pos = fixed ? location.getCoordinates() : new double[]{location.getCoordinates()[0], location.getCoordinates()[1]};
             particles.add(new Particle(
                     emissionMode != EmissionMode.SCATTER ? particleVelocity : 0,
                             pdir + (emissionMode == EmissionMode.GRAVITATE ? 180 : 0),
-                    !fixed ? 500 : (int)(1000 * ((maxRadius - minRadius) / particleVelocity)), p_pos, p_off, new Color(colors[(int)MiscMath.random(0, colors.length - 1)])));
+                    !fixed ? 500 : (int)(1000 * ((depthRadius - minRadius) / particleVelocity)), p_pos, p_off, new Color(colors[(int)MiscMath.random(0, colors.length - 1)])));
         }
     }
 
@@ -101,9 +98,9 @@ public class ParticleSource {
 
         float[] osc = Camera.getOnscreenCoordinates(ox + location.getCoordinates()[0], oy + location.getCoordinates()[1], scale);
 
-        double mxosw = maxRadius * 2 * Chunk.TILE_SIZE * scale;
+        double mxosw = (minRadius + depthRadius) * 2 * Chunk.TILE_SIZE * scale;
         double mnosw = minRadius * 2 * Chunk.TILE_SIZE * scale;
-        double[] dir_offset = MiscMath.getRotatedOffset(0, -maxRadius * 2, direction);
+        double[] dir_offset = MiscMath.getRotatedOffset(0, -depthRadius * 2, direction);
 
         g.setColor(Color.red);
         g.fillOval(osc[0] - 2, osc[1] - 2, 4, 4);
@@ -155,16 +152,16 @@ public class ParticleSource {
         this.minRadius = minRadius;
     }
 
-    public void setMaxRadius(double maxRadius) {
-        this.maxRadius = maxRadius;
+    public void setDepthRadius(double depthRadius) {
+        this.depthRadius = depthRadius;
     }
 
     public double getMinRadius() {
         return minRadius;
     }
 
-    public double getMaxRadius() {
-        return maxRadius;
+    public double getDepthRadius() {
+        return depthRadius;
     }
 
     public void addMinRadius(double amount) {
@@ -172,7 +169,7 @@ public class ParticleSource {
     }
 
     public void addMaxRadius(double amount) {
-        this.maxRadius = MiscMath.clamp(maxRadius + amount, 0, Integer.MAX_VALUE);
+        this.depthRadius = MiscMath.clamp(depthRadius + amount, 0, Integer.MAX_VALUE);
     }
 
     public void stop() {
@@ -191,8 +188,8 @@ public class ParticleSource {
                 emissionMode == EmissionMode.RADIATE
                         ? minRadius
                         : (emissionMode == EmissionMode.GRAVITATE
-                            ? maxRadius
-                            : MiscMath.random(minRadius, maxRadius)),
+                            ? depthRadius
+                            : MiscMath.random(minRadius, depthRadius)),
                 direction);
         if (particles.isEmpty()) return "";
         return particles.size() + ", spawn = " + pos[0] +", "+ pos[1] + ", p(0) = " + particles.get(0).getCoordinates()[0] + ", " + particles.get(0).getCoordinates()[1];

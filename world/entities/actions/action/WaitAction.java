@@ -32,6 +32,11 @@ public class WaitAction extends Action {
         return getParent().getLocation().getRegion().getCurrentTime() >= start + mills;
     }
 
+    @Override
+    public void onFinish() {
+        
+    }
+
     public String toString() { return "Wait("+mills+")"; }
 
 }

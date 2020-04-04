@@ -48,6 +48,11 @@ public class ChangeAnimationAction extends Action {
         return !wait || getParent().getAnimationLayer(layer).getAnimationByName(anim).finished();
     }
 
+    @Override
+    public void onFinish() {
+
+    }
+
     public String toString() { return "SetAnimation("+layer+", "+anim+", "+wait+")[started = "+started()+", finished = "+finished()+"]"; }
 
 }
