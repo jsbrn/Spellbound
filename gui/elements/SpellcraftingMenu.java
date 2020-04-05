@@ -41,9 +41,9 @@ public class SpellcraftingMenu extends Modal {
                 return super.onKeyUp(key);
             }
         };
-        crystalCost = new TextLabel("0 Crystals", 4, Color.cyan, true);
-        dyesCost = new TextLabel("0 Dyes", 4, Color.red, true);
-        manaCost = new TextLabel("0 Mana", 4, Color.pink.darker(0.1f), true);
+        crystalCost = new TextLabel("0", 8, Color.white, true);
+        dyesCost = new TextLabel("0", 8, Color.white, true);
+        manaCost = new TextLabel("0", 8, Color.white, true);
         volatility = new TextLabel("0% Volatile", 4, Color.yellow, true);
         categoryLabel = new TextLabel("...", 4, Color.gray, false);
         techniqueName = new TextLabel("-", 5, Color.black, false);
@@ -65,11 +65,27 @@ public class SpellcraftingMenu extends Modal {
         createTechniqueButtons();
 
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
-        //addChild(canvas, 8, 26, GUIAnchor.TOP_LEFT);
-        addChild(crystalCost, 8, -32, GUIAnchor.BOTTOM_LEFT);
-        addChild(dyesCost, 8, -28, GUIAnchor.BOTTOM_LEFT);
-        addChild(manaCost, 8, -24, GUIAnchor.BOTTOM_LEFT);
-        addChild(volatility, 8, -18, GUIAnchor.BOTTOM_LEFT);
+
+        iconChooser = new IconChooser("assets/gui/icons/spells", 15, 2);
+        colorChooser = new ColorChooser(16, 8, 4) {
+            @Override
+            public boolean onMousePressed(int ogx, int ogy, int button) {
+                boolean clicked = super.onMousePressed(ogx, ogy, button);
+                if (clicked) { spell.setColor(getColor()); iconChooser.setColor(getColor()); }
+                return clicked;
+            }
+        };
+
+        addChild(colorChooser, 8, 24, GUIAnchor.TOP_LEFT);
+        addChild(iconChooser, 42, 24, GUIAnchor.TOP_LEFT);
+
+        addChild(new IconLabel("icons/crystal.png"), 8, -20, GUIAnchor.BOTTOM_LEFT);
+        addChild(new IconLabel("icons/dyes.png"), 28, -20, GUIAnchor.BOTTOM_LEFT);
+        addChild(new IconLabel("icons/mana.png"), 48, -20, GUIAnchor.BOTTOM_LEFT);
+        addChild(crystalCost, 8+8, -20, GUIAnchor.BOTTOM_LEFT);
+        addChild(dyesCost, 28+8, -20, GUIAnchor.BOTTOM_LEFT);
+        addChild(manaCost, 48+8, -20, GUIAnchor.BOTTOM_LEFT);
+        addChild(volatility, 11, -16, GUIAnchor.BOTTOM_LEFT);
         addChild(new TextLabel("New Spell", 5, Color.white, true), 8, 4, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Discovered Techniques", 5, Color.white, true), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new Button("Cancel", 24, 8, null, true) {
@@ -106,19 +122,6 @@ public class SpellcraftingMenu extends Modal {
         addChild(techniqueDescription, 85, 98, GUIAnchor.TOP_LEFT);
         addChild(techniqueConflicts, 85, 110, GUIAnchor.TOP_LEFT);
 
-        iconChooser = new IconChooser("assets/gui/icons/spells", 15, 2);
-
-        colorChooser = new ColorChooser(16, 8, 4) {
-            @Override
-            public boolean onMousePressed(int ogx, int ogy, int button) {
-                boolean clicked = super.onMousePressed(ogx, ogy, button);
-                if (clicked) { spell.setColor(getColor()); iconChooser.setColor(getColor()); }
-                return clicked;
-            }
-        };
-
-        addChild(colorChooser, 8, 24, GUIAnchor.TOP_LEFT);
-        addChild(iconChooser, 42, 24, GUIAnchor.TOP_LEFT);
     }
 
     private void createTechniqueButtons() {
@@ -218,9 +221,9 @@ public class SpellcraftingMenu extends Modal {
     }
 
     private void refreshRequirements() {
-        this.crystalCost.setText(target.getCrystalCount()+"/"+spell.getCrystalCost()+" Crystals");
-        this.dyesCost.setText(target.getDyeCount()+"/0 Dyes");
-        this.manaCost.setText((int)target.getMana()+"/"+spell.getManaCost()+" Mana");
+        this.crystalCost.setText(spell.getCrystalCost()+"");
+        this.dyesCost.setText("0");
+        this.manaCost.setText(spell.getManaCost()+"");
         this.volatility.setText((int)(spell.getVolatility()*100)+"% Volatile");
         this.createButton.setEnabled(
                 target.getCrystalCount() >= spell.getCrystalCost()
