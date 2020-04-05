@@ -1,10 +1,7 @@
 package gui.elements;
 
 import gui.GUIElement;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.particles.ParticleSource;
 
@@ -63,7 +60,8 @@ public class Hotbar extends GUIElement {
         b.drawImage(selected, 3, 3 + (17 * target.getSpellbook().getSelectedIndex()));
         for (int i = 0; i < target.getSpellbook().getSpells().size(); i++) {
             Image icon = target.getSpellbook().getSpell(i).getIcon();
-            b.drawImage(icon, 2, 2 + (i * 17));
+            if (icon == null) continue;
+            b.drawImage(icon, 2, 2 + (i * 17), target.getSpellbook().getSpell(i).getColor());
         }
     }
 

@@ -16,7 +16,7 @@ import java.util.Calendar;
 public class Window {
 
     //the name of the window
-    public static final String WINDOW_TITLE = "Spellbound - Demo";
+    public static final String WINDOW_TITLE = "Spellbound - Demo (002)";
     //create a window object
     public static AppGameContainer WINDOW_INSTANCE;
 

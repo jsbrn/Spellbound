@@ -4,12 +4,15 @@ import gui.GUIAnchor;
 import gui.GUIElement;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 public abstract class Button extends GUIElement {
 
     private int[] dims;
     private Color color, highlightColor, disabledColor;
     private boolean toggled, showBackground, disabled;
+
+    private IconLabel iconLabel;
 
     public Button(String text, int w, int h, String icon, boolean showBackground) {
         if (text != null)
@@ -19,12 +22,20 @@ public abstract class Button extends GUIElement {
         this.color = new Color(170, 115, 65);
         this.highlightColor = new Color(105, 196, 235);
         this.disabledColor = new Color(100, 100, 100);
-        if (icon != null)
-            this.addChild(new IconLabel(icon), 0, 0, GUIAnchor.CENTER);
+        this.iconLabel = icon != null ? new IconLabel(icon) : new IconLabel();
+        this.addChild(iconLabel, 0, 0, GUIAnchor.CENTER);
+    }
+
+    public void setIcon(Image image) {
+        this.iconLabel.setImage(image);
     }
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void setIconFilter(Color filter) {
+        iconLabel.setFilter(filter);
     }
 
     public Color getColor() {

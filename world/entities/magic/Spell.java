@@ -1,5 +1,6 @@
 package world.entities.magic;
 
+import assets.Assets;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -20,8 +21,7 @@ public class Spell {
     private ArrayList<String> techniques;
     private HashMap<String, Integer> levels;
 
-    private Image icon;
-    private boolean[][] pixels;
+    private int iconIndex;
     private Color color;
 
     public Spell() {
@@ -29,7 +29,14 @@ public class Spell {
         this.techniques = new ArrayList<>();
         this.levels = new HashMap<>();
         this.color = Color.white;
-        this.pixels = new boolean[1][1];
+    }
+
+    public Spell(Spell template) {
+        this();
+        this.techniques.addAll(template.techniques);
+        this.levels.putAll(template.levels);
+        this.color = template.color;
+        this.iconIndex = template.iconIndex;
     }
 
     public void setName(String name) {
@@ -40,7 +47,10 @@ public class Spell {
     }
 
     public void addTechnique(String technique) { this.techniques.add(technique); }
-    public void removeTechnique(String technique) { this.techniques.remove(technique); }
+    public void removeTechnique(String technique) {
+        this.techniques.remove(technique);
+        this.levels.remove(technique);
+    }
     public boolean hasTechnique(String techniqueName) { return techniques.contains(techniqueName); }
 
     private ArrayList<Technique> loadTechniques() {
@@ -80,24 +90,18 @@ public class Spell {
     }
 
     public void setColor(Color c) { this.color = c; }
-    public void setPixels(boolean[][] grid) { this.pixels = grid; }
+    public void setIconIndex(int index) { iconIndex = index; }
+
+    public int getIconIndex() {
+        return iconIndex;
+    }
 
     public Image getIcon() {
-        if (icon != null) return icon;
-        try {
-            icon = new Image(pixels.length, pixels[0].length);
-            Graphics b = icon.getGraphics();
-            b.setColor(color);
-            for (int i = 0; i < pixels.length; i++) {
-                for (int j = 0; j < pixels[0].length; j++) {
-                    if (pixels[i][j]) b.fillRect(i, j, 1, 1);
-                }
-            }
-            return icon;
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return Assets.getImage("assets/gui/icons/spells/"+iconIndex+".png");
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public boolean isEmpty() { return techniques.isEmpty(); }

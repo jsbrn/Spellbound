@@ -61,6 +61,7 @@ public class TextLabel extends GUIElement {
     }
 
     public void setText(String newtext) {
+        newtext = newtext.replaceAll("’", "'");
         if (!newtext.equals(text)) {
             lines = getLines(newtext);
             text = newtext;

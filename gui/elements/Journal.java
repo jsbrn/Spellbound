@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import world.Chunk;
 import world.World;
+import world.entities.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;
@@ -14,46 +15,103 @@ import java.util.ArrayList;
 public class Journal extends Modal {
 
     private HumanoidEntity target;
-    private ArrayList<TextLabel> strings;
+    private TextLabel gold, crystals, dyes;
+
+    private ArrayList<Button> spellButtons;
+    private int selectedSpell;
+    private Button copyButton, combineButton, destroyButton, moveUpButton;
 
     public Journal(HumanoidEntity target, SpellcraftingMenu spellcraftingMenu) {
         super("spellbook_bg.png");
         this.target = target;
-        this.strings = new ArrayList<>();
+        this.selectedSpell = -1;
+        this.spellButtons = new ArrayList<>();
         addChild(new TextLabel("Player", 5, Color.black, false), 12, 4, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Your Spells", 5, Color.black, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new IconLabel("icons/gold.png"), 32, 16, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/crystal.png"), 32, 32, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/dyes.png"), 32, 48, GUIAnchor.TOP_LEFT);
-        addChild(new Button("Spellcrafting", 32, 8, null, true) {
+        gold = new TextLabel(target.getGoldCount()+"", 8, Color.gray, false);
+        crystals = new TextLabel(target.getCrystalCount()+"", 8, Color.gray, false);
+        dyes = new TextLabel(target.getDyeCount()+"", 8, Color.gray, false);
+        addChild(gold, 50, 20, GUIAnchor.TOP_LEFT);
+        addChild(crystals, 50, 36, GUIAnchor.TOP_LEFT);
+        addChild(dyes, 50, 52, GUIAnchor.TOP_LEFT);
+        addChild(new Button("New Spell...", 32, 8, null, true) {
             @Override
             public boolean onClick(int button) {
+                spellcraftingMenu.reset(null);
                 getGUI().stackModal(spellcraftingMenu);
                 return true;
             }
         }, 12, -10, GUIAnchor.BOTTOM_LEFT);
+        copyButton = new Button("Copy", 16, 8, null, true) {
+            @Override
+            public boolean onClick(int button) {
+                spellcraftingMenu.reset(target.getSpellbook().getSpell(selectedSpell));
+                getGUI().stackModal(spellcraftingMenu);
+                return true;
+            }
+        };
+        destroyButton = new Button("Destroy", 20, 8, null, true) {
+            @Override
+            public boolean onClick(int button) {
+                if  (selectedSpell >= 0) {
+                    target.addCrystals(target.getSpellbook().getSpell(selectedSpell).getCrystalCost() / 4);
+                    target.getSpellbook().getSpells().remove(selectedSpell);
+                }
+                if (selectedSpell >= target.getSpellbook().getSpells().size())
+                    selectedSpell = target.getSpellbook().getSpells().size() - 1;
+                refresh();
+                return true;
+            }
+        };
+        moveUpButton = new Button(null, 8, 8, "icons/arrow_up.png", true) {
+            @Override
+            public boolean onClick(int button) {
+                if (selectedSpell == 0) return false;
+                Spell selected = target.getSpellbook().getSpell(selectedSpell);
+                if (selected == null) return false;
+                target.getSpellbook().getSpells().remove(selected);
+                target.getSpellbook().getSpells().add(selectedSpell-1, selected);
+                selectedSpell--;
+                refresh();
+                return true;
+            }
+        };
+        addChild(copyButton, 91, -10, GUIAnchor.BOTTOM_LEFT);
+        addChild(destroyButton, 109, -10, GUIAnchor.BOTTOM_LEFT);
+        addChild(moveUpButton, 131, -10, GUIAnchor.BOTTOM_LEFT);
     }
 
     private void refresh() {
-        for (TextLabel l: strings) removeChild(l);
-        int spellCount = target.getSpellbook().getSpells().size();
-        for (int i = 0; i < spellCount; i++) {
-            TextLabel l = new TextLabel(target.getSpellbook().getSpell(i).getName(), 4, Color.gray, false);
-            strings.add(l);
-            addChild(l, 24, 14 + (i * 5), GUIAnchor.TOP_MIDDLE);
+        gold.setText(target.getGoldCount()+"");
+        crystals.setText(target.getCrystalCount()+"");
+        dyes.setText(target.getDyeCount()+"");
+
+        spellButtons.stream().forEach(this::removeChild);
+        spellButtons.clear();
+        for (int i = 0; i < target.getSpellbook().getSpells().size(); i++) {
+            Spell spell = target.getSpellbook().getSpell(i);
+            int index = i;
+            Button button = new Button(null, 16, 16, null, true) {
+                @Override
+                public boolean onClick(int button) {
+                    if (selectedSpell == index) selectedSpell = -1; else selectedSpell = index;
+                    refresh();
+                    return true;
+                }
+            };
+            spellButtons.add(button);
+            button.setIcon(spell.getIcon());
+            button.setIconFilter(spell.getColor());
+            button.setToggled(i == selectedSpell);
+            addChild(button, 91 + (18 * (i % 3)), 16 + (18 * (i / 3)), GUIAnchor.TOP_LEFT);
         }
 
-        TextLabel gold = new TextLabel(target.getGoldCount()+"", 8, Color.gray, false);
-        TextLabel crystals = new TextLabel(target.getCrystalCount()+"", 8, Color.gray, false);
-        TextLabel dyes = new TextLabel(target.getDyeCount()+"", 8, Color.gray, false);
-
-        strings.add(gold);
-        strings.add(crystals);
-        strings.add(dyes);
-
-        addChild(gold, 50, 20, GUIAnchor.TOP_LEFT);
-        addChild(crystals, 50, 36, GUIAnchor.TOP_LEFT);
-        addChild(dyes, 50, 52, GUIAnchor.TOP_LEFT);
+        copyButton.setEnabled(selectedSpell >= 0);
+        destroyButton.setEnabled(selectedSpell >= 0);
+        moveUpButton.setEnabled(selectedSpell >= 0);
 
     }
 

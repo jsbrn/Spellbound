@@ -132,6 +132,7 @@ public class GUI {
     public void popModal() {
         if (!modals.isEmpty()) modals.peek().hide();
         modals.pop();
+        if (!modals.isEmpty()) modals.peek().onShow();
     }
 
     public void setFade(float alpha) {

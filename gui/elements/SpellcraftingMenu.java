@@ -19,9 +19,10 @@ public class SpellcraftingMenu extends Modal {
     private TextLabel techniqueName, techniqueDescription, techniqueConflicts;
     private ArrayList<Button> buttons;
     private TextBox nameField;
-    private Canvas canvas;
 
     private TextLabel crystalCost, dyesCost, manaCost, volatility;
+    private ColorChooser colorChooser;
+    private IconChooser iconChooser;
     private Button createButton, leftButton, rightButton;
 
     private Spell spell;
@@ -33,7 +34,6 @@ public class SpellcraftingMenu extends Modal {
         this.categories = new ArrayList<>();
         this.spell = new Spell();
 
-        canvas = new Canvas(16, 16, 4);
         nameField = new TextBox(64, 8) {
             @Override
             public boolean onKeyUp(int key) {
@@ -52,8 +52,8 @@ public class SpellcraftingMenu extends Modal {
         createButton = new Button("Create!", 24, 8, null, true) {
             @Override
             public boolean onClick(int button) {
-                spell.setColor(canvas.getColor());
-                spell.setPixels(canvas.getGrid());
+                spell.setColor(colorChooser.getColor());
+                spell.setIconIndex(iconChooser.getIndex());
                 spell.setName(nameField.getText());
                 target.getSpellbook().addSpell(spell);
                 target.addCrystals(-spell.getCrystalCost());
@@ -65,7 +65,7 @@ public class SpellcraftingMenu extends Modal {
         createTechniqueButtons();
 
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
-        addChild(canvas, 8, 26, GUIAnchor.TOP_LEFT);
+        //addChild(canvas, 8, 26, GUIAnchor.TOP_LEFT);
         addChild(crystalCost, 8, -32, GUIAnchor.BOTTOM_LEFT);
         addChild(dyesCost, 8, -28, GUIAnchor.BOTTOM_LEFT);
         addChild(manaCost, 8, -24, GUIAnchor.BOTTOM_LEFT);
@@ -105,6 +105,20 @@ public class SpellcraftingMenu extends Modal {
         addChild(techniqueName, 84, -32, GUIAnchor.BOTTOM_LEFT);
         addChild(techniqueDescription, 85, 98, GUIAnchor.TOP_LEFT);
         addChild(techniqueConflicts, 85, 110, GUIAnchor.TOP_LEFT);
+
+        iconChooser = new IconChooser("assets/gui/icons/spells", 15, 2);
+
+        colorChooser = new ColorChooser(16, 8, 4) {
+            @Override
+            public boolean onMousePressed(int ogx, int ogy, int button) {
+                boolean clicked = super.onMousePressed(ogx, ogy, button);
+                if (clicked) { spell.setColor(getColor()); iconChooser.setColor(getColor()); }
+                return clicked;
+            }
+        };
+
+        addChild(colorChooser, 8, 24, GUIAnchor.TOP_LEFT);
+        addChild(iconChooser, 42, 24, GUIAnchor.TOP_LEFT);
     }
 
     private void createTechniqueButtons() {
@@ -113,28 +127,33 @@ public class SpellcraftingMenu extends Modal {
             String technique = techniques[i];
             System.out.println(technique);
             Button chooseButton = new Button(null, 16, 16, "icons/techniques/" + technique.toLowerCase() + ".png", true) {
-                private TextLabel levelLabel = new TextLabel("", 4, Color.white, true);
+                private TextLabel levelLabel = new TextLabel("", 4, Color.yellow, true);
                 private TextLabel warningLabel = new TextLabel("!", 6, Color.red, true);
                 @Override
                 public boolean onClick(int button) {
-                    if (spell.hasTechnique(technique)) {
-                        spell.addLevel(technique);
-                        if (Techniques.getMaxLevel(technique) < spell.getLevel(technique)) {
-                            spell.resetLevel(technique);
-                            spell.removeTechnique(technique);
-                            removeChild(levelLabel);
+                    if (button == 0) {
+                        if (spell.hasTechnique(technique)) {
+                            spell.addLevel(technique);
+                            if (Techniques.getMaxLevel(technique) < spell.getLevel(technique)) {
+                                spell.resetLevel(technique);
+                                spell.removeTechnique(technique);
+                                removeChild(levelLabel);
+                            }
+                        } else {
+                            spell.addTechnique(technique);
+                            addChild(levelLabel, -1, -1, GUIAnchor.TOP_RIGHT);
                         }
-                    } else {
-                        spell.addTechnique(technique);
-                        addChild(levelLabel, -1, -1, GUIAnchor.BOTTOM_RIGHT);
+
+                        if (spell.hasTechnique(technique) && !spell.getConflicts(technique).isEmpty())
+                            addChild(warningLabel, 1, -1, GUIAnchor.BOTTOM_LEFT);
+                        else
+                            removeChild(warningLabel);
+                    } else if (button == 1) {
+                        spell.removeTechnique(technique);
+                        removeChild(levelLabel);
                     }
 
-                    if (spell.hasTechnique(technique) && !spell.getConflicts(technique).isEmpty())
-                        addChild(warningLabel, 1, -1, GUIAnchor.BOTTOM_LEFT);
-                    else
-                        removeChild(warningLabel);
-
-                    levelLabel.setText(Techniques.getMaxLevel(technique) > 1 ? spell.getLevel(technique)+"" : "");
+                    levelLabel.setText(Techniques.getMaxLevel(technique) > 1 ? spell.getLevel(technique)+"/"+Techniques.getMaxLevel(technique) : "");
                     setToggled(spell.hasTechnique(technique));
                     refreshRequirements();
                     return true;
@@ -143,8 +162,12 @@ public class SpellcraftingMenu extends Modal {
                 @Override
                 public void onShow() {
                     super.onShow();
-                    levelLabel.setText(Techniques.getMaxLevel(technique) > 1 ? spell.getLevel(technique)+"" : "");
-                    if (!spell.hasTechnique(technique)) removeChild(levelLabel);
+                    levelLabel.setText(Techniques.getMaxLevel(technique) > 1 ? spell.getLevel(technique)+"/"+Techniques.getMaxLevel(technique) : "");
+                    if (!spell.hasTechnique(technique)) removeChild(levelLabel); else addChild(levelLabel, -1, -1, GUIAnchor.TOP_RIGHT);
+                    if (spell.hasTechnique(technique) && !spell.getConflicts(technique).isEmpty())
+                        addChild(warningLabel, 1, -1, GUIAnchor.BOTTOM_LEFT);
+                    else
+                        removeChild(warningLabel);
                 }
 
                 @Override
@@ -213,21 +236,18 @@ public class SpellcraftingMenu extends Modal {
         return true;
     }
 
-    @Override
-    public void onShow() {
-        super.onShow();
-        reset();
-    }
-
-    private void reset() {
-        this.spell = new Spell();
+    public void reset(Spell template) {
+        this.spell = template == null ? new Spell() : new Spell(template);
+        this.currentCategory = 0;
         refresh();
     }
 
     private void refresh() {
         refreshRequirements();
         this.nameField.setText(spell.getName());
-        this.canvas.reset();
+        this.iconChooser.setColor(spell.getColor());
+        this.iconChooser.setIndex(spell.getIconIndex());
+        this.colorChooser.setColor(spell.getColor());
         refreshTechniquesPanel();
     }
 
