@@ -1,6 +1,7 @@
 package world.generators.chunk.overworld;
 
 import assets.definitions.TileType;
+import org.newdawn.slick.Color;
 import world.Portal;
 import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
@@ -33,5 +34,10 @@ public class OpenFieldGenerator extends ChunkGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         return null;
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.green;
     }
 }

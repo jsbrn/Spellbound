@@ -23,6 +23,8 @@ public class Chunk {
     private byte[][] base;
     private byte[][] top;
 
+    private Color mapColor;
+
     public Chunk(int x, int y, Region region, ChunkGenerator generator) {
         this.region = region;
         this.coordinates = new int[]{x, y};
@@ -34,6 +36,7 @@ public class Chunk {
                 int wx = (coordinates[0] * Chunk.CHUNK_SIZE) + i, wy = (coordinates[1] * Chunk.CHUNK_SIZE) + j;
                 base[i][j] = generator.getBase(i, j);
                 top[i][j] = generator.getTop(i, j);
+                mapColor = generator.getColor();
                 Portal p = generator.getPortal(i, j);
                 if (p != null) {
                     p.setCoordinates(wx, wy);
@@ -67,6 +70,10 @@ public class Chunk {
     }
 
     public int[] getCoordinates() { return coordinates; }
+
+    public Color getMapColor() {
+        return mapColor;
+    }
 
     public void drawBase(float osx, float osy, float scale) {
         for (int j = 0; j < CHUNK_SIZE; j++) {

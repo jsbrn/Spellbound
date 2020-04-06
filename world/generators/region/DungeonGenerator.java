@@ -13,9 +13,15 @@ public class DungeonGenerator implements RegionGenerator {
 
     private Random rng;
     private ChunkGenerator[][] map;
+    private int[] cursor;
 
-    public DungeonGenerator() {
+    private int maxBranchLength, segmentCount;
+
+    public DungeonGenerator(int segmentCount, int maxBranchLength) {
         this.rng = new Random();
+        this.maxBranchLength = maxBranchLength;
+        this.segmentCount = segmentCount;
+        this.cursor = new int[]{0, 0};
     }
 
     @Override
@@ -32,24 +38,101 @@ public class DungeonGenerator implements RegionGenerator {
             }
         }
 
-        map[size/2][size-1] = new DungeonEntranceGenerator(false, true, true);
+        int entranceX = rng.nextInt(size-1), entranceY = rng.nextInt(size-1);
 
-        map[size/2 - 1][size-1] = new DungeonRoomGenerator(true, false, true, false);
-        map[size/2 + 1][size-1] = new DungeonRoomGenerator(true, false, false, true);
+        boolean[][] plan = clean(3, plan(entranceX, entranceY, size, segmentCount));
+        for (int x = 0; x < plan.length; x++) {
+            for (int y = 0; y < plan[0].length; y++) {
+                if (plan[x][y]) map[x][y] = new DungeonRoomGenerator(get(x, y-1, plan), get(x, y+1, plan), get(x+1, y, plan), get(x-1, y, plan));
+            }
+        }
+        map[entranceX][entranceY] = new DungeonEntranceGenerator(
+                get(entranceX, entranceY+1, plan),
+                get(entranceX+1, entranceY, plan),
+                get(entranceX-1, entranceY, plan));
+        map[cursor[0]][cursor[1]] = new DungeonBossRoomGenerator();
 
-        map[size/2 - 1][size-2] = new DungeonRoomGenerator(false, true, true, false);
-        map[size/2 + 1][size-2] = new DungeonRoomGenerator(false, true, false, true);
-        map[size/2][size-2] = new DungeonRoomGenerator(true, false, true, true);
 
-        for (int j = 0; j < size - 2; j++) {
-            boolean branch = j > 0 && rng.nextFloat() < .4f;
-            if (branch) buildRow(j, map);
-            map[size/2][j] = new DungeonRoomGenerator(true, true, branch, branch);
+    }
+
+    private boolean[][] plan(int startX, int startY, int size, int segmentCount) {
+        boolean[][] map = new boolean[size][size];
+        cursor = new int[]{startX, startY};
+
+        int forbiddenDirection = -1;
+
+        for (int i = 0; i < segmentCount; i++) {
+            int randomDirection = i == 0 ? 2 : rng.nextInt(4);
+            if (randomDirection == forbiddenDirection) continue;
+            if (randomDirection == 0 && cursor[1] == 0) continue;
+            if (randomDirection == 1 && cursor[0] == size - 1) continue;
+            if (randomDirection == 2 && cursor[1] == size - 1) continue;
+            if (randomDirection == 3 && cursor[0] == 0) continue;
+            segment(cursor, map, rng.nextInt(4));
+            forbiddenDirection = (randomDirection + 2) % 4;
         }
 
-        for (int j = 1; j < size; j++)
+        return map;
+    }
 
-        map[size/2][0] = new DungeonBossRoomGenerator();
+    private void segment(int[] cursor, boolean[][] map, int direction) {
+
+        int maxDist;
+        int axis = direction % 2 == 0 ? 1 : 0; //rows and columns
+        int delta = direction == 1 || direction == 2 ? 1 : -1; //up or down
+
+        switch(direction) {
+            case 0: maxDist = cursor[1]; break;
+            case 1: maxDist = map.length - 1 - cursor[0]; break;
+            case 2: maxDist = map.length - 1 - cursor[1]; break;
+            case 3: maxDist = cursor[0]; break;
+            default: maxDist = 0;
+        }
+
+        int dist = rng.nextInt((int)MiscMath.clamp(maxDist, 1, maxBranchLength));
+
+        for (int i = 0; i < dist; i++) {
+            map[cursor[0]][cursor[1]] = true;
+            cursor[axis] += delta;
+        }
+
+    }
+
+    private int adjacent(int x, int y, boolean includeCorners, boolean[][] map) {
+        int count = 0;
+        if (get(x, y-1, map)) count++;
+        if (get(x, y+1, map)) count++;
+        if (get(x-1, y, map)) count++;
+        if (get(x+1, y, map)) count++;
+
+        if (includeCorners) {
+            if (get(x - 1, y - 1, map)) count++;
+            if (get(x + 1, y - 1, map)) count++;
+            if (get(x + 1, y + 1, map)) count++;
+            if (get(x - 1, y + 1, map)) count++;
+        }
+        return count;
+    }
+
+    private boolean[][] clean(int passes, boolean[][] map) {
+        if (passes == 0) return map;
+        for (int y = 0; y < map[0].length; y++) {
+            for (int x = 0; x < map.length; x++) {
+                int adjacent = adjacent(x, y, true, map);
+                if (adjacent >= 6 || adjacent <= 1) map[x][y] = false;
+            }
+        }
+        return clean(passes - 1, map);
+    }
+
+    private boolean get(int x, int y, boolean[][] map) {
+        if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return false;
+        return map[x][y];
+    }
+
+    private void set(int x, int y, boolean value, boolean[][] map) {
+        if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
+        map[x][y] = value;
     }
 
     private void buildRow(int j, ChunkGenerator[][] map) {

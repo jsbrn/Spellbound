@@ -25,7 +25,7 @@ public class Spell {
     private Color color;
 
     public Spell() {
-        this.name = "Unnamed Spell";
+        this.name = "Untitled Spell";
         this.techniques = new ArrayList<>();
         this.levels = new HashMap<>();
         this.color = Color.white;

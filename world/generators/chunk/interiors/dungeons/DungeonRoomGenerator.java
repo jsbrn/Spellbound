@@ -1,6 +1,7 @@
 package world.generators.chunk.interiors.dungeons;
 
 import assets.definitions.TileType;
+import org.newdawn.slick.Color;
 import world.Portal;
 import world.entities.Entity;
 import world.entities.types.Chest;
@@ -18,6 +19,7 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
 
     public DungeonRoomGenerator(boolean north, boolean south, boolean east, boolean west) {
         super(north, south, east, west);
+        this.setSize(9);
         this.rng = new Random();
         this.spawnBandits = rng.nextFloat() < 0.5;
         this.spawnLoot = rng.nextFloat() < 0.75;
@@ -59,4 +61,8 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
         return null;
     }
 
+    @Override
+    public Color getColor() {
+        return Color.gray;
+    }
 }

@@ -1,5 +1,6 @@
 package world.generators.chunk.interiors.dungeons;
 
+import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Portal;
 
@@ -25,4 +26,8 @@ public class DungeonBossRoomGenerator extends DungeonRoomGenerator {
         return null;
     }
 
+    @Override
+    public Color getColor() {
+        return Color.red;
+    }
 }

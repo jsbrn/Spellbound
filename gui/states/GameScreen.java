@@ -14,9 +14,11 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import world.Camera;
 import world.Chunk;
+import world.Region;
 import world.World;
 import world.entities.Entity;
 import world.entities.types.humanoids.npcs.Civilian;
+import world.generators.region.DungeonGenerator;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,6 +33,8 @@ public class GameScreen extends BasicGameState {
     private static GUI gui;
     private static Modal spellbook;
     private static boolean debugMode, showTopLayer;
+
+    private static MiniMap miniMap;
 
     public GameScreen(int state) {
         this.initialized = false;
@@ -72,6 +76,9 @@ public class GameScreen extends BasicGameState {
                 return true;
             }
         }, 4, 94, GUIAnchor.TOP_LEFT);
+
+        miniMap = new MiniMap();
+        gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);
 
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
         gui.addElement(spellcasting, 0, 0, GUIAnchor.CENTER);
@@ -140,6 +147,9 @@ public class GameScreen extends BasicGameState {
 
     @Override
     public void keyReleased(int key, char c) {
+
+        if (key == Input.KEY_F5) miniMap.setRegion(new Region("test_dungeon", 16, new DungeonGenerator(16*4, 12)));
+        if (key == Input.KEY_F6) miniMap.setRegion(null);
 
         if (key == Input.KEY_F11) {
             try {

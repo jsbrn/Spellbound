@@ -1,5 +1,6 @@
 package world.generators.chunk.overworld;
 
+import org.newdawn.slick.Color;
 import world.Region;
 import world.Portal;
 import world.World;
@@ -28,5 +29,10 @@ public class BackyardGenerator extends OpenFieldGenerator {
         return (x == 6 && y == 5)
                 ? new Portal("door", 0, 1, true, World.getRegion("player_home"), "door")
                 : null;
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.orange;
     }
 }

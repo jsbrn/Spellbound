@@ -1,6 +1,7 @@
 package world.generators.chunk.interiors.dungeons;
 
 import assets.definitions.TileType;
+import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Portal;
 import world.World;
@@ -29,5 +30,10 @@ public class DungeonEntranceGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         return null;
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.green;
     }
 }

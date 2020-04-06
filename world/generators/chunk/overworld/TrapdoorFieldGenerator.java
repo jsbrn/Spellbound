@@ -1,6 +1,7 @@
 package world.generators.chunk.overworld;
 
 import assets.definitions.TileType;
+import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Portal;
 import world.Region;
@@ -32,8 +33,13 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
         return (x == entrance_x && y == entrance_y)
                 ? new Portal(
                         "trapdoor",
-                0, -1, false, World.addRegion(new Region(dungeon_name, 12, new DungeonGenerator())),
+                0, -1, false, World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(64, 8))),
                         "ladder")
                 : super.getPortal(x, y);
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.gray;
     }
 }

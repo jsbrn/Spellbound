@@ -1,6 +1,7 @@
 package world.generators.chunk.interiors;
 
 import assets.definitions.TileType;
+import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Portal;
 import world.World;
@@ -52,5 +53,10 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         return null;
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.orange;
     }
 }
