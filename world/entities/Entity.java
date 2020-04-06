@@ -1,8 +1,7 @@
 package world.entities;
 
 import assets.definitions.Definitions;
-import assets.definitions.TileDefinition;
-import gui.states.GameScreen;
+import world.Tiles;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -10,18 +9,14 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.Camera;
 import world.Chunk;
-import world.Portal;
-import world.World;
 import world.entities.actions.Action;
 import world.entities.actions.ActionGroup;
-import world.entities.actions.action.MoveAction;
 import world.entities.animations.Animation;
 import world.entities.animations.AnimationLayer;
 import world.entities.states.State;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Entity {
@@ -127,11 +122,9 @@ public class Entity {
         while (dist < range) {
             offset = MiscMath.getRotatedOffset(0, -dist, angle);
             byte[] tile = getLocation().getRegion().getTile((int)(coords[0] + offset[0]), (int)(coords[1] + offset[1]));
-            TileDefinition base = Definitions.getTile(tile[0]);
-            TileDefinition top = Definitions.getTile(tile[1]);
             if ((int)(coords[0] + offset[0]) == (int)wx && (int)(coords[1] + offset[1]) == (int)wy) break;
-            if (base.getTransparency() == 0 || top.getTransparency() == 0) { visibility = 0; break; }
-            visibility *= (base.getTransparency() * top.getTransparency());
+            if (Tiles.getTransparency(tile[0]) == 0 || Tiles.getTransparency(tile[1]) == 0) { visibility = 0; break; }
+            visibility *= (Tiles.getTransparency(tile[0]) * Tiles.getTransparency(tile[1]));
             dist++;
         }
         return visibility;

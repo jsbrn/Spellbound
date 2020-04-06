@@ -1,6 +1,7 @@
 package world.entities.actions.action;
 
 import assets.definitions.Definitions;
+import world.Tiles;
 import world.entities.Entity;
 import world.entities.actions.Action;
 
@@ -41,7 +42,7 @@ public class MoveAction extends Action {
         if (!getParent().getMover().isMoving()) return true;
 
         byte[] tile = getParent().getLocation().getRegion().getTile((int)target[0], (int)target[1]);
-        if (Definitions.getTile(tile[1]).collides() || Definitions.getTile(tile[0]).collides()) return true;
+        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1])) return true;
 
         return false;
     }

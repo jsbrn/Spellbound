@@ -2,7 +2,7 @@ package world.particles;
 
 import assets.Assets;
 import assets.definitions.Definitions;
-import assets.definitions.TileDefinition;
+import world.Tiles;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -86,9 +86,8 @@ public class ParticleSource {
             boolean behind_something = false;
             for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / Chunk.TILE_SIZE; t++) {
                 byte[] tile = World.getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
-                TileDefinition td = Definitions.getTile(tile[1]);
-                if (pcoords[1] > (pcoords[1] + t - td.getHeight())) {
-                    if (td.getTransparency() == 0) behind_something = true; else alpha = td.getTransparency();
+                if (pcoords[1] > (pcoords[1] + t - Tiles.getHeight(tile[1]))) {
+                    if (Tiles.getTransparency(tile[1]) == 0) behind_something = true; else alpha = Tiles.getTransparency(tile[1]);
                     break;
                 }
             }

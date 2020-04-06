@@ -7,7 +7,9 @@ import world.generators.chunk.interiors.dungeons.DungeonBossRoomGenerator;
 import world.generators.chunk.interiors.dungeons.DungeonEntranceGenerator;
 import world.generators.chunk.interiors.dungeons.DungeonRoomGenerator;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class DungeonGenerator implements RegionGenerator {
 
@@ -38,19 +40,32 @@ public class DungeonGenerator implements RegionGenerator {
             }
         }
 
-        int entranceX = rng.nextInt(size-1), entranceY = rng.nextInt(size-1);
+        boolean[][] plan = clean(3, plan(rng.nextInt(size), rng.nextInt(size), size, segmentCount));
 
-        boolean[][] plan = clean(3, plan(entranceX, entranceY, size, segmentCount));
+        int[] potentialEntrance = findRandom(plan, coords ->
+                (get(coords[0], coords[1] + 1, plan) || get(coords[0] + 1, coords[1], plan) || get(coords[0] - 1, coords[1], plan))
+                && adjacent(coords[0], coords[1], false, plan) == 1);
+
+        int[] potentialExit = findRandom(plan, coords ->
+                (get(coords[0], coords[1] + 1, plan) || get(coords[0] + 1, coords[1], plan) || get(coords[0] - 1, coords[1], plan))
+                && adjacent(coords[0], coords[1], false, plan) == 1
+                && coords[0] != potentialEntrance[0] && coords[1] != potentialEntrance[1]);
+
+        plan[potentialEntrance[0]][potentialEntrance[1]] = true;
+        plan[potentialExit[0]][potentialExit[1]] = true;
+
         for (int x = 0; x < plan.length; x++) {
             for (int y = 0; y < plan[0].length; y++) {
                 if (plan[x][y]) map[x][y] = new DungeonRoomGenerator(get(x, y-1, plan), get(x, y+1, plan), get(x+1, y, plan), get(x-1, y, plan));
             }
         }
-        map[entranceX][entranceY] = new DungeonEntranceGenerator(
-                get(entranceX, entranceY+1, plan),
-                get(entranceX+1, entranceY, plan),
-                get(entranceX-1, entranceY, plan));
-        map[cursor[0]][cursor[1]] = new DungeonBossRoomGenerator();
+
+        map[potentialEntrance[0]][potentialEntrance[1]] = new DungeonEntranceGenerator(
+                get(potentialEntrance[0], potentialEntrance[1]+1, plan),
+                get(potentialEntrance[0]+1, potentialEntrance[1], plan),
+                get(potentialEntrance[0]-1, potentialEntrance[1], plan));
+
+        map[potentialExit[0]][potentialExit[1]] = new DungeonBossRoomGenerator();
 
 
     }
@@ -62,7 +77,7 @@ public class DungeonGenerator implements RegionGenerator {
         int forbiddenDirection = -1;
 
         for (int i = 0; i < segmentCount; i++) {
-            int randomDirection = i == 0 ? 2 : rng.nextInt(4);
+            int randomDirection = i == 0 ? 2 : (i == segmentCount - 1 ? 0 : rng.nextInt(4));
             if (randomDirection == forbiddenDirection) continue;
             if (randomDirection == 0 && cursor[1] == 0) continue;
             if (randomDirection == 1 && cursor[0] == size - 1) continue;
@@ -71,7 +86,6 @@ public class DungeonGenerator implements RegionGenerator {
             segment(cursor, map, rng.nextInt(4));
             forbiddenDirection = (randomDirection + 2) % 4;
         }
-
         return map;
     }
 
@@ -123,6 +137,18 @@ public class DungeonGenerator implements RegionGenerator {
             }
         }
         return clean(passes - 1, map);
+    }
+
+    private int[] findRandom(boolean[][] map, Predicate<int[]> isValid) {
+        ArrayList<int[]> potentials = new ArrayList<>();
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[0].length; y++) {
+                int[] potential = new int[]{x, y};
+                boolean valid = isValid.test(potential);
+                if (valid) potentials.add(potential);
+            }
+        }
+        return potentials.get(rng.nextInt(potentials.size()));
     }
 
     private boolean get(int x, int y, boolean[][] map) {

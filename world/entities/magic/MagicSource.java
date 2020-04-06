@@ -4,6 +4,7 @@ import assets.definitions.Definitions;
 import misc.Location;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
+import world.Tiles;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;
@@ -62,7 +63,7 @@ public class MagicSource {
                 (int)getBody().getLocation().getCoordinates()[0],
                 (int)getBody().getLocation().getCoordinates()[1]
         );
-        boolean currentSolid = Definitions.getTile(currentTile[1]).collides();
+        boolean currentSolid = Tiles.collides(currentTile[1]);
         if (!lastLocationSolid && currentSolid) EventDispatcher.invoke(new MagicImpactEvent(this, null));
         lastLocationSolid = currentSolid;
 

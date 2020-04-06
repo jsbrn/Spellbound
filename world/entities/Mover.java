@@ -1,10 +1,9 @@
 package world.entities;
 
 import assets.definitions.Definitions;
-import assets.definitions.TileDefinition;
+import world.Tiles;
 import misc.Location;
 import misc.MiscMath;
-import world.Chunk;
 import world.World;
 import world.entities.pathfinding.LocalPathFinder;
 import world.events.EventDispatcher;
@@ -66,7 +65,7 @@ public class Mover {
         if (lookAtTarget) parent.getLocation().lookAt(path.get(0).getCoordinates()[0], path.get(0).getCoordinates()[1]);
 
         double[] coordinates = parent.getLocation().getCoordinates();
-        double multiplier = Definitions.getTile(World.getRegion().getTile((int)(coordinates[0]), (int)(coordinates[1]))[1]).getSpeedMultiplier();
+        double multiplier = Tiles.getSpeedMultiplier(World.getRegion().getTile((int)(coordinates[0]), (int)(coordinates[1]))[1]);
         double[] dir = independentAxes ? new double[]{1, 1}: MiscMath.getUnitVector(wx - start[0], wy - start[1]);
 
         int old_index = (int)parent.getLocation().getGlobalIndex();
@@ -109,10 +108,8 @@ public class Mover {
 
     public boolean canPassThrough(double wx, double wy) {
         byte[] tile = parent.getLocation().getRegion().getTile((int)wx, (int)wy);
-        TileDefinition base = Definitions.getTile(tile[0]);
-        TileDefinition top = Definitions.getTile(tile[1]);
 
-        if (base.collides() || top.collides()) return false;
+        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1])) return false;
         ArrayList<Entity> entities = parent.getLocation().getRegion().getEntities((int)wx, (int)wy, 1, 1);
         for (Entity e: entities) if (e.getMover().isCollidable() && !e.equals(parent)) return false;
         return true;

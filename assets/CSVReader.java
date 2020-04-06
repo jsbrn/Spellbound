@@ -28,6 +28,7 @@ public class CSVReader {
     public int getRowCount() { return rowIndices.size(); }
     public int getColumnCount() { return columnHeaders.size(); }
 
+    public String get(String column, int row) { return contents[row][columnHeaders.indexOf(column)]; }
     public String get(int column, int row) {
         return contents[row][column];
     }

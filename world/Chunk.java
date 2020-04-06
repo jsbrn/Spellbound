@@ -115,9 +115,9 @@ public class Chunk {
                         Math.abs(playerLocalCoords[0] - i) < 1
                                 && playerChunkCoords[0] == coordinates[0]
                                 && playerChunkCoords[1] == coordinates[1]
-                                && j - playerLocalCoords[1] < Definitions.getTile(top[i][j]).getHeight() - 1
+                                && j - playerLocalCoords[1] < Tiles.getHeight(top[i][j]) - 1
                                 && j - playerLocalCoords[1] > 0.25f
-                                && Definitions.getTile(top[i][j]).peeking();
+                                && Tiles.peeking(top[i][j]);
 
                 Assets.TILE_SPRITESHEET.startUse();
                 Assets.TILE_SPRITESHEET.drawEmbedded(
