@@ -28,6 +28,6 @@ public class DungeonBossRoomGenerator extends DungeonRoomGenerator {
 
     @Override
     public Color getColor() {
-        return Color.red;
+        return Color.darkGray;
     }
 }

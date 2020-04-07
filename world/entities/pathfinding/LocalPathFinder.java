@@ -1,7 +1,5 @@
 package world.entities.pathfinding;
 
-import assets.definitions.Definitions;
-import assets.definitions.TileType;
 import world.Tiles;
 import misc.Location;
 import misc.MiscMath;
@@ -132,7 +130,7 @@ class Node {
 
     public double getDScore() {
         byte[] tile = region.getTile(coordinates[0], coordinates[1]);
-        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1]) || tile[0] == TileType.AIR || isOutOfBounds()) return Integer.MAX_VALUE;
+        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1]) || tile[0] == Tiles.AIR || isOutOfBounds()) return Integer.MAX_VALUE;
         ArrayList<Entity> entities = region.getEntities(coordinates[0], coordinates[1], 1, 1);
         int solidEntities = 0;
         for (Entity e: entities) { if (e.getMover().isCollidable()) return Integer.MAX_VALUE; else solidEntities++; }

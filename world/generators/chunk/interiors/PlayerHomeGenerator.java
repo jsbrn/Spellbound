@@ -1,13 +1,11 @@
 package world.generators.chunk.interiors;
 
-import assets.definitions.TileType;
 import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Portal;
+import world.Tiles;
 import world.World;
 import world.entities.Entity;
-import world.entities.types.humanoids.npcs.Bandit;
-import world.entities.types.humanoids.npcs.Civilian;
 
 import java.util.Random;
 
@@ -28,19 +26,19 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
     @Override
     public byte getTop(int x, int y) {
         if (y == getMinimum()) {
-            if (x == Chunk.CHUNK_SIZE/2) return TileType.WOOD_WALL_DOOR_NORTH;
-            if (x > getMinimum() && x < getMaximum()) return TileType.WOOD_WALL_NORTH;
-            if (x == getMaximum()) return TileType.WOOD_CORNER_NORTHEAST;
-            if (x == getMinimum()) return TileType.WOOD_CORNER_NORTHWEST;
+            if (x == Chunk.CHUNK_SIZE/2) return Tiles.WOOD_WALL_DOOR_NORTH;
+            if (x > getMinimum() && x < getMaximum()) return Tiles.WOOD_WALL_NORTH;
+            if (x == getMaximum()) return Tiles.WOOD_CORNER_NORTHEAST;
+            if (x == getMinimum()) return Tiles.WOOD_CORNER_NORTHWEST;
         }
         if (y > getMinimum() && y < getMaximum()) {
-            if (x == getMaximum()) return TileType.WOOD_WALL_EAST;
-            if (x == getMinimum()) return TileType.WOOD_WALL_WEST;
+            if (x == getMaximum()) return Tiles.WOOD_WALL_EAST;
+            if (x == getMinimum()) return Tiles.WOOD_WALL_WEST;
         }
         if (y == getMaximum() && x >= getMinimum() && x <= getMaximum()) {
-            return x % 4 != 0 ? (byte) TileType.WOOD_WALL_SOUTH : (byte) TileType.WOOD_WALL_WINDOW_SOUTH;
+            return x % 4 != 0 ? (byte) Tiles.WOOD_WALL_SOUTH : (byte) Tiles.WOOD_WALL_WINDOW_SOUTH;
         }
-        return TileType.AIR;
+        return Tiles.AIR;
     }
 
     @Override

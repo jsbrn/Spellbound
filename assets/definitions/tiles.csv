@@ -10,7 +10,7 @@ House;True;True;2;0;1
 Tree;False;False;2;0.5;0.5
 Interior Wall;TRUE;True;2;0;1
 Wood Interior Door;TRUE;True;2;0;1
-Wood Floor;false;False;1;`;1
+Wood Floor;false;False;1;1;1
 Wood Corner (Northeast);FALSE;True;2;0;1
 Wood Wall (East);TRUE;True;2;0;1
 Wood Wall (West);TRUE;True;2;0;1
@@ -29,8 +29,10 @@ Stone Window (South);TRUE;True;2;0;1
 Broken Stone Wall;true;TRUE;2;0;1
 Trapdoor;true;false;1;1;1
 Stone Ladder (North);TRUE;True;2;0;1
-Stone Column (East);TRUE;True;2;0;1
-Stone Column (West);TRUE;True;2;0;1
+Stone Column (East);TRUE;FALSE;2;0;1
+Stone Column (West);TRUE;FALSE;2;0;1
 Cracked Stone Floor;False;False;1;1;1
 Broken Stone Floor;False;False;1;1;1
 Mossy Stone Floor;False;False;1;1;1
+Stone Wall Bookshelf (North);TRUE;TRUE;2;0;1
+Bookshelf;TRUE;TRUE;2;0;1

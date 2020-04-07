@@ -1,7 +1,7 @@
 package world.generators.chunk.overworld;
 
-import assets.definitions.TileType;
 import org.newdawn.slick.Color;
+import world.Tiles;
 
 import java.util.Random;
 
@@ -17,7 +17,7 @@ public class ForestGenerator extends OpenFieldGenerator {
 
     @Override
     public byte getTop(int x, int y) {
-        if (rng.nextFloat() > 1 - density) return TileType.TREE;
+        if (rng.nextFloat() > 1 - density) return Tiles.TREE;
         return super.getTop(x, y);
     }
 

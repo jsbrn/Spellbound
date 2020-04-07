@@ -1,8 +1,8 @@
 package world.generators.chunk.overworld;
 
-import assets.definitions.TileType;
 import org.newdawn.slick.Color;
 import world.Portal;
+import world.Tiles;
 import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
@@ -23,7 +23,7 @@ public class OpenFieldGenerator extends ChunkGenerator {
 
     @Override
     public byte getTop(int x, int y) {
-        return (byte)(rng.nextFloat() > 0.6 ? (rng.nextFloat() < 0.2 ? TileType.FLOWERS : TileType.TALL_GRASS) : 0);
+        return (byte)(rng.nextFloat() > 0.6 ? (rng.nextFloat() < 0.2 ? Tiles.FLOWERS : Tiles.TALL_GRASS) : 0);
     }
 
     @Override

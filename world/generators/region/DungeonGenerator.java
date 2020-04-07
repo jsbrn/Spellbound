@@ -3,9 +3,7 @@ package world.generators.region;
 import misc.MiscMath;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.EmptyChunkGenerator;
-import world.generators.chunk.interiors.dungeons.DungeonBossRoomGenerator;
-import world.generators.chunk.interiors.dungeons.DungeonEntranceGenerator;
-import world.generators.chunk.interiors.dungeons.DungeonRoomGenerator;
+import world.generators.chunk.interiors.dungeons.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -56,7 +54,10 @@ public class DungeonGenerator implements RegionGenerator {
 
         for (int x = 0; x < plan.length; x++) {
             for (int y = 0; y < plan[0].length; y++) {
-                if (plan[x][y]) map[x][y] = new DungeonRoomGenerator(get(x, y-1, plan), get(x, y+1, plan), get(x+1, y, plan), get(x-1, y, plan));
+                if (plan[x][y]) {
+                    boolean north = get(x, y-1, plan), south = get(x, y+1, plan), east = get(x+1, y, plan), west = get(x-1, y, plan);
+                    map[x][y] = rng.nextInt(10) > 0 ? new DungeonRoomGenerator(north, south, east, west) : new DungeonLibraryGenerator(north, south, east, west);
+                }
             }
         }
 
@@ -65,7 +66,10 @@ public class DungeonGenerator implements RegionGenerator {
                 get(potentialEntrance[0]+1, potentialEntrance[1], plan),
                 get(potentialEntrance[0]-1, potentialEntrance[1], plan));
 
-        map[potentialExit[0]][potentialExit[1]] = new DungeonBossRoomGenerator();
+        map[potentialExit[0]][potentialExit[1]] = new DungeonExitGenerator(
+                get(potentialExit[0], potentialExit[1]+1, plan),
+                get(potentialExit[0]+1, potentialExit[1], plan),
+                get(potentialExit[0]-1, potentialExit[1], plan));
 
 
     }

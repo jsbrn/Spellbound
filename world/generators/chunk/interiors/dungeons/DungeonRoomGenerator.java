@@ -1,12 +1,11 @@
 package world.generators.chunk.interiors.dungeons;
 
-import assets.definitions.TileType;
 import org.newdawn.slick.Color;
 import world.Portal;
+import world.Tiles;
 import world.entities.Entity;
 import world.entities.types.Chest;
 import world.entities.types.humanoids.npcs.Bandit;
-import world.entities.types.humanoids.npcs.Civilian;
 import world.generators.chunk.interiors.InteriorRoomGenerator;
 
 import java.util.Random;
@@ -21,15 +20,15 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
         super(north, south, east, west);
         this.setSize(9);
         this.rng = new Random();
-        this.spawnBandits = rng.nextFloat() < 0.5;
+        this.spawnBandits = rng.nextFloat() < 0;
         this.spawnLoot = rng.nextFloat() < 0.75;
     }
 
     @Override
     public byte getBase(int x, int y) {
         byte tile = super.getBase(x, y);
-        if (tile == TileType.STONE_FLOOR) {
-            return (byte)(rng.nextFloat() < 0.2f ? TileType.CRACKED_STONE_FLOOR + rng.nextInt(3) : TileType.STONE_FLOOR);
+        if (tile == Tiles.STONE_FLOOR) {
+            return (byte)(rng.nextFloat() < 0.2f ? Tiles.CRACKED_STONE_FLOOR + rng.nextInt(3) : Tiles.STONE_FLOOR);
         }
         return tile;
     }
@@ -41,18 +40,12 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
 
     @Override
     public Entity getEntity(int x, int y) {
-        if (x > getMinimum() + 1
-                && x < getMaximum() - 2
-                && y > getMinimum() + 1
-                && y < getMaximum() - 2
+        if (isWithinWalls(x, y)
                 && rng.nextFloat() < 0.5
                 && spawnBandits) {
             return new Bandit();
         }
-        if (x > getMinimum() + 1
-                && x < getMaximum() - 2
-                && y > getMinimum() + 1
-                && y < getMaximum() - 2
+        if (isWithinWalls(x, y)
                 && spawnLoot && rng.nextFloat() < 0.1
                 && chestCount < 3) {
             chestCount++;

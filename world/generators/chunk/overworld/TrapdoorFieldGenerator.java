@@ -1,11 +1,7 @@
 package world.generators.chunk.overworld;
 
-import assets.definitions.TileType;
 import org.newdawn.slick.Color;
-import world.Chunk;
-import world.Portal;
-import world.Region;
-import world.World;
+import world.*;
 import world.generators.region.DungeonGenerator;
 
 import java.util.Random;
@@ -24,7 +20,7 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
 
     @Override
     public byte getTop(int x, int y) {
-        return (x == entrance_x && y == entrance_y) ? TileType.TRAP_DOOR : super.getTop(x, y);
+        return (x == entrance_x && y == entrance_y) ? Tiles.TRAP_DOOR : super.getTop(x, y);
     }
 
     @Override

@@ -1,20 +1,20 @@
 package world.generators.chunk;
 
-import assets.definitions.TileType;
 import org.newdawn.slick.Color;
 import world.Portal;
+import world.Tiles;
 import world.entities.Entity;
 
 public class EmptyChunkGenerator extends ChunkGenerator {
 
     @Override
     public byte getBase(int x, int y) {
-        return TileType.AIR;
+        return Tiles.AIR;
     }
 
     @Override
     public byte getTop(int x, int y) {
-        return TileType.AIR;
+        return Tiles.AIR;
     }
 
     @Override
