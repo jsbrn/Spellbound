@@ -56,6 +56,6 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
 
     @Override
     public Color getColor() {
-        return Color.gray;
+        return Color.darkGray;
     }
 }

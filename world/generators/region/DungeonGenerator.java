@@ -55,8 +55,7 @@ public class DungeonGenerator implements RegionGenerator {
         for (int x = 0; x < plan.length; x++) {
             for (int y = 0; y < plan[0].length; y++) {
                 if (plan[x][y]) {
-                    boolean north = get(x, y-1, plan), south = get(x, y+1, plan), east = get(x+1, y, plan), west = get(x-1, y, plan);
-                    map[x][y] = rng.nextInt(10) > 0 ? new DungeonRoomGenerator(north, south, east, west) : new DungeonLibraryGenerator(north, south, east, west);
+                    map[x][y] = pickRoom(x, y, plan);
                 }
             }
         }
@@ -153,6 +152,15 @@ public class DungeonGenerator implements RegionGenerator {
             }
         }
         return potentials.get(rng.nextInt(potentials.size()));
+    }
+
+    private ChunkGenerator pickRoom(int x, int y, boolean[][] plan) {
+        boolean north = get(x, y-1, plan), south = get(x, y+1, plan), east = get(x+1, y, plan), west = get(x-1, y, plan);
+        boolean isVerticalHallway = get(x, y - 1, plan) && get(x, y + 1, plan) && adjacent(x, y, false, plan) == 2;
+        boolean isHorizontalHallway = get(x - 1, y, plan) && get(x + 1, y, plan) && adjacent(x, y, false, plan) == 2;
+        return isVerticalHallway || isHorizontalHallway
+                ? (rng.nextInt(3) == 0 ? new DungeonRoomGenerator(north, south, east, west) : new DungeonHallwayGenerator(isHorizontalHallway))
+                : (rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(north, south, east, west));
     }
 
     private boolean get(int x, int y, boolean[][] map) {
