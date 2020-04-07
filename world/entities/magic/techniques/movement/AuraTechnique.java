@@ -14,7 +14,7 @@ public class AuraTechnique extends PropelTechnique {
     public void update(MagicSource source) {
         source.setMoveTarget(
                 source.getCaster().getLocation().getCoordinates()[0],
-                source.getCaster().getLocation().getCoordinates()[1] - 0.5f);
+                source.getCaster().getLocation().getCoordinates()[1]);
     }
 
 }

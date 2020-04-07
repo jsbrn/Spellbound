@@ -112,11 +112,11 @@ public class Chunk {
                 float ttx = top[i][j] * TILE_SIZE;
 
                 boolean reveal =
-                        Math.abs(playerLocalCoords[0] - i) < 1
+                        (int)playerLocalCoords[0] == i
                                 && playerChunkCoords[0] == coordinates[0]
                                 && playerChunkCoords[1] == coordinates[1]
                                 && j - playerLocalCoords[1] < Tiles.getHeight(top[i][j]) - 1
-                                && j - playerLocalCoords[1] > 0.25f
+                                && j - playerLocalCoords[1] > 0
                                 && Tiles.peeking(top[i][j]);
 
                 Assets.TILE_SPRITESHEET.startUse();

@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import world.Tiles;
 import world.entities.Entity;
 import world.entities.types.Chest;
+import world.entities.types.SpikeTrap;
 import world.entities.types.humanoids.npcs.Bandit;
 
 import java.util.Random;
@@ -36,7 +37,7 @@ public class DungeonHallwayGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y) && rng.nextInt(16) == 0) {
-            return rng.nextInt(3) == 0 ? new Bandit() : new Chest(3);
+            return rng.nextInt(3) == 0 ? new Bandit() : (rng.nextBoolean() ? new SpikeTrap() : new Chest(3));
         }
         return null;
     }

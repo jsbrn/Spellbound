@@ -1,6 +1,5 @@
 package world.entities;
 
-import assets.definitions.Definitions;
 import world.Tiles;
 import misc.Location;
 import misc.MiscMath;
@@ -14,10 +13,13 @@ import world.entities.actions.ActionGroup;
 import world.entities.animations.Animation;
 import world.entities.animations.AnimationLayer;
 import world.entities.states.State;
+import world.events.EventDispatcher;
+import world.events.event.EntityCollisionEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Entity {
 
@@ -26,11 +28,13 @@ public class Entity {
     private State currentState;
 
     private String conversationStartingPoint;
-
     private LinkedHashMap<String, AnimationLayer> animationLayers;
     private ArrayList<ActionGroup> action_queue;
 
+    private List<Entity> lastTouching;
+
     public Entity() {
+        this.lastTouching = new ArrayList<>();
         this.action_queue = new ArrayList<>();
         this.animationLayers = new LinkedHashMap<>();
         this.mover = new Mover();
@@ -44,6 +48,11 @@ public class Entity {
         if (action_queue.isEmpty()) return;
         action_queue.get(0).update();
         if (action_queue.get(0).finished()) action_queue.remove(0);
+
+        List<Entity> touching = getLocation().getRegion().getEntities(getLocation().getCoordinates()[0], getLocation().getCoordinates()[1], 1);
+        touching.stream().filter(e -> !lastTouching.contains(e)).forEach(e -> EventDispatcher.invoke(new EntityCollisionEvent(this, e)));
+        lastTouching = touching;
+
     }
 
     public void setConversationStartingPoint(String dialogue_id) {
@@ -146,7 +155,7 @@ public class Entity {
             if (anim != null)
                 anim.draw(
                         osx,
-                        osy,
+                        osy + 0.5f * Chunk.TILE_SIZE * Window.getScale(),
                         scale,
                         direction);
         }

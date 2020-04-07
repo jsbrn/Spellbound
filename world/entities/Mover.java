@@ -101,7 +101,7 @@ public class Mover {
             offset = MiscMath.getRotatedOffset(0, -dist, angle);
             int wx = (int)(coords[0] + offset[0]), wy = (int)(coords[1] + offset[1]);
             if (!canPassThrough(wx, wy)) return false;
-            dist+=0.5;
+            dist+=0.25;
         }
         return true;
     }
@@ -118,7 +118,7 @@ public class Mover {
     public double[] findMoveTarget(double dx, double dy, double maxDistance) {
         double[] coordinates = parent.getLocation().getCoordinates();
         double[] potentialTarget = new double[]{ coordinates[0], coordinates[1] };
-        for (double i = 0.5; i < maxDistance; i += 0.5) {
+        for (double i = 0.25; i < maxDistance; i += 0.25) {
             double tx = coordinates[0] + (i * dx);
             double ty = coordinates[1] + (i * dy);
             if (!canMoveDirectlyTo(tx, ty) || !canPassThrough(tx, ty)) break;

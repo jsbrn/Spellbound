@@ -103,7 +103,9 @@ public class MiniMap extends GUIElement {
                 coords[0] / (getRegion().getSize() * Chunk.CHUNK_SIZE),
                 coords[1] / (getRegion().getSize() * Chunk.CHUNK_SIZE)
         };
-        World.getLocalPlayer().draw(getOnscreenCoordinates()[0] + (Window.getScale()*2) + ((float)percentage[0] * size * Window.getScale()), getOnscreenCoordinates()[1] + (Window.getScale()*2) + ((float)percentage[1] * size * Window.getScale()), 1);
+        World.getLocalPlayer().draw(
+                getOnscreenCoordinates()[0] + (Window.getScale()*2) + ((float)percentage[0] * size * Window.getScale()),
+                getOnscreenCoordinates()[1] + (Window.getScale()*2) + ((float)percentage[1] * size * Window.getScale()), 1);
     }
 
 }

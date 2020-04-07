@@ -41,7 +41,6 @@ public class MagicSource {
         this.body = new ParticleSource();
         this.body.setColor(color);
         this.body.setLocation(new Location(caster.getLocation()));
-        this.body.getLocation().addCoordinates(0, -0.5);
         double[] offset = MiscMath.getRotatedOffset(0, -0.6, MiscMath.angleBetween(caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1], x, y));
         this.moveTarget = new double[]{body.getLocation().getCoordinates()[0] + offset[0], body.getLocation().getCoordinates()[1] + offset[1]};
         List<Entity> found = caster.getLocation().getRegion().getEntities((int)x-1, (int)y-1, 3, 3).stream().filter(e -> !e.equals(caster)).collect(Collectors.toList());
@@ -127,11 +126,11 @@ public class MagicSource {
     public List<Entity> getCollidingEntities() {
         List<Entity> inner = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
-                body.getLocation().getCoordinates()[1] + 0.5f,
+                body.getLocation().getCoordinates()[1],
                 body.getReachRadius()
         ), outer = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
-                body.getLocation().getCoordinates()[1] + 0.5f,
+                body.getLocation().getCoordinates()[1],
                 body.getDepthRadius()
         );
         return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());
@@ -140,11 +139,11 @@ public class MagicSource {
     public List<MagicSource> getCollidingMagic() {
         List<MagicSource> inner = body.getLocation().getRegion().getMagicSources(
                 body.getLocation().getCoordinates()[0],
-                body.getLocation().getCoordinates()[1] + 0.5f,
+                body.getLocation().getCoordinates()[1],
                 body.getReachRadius()
         ), outer = body.getLocation().getRegion().getMagicSources(
                 body.getLocation().getCoordinates()[0],
-                body.getLocation().getCoordinates()[1] + 0.5f,
+                body.getLocation().getCoordinates()[1],
                 body.getDepthRadius()
         );
         return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());

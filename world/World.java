@@ -27,7 +27,8 @@ public class World {
         player = new Player();
         addRegion(new Region("world", 32, new DefaultWorldGenerator()));
         Region player_home = addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator()));
-        player.moveTo(new Location(getRegion("world"), 16, 16, Chunk.CHUNK_SIZE/2 + 0.5f, Chunk.CHUNK_SIZE/2 + 0.5f));
+        player.moveTo(new Location(player_home, 0, 0, Chunk.CHUNK_SIZE/2 + 0.5f, Chunk.CHUNK_SIZE/2 - 1 + 0.5f));
+        player.getLocation().setLookDirection(180);
         Camera.setTarget(player);
 
     }

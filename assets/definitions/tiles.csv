@@ -20,12 +20,12 @@ Wood Wall Window (South);TRUE;True;2;0;1
 Stone Wall (North);TRUE;True;2;0;1
 Stone Door (North);TRUE;True;2;0;1
 Stone Floor;FALSE;False;1;1;1
-Stone Corner;FALSE;FALSE;2;0;1
-Stone Wall (East);TRUE;HH;2;0;1
-Stone Wall (West);TRUE;True;2;0;1
-Stone Corner (Northwest);TRUE;FALSE;2;0;1
+Stone Corner;FALSE;FALSE;2;1;1
+Stone Wall (East);TRUE;FALSE;2;1;1
+Stone Wall (West);TRUE;FALSE;2;1;1
+Stone Corner (Northwest);TRUE;FALSE;2;1;1
 Stone Wall (South);TRUE;True;2;0;1
-Stone Window (South);TRUE;True;2;0;1
+Stone Window (South);TRUE;True;2;10;1
 Broken Stone Wall;true;TRUE;2;0;1
 Trapdoor;true;false;1;1;1
 Stone Ladder (North);TRUE;True;2;0;1

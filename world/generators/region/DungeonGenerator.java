@@ -38,7 +38,7 @@ public class DungeonGenerator implements RegionGenerator {
             }
         }
 
-        boolean[][] plan = clean(3, plan(rng.nextInt(size), rng.nextInt(size), size, segmentCount));
+        boolean[][] plan = clean(1, plan(rng.nextInt(size), rng.nextInt(size), size, segmentCount));
 
         int[] potentialEntrance = findRandom(plan, coords ->
                 (get(coords[0], coords[1] + 1, plan) || get(coords[0] + 1, coords[1], plan) || get(coords[0] - 1, coords[1], plan))

@@ -31,7 +31,7 @@ public class WeightTechnique extends Technique {
                                     cast.getBody().getLocation().getCoordinates()[0],
                                     cast.getBody().getLocation().getCoordinates()[1],
                                     mie.getEntity().getLocation().getCoordinates()[0],
-                                    mie.getEntity().getLocation().getCoordinates()[1] - 0.5)));
+                                    mie.getEntity().getLocation().getCoordinates()[1])));
                 }
             })
         );

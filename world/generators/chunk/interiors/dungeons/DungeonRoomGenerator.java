@@ -5,6 +5,7 @@ import world.Portal;
 import world.Tiles;
 import world.entities.Entity;
 import world.entities.types.Chest;
+import world.entities.types.SpikeTrap;
 import world.entities.types.humanoids.npcs.Bandit;
 import world.generators.chunk.interiors.InteriorRoomGenerator;
 
@@ -13,14 +14,13 @@ import java.util.Random;
 public class DungeonRoomGenerator extends InteriorRoomGenerator {
 
     private Random rng;
-    private boolean spawnBandits, spawnLoot;
+    private boolean spawnLoot;
     private int chestCount;
 
     public DungeonRoomGenerator(boolean north, boolean south, boolean east, boolean west) {
         super(north, south, east, west);
         this.setSize(9);
         this.rng = new Random();
-        this.spawnBandits = rng.nextFloat() < 0;
         this.spawnLoot = rng.nextFloat() < 0.75;
     }
 
@@ -41,9 +41,8 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y)
-                && rng.nextFloat() < 0.5
-                && spawnBandits) {
-            return new Bandit();
+                && rng.nextFloat() < 0.3) {
+            return new SpikeTrap();
         }
         if (isWithinWalls(x, y)
                 && spawnLoot && rng.nextFloat() < 0.1
