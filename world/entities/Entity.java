@@ -31,11 +31,13 @@ public class Entity {
     private LinkedHashMap<String, AnimationLayer> animationLayers;
     private ArrayList<ActionGroup> action_queue;
 
+    private double radius;
     private boolean isTile;
 
     private List<Entity> lastTouching;
 
     public Entity() {
+        this.radius = 0.5f;
         this.lastTouching = new ArrayList<>();
         this.action_queue = new ArrayList<>();
         this.animationLayers = new LinkedHashMap<>();
@@ -45,16 +47,24 @@ public class Entity {
     }
 
     public void update() {
+
+        List<Entity> touching = getLocation().getRegion().getEntities(getLocation().getCoordinates()[0], getLocation().getCoordinates()[1], radius);
+        touching.stream().filter(e -> !lastTouching.contains(e)).forEach(e -> EventDispatcher.invoke(new EntityCollisionEvent(this, e)));
+        lastTouching = touching;
+
         if (currentState != null) currentState.update();
         mover.update();
         if (action_queue.isEmpty()) return;
         action_queue.get(0).update();
         if (action_queue.get(0).finished()) action_queue.remove(0);
+    }
 
-        List<Entity> touching = getLocation().getRegion().getEntities(getLocation().getCoordinates()[0], getLocation().getCoordinates()[1], 1);
-        touching.stream().filter(e -> !lastTouching.contains(e)).forEach(e -> EventDispatcher.invoke(new EntityCollisionEvent(this, e)));
-        lastTouching = touching;
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
 
+    public double getRadius() {
+        return radius;
     }
 
     public void setIsTile(boolean tile) {
@@ -164,8 +174,8 @@ public class Entity {
             Animation anim = animationLayer.getAnimationByName(animationLayer.getCurrentAnimation());
             if (anim != null)
                 anim.draw(
-                        osx,
-                        osy,
+                        isTile ? (int)osx : osx,
+                        isTile ? (int)osy : osy,
                         scale,
                         direction);
         }
@@ -178,7 +188,7 @@ public class Entity {
         float tosc[] = Camera.getOnscreenCoordinates(getMover().getTarget()[0], getMover().getTarget()[1], scale);
 
         g.setColor(Color.blue);
-        g.drawOval(osc[0]- (Chunk.TILE_SIZE * scale / 2), osc[1]- (Chunk.TILE_SIZE * scale / 2), Chunk.TILE_SIZE * scale, Chunk.TILE_SIZE * scale);
+        g.drawOval(osc[0] - (float)(Chunk.TILE_SIZE * scale * radius), osc[1]- (float)(Chunk.TILE_SIZE * scale * radius), (int)(Chunk.TILE_SIZE * scale * radius * 2), (int)(Chunk.TILE_SIZE * scale * radius * 2));
 
         g.setColor(Color.cyan);
         if (!getMover().isIndependent()) {

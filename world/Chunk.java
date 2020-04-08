@@ -86,10 +86,10 @@ public class Chunk {
 
                 Assets.TILE_SPRITESHEET.startUse();
                 Assets.TILE_SPRITESHEET.drawEmbedded(
-                        ox,
-                        oy,
-                        ox + (TILE_SIZE * scale),
-                        oy + (Assets.TILE_SPRITESHEET.getHeight() * scale),
+                        (int)ox,
+                        (int)oy,
+                        (int)ox + (TILE_SIZE * scale),
+                        (int)oy + (Assets.TILE_SPRITESHEET.getHeight() * scale),
                         btx,
                         0,
                         btx + TILE_SIZE,
@@ -122,10 +122,10 @@ public class Chunk {
 
                 Assets.TILE_SPRITESHEET.startUse();
                 Assets.TILE_SPRITESHEET.drawEmbedded(
-                        ox,
-                        oy,
-                        ox + (TILE_SIZE * scale),
-                        oy + (Assets.TILE_SPRITESHEET.getHeight() * scale),
+                        (int)ox,
+                        (int)oy,
+                        (int)ox + (TILE_SIZE * scale),
+                        (int)oy + (Assets.TILE_SPRITESHEET.getHeight() * scale),
                         ttx,
                         0,
                         ttx + TILE_SIZE,

@@ -117,7 +117,7 @@ public class Region {
         return entities.stream().filter(e -> MiscMath.circlesIntersect(
                 e.getLocation().getCoordinates()[0],
                 e.getLocation().getCoordinates()[1],
-                0.5,
+                e.getRadius(),
                 wx,
                 wy,
                 radius)).collect(Collectors.toList());
