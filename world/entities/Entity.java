@@ -31,6 +31,8 @@ public class Entity {
     private LinkedHashMap<String, AnimationLayer> animationLayers;
     private ArrayList<ActionGroup> action_queue;
 
+    private boolean isTile;
+
     private List<Entity> lastTouching;
 
     public Entity() {
@@ -53,6 +55,14 @@ public class Entity {
         touching.stream().filter(e -> !lastTouching.contains(e)).forEach(e -> EventDispatcher.invoke(new EntityCollisionEvent(this, e)));
         lastTouching = touching;
 
+    }
+
+    public void setIsTile(boolean tile) {
+        isTile = tile;
+    }
+
+    public boolean isTile() {
+        return isTile;
     }
 
     public void setConversationStartingPoint(String dialogue_id) {
@@ -155,7 +165,7 @@ public class Entity {
             if (anim != null)
                 anim.draw(
                         osx,
-                        osy + 0.5f * Chunk.TILE_SIZE * Window.getScale(),
+                        osy,
                         scale,
                         direction);
         }

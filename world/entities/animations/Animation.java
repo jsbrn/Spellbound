@@ -57,7 +57,7 @@ public class Animation {
     public void draw(float ex, float ey, float scale, int direction) {
         int frame = getFrame();
         sprite.startUse();
-        float y_offset = -(frame_height * scale), x_offset = -0.5f * scale * (float)Chunk.TILE_SIZE;
+        float y_offset = -(frame_height/2 * scale), x_offset = -0.5f * scale * (float)Chunk.TILE_SIZE;
         int src_y = (int)(!directional ? 0 : direction * frame_height);
         sprite.drawEmbedded(
                 ex + x_offset,

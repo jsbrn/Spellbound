@@ -11,6 +11,7 @@ import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Chunk {
 
@@ -132,14 +133,18 @@ public class Chunk {
                 Assets.TILE_SPRITESHEET.endUse();
 
                 ArrayList<Entity> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
-                for (Entity e: entities) {
-                    float[] eosc = Camera.getOnscreenCoordinates(e.getLocation().getCoordinates()[0], e.getLocation().getCoordinates()[1], scale);
-                    int padding = (int)(4 * Chunk.TILE_SIZE * scale);
-                    if (MiscMath.pointIntersectsRect(
-                            eosc[0], eosc[1],
-                            -padding, -padding,
-                            Window.getWidth() + (2*padding), Window.getHeight() + (2*padding)))
-                        e.draw(eosc[0], eosc[1], scale);
+                int pass = 0;
+                for (int p = 0; p < 2; p++) {
+                    int finalP = p;
+                    for (Entity e : entities.stream().filter(e -> finalP == 0 ? e.isTile() : !e.isTile()).collect(Collectors.toList())) {
+                        float[] eosc = Camera.getOnscreenCoordinates(e.getLocation().getCoordinates()[0], e.getLocation().getCoordinates()[1], scale);
+                        int padding = (int) (4 * Chunk.TILE_SIZE * scale);
+                        if (MiscMath.pointIntersectsRect(
+                                eosc[0], eosc[1],
+                                -padding, -padding,
+                                Window.getWidth() + (2 * padding), Window.getHeight() + (2 * padding)))
+                            e.draw(eosc[0], eosc[1], scale);
+                    }
                 }
 
             }

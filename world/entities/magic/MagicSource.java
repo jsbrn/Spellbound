@@ -55,7 +55,7 @@ public class MagicSource {
         colliding.stream()
                 .filter(e -> !e.equals(caster) && !lastColliding.contains(e))
                 .forEach(e -> {
-                    EventDispatcher.invoke(new MagicImpactEvent(this, e));
+                    if (!e.isTile()) EventDispatcher.invoke(new MagicImpactEvent(this, e));
                 });
         lastColliding = colliding;
         byte[] currentTile = getBody().getLocation().getRegion().getTile(

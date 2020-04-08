@@ -21,6 +21,7 @@ public class KnockbackAction extends Action {
     @Override
     public void onStart() {
         Entity parent = getParent();
+        if (parent.isTile()) return;
         parent.getMover().setSpeed(force * 2);
         previouslyIndependent = parent.getMover().isIndependent();
         parent.getMover().setIndependent(false);

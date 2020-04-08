@@ -49,16 +49,12 @@ public class Region {
         entities = new ArrayList<>();
         portals = new HashMap<>();
 
-        Region that = this;
         EventDispatcher.register(new EventListener().on(EntityMovedEvent.class.toString(), e -> {
-
             EntityMovedEvent event = (EntityMovedEvent) e;
-
             if (entities.contains(event.getEntity())) {
                 removeEntity(event.getEntity());
                 addEntity(event.getEntity());
             }
-
         }));
 
     }
@@ -66,7 +62,8 @@ public class Region {
     public long getCurrentTime() { return time; }
 
     public void addEntity(Entity e) {
-        int index = getEntityIndex(e.getLocation().getGlobalIndex(), 0, entities.size());
+        double lindex = e.getLocation().getGlobalIndex();
+        int index = getEntityIndex(lindex, 0, entities.size());
         entities.add(index, e);
     }
 

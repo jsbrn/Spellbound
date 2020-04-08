@@ -14,6 +14,7 @@ public class DungeonLibraryGenerator extends DungeonRoomGenerator {
 
     public DungeonLibraryGenerator(boolean north, boolean south, boolean east, boolean west) {
         super(north, south, east, west);
+        this.setSize(10);
         this.rng = new Random();
         this.spacing = 3 + rng.nextInt(4);
     }
