@@ -1,8 +1,10 @@
 package gui;
 
 import gui.elements.Modal;
+import gui.elements.PositionalTextLabel;
 import gui.elements.SpeechBubble;
 import gui.states.GameScreen;
+import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
@@ -10,6 +12,7 @@ import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import world.Camera;
 import world.World;
+import world.entities.Entity;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
@@ -146,6 +149,18 @@ public class GUI {
         this.elements.add(element);
     }
 
+    public void removeElement(GUIElement element) {
+        if (elements.remove(element)) element.onHide();
+    }
+
+    public void floatText(Location location, String text, Color color, int speed, int lifespan) {
+        GameScreen.getGUI().addElement(
+                new PositionalTextLabel(location, text, color, MiscMath.random(-45, 45), speed, lifespan),
+                -1,
+                -1,
+                GUIAnchor.TOP_LEFT);
+    }
+
     public void draw(Graphics g, boolean debug) {
 
         int mouseGX = (int)(GameScreen.getInput().getMouseX() / Window.getScale()), mouseGY = (int)(GameScreen.getInput().getMouseY() / Window.getScale());
@@ -162,7 +177,9 @@ public class GUI {
             g.setColor(Color.white);
         }
 
-        for (GUIElement element: elements) {
+        for (int i = 0; i < elements.size(); i++) {
+            if (i >= elements.size()) break;
+            GUIElement element = elements.get(i);
             if (element.isActive() && !element.equals(modals)) {
                 element.draw(g);
                 if (debug) element.drawDebug(g);

@@ -111,10 +111,10 @@ public class TextLabel extends GUIElement {
             float y = coords[1] + (i * lineHeight * Window.getScale());
             if (shadow) {
                 g.setColor(color.darker().darker());
-                g.drawString(lines.get(i), x + 1, y + 1);
+                g.drawString(lines.get(i), (int)x + 1, (int)y + 1);
             }
             g.setColor(color);
-            g.drawString(lines.get(i), x, y);
+            g.drawString(lines.get(i), (int)x, (int)y);
         }
     }
 

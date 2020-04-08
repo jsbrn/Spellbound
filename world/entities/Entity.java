@@ -33,6 +33,7 @@ public class Entity {
 
     private double radius;
     private boolean isTile;
+    private String name;
 
     private List<Entity> lastTouching;
 
@@ -57,6 +58,14 @@ public class Entity {
         if (action_queue.isEmpty()) return;
         action_queue.get(0).update();
         if (action_queue.get(0).finished()) action_queue.remove(0);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setRadius(double radius) {

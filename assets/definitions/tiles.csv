@@ -11,10 +11,10 @@ Tree;False;False;2;0.5;0.5
 Interior Wall;TRUE;True;2;0;1
 Wood Interior Door;TRUE;True;2;0;1
 Wood Floor;false;False;1;1;1
-Wood Corner (Northeast);FALSE;True;2;0;1
+Wood Corner (Northeast);TRUE;True;2;0;1
 Wood Wall (East);TRUE;True;2;0;1
 Wood Wall (West);TRUE;True;2;0;1
-Wood Corner (Northwest);FALSE;True;2;0;1
+Wood Corner (Northwest);TRUE;True;2;0;1
 Wood Wall (South);TRUE;True;2;0;1
 Wood Wall Window (South);TRUE;True;2;0;1
 Stone Wall (North);TRUE;True;2;0;1

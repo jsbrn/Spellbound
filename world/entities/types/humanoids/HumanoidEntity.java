@@ -1,7 +1,9 @@
 package world.entities.types.humanoids;
 
+import gui.states.GameScreen;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Game;
 import world.entities.Entity;
 import world.entities.animations.Animation;
 import world.entities.magic.Spell;
@@ -25,11 +27,9 @@ public class HumanoidEntity extends Entity {
 
         this.setMaxHP(10);
         this.setMaxMana(Integer.MAX_VALUE);
-        this.setHP(10);
+        this.hp = 10;
         this.setMana(Integer.MAX_VALUE);
         this.setMaxStamina(10);
-
-        this.addCrystals((int)MiscMath.random(10, 25));
 
         this.spellbook = new Spellbook(this);
 
@@ -51,6 +51,7 @@ public class HumanoidEntity extends Entity {
     @Override
     public void update() {
         super.update();
+        addHP(MiscMath.getConstant(max_hp, 300));
         addMana(MiscMath.getConstant(max_mana, 30));
         addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
@@ -72,7 +73,19 @@ public class HumanoidEntity extends Entity {
 
     public void setMana(double mana) { this.mana = MiscMath.clamp(mana, 0, max_mana); }
     public void addMana(double amount) { setMana(mana + amount); }
-    public void setHP(double hp) { this.hp = MiscMath.clamp(hp, 0, max_hp); }
+    public void setHP(double amount) {
+        int oldHP = (int)hp;
+        this.hp = MiscMath.clamp(amount, 0, max_hp);
+        if ((int)hp != oldHP) {
+            int diff = (int)(hp - oldHP);
+            GameScreen.getGUI().floatText(
+                    getLocation(),
+                    diff > 0 ? "+"+diff : ""+diff,
+                    diff > 0 ? Color.green : Color.red,
+                    4,
+                    500);
+        }
+    }
     public void addHP(double amount) { setHP(hp + amount); }
     public void setStamina(double amount) { this.stamina = MiscMath.clamp(amount, 0, max_stamina); }
     public void addStamina(double amount) { setStamina(stamina + amount); }

@@ -17,23 +17,27 @@ public class SpeechBubble extends GUIElement {
     private Entity speaker;
     private DialogueDefinition dialogue;
     private Image background;
-    private TextLabel label;
+    private TextLabel contents;
+    private TextLabel title;
     private TextLabel options;
 
     public SpeechBubble() {
-        this.label = new TextLabel("", 4, Chunk.TILE_SIZE * 5, 4, Color.black, false);
+        this.title = new TextLabel("", 6, Chunk.TILE_SIZE * 5, 1, Color.white, true);
+        this.contents = new TextLabel("", 4, Chunk.TILE_SIZE * 5, 3, Color.black, false);
         this.options = new TextLabel("", 3, Color.gray, false);
-        this.addChild(label, Chunk.TILE_SIZE * 2, 6, GUIAnchor.TOP_LEFT);
+        this.addChild(title, 4, -4, GUIAnchor.TOP_LEFT);
+        this.addChild(contents, Chunk.TILE_SIZE * 2, 12, GUIAnchor.TOP_LEFT);
         this.addChild(options, 0, -4, GUIAnchor.BOTTOM_MIDDLE);
         this.background = Assets.getImage("assets/gui/dialogue.png");
     }
 
     public void setSpeaker(Entity speaker) {
         this.speaker = speaker;
+        this.title.setText(speaker.getName());
     }
 
     public void setDialogue(DialogueDefinition dialogue) {
-        this.label.setText(dialogue.getRandomText());
+        this.contents.setText(dialogue.getRandomText());
         String optionsLabel = "";
         for (int o = 0; o < dialogue.getOptionCount(); o++)
             optionsLabel += "["+(o+1)+"] "+dialogue.getOptionText(o)+" ";

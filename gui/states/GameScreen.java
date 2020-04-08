@@ -48,9 +48,9 @@ public class GameScreen extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         if (initialized) return;
         showTopLayer = true;
+        gui = new GUI();
         World.init();
         game = sbg;
-        gui = new GUI();
 
         World.getLocalPlayer().getSpellbook().discoverAllTechniques();
 
@@ -148,6 +148,8 @@ public class GameScreen extends BasicGameState {
     @Override
     public void keyReleased(int key, char c) {
 
+        if (key == Input.KEY_Q)
+            GameScreen.getGUI().floatText(World.getLocalPlayer().getLocation(), "-1", Color.red, 4, 500);
         if (key == Input.KEY_F5) miniMap.setRegion(new Region("test_dungeon", 16, new DungeonGenerator(16*4, 12)));
         if (key == Input.KEY_F6) miniMap.setRegion(null);
 

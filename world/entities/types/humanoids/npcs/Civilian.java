@@ -28,7 +28,7 @@ public class Civilian extends HumanoidEntity {
     public Civilian() {
         super();
         rng = new Random();
-
+        setName("Civilian");
         Color shirt = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
         getAnimationLayer("torso").setColor(shirt);
         getAnimationLayer("arms").setColor(shirt.darker());
