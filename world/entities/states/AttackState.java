@@ -7,6 +7,7 @@ import world.entities.actions.action.CastSpellAction;
 import world.entities.actions.action.MoveAction;
 import world.entities.actions.action.ChangeAnimationAction;
 import world.entities.actions.action.WaitAction;
+import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.Random;
 
@@ -30,6 +31,7 @@ public class AttackState extends FollowState {
                 && getParent().canSee(getFollowing()) > 0.5) {
             getParent().queueActions(moveCount < 0 ? move() : cast());
         }
+        if (((HumanoidEntity)getFollowing()).isDead()) getParent().exitState();
     }
 
     private ActionGroup cast() {

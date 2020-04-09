@@ -12,14 +12,17 @@ import world.entities.magic.techniques.Technique;
 
 public class HumanoidEntity extends Entity {
 
+    public static Color[] SKIN_COLORS
+            = new Color[]{new Color(230, 210, 155), new Color(110, 90, 72)};
+
     private Spellbook spellbook;
     private double hp, mana, stamina, max_hp, max_mana, max_stamina;
-    private boolean hostile;
+
+    private boolean isDead;
 
     private int crystals, gold, dyes;
 
-    public static Color[] SKIN_COLORS
-            = new Color[]{new Color(230, 210, 155), new Color(110, 90, 72)};
+
 
     public HumanoidEntity() {
 
@@ -46,10 +49,22 @@ public class HumanoidEntity extends Entity {
         this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
         this.addAnimation("head", "talking", new Animation("humanoid/head_talking.png", 3, 2, 16, true, true, Color.white));
 
+        this.addAnimation("torso", "dying", new Animation("humanoid/torso_dying.png", 4, 3, 16, false, false, Color.red));
+        this.addAnimation("torso", "dead", new Animation("humanoid/torso_dead.png", 1, 1, 16, false, false, Color.red));
+        this.addAnimation("arms", "dying", new Animation("humanoid/arms_dying.png", 4, 3, 16, false, false, Color.orange));
+        this.addAnimation("arms", "dead", new Animation("humanoid/arms_dead.png", 1, 1, 16, false, false, Color.orange));
+        this.addAnimation("legs", "dying", new Animation("humanoid/legs_dying.png", 4, 3, 16, false, false, Color.orange));
+        this.addAnimation("legs", "dead", new Animation("humanoid/legs_dead.png", 1, 1, 16, false, false, Color.orange));
+        this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false, Color.orange));
+        this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false, Color.orange));
+
+
+
     }
 
     @Override
     public void update() {
+        if (isDead()) return;
         super.update();
         addHP(MiscMath.getConstant(max_hp, 300));
         addMana(MiscMath.getConstant(max_mana, 30));
@@ -77,13 +92,26 @@ public class HumanoidEntity extends Entity {
         int oldHP = (int)hp;
         this.hp = MiscMath.clamp(amount, 0, max_hp);
         if ((int)hp != oldHP) {
-            int diff = (int)(hp - oldHP);
+            int diff = (int)hp - oldHP;
             GameScreen.getGUI().floatText(
                     getLocation(),
                     diff > 0 ? "+"+diff : ""+diff,
                     diff > 0 ? Color.green : Color.red,
                     4,
                     500);
+        }
+        if (!isDead && hp == 0) {
+            isDead = true;
+            setIsTile(true);
+            clearActions();
+            getAnimationLayer("torso").stackAnimation("dying");
+            getAnimationLayer("arms").stackAnimation("dying");
+            getAnimationLayer("legs").stackAnimation("dying");
+            getAnimationLayer("head").stackAnimation("dying");
+            getAnimationLayer("torso").setBaseAnimation("dead");
+            getAnimationLayer("arms").setBaseAnimation("dead");
+            getAnimationLayer("legs").setBaseAnimation("dead");
+            getAnimationLayer("head").setBaseAnimation("dead");
         }
     }
     public void addHP(double amount) { setHP(hp + amount); }
@@ -94,8 +122,9 @@ public class HumanoidEntity extends Entity {
     public void setMaxMana(double amount) { this.max_mana = amount; }
     public void setMaxStamina(double amount) { this.max_stamina = amount; }
 
-    public boolean isHostile() { return hostile; }
-    public void setHostile(boolean h) { this.hostile = h; }
+    public boolean isDead() {
+        return isDead;
+    }
 
     public Spellbook getSpellbook() { return spellbook; }
     public void setSpellbook(Spellbook spellbook) {

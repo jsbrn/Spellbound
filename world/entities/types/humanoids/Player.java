@@ -55,6 +55,7 @@ public class Player extends HumanoidEntity {
                 .on(MousePressedEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
+                        if (isDead()) return;
                         MousePressedEvent mce = (MousePressedEvent)e;
                         ActionGroup actions = new ActionGroup();
                         if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0
@@ -69,6 +70,7 @@ public class Player extends HumanoidEntity {
                 .on(KeyDownEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
+                        if (isDead()) return;
                         KeyDownEvent kde = (KeyDownEvent)e;
                         if (kde.getKey() == Input.KEY_E && that.getActionQueue().isEmpty()) {
                             that.queueAction(new ActivateAction());
@@ -78,6 +80,7 @@ public class Player extends HumanoidEntity {
                 .on(ConversationStartedEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
+                        if (isDead()) return;
                         ConversationStartedEvent cse = (ConversationStartedEvent)e;
                         if (cse.getPlayer().equals(that)) {
                             that.allowUserMovement = false;
@@ -88,6 +91,7 @@ public class Player extends HumanoidEntity {
                 .on(ConversationEndedEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
+                        if (isDead()) return;
                         ConversationEndedEvent cse = (ConversationEndedEvent)e;
                         if (cse.getPlayer().equals(that)) {
                             that.allowUserMovement = true;
@@ -99,6 +103,9 @@ public class Player extends HumanoidEntity {
     }
 
     public void update() {
+
+        if (isDead()) return;
+
         super.update();
 
         int dx = 0, dy = 0;

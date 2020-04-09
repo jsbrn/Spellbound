@@ -1,6 +1,7 @@
 package world.entities.states;
 
 import world.entities.Entity;
+import world.entities.types.humanoids.HumanoidEntity;
 
 public class PatrolState extends IdleState {
 
@@ -14,7 +15,8 @@ public class PatrolState extends IdleState {
 
     public void update() {
         super.update();
-        if (getParent().canSee(target) > 0.5 && target.getLocation().distanceTo(getParent().getLocation()) < radius)
+        if (!(getParent() instanceof HumanoidEntity)) return;
+        if (!((HumanoidEntity)target).isDead() && getParent().canSee(target) > 0.5 && target.getLocation().distanceTo(getParent().getLocation()) < radius)
             getParent().enterState(new AttackState(target, 3, 8, 16));
     }
 
