@@ -35,6 +35,7 @@ public class GameScreen extends BasicGameState {
     private static boolean debugMode, showTopLayer;
 
     private static MiniMap miniMap;
+    private static TextLabel deathMessage;
 
     public GameScreen(int state) {
         this.initialized = false;
@@ -79,6 +80,9 @@ public class GameScreen extends BasicGameState {
 
         miniMap = new MiniMap();
         gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);
+
+        deathMessage = new TextLabel("Press R to continue", 4, Color.white, true);
+        gui.addElement(deathMessage, 0, 16, GUIAnchor.CENTER);
 
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
         gui.addElement(spellcasting, 0, 0, GUIAnchor.CENTER);
@@ -141,6 +145,9 @@ public class GameScreen extends BasicGameState {
         World.setTimeMultiplier(gc.getInput().isKeyDown(Input.KEY_LSHIFT) ? 0.5 : 1);
         MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
         input = gc.getInput();
+
+        if (World.getLocalPlayer().isDead()) deathMessage.show(); else deathMessage.hide();
+
         if (!paused) World.update();
 
     }

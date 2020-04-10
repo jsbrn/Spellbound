@@ -3,8 +3,8 @@ package world.entities.states;
 import misc.Location;
 import misc.MiscMath;
 import world.entities.Entity;
-import world.entities.actions.action.MoveAction;
-import world.entities.actions.action.ChangeAnimationAction;
+import world.entities.actions.types.MoveAction;
+import world.entities.actions.types.ChangeAnimationAction;
 
 import java.util.Random;
 
@@ -56,11 +56,11 @@ public class FollowState extends State {
             if (distanceTo > min + 1) {
                 double[] startCoords = following.getLocation().getCoordinates();
                 double[] direction = MiscMath.getRotatedOffset(0, -(distanceTo - min), getParent().getLocation().angleBetween(lastSeen) - 45 + rng.nextInt(90));
-                getParent().queueAction(new ChangeAnimationAction("arms", "walking", false, false));
-                getParent().queueAction(new ChangeAnimationAction("legs", "walking", false, false));
-                getParent().queueAction(new MoveAction(startCoords[0] + direction[0], startCoords[1] + direction[1], false, true));
-                getParent().queueAction(new ChangeAnimationAction("arms", "default", false, false));
-                getParent().queueAction(new ChangeAnimationAction("legs", "default", false, false));
+                getParent().getActionQueue().queueAction(new ChangeAnimationAction("arms", "walking", false, false));
+                getParent().getActionQueue().queueAction(new ChangeAnimationAction("legs", "walking", false, false));
+                getParent().getActionQueue().queueAction(new MoveAction(startCoords[0] + direction[0], startCoords[1] + direction[1], false, true));
+                getParent().getActionQueue().queueAction(new ChangeAnimationAction("arms", "default", false, false));
+                getParent().getActionQueue().queueAction(new ChangeAnimationAction("legs", "default", false, false));
             }
         }
 

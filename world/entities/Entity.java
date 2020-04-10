@@ -10,6 +10,7 @@ import world.Camera;
 import world.Chunk;
 import world.entities.actions.Action;
 import world.entities.actions.ActionGroup;
+import world.entities.actions.ActionQueue;
 import world.entities.animations.Animation;
 import world.entities.animations.AnimationLayer;
 import world.entities.states.State;
@@ -29,7 +30,7 @@ public class Entity {
 
     private String conversationStartingPoint;
     private LinkedHashMap<String, AnimationLayer> animationLayers;
-    private ArrayList<ActionGroup> action_queue;
+    private LinkedHashMap<String, ActionQueue> actionQueues;
 
     private double radius;
     private boolean isTile;
@@ -40,7 +41,7 @@ public class Entity {
     public Entity() {
         this.radius = 0.5f;
         this.lastTouching = new ArrayList<>();
-        this.action_queue = new ArrayList<>();
+        this.actionQueues = new LinkedHashMap<>();
         this.animationLayers = new LinkedHashMap<>();
         this.mover = new Mover();
         this.mover.setParent(this);
@@ -55,60 +56,20 @@ public class Entity {
 
         if (currentState != null) currentState.update();
         mover.update();
-        if (action_queue.isEmpty()) return;
-        action_queue.get(0).update();
-        if (action_queue.get(0).finished()) action_queue.remove(0);
+        for (ActionQueue queue: actionQueues.values())
+            queue.update();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void clearAllActions() {
+        for (ActionQueue q: actionQueues.values()) q.clearActions();
     }
 
-    public String getName() {
-        return name;
-    }
+    public ActionQueue getActionQueue() { return getActionQueue("default"); }
 
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
-
-    public double getRadius() {
-        return radius;
-    }
-
-    public void setIsTile(boolean tile) {
-        isTile = tile;
-    }
-
-    public boolean isTile() {
-        return isTile;
-    }
-
-    public void setConversationStartingPoint(String dialogue_id) {
-        this.conversationStartingPoint = dialogue_id;
-    }
-
-    public String getConversationStartingPoint() { return conversationStartingPoint; }
-
-    public void queueActions(ActionGroup actions) {
-        this.action_queue.add(actions);
-        actions.setParent(this);
-    }
-
-    public void queueAction(Action a) {
-        queueActions(new ActionGroup(a));
-    }
-
-    public Action getCurrentAction() { return action_queue.isEmpty() ? null : action_queue.get(0).getCurrentAction(); }
-
-    public void cancelCurrentAction() {
-        if (action_queue.isEmpty()) return;
-        action_queue.remove(0).getCurrentAction().onCancel();
-    }
-
-    public void clearActions() {
-        cancelCurrentAction();
-        action_queue.clear();
+    public ActionQueue getActionQueue(String name) {
+        if (actionQueues.containsKey(name)) return actionQueues.get(name);
+        actionQueues.put(name, new ActionQueue(this));
+        return actionQueues.get(name);
     }
 
     public void enterState(State state) {
@@ -117,7 +78,6 @@ public class Entity {
         if (currentState != null) {
             currentState.setParent(this);
             currentState.onEnter();
-            clearActions();
         }
     }
 
@@ -136,8 +96,6 @@ public class Entity {
 
     public AnimationLayer getAnimationLayer(String layer) { return animationLayers.get(layer); }
     public Collection<AnimationLayer> getAnimationLayers() { return animationLayers.values(); }
-
-    public ArrayList<ActionGroup> getActionQueue() { return action_queue; }
 
     public Mover getMover() {
         return mover;
@@ -223,5 +181,29 @@ public class Entity {
 
         g.setColor(Color.white);
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+    public double getRadius() {
+        return radius;
+    }
+    public void setIsTile(boolean tile) {
+        isTile = tile;
+    }
+    public boolean isTile() {
+        return isTile;
+    }
+    public void setConversationStartingPoint(String dialogue_id) {
+        this.conversationStartingPoint = dialogue_id;
+    }
+    public String getConversationStartingPoint() { return conversationStartingPoint; }
+
 
 }

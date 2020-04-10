@@ -3,10 +3,10 @@ package world.entities.states;
 import misc.MiscMath;
 import world.entities.Entity;
 import world.entities.actions.ActionGroup;
-import world.entities.actions.action.CastSpellAction;
-import world.entities.actions.action.MoveAction;
-import world.entities.actions.action.ChangeAnimationAction;
-import world.entities.actions.action.WaitAction;
+import world.entities.actions.types.CastSpellAction;
+import world.entities.actions.types.MoveAction;
+import world.entities.actions.types.ChangeAnimationAction;
+import world.entities.actions.types.WaitAction;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.Random;
@@ -29,7 +29,7 @@ public class AttackState extends FollowState {
         if (getParent().getActionQueue().isEmpty()
                 && distanceTo < attackDistance
                 && getParent().canSee(getFollowing()) > 0.5) {
-            getParent().queueActions(moveCount < 0 ? move() : cast());
+            getParent().getActionQueue().queueActions(moveCount < 0 ? move() : cast());
         }
         if (((HumanoidEntity)getFollowing()).isDead()) getParent().exitState();
     }
@@ -37,8 +37,7 @@ public class AttackState extends FollowState {
     private ActionGroup cast() {
         ActionGroup group = new ActionGroup();
         group.add(new CastSpellAction(getFollowing().getLocation().getCoordinates()[0], getFollowing().getLocation().getCoordinates()[1]));
-        group.add(new ChangeAnimationAction("arms", "casting", true, false));
-        group.add(new ChangeAnimationAction("arms", "default", false, false));
+        group.add(new ChangeAnimationAction("arms", "casting", true, true));
         group.add(new WaitAction(100 + rng.nextInt(400)));
         moveCount--;
         getParent().getLocation().lookAt(getFollowing().getLocation());

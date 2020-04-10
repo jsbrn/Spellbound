@@ -1,4 +1,4 @@
-package world.entities.actions.action;
+package world.entities.actions.types;
 
 import world.entities.Entity;
 import world.entities.actions.Action;

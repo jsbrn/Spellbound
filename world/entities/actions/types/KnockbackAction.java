@@ -1,6 +1,5 @@
-package world.entities.actions.action;
+package world.entities.actions.types;
 
-import assets.definitions.Definitions;
 import misc.MiscMath;
 import world.Tiles;
 import world.entities.Entity;
@@ -21,7 +20,7 @@ public class KnockbackAction extends Action {
     @Override
     public void onStart() {
         Entity parent = getParent();
-        if (parent.isTile()) return;
+        if (!(parent instanceof HumanoidEntity)) return;
         parent.getMover().setSpeed(force * 2);
         previouslyIndependent = parent.getMover().isIndependent();
         parent.getMover().setIndependent(false);
@@ -35,12 +34,10 @@ public class KnockbackAction extends Action {
         double[] nearestOpen = parent.getMover().findMoveTarget(offset[0], offset[1], force);
         parent.getMover().setTarget(nearestOpen[0], nearestOpen[1]);
         parent.getLocation().setLookDirection((int)((direction + 180 ) % 360));
-        if (parent instanceof HumanoidEntity) {
-            parent.getAnimationLayer("arms").setBaseAnimation("falling");
-            parent.getAnimationLayer("legs").setBaseAnimation("falling");
-            parent.getAnimationLayer("arms").stackAnimation("pushed");
-            parent.getAnimationLayer("legs").stackAnimation("pushed");
-        }
+        parent.getAnimationLayer("arms").setBaseAnimation("falling");
+        parent.getAnimationLayer("legs").setBaseAnimation("falling");
+        parent.getAnimationLayer("arms").stackAnimation("pushed");
+        parent.getAnimationLayer("legs").stackAnimation("pushed");
     }
 
     @Override

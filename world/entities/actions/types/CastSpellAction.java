@@ -1,4 +1,4 @@
-package world.entities.actions.action;
+package world.entities.actions.types;
 
 import world.entities.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;

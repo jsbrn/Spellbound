@@ -1,7 +1,7 @@
 package world.entities.magic.techniques.effects;
 
 import misc.MiscMath;
-import world.entities.actions.action.KnockbackAction;
+import world.entities.actions.types.KnockbackAction;
 import world.entities.magic.MagicSource;
 import world.entities.types.humanoids.HumanoidEntity;
 
@@ -23,14 +23,14 @@ public class EffectRandomizeTechnique extends EffectTechnique {
         if (cast.hasTechnique("trait_hp")) e.setHP(e.getHP() + MiscMath.random(-getLevel(), getLevel()));
         if (cast.hasTechnique("trait_mana")) e.setMana(e.getMana() + MiscMath.random(-getLevel(), getLevel()));
         if (cast.hasTechnique("trait_x") && cast.hasTechnique("trait_y")) {
-            e.clearActions();
-            e.queueAction(new KnockbackAction(getLevel(), MiscMath.random(0, 360)));
+            e.clearAllActions();
+            e.getActionQueue().queueAction(new KnockbackAction(getLevel(), MiscMath.random(0, 360)));
         } else if (cast.hasTechnique("trait_x")) {
-            e.clearActions();
-            e.queueAction(new KnockbackAction(getLevel(), MiscMath.random(0, 10) > 5 ? 180 : 0));
+            e.getActionQueue().clearActions();
+            e.getActionQueue().queueAction(new KnockbackAction(getLevel(), MiscMath.random(0, 10) > 5 ? 180 : 0));
         } else if (cast.hasTechnique("trait_y")) {
-            e.clearActions();
-            e.queueAction(new KnockbackAction(getLevel(), MiscMath.random(0, 10) > 5 ? 90 : 270));
+            e.getActionQueue().clearActions();
+            e.getActionQueue().queueAction(new KnockbackAction(getLevel(), MiscMath.random(0, 10) > 5 ? 90 : 270));
         }
     }
 

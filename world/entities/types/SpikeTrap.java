@@ -1,10 +1,9 @@
 package world.entities.types;
 
 import org.newdawn.slick.Color;
-import sun.security.provider.ConfigFile;
 import world.entities.Entity;
-import world.entities.actions.action.ChangeAnimationAction;
-import world.entities.actions.action.KnockbackAction;
+import world.entities.actions.types.ChangeAnimationAction;
+import world.entities.actions.types.KnockbackAction;
 import world.entities.animations.Animation;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.events.Event;
@@ -12,9 +11,6 @@ import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityCollisionEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SpikeTrap extends Entity {
 
@@ -36,11 +32,11 @@ public class SpikeTrap extends Entity {
                 EntityCollisionEvent ece = (EntityCollisionEvent)e;
                 if (!ece.getEntity().equals(that)) return;
                 if (!(ece.getWith() instanceof HumanoidEntity)) return;
-                ece.getEntity().clearActions();
-                ece.getEntity().queueAction(new ChangeAnimationAction("default", "open", true, true));
-                ece.getEntity().queueAction(new ChangeAnimationAction("default", "close", true, true));
-                ece.getWith().clearActions();
-                ece.getWith().queueAction(new KnockbackAction(1, getLocation().angleBetween(ece.getWith().getLocation())));
+                ece.getEntity().clearAllActions();
+                ece.getEntity().getActionQueue().queueAction(new ChangeAnimationAction("default", "open", true, true));
+                ece.getEntity().getActionQueue().queueAction(new ChangeAnimationAction("default", "close", true, true));
+                ece.getWith().clearAllActions();
+                ece.getWith().getActionQueue().queueAction(new KnockbackAction(1, getLocation().angleBetween(ece.getWith().getLocation())));
                 ((HumanoidEntity) ece.getWith()).addHP(-1);
             }
         }));

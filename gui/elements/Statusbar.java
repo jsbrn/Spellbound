@@ -2,10 +2,10 @@ package gui.elements;
 
 import gui.GUIAnchor;
 import gui.GUIElement;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import gui.states.GameScreen;
+import misc.Location;
+import org.newdawn.slick.*;
+import world.World;
 import world.entities.types.humanoids.HumanoidEntity;
 
 public class Statusbar extends GUIElement {
@@ -59,6 +59,12 @@ public class Statusbar extends GUIElement {
 
     @Override
     public boolean onKeyUp(int key) {
+        if (key == Input.KEY_R && World.getLocalPlayer().isDead()) {
+            World.getLocalPlayer().resurrect();
+            World.getLocalPlayer().moveTo(new Location(World.getRegion("player_home"), 6.5, 6.5));
+            World.getLocalPlayer().getLocation().setLookDirection(180);
+            return true;
+        }
         return false;
     }
 

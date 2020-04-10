@@ -22,8 +22,6 @@ public class HumanoidEntity extends Entity {
 
     private int crystals, gold, dyes;
 
-
-
     public HumanoidEntity() {
 
         super();
@@ -103,7 +101,7 @@ public class HumanoidEntity extends Entity {
         if (!isDead && hp == 0) {
             isDead = true;
             setIsTile(true);
-            clearActions();
+            clearAllActions();
             getAnimationLayer("torso").stackAnimation("dying");
             getAnimationLayer("arms").stackAnimation("dying");
             getAnimationLayer("legs").stackAnimation("dying");
@@ -121,6 +119,21 @@ public class HumanoidEntity extends Entity {
     public void setMaxHP(double amount) { this.max_hp = amount; }
     public void setMaxMana(double amount) { this.max_mana = amount; }
     public void setMaxStamina(double amount) { this.max_stamina = amount; }
+
+    public void resurrect() {
+        if (isDead) {
+            setHP(max_hp);
+            setMana(max_mana);
+            setStamina(0); //probably out of breath if you come back from the dead.
+            clearAllActions();
+            setIsTile(false);
+            getAnimationLayer("torso").setBaseAnimation("default");
+            getAnimationLayer("arms").setBaseAnimation("default");
+            getAnimationLayer("legs").setBaseAnimation("default");
+            getAnimationLayer("head").setBaseAnimation("default");
+            isDead = false;
+        }
+    }
 
     public boolean isDead() {
         return isDead;

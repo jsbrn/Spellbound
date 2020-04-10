@@ -1,6 +1,5 @@
-package world.entities.actions.action;
+package world.entities.actions.types;
 
-import assets.definitions.Definitions;
 import world.Tiles;
 import world.entities.Entity;
 import world.entities.actions.Action;

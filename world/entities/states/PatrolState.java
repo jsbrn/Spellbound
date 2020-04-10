@@ -17,7 +17,8 @@ public class PatrolState extends IdleState {
         super.update();
         if (!(getParent() instanceof HumanoidEntity)) return;
         if (!((HumanoidEntity)target).isDead() && getParent().canSee(target) > 0.5 && target.getLocation().distanceTo(getParent().getLocation()) < radius)
-            getParent().enterState(new AttackState(target, 3, 8, 16));
+            //getParent().enterState(new AttackState(target, 3, 8, 16));
+            getParent().enterState(new FollowState(target, 3, 6));
     }
 
 }

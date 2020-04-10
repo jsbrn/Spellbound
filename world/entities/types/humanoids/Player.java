@@ -1,16 +1,13 @@
 package world.entities.types.humanoids;
 
-import assets.definitions.Definitions;
 import gui.states.GameScreen;
 import misc.MiscMath;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.Chunk;
-import world.World;
 import world.entities.actions.ActionGroup;
-import world.entities.actions.action.ActivateAction;
-import world.entities.actions.action.CastSpellAction;
-import world.entities.actions.action.ChangeAnimationAction;
+import world.entities.actions.types.ActivateAction;
+import world.entities.actions.types.CastSpellAction;
+import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.magic.Spell;
 import world.events.Event;
 import world.events.EventDispatcher;
@@ -63,7 +60,7 @@ public class Player extends HumanoidEntity {
                             getLocation().lookAt(mce.getX(), mce.getY());
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
                             actions.add(new ChangeAnimationAction("arms", "casting", true, true));
-                            getSpellbook().getParent().queueActions(actions);
+                            getSpellbook().getParent().getActionQueue().queueActions(actions);
                         }
                     }
                 })
@@ -73,7 +70,7 @@ public class Player extends HumanoidEntity {
                         if (isDead()) return;
                         KeyDownEvent kde = (KeyDownEvent)e;
                         if (kde.getKey() == Input.KEY_E && that.getActionQueue().isEmpty()) {
-                            that.queueAction(new ActivateAction());
+                            that.getActionQueue().queueAction(new ActivateAction());
                         }
                     }
                 })

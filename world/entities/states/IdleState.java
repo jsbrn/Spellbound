@@ -3,9 +3,9 @@ package world.entities.states;
 import misc.Location;
 import misc.MiscMath;
 import world.entities.actions.ActionGroup;
-import world.entities.actions.action.MoveAction;
-import world.entities.actions.action.ChangeAnimationAction;
-import world.entities.actions.action.WaitAction;
+import world.entities.actions.types.MoveAction;
+import world.entities.actions.types.ChangeAnimationAction;
+import world.entities.actions.types.WaitAction;
 
 import java.util.Random;
 
@@ -39,7 +39,7 @@ public class IdleState extends State {
                     true));
             ag.add(new ChangeAnimationAction("arms", "default", false, false));
             ag.add(new ChangeAnimationAction("legs", "default", false, false));
-            getParent().queueActions(ag);
+            getParent().getActionQueue().queueActions(ag);
         }
     }
 

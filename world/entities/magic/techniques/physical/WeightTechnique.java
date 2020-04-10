@@ -1,7 +1,7 @@
 package world.entities.magic.techniques.physical;
 
 import misc.MiscMath;
-import world.entities.actions.action.KnockbackAction;
+import world.entities.actions.types.KnockbackAction;
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;
 import world.events.Event;
@@ -24,8 +24,8 @@ public class WeightTechnique extends Technique {
 
                     double force = ((double)Math.max(1, cast.getLevel("physical_speed")) * ((double)cast.getLevel("physical_weight") / 5.0) / 2.0) + 0.5;
 
-                    mie.getEntity().clearActions();
-                    mie.getEntity().queueAction(new KnockbackAction(
+                    mie.getEntity().clearAllActions();
+                    mie.getEntity().getActionQueue().queueAction(new KnockbackAction(
                             force,
                             MiscMath.angleBetween(
                                     cast.getBody().getLocation().getCoordinates()[0],

@@ -39,6 +39,7 @@ public class Civilian extends HumanoidEntity {
             .on(EntityActivatedEvent.class.toString(), new EventHandler() {
                 @Override
                 public void handle(Event e) {
+                    if (isDead()) return;
                     EntityActivatedEvent eae = (EntityActivatedEvent)e;
                     if (!(getCurrentState() instanceof IdleState)) return;
                     if (eae.getEntity().equals(that) && eae.getActivatedBy() instanceof Player) {

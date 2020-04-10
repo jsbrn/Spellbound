@@ -3,7 +3,7 @@ package world.entities.types;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
-import world.entities.actions.action.ChangeAnimationAction;
+import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.animations.Animation;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.events.Event;
@@ -34,7 +34,7 @@ public class Chest extends Entity {
                     if (eae.getEntity().equals(that)) {
                         if (eae.getActivatedBy() instanceof HumanoidEntity) {
                             that.getAnimationLayer("default").setBaseAnimation("opened");
-                            that.queueAction(new ChangeAnimationAction("default", "opening", false, true));
+                            that.getActionQueue().queueAction(new ChangeAnimationAction("default", "opening", false, true));
                             HumanoidEntity human = (HumanoidEntity)eae.getActivatedBy();
                             human.addGold((int)MiscMath.random(0, lootMultiplier * 10));
                             human.addCrystals((int)MiscMath.random(0, lootMultiplier * 4));

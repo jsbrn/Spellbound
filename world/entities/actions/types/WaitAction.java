@@ -1,6 +1,5 @@
-package world.entities.actions.action;
+package world.entities.actions.types;
 
-import world.World;
 import world.entities.actions.Action;
 
 public class WaitAction extends Action {

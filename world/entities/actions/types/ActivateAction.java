@@ -1,16 +1,12 @@
-package world.entities.actions.action;
+package world.entities.actions.types;
 
 import misc.Location;
 import misc.MiscMath;
 import world.Portal;
 import world.entities.Entity;
 import world.entities.actions.Action;
-import world.entities.types.humanoids.Player;
 import world.events.EventDispatcher;
-import world.events.EventListener;
 import world.events.event.EntityActivatedEvent;
-
-import java.util.ArrayList;
 
 public class ActivateAction extends Action {
 
@@ -38,7 +34,7 @@ public class ActivateAction extends Action {
                     origin.getDestination(),
                     destination.getCoordinates()[0] + 0.5 + (0.75 * destination.getExitDirection()[0]),
                     destination.getCoordinates()[1] + 0.5 + (0.75 * destination.getExitDirection()[1])));
-            parent.queueAction(new MoveAction(
+            parent.getActionQueue().queueAction(new MoveAction(
                     destination.getCoordinates()[0] + 0.5 + (destination.getExitDirection()[0]),
                     destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1]),
                     false,
