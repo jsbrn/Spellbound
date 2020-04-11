@@ -25,6 +25,7 @@ public class Player extends HumanoidEntity {
         super();
 
         this.allowUserMovement = true;
+        this.setAllegiance("players");
 
         this.setMaxMana(10);
         this.setMana(10);

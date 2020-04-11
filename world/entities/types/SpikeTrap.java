@@ -19,7 +19,7 @@ public class SpikeTrap extends Entity {
     public SpikeTrap() {
         setIsTile(true);
         setRadius(0.25f);
-        getMover().setCollidable(false);
+        getMover().setDScore(1000);
         addAnimation("default", "idle", new Animation("spike_trap.png", 1, 1, 16, false, false, Color.white));
         addAnimation("default", "open", new Animation("spike_trap_open.png", 8, 3, 16, false, false, Color.white));
         addAnimation("default", "close", new Animation("spike_trap_close.png", 8, 3, 16, false, false, Color.white));

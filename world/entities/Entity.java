@@ -103,7 +103,15 @@ public class Entity {
 
     public Location getLocation() { return location; }
 
-    public double canSee(Entity e) { return canSee(
+    public List<Entity> getNearbyEntities(double radius) {
+        return getLocation().getRegion().getEntities(
+                getLocation().getCoordinates()[0],
+                getLocation().getCoordinates()[1],
+                radius);
+    }
+
+    public double canSee(Entity e) {
+        return canSee(
             (int)e.getLocation().getCoordinates()[0],
             (int)e.getLocation().getCoordinates()[1]);
     }

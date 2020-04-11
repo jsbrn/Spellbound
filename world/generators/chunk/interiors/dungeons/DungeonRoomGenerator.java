@@ -41,7 +41,7 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y)
-                && rng.nextFloat() < 0.3) {
+                && rng.nextFloat() < 0.15) {
             return new SpikeTrap();
         }
         if (isWithinWalls(x, y)

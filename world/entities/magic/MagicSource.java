@@ -9,6 +9,7 @@ import world.entities.Entity;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;
 import world.entities.magic.techniques.effects.EffectTechnique;
+import world.entities.types.humanoids.HumanoidEntity;
 import world.events.EventDispatcher;
 import world.events.event.MagicDepletedEvent;
 import world.events.event.MagicImpactEvent;
@@ -55,7 +56,9 @@ public class MagicSource {
         colliding.stream()
                 .filter(e -> !e.equals(caster) && !lastColliding.contains(e))
                 .forEach(e -> {
-                    if (!e.isTile()) EventDispatcher.invoke(new MagicImpactEvent(this, e));
+                    if (e.isTile()) return;
+                    if ((e instanceof HumanoidEntity && !((HumanoidEntity) e).isAlliedTo((HumanoidEntity)caster)))
+                        EventDispatcher.invoke(new MagicImpactEvent(this, e));
                 });
         lastColliding = colliding;
         byte[] currentTile = getBody().getLocation().getRegion().getTile(

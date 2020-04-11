@@ -5,6 +5,8 @@ import assets.definitions.Definitions;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.*;
+import gui.menus.Journal;
+import gui.menus.SpellcraftingMenu;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;

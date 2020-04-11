@@ -1,6 +1,5 @@
 package world.entities;
 
-import assets.definitions.Definitions;
 import world.Tiles;
 import misc.Location;
 import misc.MiscMath;
@@ -18,11 +17,12 @@ public class Mover {
     private boolean collidable, lookAtTarget;
     private boolean moving, independentAxes, ignoreCollision;
     private double[] start;
-    private double speed;
+    private double speed, DScore;
 
     private LinkedList<Location> path;
 
     public Mover() {
+        this.DScore = 0;
         this.speed = 3; //tiles per second
         this.ignoreCollision = false;
         this.path = new LinkedList<>();
@@ -90,6 +90,9 @@ public class Mover {
 
     public double getSpeed() { return speed; }
     public void setSpeed(double s) { speed = s; }
+
+    public void setDScore(double DScore) { this.DScore = DScore; }
+    public double getDScore() { return DScore; }
 
     private boolean canMoveDirectlyTo(double tx, double ty) {
         double[] coords = parent.getLocation().getCoordinates();

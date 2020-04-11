@@ -1,6 +1,10 @@
-package gui.elements;
+package gui.menus;
 
 import gui.GUIAnchor;
+import gui.elements.Button;
+import gui.elements.IconLabel;
+import gui.elements.Modal;
+import gui.elements.TextLabel;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

@@ -6,21 +6,26 @@ import world.entities.magic.techniques.Technique;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class EffectTechnique extends Technique {
 
-    public void affectOnce(MagicSource cast) {
-        List<Entity> colliding = cast.getCollidingEntities();
-        for (Entity e: colliding) {
-            if (e instanceof HumanoidEntity) affectOnce(cast, (HumanoidEntity)e);
-        }
+    public final void affectOnce(MagicSource cast) {
+        cast.getCollidingEntities().stream()
+                .filter(e -> e instanceof HumanoidEntity)
+                .map(e -> (HumanoidEntity)e)
+                .filter(he -> !he.isAlliedTo((HumanoidEntity)cast.getCaster()))
+                .collect(Collectors.toList())
+                .forEach(he -> affectOnce(cast, he));
     }
 
-    public void affectContinuous(MagicSource cast) {
-        List<Entity> colliding = cast.getCollidingEntities();
-        for (Entity e: colliding) {
-            if (e instanceof HumanoidEntity) affectContinuous(cast, (HumanoidEntity)e);
-        }
+    public final void affectContinuous(MagicSource cast) {
+        cast.getCollidingEntities().stream()
+                .filter(e -> e instanceof HumanoidEntity)
+                .map(e -> (HumanoidEntity)e)
+                .filter(he -> !he.isAlliedTo((HumanoidEntity)cast.getCaster()))
+                .collect(Collectors.toList())
+                .forEach(he -> affectContinuous(cast, he));
     }
 
     public abstract void affectOnce(MagicSource cast, HumanoidEntity e);

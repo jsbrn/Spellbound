@@ -19,13 +19,14 @@ public class HumanoidEntity extends Entity {
     private double hp, mana, stamina, max_hp, max_mana, max_stamina;
 
     private boolean isDead;
-
+    private String allegiance;
     private int crystals, gold, dyes;
 
     public HumanoidEntity() {
 
         super();
 
+        this.allegiance = "default";
         this.setMaxHP(10);
         this.setMaxMana(Integer.MAX_VALUE);
         this.hp = 10;
@@ -68,6 +69,10 @@ public class HumanoidEntity extends Entity {
         addMana(MiscMath.getConstant(max_mana, 30));
         addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
+
+    public String getAllegiance() { return allegiance; }
+    public void setAllegiance(String allegiance) { this.allegiance = allegiance; }
+    public boolean isAlliedTo(HumanoidEntity e) { return e.allegiance.equals(allegiance); }
 
     public double getHP() { return hp; }
     public double getMana() { return mana; }

@@ -1,6 +1,7 @@
-package gui.elements;
+package gui.menus;
 
 import gui.GUIAnchor;
+import gui.elements.*;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.magic.Spell;

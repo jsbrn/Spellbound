@@ -14,6 +14,7 @@ public class Bandit extends HumanoidEntity {
 
     public Bandit() {
         super();
+        this.setAllegiance("bandits");
         rng = new Random();
         Color shirt = Color.orange.darker();
         getAnimationLayer("torso").setColor(shirt);
@@ -40,7 +41,7 @@ public class Bandit extends HumanoidEntity {
     @Override
     public void update() {
         super.update();
-        if (getCurrentState() == null) enterState(new PatrolState(World.getLocalPlayer(), 4));
+        if (getCurrentState() == null) enterState(new PatrolState(7));
     }
 
 }

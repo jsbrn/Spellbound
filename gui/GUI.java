@@ -154,11 +154,12 @@ public class GUI {
     }
 
     public void floatText(Location location, String text, Color color, int speed, int lifespan) {
-        GameScreen.getGUI().addElement(
-                new PositionalTextLabel(location, text, color, MiscMath.random(-45, 45), speed, lifespan),
-                -1,
-                -1,
-                GUIAnchor.TOP_LEFT);
+        if (location.getRegion().equals(World.getRegion()))
+            GameScreen.getGUI().addElement(
+                    new PositionalTextLabel(location, text, color, MiscMath.random(-45, 45), speed, lifespan),
+                    -Integer.MAX_VALUE,
+                    -Integer.MAX_VALUE,
+                    GUIAnchor.TOP_LEFT);
     }
 
     public void draw(Graphics g, boolean debug) {

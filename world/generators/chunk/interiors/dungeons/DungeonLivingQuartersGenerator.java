@@ -22,7 +22,7 @@ public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
         byte original = super.getTop(x, y);
         if (original != Tiles.AIR || !isWithinWalls(x, y)) return original;
         return rng.nextInt(8) == 0
-                ? (byte)(rng.nextInt(3) == 0 ? Tiles.SLEEPING_COT : (rng.nextBoolean() ? Tiles.EMPTY_BOTTLES : Tiles.CHAIR))
+                ? (byte)((rng.nextBoolean() ? Tiles.EMPTY_BOTTLES : Tiles.CHAIR))
                 : original;
     }
 
