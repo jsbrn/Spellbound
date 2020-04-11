@@ -42,7 +42,7 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y)
                 && rng.nextFloat() < 0.15) {
-            return new SpikeTrap();
+            return rng.nextInt(4) == 0 ? new Bandit() : new SpikeTrap();
         }
         if (isWithinWalls(x, y)
                 && spawnLoot && rng.nextFloat() < 0.1

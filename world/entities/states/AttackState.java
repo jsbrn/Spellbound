@@ -31,7 +31,7 @@ public class AttackState extends FollowState {
                 && getParent().canSee(getFollowing()) > 0.5) {
             getParent().getActionQueue().queueActions(moveCount < 0 ? move() : cast());
         }
-        if (((HumanoidEntity)getFollowing()).isDead()) getParent().exitState();
+        if (((HumanoidEntity)getFollowing()).isDead() || !getFollowing().getLocation().getRegion().equals(getParent().getLocation().getRegion())) getParent().exitState();
     }
 
     private ActionGroup cast() {

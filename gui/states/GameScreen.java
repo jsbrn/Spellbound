@@ -19,6 +19,7 @@ import world.Chunk;
 import world.Region;
 import world.World;
 import world.entities.Entity;
+import world.entities.types.humanoids.Zombie;
 import world.entities.types.humanoids.npcs.Civilian;
 import world.generators.region.DungeonGenerator;
 
@@ -185,7 +186,7 @@ public class GameScreen extends BasicGameState {
         if (button == 2) {
             Random rng = new Random();
             for (int i = 0; i < 1; i++) {
-                Entity civ = new Civilian();
+                Entity civ = new Zombie();
                 Location player = World.getLocalPlayer().getLocation();
                 civ.moveTo(new Location(
                         player.getRegion(),

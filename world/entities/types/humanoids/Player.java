@@ -53,7 +53,7 @@ public class Player extends HumanoidEntity {
                 .on(MousePressedEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
-                        if (isDead()) return;
+                        if (isDead() || !getActionQueue("arms").isEmpty()) return;
                         MousePressedEvent mce = (MousePressedEvent)e;
                         ActionGroup actions = new ActionGroup();
                         if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0
@@ -61,7 +61,7 @@ public class Player extends HumanoidEntity {
                             getLocation().lookAt(mce.getX(), mce.getY());
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
                             actions.add(new ChangeAnimationAction("arms", "casting", true, true));
-                            getSpellbook().getParent().getActionQueue().queueActions(actions);
+                            getSpellbook().getParent().getActionQueue("arms").queueActions(actions);
                         }
                     }
                 })
@@ -123,7 +123,7 @@ public class Player extends HumanoidEntity {
                 getAnimationLayer("legs").setBaseAnimation("walking");
                 getMover().setTarget(targetX, targetY);
                 getMover().setLookTowardsTarget(false);
-                getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
+                if (getActionQueue("arms").isEmpty()) getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
                 getAnimationLayer("arms").setBaseAnimation("default");
                 getAnimationLayer("legs").setBaseAnimation("default");

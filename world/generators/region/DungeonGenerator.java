@@ -158,9 +158,13 @@ public class DungeonGenerator implements RegionGenerator {
         boolean north = get(x, y-1, plan), south = get(x, y+1, plan), east = get(x+1, y, plan), west = get(x-1, y, plan);
         boolean isVerticalHallway = get(x, y - 1, plan) && get(x, y + 1, plan) && adjacent(x, y, false, plan) == 2;
         boolean isHorizontalHallway = get(x - 1, y, plan) && get(x + 1, y, plan) && adjacent(x, y, false, plan) == 2;
-        return isVerticalHallway || isHorizontalHallway
-                ? (rng.nextInt(3) == 0 ? new DungeonRoomGenerator(north, south, east, west) : new DungeonHallwayGenerator(isHorizontalHallway))
-                : (rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(north, south, east, west));
+        if (isVerticalHallway || isHorizontalHallway) {
+            return (rng.nextInt(2) == 0 ? new DungeonRoomGenerator(north, south, east, west) : new DungeonHallwayGenerator(isHorizontalHallway));
+        } else {
+            if (rng.nextInt(12) == 0) return new DungeonZombieRoomGenerator(north, south, east, west);
+            if (rng.nextBoolean()) return rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(north, south, east, west);
+        }
+        return new DungeonRoomGenerator(north, south, east, west);
     }
 
     private boolean get(int x, int y, boolean[][] map) {
@@ -171,15 +175,6 @@ public class DungeonGenerator implements RegionGenerator {
     private void set(int x, int y, boolean value, boolean[][] map) {
         if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
         map[x][y] = value;
-    }
-
-    private void buildRow(int j, ChunkGenerator[][] map) {
-        int size = map[0].length;
-        int length = (int)MiscMath.clamp(rng.nextInt(size/2), 1, 4);
-        int min = (size / 2) - length;
-        int max = (size / 2) + length;
-        for (int i = min; i <= max; i++)
-            map[i][j] = new DungeonRoomGenerator(false, false, i != max, i != min);
     }
 
 }
