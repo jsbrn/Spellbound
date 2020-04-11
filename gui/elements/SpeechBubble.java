@@ -66,6 +66,11 @@ public class SpeechBubble extends GUIElement {
     }
 
     @Override
+    public boolean onMouseScroll(int direction) {
+        return false;
+    }
+
+    @Override
     public boolean onKeyDown(int key) {
         return true;
     }

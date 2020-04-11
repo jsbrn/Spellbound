@@ -30,7 +30,7 @@ public class Journal extends Modal {
         this.target = target;
         this.selectedSpell = -1;
         this.spellButtons = new ArrayList<>();
-        addChild(new TextLabel("Player", 5, Color.black, false), 12, 4, GUIAnchor.TOP_LEFT);
+        addChild(new TextLabel("Player", 5, Color.black, false), 12+16, 8, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Your Spells", 5, Color.black, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new IconLabel("icons/gold.png"), 32, 16, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/crystal.png"), 32, 32, GUIAnchor.TOP_LEFT);
@@ -144,6 +144,5 @@ public class Journal extends Modal {
                 (float)(getCoordinates()[0] + Chunk.TILE_SIZE * 1.25) * Window.getScale(),
                 (float)(getCoordinates()[1] + Chunk.TILE_SIZE*3) * Window.getScale(),
                 Window.getScale() * 1, 3);
-
     }
 }

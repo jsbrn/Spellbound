@@ -69,7 +69,7 @@ public class GUI {
         return speechBubble;
     }
 
-    public boolean handleMouseMoved(int osx, int osy) {
+    public final boolean handleMouseMoved(int osx, int osy) {
         int ogx = (int)(osx / Window.getScale()), ogy = (int)(osy / Window.getScale());
         if (!modals.isEmpty()) return modals.peek().handleMouseMoved(ogx, ogy);
         for (int i = elements.size() - 1; i >= 0; i--) {
@@ -81,7 +81,7 @@ public class GUI {
         return false;
     }
 
-    public boolean handleMousePressed(int osx, int osy, int button) {
+    public final boolean handleMousePressed(int osx, int osy, int button) {
         int ogx = (int)(osx / Window.getScale()), ogy = (int)(osy / Window.getScale());
         if (!modals.isEmpty()) return modals.peek().handleMousePressed(ogx, ogy, button);
         for (int i = elements.size() - 1; i >= 0; i--) {
@@ -93,7 +93,7 @@ public class GUI {
         return false;
     }
 
-    public boolean handleMouseRelease(int osx, int osy, int button) {
+    public final boolean handleMouseRelease(int osx, int osy, int button) {
         int ogx = (int)(osx / Window.getScale()), ogy = (int)(osy / Window.getScale());
         if (!modals.isEmpty()) return modals.peek().handleMouseRelease(ogx, ogy, button);
         for (int i = elements.size() - 1; i >= 0; i--) {
@@ -102,6 +102,15 @@ public class GUI {
         }
         double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
         EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
+        return false;
+    }
+
+    public final boolean handleMouseScroll(int direction) {
+        if (!modals.isEmpty()) return modals.peek().handleMouseScroll(direction);
+        for (int i = elements.size() - 1; i >= 0; i--) {
+            GUIElement e = elements.get(i);
+            if (e.handleMouseScroll(direction)) return true;
+        }
         return false;
     }
 

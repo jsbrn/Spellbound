@@ -86,6 +86,11 @@ public class IconChooser extends GUIElement {
     }
 
     @Override
+    public boolean onMouseScroll(int direction) {
+        return false;
+    }
+
+    @Override
     public boolean onKeyDown(int key) {
         return false;
     }

@@ -208,6 +208,11 @@ public class GameScreen extends BasicGameState {
             showTopLayer = !showTopLayer;
     }
 
+    @Override
+    public void mouseWheelMoved(int newValue) {
+        gui.handleMouseScroll(newValue > 0 ? -1 : 1);
+    }
+
     public static Input getInput() { return input; }
 
     public static GUI getGUI() {

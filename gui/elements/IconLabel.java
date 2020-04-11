@@ -52,6 +52,11 @@ public class IconLabel extends GUIElement {
     }
 
     @Override
+    public boolean onMouseScroll(int direction) {
+        return false;
+    }
+
+    @Override
     public boolean onKeyDown(int key) {
         return false;
     }

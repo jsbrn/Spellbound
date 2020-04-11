@@ -53,6 +53,11 @@ public abstract class Button extends GUIElement {
     public final boolean onMouseRelease(int ogx, int ogy, int button) { return false; }
 
     @Override
+    public boolean onMouseScroll(int direction) {
+        return false;
+    }
+
+    @Override
     public final boolean onMousePressed(int ogx, int ogy, int button) {
         if (mouseIntersects() && !disabled) {
             onClick(button);

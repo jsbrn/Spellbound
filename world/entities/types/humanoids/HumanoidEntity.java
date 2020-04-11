@@ -20,7 +20,7 @@ public class HumanoidEntity extends Entity {
 
     private boolean isDead;
     private String allegiance;
-    private int crystals, gold, dyes;
+    private int crystals, gold, dyes, tomes, keys;
 
     public HumanoidEntity() {
 
@@ -84,10 +84,14 @@ public class HumanoidEntity extends Entity {
     public int getCrystalCount() { return crystals; }
     public int getGoldCount() { return gold; }
     public int getDyeCount() { return dyes; }
+    public int getKeyCount() { return keys; }
+    public int getTomeCount() { return tomes; }
 
     public void addGold(int gold) { this.gold += gold; }
     public void addCrystals(int crystals) { this.crystals += crystals; }
     public void addDyes(int dyes) { this.dyes += dyes; }
+    public void addKeys(int keys) { this.keys += keys; }
+    public void addTomes(int tomes) { this.tomes += tomes; }
 
     public void setMana(double mana) { this.mana = MiscMath.clamp(mana, 0, max_mana); }
     public void addMana(double amount) { setMana(mana + amount); }

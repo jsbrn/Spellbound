@@ -1,6 +1,7 @@
 package gui.elements;
 
 import gui.GUIElement;
+import misc.MiscMath;
 import org.newdawn.slick.*;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.particles.ParticleSource;
@@ -40,6 +41,14 @@ public class Hotbar extends GUIElement {
 
     @Override
     public boolean onMousePressed(int ogx, int ogy, int button) { return false; }
+
+    @Override
+    public boolean onMouseScroll(int direction) {
+        int current = target.getSpellbook().getSelectedIndex();
+        int new_ = (int)MiscMath.clamp(current + direction, 0, 2);
+        target.getSpellbook().selectSpell(new_);
+        return true;
+    }
 
     @Override
     public boolean onKeyDown(int key) {

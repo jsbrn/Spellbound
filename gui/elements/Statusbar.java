@@ -53,6 +53,11 @@ public class Statusbar extends GUIElement {
     public boolean onMousePressed(int ogx, int ogy, int button) { return false; }
 
     @Override
+    public boolean onMouseScroll(int direction) {
+        return false;
+    }
+
+    @Override
     public boolean onKeyDown(int key) {
         return false;
     }

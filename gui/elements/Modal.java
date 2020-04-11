@@ -37,6 +37,11 @@ public class Modal extends GUIElement {
     }
 
     @Override
+    public boolean onMouseScroll(int direction) {
+        return false;
+    }
+
+    @Override
     public void drawUnder(Graphics g) {
 
     }

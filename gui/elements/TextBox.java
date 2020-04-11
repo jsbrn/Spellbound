@@ -56,6 +56,11 @@ public class TextBox extends GUIElement {
     }
 
     @Override
+    public boolean onMouseScroll(int direction) {
+        return false;
+    }
+
+    @Override
     public boolean onKeyDown(int key) {
         if (focused) {
             boolean shifting = GameScreen.getInput().isKeyDown(Input.KEY_LSHIFT)

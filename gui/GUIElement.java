@@ -105,6 +105,15 @@ public abstract class GUIElement {
         return onMouseRelease(ogx - (int)getCoordinates()[0], ogy - (int)getCoordinates()[1], button);
     }
 
+    public final boolean handleMouseScroll(int direction) {
+        if (!isActive()) return false;
+        for (int i = children.size() - 1; i >= 0; i--) {
+            GUIElement e = children.get(i);
+            if (e.handleMouseScroll(direction)) return true;
+        }
+        return onMouseScroll(direction);
+    }
+
     public final boolean handleKeyUp(int key) {
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
@@ -124,6 +133,7 @@ public abstract class GUIElement {
     public abstract boolean onMouseMoved(int ogx, int ogy);
     public abstract boolean onMouseRelease(int ogx, int ogy, int button);
     public abstract boolean onMousePressed(int ogx, int ogy, int button);
+    public abstract boolean onMouseScroll(int direction);
     public abstract boolean onKeyDown(int key);
     public abstract boolean onKeyUp(int key);
 
