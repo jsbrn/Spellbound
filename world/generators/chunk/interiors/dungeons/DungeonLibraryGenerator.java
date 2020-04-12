@@ -30,7 +30,7 @@ public class DungeonLibraryGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (!isWithinWalls(x, y)) return null;
-        return ((y-1) % spacing != 0 && rng.nextInt(12 + rng.nextInt(8)) == 0) ? new Chest(1, false, Chest.TOME_LOOT + rng.nextInt(2), 0.4f) : null;
+        return ((y-1) % spacing != 0 && rng.nextInt(12 + rng.nextInt(8)) == 0) ? new Chest(1, false, rng.nextBoolean() ? Chest.TOME_LOOT : Chest.GOLD_LOOT, 0.6f) : null;
     }
 
     @Override

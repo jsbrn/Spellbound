@@ -45,7 +45,7 @@ public class Chest extends Entity {
                                 GameScreen.getGUI().floatText(
                                         eae.getEntity().getLocation(),
                                         "Locked",
-                                        Color.gray, -2, 500, -0.5f, false);
+                                        Color.gray, 2, 500, -0.5f, false);
                                 return;
                             }
 
@@ -61,10 +61,13 @@ public class Chest extends Entity {
                                 if (lootType == GOLD_LOOT) { amount /= 10; human.addGold(amount); type = "Gold"; }
                                 if (lootType == CRYSTAL_LOOT) { amount /= 20; human.addCrystals(amount); type = "Crystals"; }
                                 if (lootType == DYE_LOOT) { amount /= 30; human.addDyes(amount); type = "Dyes"; }
-                                if (lootType == TOME_LOOT) { amount = 1; human.addTomes(1); type = "Tome"; }
-                                if (lootType == ARTIFACT_LOOT) { amount = 1; human.addArtifacts(1); type = "Artifact"; }
+                                if (lootType == TOME_LOOT) { amount = 1; human.addTomes(amount); type = "Tome"; }
+                                if (lootType == ARTIFACT_LOOT) { amount = 1; human.addArtifacts(amount); type = "Artifact"; }
+                                if (lootType == KEY_LOOT) { amount = 1; human.addKeys(amount); type = "Key"; }
                                 empty = amount <= 0;
                             }
+
+                            if (locked) ((HumanoidEntity) eae.getActivatedBy()).addKeys(-1);
 
                             if (empty) {
                                 GameScreen.getGUI().floatText(eae.getEntity().getLocation(), "Empty", Color.gray, 2, 500, -0.5f, false);

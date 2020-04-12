@@ -2,7 +2,10 @@ package world.entities.types.humanoids;
 
 import gui.states.GameScreen;
 import misc.MiscMath;
+import misc.Window;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
+import world.Camera;
 import world.Chunk;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.types.ActivateAction;
@@ -18,7 +21,7 @@ import world.events.event.*;
 public class Player extends HumanoidEntity {
 
     private double[] moveTarget;
-    private boolean allowUserMovement;
+    private boolean allowUserMovement, godMode;
 
     public Player() {
 
@@ -26,24 +29,22 @@ public class Player extends HumanoidEntity {
 
         this.allowUserMovement = true;
         this.setAllegiance("players");
+        this.getMover().setIndependent(true);
+        this.getMover().setLookTowardsTarget(false);
 
         this.setMaxMana(10);
         this.setMana(10);
-
-        this.addCrystals(1000);
-        this.addDyes(1000);
-        this.addGold(1000);
-        this.setMaxMana(100);
-        this.setMana(100);
-
-        this.getMover().setIndependent(true);
-        this.getMover().setLookTowardsTarget(false);
 
         Spell kb = new Spell();
         kb.addTechnique("physical_weight");
         kb.addTechnique("movement_directional");
         kb.addTechnique("physical_speed");
         kb.addTechnique("physical_collision");
+        kb.addTechnique("physical_energy");
+        kb.setLevel("physical_energy", 4);
+        kb.setLevel("physical_speed", 2);
+        kb.setName("Green Ball of Fury");
+        kb.setColor(Color.green);
         getSpellbook().addSpell(kb);
 
         this.getAnimationLayer("head").setColor(SKIN_COLORS[0]);
@@ -104,6 +105,13 @@ public class Player extends HumanoidEntity {
 
         if (isDead()) return;
 
+        if (godMode) {
+            this.getMover().setSpeed(10);
+            this.setHP(1000);
+            this.getMover().setCollidable(false);
+            this.getMover().setIgnoreCollision(true);
+        }
+
         super.update();
 
         int dx = 0, dy = 0;
@@ -116,6 +124,14 @@ public class Player extends HumanoidEntity {
         double targetX = getMover().findMoveTarget(dx, 0, Chunk.CHUNK_SIZE)[0];
         double targetY = getMover().findMoveTarget(0, dy, Chunk.CHUNK_SIZE)[1];
         if (getActionQueue().isEmpty()) {
+
+            double[] mouse_wc = Camera.getWorldCoordinates(GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY(), Window.getScale());
+            if (GameScreen.getInput().isKeyDown(Input.KEY_LCONTROL))
+                getLocation().setLookDirection((int)MiscMath.angleBetween(
+                        getLocation().getCoordinates()[0],
+                        getLocation().getCoordinates()[1],
+                        mouse_wc[0], mouse_wc[1]));
+
             getMover().setSpeed(3);
             getMover().setIndependent(true);
             if ((dx != 0 || dy != 0) && allowUserMovement) {
@@ -123,7 +139,8 @@ public class Player extends HumanoidEntity {
                 getAnimationLayer("legs").setBaseAnimation("walking");
                 getMover().setTarget(targetX, targetY);
                 getMover().setLookTowardsTarget(false);
-                if (getActionQueue("arms").isEmpty()) getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
+                if (getActionQueue("arms").isEmpty() && !GameScreen.getInput().isKeyDown(Input.KEY_LCONTROL))
+                    getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
                 getAnimationLayer("arms").setBaseAnimation("default");
                 getAnimationLayer("legs").setBaseAnimation("default");
@@ -132,5 +149,7 @@ public class Player extends HumanoidEntity {
         }
 
     }
+
+    public void activateGodMode() { godMode = true; }
 
 }

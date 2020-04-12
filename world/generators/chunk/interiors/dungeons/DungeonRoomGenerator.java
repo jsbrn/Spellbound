@@ -48,7 +48,7 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
                 && spawnLoot && rng.nextFloat() < 0.1
                 && chestCount < 3) {
             chestCount++;
-            return new Chest(rng.nextInt(4), false, rng.nextInt(3), 0.5f);
+            return new Chest(rng.nextInt(4), false, rng.nextInt(3), 0.75f);
         }
         return null;
     }

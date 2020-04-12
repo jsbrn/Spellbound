@@ -61,7 +61,7 @@ public class HumanoidEntity extends Entity {
         if (isDead()) return;
         super.update();
         addHP(MiscMath.getConstant(max_hp, 300));
-        addMana(MiscMath.getConstant(max_mana, 30));
+        addMana(MiscMath.getConstant(1, 0.5));
         addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
 

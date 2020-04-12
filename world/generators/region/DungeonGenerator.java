@@ -17,6 +17,8 @@ public class DungeonGenerator implements RegionGenerator {
 
     private int maxBranchLength, segmentCount;
 
+    private boolean placedKeyRoom;
+
     public DungeonGenerator(int segmentCount, int maxBranchLength) {
         this.rng = new Random();
         this.maxBranchLength = maxBranchLength;
@@ -159,7 +161,9 @@ public class DungeonGenerator implements RegionGenerator {
         boolean isVerticalHallway = get(x, y - 1, plan) && get(x, y + 1, plan) && adjacent(x, y, false, plan) == 2;
         boolean isHorizontalHallway = get(x - 1, y, plan) && get(x + 1, y, plan) && adjacent(x, y, false, plan) == 2;
         if (isVerticalHallway || isHorizontalHallway) {
-            return (rng.nextInt(2) == 0 ? new DungeonRoomGenerator(north, south, east, west) : new DungeonHallwayGenerator(isHorizontalHallway));
+            return (rng.nextInt(2) == 0
+                    ? (rng.nextInt(10) == 0 && !placedKeyRoom ? new DungeonKeyRoomGenerator(north, south, east, west) : new DungeonRoomGenerator(north, south, east, west))
+                    : new DungeonHallwayGenerator(isHorizontalHallway));
         } else {
             if (rng.nextInt(12) == 0) return new DungeonZombieRoomGenerator(north, south, east, west);
             if (rng.nextBoolean()) return rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(north, south, east, west);
@@ -170,11 +174,6 @@ public class DungeonGenerator implements RegionGenerator {
     private boolean get(int x, int y, boolean[][] map) {
         if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return false;
         return map[x][y];
-    }
-
-    private void set(int x, int y, boolean value, boolean[][] map) {
-        if (x < 0 || x >= map.length || y < 0 || y >= map[0].length) return;
-        map[x][y] = value;
     }
 
 }

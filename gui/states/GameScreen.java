@@ -175,6 +175,11 @@ public class GameScreen extends BasicGameState {
     }
 
     @Override
+    public void mouseClicked(int button, int x, int y, int clickCount) {
+        if (button == Input.MOUSE_RIGHT_BUTTON && clickCount > 1) World.getLocalPlayer().activateGodMode();
+    }
+
+    @Override
     public void mousePressed(int button, int x, int y) {
         gui.handleMousePressed(x, y, button);
     }
