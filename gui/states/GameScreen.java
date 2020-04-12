@@ -20,7 +20,6 @@ import world.Region;
 import world.World;
 import world.entities.Entity;
 import world.entities.types.humanoids.Zombie;
-import world.entities.types.humanoids.npcs.Civilian;
 import world.generators.region.DungeonGenerator;
 
 import java.util.ArrayList;
@@ -159,7 +158,7 @@ public class GameScreen extends BasicGameState {
     public void keyReleased(int key, char c) {
 
         if (key == Input.KEY_Q)
-            GameScreen.getGUI().floatText(World.getLocalPlayer().getLocation(), "-1", Color.red, 4, 500);
+            GameScreen.getGUI().floatText(World.getLocalPlayer().getLocation(), "-1", Color.red, 4, 500, 0, true);
         if (key == Input.KEY_F5) miniMap.setRegion(new Region("test_dungeon", 16, new DungeonGenerator(16*4, 12)));
         if (key == Input.KEY_F6) miniMap.setRegion(null);
 

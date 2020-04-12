@@ -8,11 +8,9 @@ import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import world.Camera;
 import world.World;
-import world.entities.Entity;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
@@ -162,10 +160,10 @@ public class GUI {
         if (elements.remove(element)) element.onHide();
     }
 
-    public void floatText(Location location, String text, Color color, int speed, int lifespan) {
+    public void floatText(Location location, String text, Color color, int speed, int lifespan, double offset, boolean randomXDirection) {
         if (location.getRegion().equals(World.getRegion()))
             GameScreen.getGUI().addElement(
-                    new PositionalTextLabel(location, text, color, MiscMath.random(-45, 45), speed, lifespan),
+                    new PositionalTextLabel(location, text, color, randomXDirection ? MiscMath.random(-45, 45) : 0, speed, lifespan, offset),
                     -Integer.MAX_VALUE,
                     -Integer.MAX_VALUE,
                     GUIAnchor.TOP_LEFT);

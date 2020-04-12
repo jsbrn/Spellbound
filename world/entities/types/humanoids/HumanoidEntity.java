@@ -3,12 +3,9 @@ package world.entities.types.humanoids;
 import gui.states.GameScreen;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
 import world.entities.Entity;
 import world.entities.animations.Animation;
-import world.entities.magic.Spell;
 import world.entities.magic.Spellbook;
-import world.entities.magic.techniques.Technique;
 
 public class HumanoidEntity extends Entity {
 
@@ -20,7 +17,7 @@ public class HumanoidEntity extends Entity {
 
     private boolean isDead;
     private String allegiance;
-    private int crystals, gold, dyes, tomes, keys;
+    private int crystals, gold, dyes, tomes, keys, artifacts;
 
     public HumanoidEntity() {
 
@@ -57,8 +54,6 @@ public class HumanoidEntity extends Entity {
         this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false, Color.orange));
         this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false, Color.orange));
 
-
-
     }
 
     @Override
@@ -86,12 +81,14 @@ public class HumanoidEntity extends Entity {
     public int getDyeCount() { return dyes; }
     public int getKeyCount() { return keys; }
     public int getTomeCount() { return tomes; }
+    public int getArtifactCount() { return artifacts; }
 
     public void addGold(int gold) { this.gold += gold; }
     public void addCrystals(int crystals) { this.crystals += crystals; }
     public void addDyes(int dyes) { this.dyes += dyes; }
     public void addKeys(int keys) { this.keys += keys; }
     public void addTomes(int tomes) { this.tomes += tomes; }
+    public void addArtifacts(int artifacts) { this.artifacts += artifacts; }
 
     public void setMana(double mana) { this.mana = MiscMath.clamp(mana, 0, max_mana); }
     public void addMana(double amount) { setMana(mana + amount); }
@@ -105,7 +102,7 @@ public class HumanoidEntity extends Entity {
                     diff > 0 ? "+"+diff : ""+diff,
                     diff > 0 ? Color.green : Color.red,
                     4,
-                    500);
+                    500, 0, true);
         }
         if (!isDead && hp == 0) {
             isDead = true;

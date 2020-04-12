@@ -13,14 +13,15 @@ import world.Chunk;
 
 public class PositionalTextLabel extends GUIElement {
 
-    private double direction, speed, lifespan, elapsedTime;
+    private double direction, speed, lifespan, elapsedTime, offset;
     private Location location;
 
-    public PositionalTextLabel(Location location, String text, Color color, double direction, double speed, double lifespan) {
+    public PositionalTextLabel(Location location, String text, Color color, double direction, double speed, double lifespan, double offset) {
         this(location, text, color);
         this.direction = direction;
         this.speed = speed;
         this.lifespan = lifespan;
+        this.offset = offset;
     }
 
     private PositionalTextLabel(Location location, String text, Color color) {
@@ -72,7 +73,7 @@ public class PositionalTextLabel extends GUIElement {
     public void drawOver(Graphics g) {
         elapsedTime += MiscMath.getConstant(1000, 1);
         double[] rotatedOffset = MiscMath.getRotatedOffset(0, -MiscMath.getConstant(speed * Chunk.TILE_SIZE, 1) * (elapsedTime / 1000), direction);
-        float[] osc = Camera.getOnscreenCoordinates(location.getCoordinates()[0] + rotatedOffset[0], location.getCoordinates()[1] + rotatedOffset[1], Window.getScale());
+        float[] osc = Camera.getOnscreenCoordinates(location.getCoordinates()[0] + rotatedOffset[0], location.getCoordinates()[1] + rotatedOffset[1] + offset, Window.getScale());
         this.setOffset(osc[0]/Window.getScale(), osc[1]/Window.getScale());
         if (elapsedTime >= lifespan) GameScreen.getGUI().removeElement(this);
     }

@@ -20,7 +20,7 @@ Wood Wall Window (South);TRUE;True;2;0;1
 Stone Wall (North);TRUE;True;2;0;1
 Stone Door (North);TRUE;True;2;0;1
 Stone Floor;FALSE;False;1;1;1
-Stone Corner;FALSE;FALSE;2;1;1
+Stone Corner;TRUE;FALSE;2;1;1
 Stone Wall (East);TRUE;FALSE;2;1;1
 Stone Wall (West);TRUE;FALSE;2;1;1
 Stone Corner (Northwest);TRUE;FALSE;2;1;1

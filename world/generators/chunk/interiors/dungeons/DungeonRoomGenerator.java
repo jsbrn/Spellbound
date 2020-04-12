@@ -42,13 +42,13 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y)
                 && rng.nextFloat() < 0.15) {
-            return rng.nextInt(4) == 0 ? new Bandit() : new SpikeTrap();
+            return rng.nextInt(10) == 0 ? new Bandit() : new SpikeTrap();
         }
         if (isWithinWalls(x, y)
                 && spawnLoot && rng.nextFloat() < 0.1
                 && chestCount < 3) {
             chestCount++;
-            return new Chest(rng.nextInt(4));
+            return new Chest(rng.nextInt(4), false, rng.nextInt(3), 0.5f);
         }
         return null;
     }

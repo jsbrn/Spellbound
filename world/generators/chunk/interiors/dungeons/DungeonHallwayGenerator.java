@@ -37,7 +37,7 @@ public class DungeonHallwayGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y) && rng.nextInt(16) == 0) {
-            return rng.nextInt(3) == 0 ? new Bandit() : (rng.nextBoolean() ? new SpikeTrap() : new Chest(3));
+            return rng.nextInt(3) == 0 ? new Bandit() : (rng.nextBoolean() ? new SpikeTrap() : new Chest(3, false, rng.nextInt(3), 0.7f));
         }
         return null;
     }
