@@ -45,7 +45,7 @@ public class Zombie extends HumanoidEntity {
                                     getLocation().getCoordinates()[1],
                                     ece.getWith().getLocation().getCoordinates()[0],
                                     ece.getWith().getLocation().getCoordinates()[1])));
-                    ((HumanoidEntity)ece.getWith()).addHP(-1);
+                    ((HumanoidEntity)ece.getWith()).addHP(-5);
                     getActionQueue("arms").queueAction(new ChangeAnimationAction("arms", "casting", true, true));
                     getLocation().lookAt(ece.getWith().getLocation());
                 }

@@ -45,7 +45,7 @@ public class SpellcraftingMenu extends Modal {
         crystalCost = new TextLabel("0", 8, Color.white, true);
         dyesCost = new TextLabel("0", 8, Color.white, true);
         manaCost = new TextLabel("0", 8, Color.white, true);
-        volatility = new TextLabel("0% Volatile", 4, Color.yellow, true);
+        volatility = new TextLabel("", 4, Color.yellow, true);
         categoryLabel = new TextLabel("...", 4, Color.gray, false);
         techniqueName = new TextLabel("-", 5, Color.black, false);
         techniqueDescription = new TextLabel("", 4, 100, 3, Color.gray, false);
@@ -223,9 +223,11 @@ public class SpellcraftingMenu extends Modal {
 
     private void refreshRequirements() {
         this.crystalCost.setText(spell.getCrystalCost()+"");
+        this.crystalCost.setColor(spell.getCrystalCost() > target.getCrystalCount() ? Color.red : Color.white);
         this.dyesCost.setText("0");
         this.manaCost.setText(spell.getManaCost()+"");
-        this.volatility.setText((int)(spell.getVolatility()*100)+"% Volatile");
+        this.manaCost.setColor(spell.getManaCost() > target.getMaxMana() ? Color.yellow : Color.white);
+        this.volatility.setText(spell.getVolatility() < 0.05 ? "" : (int)(spell.getVolatility()*100)+"% Volatile");
         this.createButton.setEnabled(
                 target.getCrystalCount() >= spell.getCrystalCost()
                 && !nameField.getText().trim().isEmpty()

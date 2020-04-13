@@ -33,6 +33,10 @@ public class TextLabel extends GUIElement {
         this.setBuffered(false);
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     private ArrayList<String> getLines(String text) {
         String[] words = text.split("\\s");
         ArrayList<String> rows = new ArrayList<String>();

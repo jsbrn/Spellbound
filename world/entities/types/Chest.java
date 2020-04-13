@@ -62,7 +62,7 @@ public class Chest extends Entity {
                                 if (lootType == CRYSTAL_LOOT) { amount /= 20; human.addCrystals(amount); type = "Crystals"; }
                                 if (lootType == DYE_LOOT) { amount /= 30; human.addDyes(amount); type = "Dyes"; }
                                 if (lootType == TOME_LOOT) { amount = 1; human.addTomes(amount); type = "Tome"; }
-                                if (lootType == ARTIFACT_LOOT) { amount = 1; human.addArtifacts(amount); type = "Artifact"; }
+                                if (lootType == ARTIFACT_LOOT) { amount = 1; human.addArtifacts(amount); type = "Strange Artifact"; }
                                 if (lootType == KEY_LOOT) { amount = 1; human.addKeys(amount); type = "Key"; }
                                 empty = amount <= 0;
                             }

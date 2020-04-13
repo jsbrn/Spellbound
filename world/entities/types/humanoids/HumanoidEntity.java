@@ -24,11 +24,11 @@ public class HumanoidEntity extends Entity {
         super();
 
         this.allegiance = "default";
-        this.setMaxHP(10);
+        this.setMaxHP(100);
         this.setMaxMana(Integer.MAX_VALUE);
-        this.hp = 10;
+        this.hp = 100;
         this.setMana(Integer.MAX_VALUE);
-        this.setMaxStamina(10);
+        this.setMaxStamina(100);
 
         this.spellbook = new Spellbook(this);
 
@@ -61,7 +61,7 @@ public class HumanoidEntity extends Entity {
         if (isDead()) return;
         super.update();
         addHP(MiscMath.getConstant(max_hp, 300));
-        addMana(MiscMath.getConstant(1, 0.5));
+        addMana(MiscMath.getConstant(max_mana, 20));
         addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
 

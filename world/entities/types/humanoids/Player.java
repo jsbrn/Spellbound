@@ -32,8 +32,8 @@ public class Player extends HumanoidEntity {
         this.getMover().setIndependent(true);
         this.getMover().setLookTowardsTarget(false);
 
-        this.setMaxMana(10);
-        this.setMana(10);
+        this.setMaxMana(100);
+        this.setMana(100);
 
         Spell kb = new Spell();
         kb.addTechnique("physical_weight");
