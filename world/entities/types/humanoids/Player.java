@@ -107,7 +107,7 @@ public class Player extends HumanoidEntity {
 
         if (godMode) {
             this.getMover().setSpeed(10);
-            this.setHP(1000);
+            this.setHP(1000, true);
             this.getMover().setCollidable(false);
             this.getMover().setIgnoreCollision(true);
         }

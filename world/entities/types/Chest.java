@@ -1,7 +1,6 @@
 package world.entities.types;
 
 import gui.states.GameScreen;
-import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.entities.actions.types.ChangeAnimationAction;
@@ -58,7 +57,7 @@ public class Chest extends Entity {
                             int amount = rng.nextInt(100) * lootMultiplier;
 
                             if (rng.nextFloat() < filledChance) {
-                                if (lootType == GOLD_LOOT) { amount /= 10; human.addGold(amount); type = "Gold"; }
+                                if (lootType == GOLD_LOOT) { amount /= 10; human.addGold(amount, false); type = "Gold"; }
                                 if (lootType == CRYSTAL_LOOT) { amount /= 20; human.addCrystals(amount); type = "Crystals"; }
                                 if (lootType == DYE_LOOT) { amount /= 30; human.addDyes(amount); type = "Dyes"; }
                                 if (lootType == TOME_LOOT) { amount = 1; human.addTomes(amount); type = "Tome"; }

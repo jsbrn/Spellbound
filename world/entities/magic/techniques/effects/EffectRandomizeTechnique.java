@@ -20,7 +20,7 @@ public class EffectRandomizeTechnique extends EffectTechnique {
 
     @Override
     public void affectOnce(MagicSource cast, HumanoidEntity e) {
-        if (cast.hasTechnique("trait_hp")) e.setHP(e.getHP() + MiscMath.random(-getLevel() * 4, getLevel() * 4));
+        if (cast.hasTechnique("trait_hp")) e.setHP(e.getHP() + MiscMath.random(-getLevel() * 4, getLevel() * 4), true);
         if (cast.hasTechnique("trait_mana")) e.setMana(e.getMana() + MiscMath.random(-getLevel() * 4, getLevel() * 4));
         if (cast.hasTechnique("trait_x") && cast.hasTechnique("trait_y")) {
             e.clearAllActions();

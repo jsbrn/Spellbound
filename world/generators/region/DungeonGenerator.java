@@ -17,8 +17,6 @@ public class DungeonGenerator implements RegionGenerator {
 
     private int maxBranchLength, segmentCount;
 
-    private boolean placedKeyRoom;
-
     public DungeonGenerator(int segmentCount, int maxBranchLength) {
         this.rng = new Random();
         this.maxBranchLength = maxBranchLength;
@@ -162,8 +160,8 @@ public class DungeonGenerator implements RegionGenerator {
         boolean isHorizontalHallway = get(x - 1, y, plan) && get(x + 1, y, plan) && adjacent(x, y, false, plan) == 2;
         if (isVerticalHallway || isHorizontalHallway) {
             return (rng.nextInt(2) == 0
-                    ? (rng.nextInt(10) == 0 && !placedKeyRoom ? new DungeonKeyRoomGenerator(north, south, east, west) : new DungeonRoomGenerator(north, south, east, west))
-                    : new DungeonHallwayGenerator(isHorizontalHallway));
+                    ? (rng.nextInt(10) == 0 ? new DungeonKeyRoomGenerator(north, south, east, west) : new DungeonRoomGenerator(north, south, east, west))
+                    : (rng.nextInt(10) == 0 ? new DungeonLostCivilianRoom(north, south, east, west) : new DungeonHallwayGenerator(isHorizontalHallway)));
         } else {
             if (rng.nextInt(12) == 0) return new DungeonZombieRoomGenerator(north, south, east, west);
             if (rng.nextBoolean()) return rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(north, south, east, west);

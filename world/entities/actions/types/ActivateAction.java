@@ -7,6 +7,7 @@ import world.entities.Entity;
 import world.entities.actions.Action;
 import world.events.EventDispatcher;
 import world.events.event.EntityActivatedEvent;
+import world.events.event.EntityChangeRegionEvent;
 
 public class ActivateAction extends Action {
 
@@ -35,12 +36,14 @@ public class ActivateAction extends Action {
                     destination.getCoordinates()[0] + 0.5 + (0.75 * destination.getExitDirection()[0]),
                     destination.getCoordinates()[1] + 0.5 + (0.75 * destination.getExitDirection()[1])));
             parent.getActionQueue().queueAction(new MoveAction(
-                    destination.getCoordinates()[0] + 0.5 + (destination.getExitDirection()[0]),
-                    destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1]),
+                    destination.getCoordinates()[0] + 0.5 + (destination.getExitDirection()[0] * 2),
+                    destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1] * 2),
                     false,
                     true
             ));
+            EventDispatcher.invoke(new EntityChangeRegionEvent(destination.getDestination(), origin.getDestination(), parent));
             return;
+
         }
 
         Entity at = location.getRegion().getEntity(activateCoords[0], activateCoords[1]);

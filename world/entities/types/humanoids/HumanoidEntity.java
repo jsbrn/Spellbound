@@ -60,7 +60,7 @@ public class HumanoidEntity extends Entity {
     public void update() {
         if (isDead()) return;
         super.update();
-        addHP(MiscMath.getConstant(max_hp, 300));
+        addHP(MiscMath.getConstant(max_hp, 300), false);
         addMana(MiscMath.getConstant(max_mana, 20));
         addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
@@ -83,7 +83,12 @@ public class HumanoidEntity extends Entity {
     public int getTomeCount() { return tomes; }
     public int getArtifactCount() { return artifacts; }
 
-    public void addGold(int gold) { this.gold += gold; }
+    public void addGold(int gold, boolean verbose) {
+        this.gold += gold;
+        if (verbose) {
+            GameScreen.getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
+        }
+    }
     public void addCrystals(int crystals) { this.crystals += crystals; }
     public void addDyes(int dyes) { this.dyes += dyes; }
     public void addKeys(int keys) { this.keys += keys; }
@@ -92,10 +97,10 @@ public class HumanoidEntity extends Entity {
 
     public void setMana(double mana) { this.mana = MiscMath.clamp(mana, 0, max_mana); }
     public void addMana(double amount) { setMana(mana + amount); }
-    public void setHP(double amount) {
+    public void setHP(double amount, boolean verbose) {
         int oldHP = (int)hp;
         this.hp = MiscMath.clamp(amount, 0, max_hp);
-        if ((int)hp != oldHP) {
+        if ((int)hp != oldHP && verbose) {
             int diff = (int)hp - oldHP;
             GameScreen.getGUI().floatText(
                     getLocation(),
@@ -118,7 +123,7 @@ public class HumanoidEntity extends Entity {
             getAnimationLayer("head").setBaseAnimation("dead");
         }
     }
-    public void addHP(double amount) { setHP(hp + amount); }
+    public void addHP(double amount, boolean verbose) { setHP(hp + amount, verbose); }
     public void setStamina(double amount) { this.stamina = MiscMath.clamp(amount, 0, max_stamina); }
     public void addStamina(double amount) { setStamina(stamina + amount); }
 
@@ -128,7 +133,7 @@ public class HumanoidEntity extends Entity {
 
     public void resurrect() {
         if (isDead) {
-            setHP(max_hp);
+            setHP(max_hp, true);
             setMana(max_mana);
             setStamina(0); //probably out of breath if you come back from the dead.
             clearAllActions();

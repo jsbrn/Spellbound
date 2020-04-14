@@ -33,11 +33,11 @@ public class Journal extends Modal {
         addChild(new TextLabel("Inventory", 5, Color.black, false), 12, 4, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Your Spells", 5, Color.black, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new IconLabel("icons/gold.png"), 16, 16, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/crystal.png"), 16, 32, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/dyes.png"), 16, 48, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/crystal.png"), 16, 40, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/dyes.png"), 16, 64, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/tome.png"), 48, 16, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/artifact.png"), 48, 32, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/key.png"), 48, 48, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/artifact.png"), 48, 40, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/key.png"), 48, 64, GUIAnchor.TOP_LEFT);
         gold = new TextLabel(target.getGoldCount()+"", 8, Color.white, true);
         crystals = new TextLabel(target.getCrystalCount()+"", 8, Color.white, true);
         dyes = new TextLabel(target.getDyeCount()+"", 8, Color.white, true);
@@ -45,19 +45,19 @@ public class Journal extends Modal {
         artifacts = new TextLabel(target.getArtifactCount()+"", 8, Color.white, true);
         keys = new TextLabel(target.getKeyCount()+"", 8, Color.white, true);
         addChild(gold, 24, 24, GUIAnchor.TOP_LEFT);
-        addChild(crystals, 24, 40, GUIAnchor.TOP_LEFT);
-        addChild(dyes, 24, 56, GUIAnchor.TOP_LEFT);
+        addChild(crystals, 24, 48, GUIAnchor.TOP_LEFT);
+        addChild(dyes, 24, 72, GUIAnchor.TOP_LEFT);
         addChild(tomes, 56, 24, GUIAnchor.TOP_LEFT);
-        addChild(artifacts, 56, 40, GUIAnchor.TOP_LEFT);
-        addChild(keys, 56, 56, GUIAnchor.TOP_LEFT);
-        addChild(new Button("New Spell...", 32, 8, null, true) {
+        addChild(artifacts, 56, 48, GUIAnchor.TOP_LEFT);
+        addChild(keys, 56, 72, GUIAnchor.TOP_LEFT);
+        addChild(new Button("+", 8, 8, null, true) {
             @Override
             public boolean onClick(int button) {
                 spellcraftingMenu.reset(null);
                 getGUI().stackModal(spellcraftingMenu);
                 return true;
             }
-        }, 12, -10, GUIAnchor.BOTTOM_LEFT);
+        }, -12, 4, GUIAnchor.TOP_RIGHT);
         copyButton = new Button("Copy", 16, 8, null, true) {
             @Override
             public boolean onClick(int button) {

@@ -38,6 +38,7 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
         if (y == getMaximum() && x >= getMinimum() && x <= getMaximum()) {
             return x % 4 != 0 ? (byte) Tiles.WOOD_WALL_SOUTH : (byte) Tiles.WOOD_WALL_WINDOW_SOUTH;
         }
+        if (x == getMinimum() + 2 && y == getMinimum() + 1) return Tiles.FURNACE;
         return Tiles.AIR;
     }
 

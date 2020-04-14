@@ -37,7 +37,7 @@ public class SpikeTrap extends Entity {
                 ece.getEntity().getActionQueue().queueAction(new ChangeAnimationAction("default", "close", true, true));
                 ece.getWith().clearAllActions();
                 ece.getWith().getActionQueue().queueAction(new KnockbackAction(1, getLocation().angleBetween(ece.getWith().getLocation())));
-                ((HumanoidEntity) ece.getWith()).addHP(-5);
+                ((HumanoidEntity) ece.getWith()).addHP(-5, true);
             }
         }));
 

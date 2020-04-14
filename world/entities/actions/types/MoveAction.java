@@ -41,14 +41,14 @@ public class MoveAction extends Action {
         if (!getParent().getMover().isMoving()) return true;
 
         byte[] tile = getParent().getLocation().getRegion().getTile((int)target[0], (int)target[1]);
-        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1])) return true;
+        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1]) || tile[0] == Tiles.AIR) return true;
 
         return false;
     }
 
     @Override
     public void onFinish() {
-
+        getParent().getMover().stop();
     }
 
     public String toString() { return "Move("+target[0]+", "+target[1]+")"; }

@@ -16,6 +16,7 @@ import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityActivatedEvent;
+import world.events.event.EntityChangeRegionEvent;
 import world.events.event.NPCSpeakEvent;
 import world.events.event.PlayerReplyEvent;
 
@@ -41,7 +42,6 @@ public class Civilian extends HumanoidEntity {
                 public void handle(Event e) {
                     if (isDead()) return;
                     EntityActivatedEvent eae = (EntityActivatedEvent)e;
-                    if (!(getCurrentState() instanceof IdleState)) return;
                     if (eae.getEntity().equals(that) && eae.getActivatedBy() instanceof Player) {
                         enterState(new TalkingToState((Player)eae.getActivatedBy()));
                     }

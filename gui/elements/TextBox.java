@@ -82,6 +82,10 @@ public class TextBox extends GUIElement {
         return false;
     }
 
+    public void releaseFocus() {
+        this.focused = false;
+    }
+
     @Override
     public boolean onKeyUp(int key) {
         return false;

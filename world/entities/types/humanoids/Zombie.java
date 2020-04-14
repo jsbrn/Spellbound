@@ -3,12 +3,10 @@ package world.entities.types.humanoids;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.Chunk;
-import world.entities.actions.Action;
 import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.actions.types.KnockbackAction;
 import world.entities.actions.types.MoveAction;
 import world.entities.animations.Animation;
-import world.entities.states.FollowState;
 import world.entities.states.PatrolState;
 import world.events.Event;
 import world.events.EventDispatcher;
@@ -45,7 +43,7 @@ public class Zombie extends HumanoidEntity {
                                     getLocation().getCoordinates()[1],
                                     ece.getWith().getLocation().getCoordinates()[0],
                                     ece.getWith().getLocation().getCoordinates()[1])));
-                    ((HumanoidEntity)ece.getWith()).addHP(-5);
+                    ((HumanoidEntity)ece.getWith()).addHP(-5, true);
                     getActionQueue("arms").queueAction(new ChangeAnimationAction("arms", "casting", true, true));
                     getLocation().lookAt(ece.getWith().getLocation());
                 }

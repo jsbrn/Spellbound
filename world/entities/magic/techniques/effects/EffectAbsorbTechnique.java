@@ -22,8 +22,8 @@ public class EffectAbsorbTechnique extends EffectTechnique {
         if (cast.getCaster() instanceof HumanoidEntity) return;
         HumanoidEntity caster = (HumanoidEntity)cast.getCaster();
         if (cast.hasTechnique("trait_hp") && e.getHP() > 0) {
-            e.addHP(-getLevel() * 2);
-            caster.addHP(getLevel() * 2);
+            e.addHP(-getLevel() * 2, true);
+            caster.addHP(getLevel() * 2, true);
         }
         if (cast.hasTechnique("trait_mana") && e.getMana() > 0) {
             e.addMana(-getLevel() * 2);
@@ -37,8 +37,8 @@ public class EffectAbsorbTechnique extends EffectTechnique {
         HumanoidEntity caster = (HumanoidEntity)cast.getCaster();
         double amount = MiscMath.getConstant(getLevel(), 1);
         if (cast.hasTechnique("trait_hp") && e.getHP() > amount) {
-            e.addHP(-amount);
-            caster.addHP(amount);
+            e.addHP(-amount, true);
+            caster.addHP(amount, true);
         }
         if (cast.hasTechnique("trait_mana") && e.getMana() > amount) {
             e.addMana(-amount);

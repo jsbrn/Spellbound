@@ -1,5 +1,17 @@
 [
   {
+    "id": "help_messages",
+    "texts": [
+      "Help!",
+      "Somebody help me!",
+      "Hey you!",
+      "Please help!",
+      "Are you one of them?",
+      "Please don't hurt me."
+    ],
+    "options": []
+  },
+  {
     "id": "greeting",
     "texts": [
       "Hi!",
@@ -15,15 +27,203 @@
   {
     "id": "backstory",
     "texts": [
-      "I'm just a humble farmer.",
-      "I'm a blacksmith by day, and a vigilante assassin by night.",
-      "I came to this land many years ago. It's a lovely place.",
-      "I'm nothing special. You, on the other hand...",
-      "Sorry, I'm quite busy.",
-      "Leave me alone!"
+      "I don't know you enough to talk about this.",
+      "Uh, do I know you?",
+      "I could ask you the same thing.",
+      "If I told you, I'd have to kill you. Haha! I'm just kidding around.",
+      "Sorry, I just don't have the time."
     ],
     "options": [
       { "label": "OK", "pointsTo": null }
     ]
+  },
+  {
+    "id": "lost_civilian_greeting",
+    "texts": [
+      "Oh, thank the Omniscience you're here!"
+    ],
+    "options": [
+      { "label":  "The who?", "pointsTo": "civilian_backtrack" },
+      { "label":  "What do you need?", "pointsTo": "civilian_explanation" }
+    ]
+  },
+  {
+    "id": "civilian_backtrack",
+    "texts": [
+      "Uh, never mind.",
+      "Forget I said anything.",
+      "You don't know? Uh, forget it, then."
+    ],
+    "options": [
+      { "label":  "What do you need?", "pointsTo": "civilian_explanation" }
+    ]
+  },
+  {
+    "id": "civilian_explanation",
+    "texts": [
+      "I need to get out of here! Can you take me with you? I'll pay you."
+    ],
+    "options": [
+      { "label":  "I'll help", "pointsTo": "civilian_celebrate" },
+      { "label":  "Find your own way", "pointsTo": "civilian_disappointed" }
+    ]
+  },
+  {
+    "id": "civilian_celebrate",
+    "texts": [
+      "You won't regret this.",
+      "I don't know what I'd do without you.",
+      "Great!",
+      "You're my hero!",
+      "My hero!",
+      "Whew! I thought I was a goner!",
+      "I can't wait to see my family again.",
+      "My knight in shining armor!",
+      "The faster I'm out of here, the better.",
+      "Hope I don't die on the way! Haha! Ha!"
+    ],
+    "options": [
+      { "label":  "Continue", "pointsTo": "civilian_instruct" }
+    ]
+  },
+  {
+    "id": "civilian_disappointed",
+    "texts": [
+      "Are you kidding me?",
+      "Oh, come on!",
+      "Wow. Some people really are heartless.",
+      "I'm going to die down here.",
+      "I'll never see my family again!",
+      "Jerk!",
+      "You'll RUE this day!",
+      "You'll die down here, just like me.",
+      "Fine! Have it your way.",
+      "We'll see how the Omniscience takes this!"
+    ],
+    "options": [
+      { "label":  "Not my problem", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "civilian_instruct",
+    "texts": [
+      "I'll follow you. Take me to the exit and you'll get your reward."
+    ],
+    "options": [
+      { "label":  "Continue", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "follow_confirmation",
+    "texts": [
+      "Still here.",
+      "Right behind you.",
+      "Let's just hurry.",
+      "Thanks again for helping me.",
+      "Are we close?",
+      "Are we there yet?",
+      "Yea?",
+      "What is it?",
+      "We need to get out of here.",
+      "Don't leave me behind.",
+      "I hope you aren't leading me to my death.",
+      "If I die, tell my wife I love her."
+    ],
+    "options": [
+      { "label": "Let's keep going.", "pointsTo": "civilian_instruct" },
+      { "label": "Wait here.", "pointsTo": "civilian_waiting" },
+      { "label": "Go away", "pointsTo":  "civilian_abandoned"}
+    ]
+  },
+  {
+    "id": "civilian_waiting",
+    "texts": [
+      "Please don't be too long!",
+      "Whew, I was getting tired.",
+      "I won't move a muscle, trust me.",
+      "Don't forget me down here!",
+      "Good plan, I'll wait here until it's cleared.",
+      "I hope you've got a plan."
+    ],
+    "options": [
+      { "label":  "Continue", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "civilian_abandoned",
+    "texts": [
+      "Not again!",
+      "You monster!",
+      "You'll get yours one day. Mark my words!",
+      "How could you betray me like this?",
+      "What!? I can't survive on my own!"
+    ],
+    "options": [
+      { "label":  "Goodbye", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "civilian_continue",
+    "texts": [
+      "Let's get out of here!",
+      "I thought you'd never come back!",
+      "You came back!",
+      "I think I heard a rat"
+    ],
+    "options": [
+      { "label": "Let's keep going.", "pointsTo":  "civilian_instruct" },
+      { "label":  "You're on your own.", "pointsTo": "civilian_abandoned" }
+    ]
+  },
+  {
+    "id": "civilian_redemption",
+    "texts": [
+      "Oh, you came back, did you?",
+      "You...came back for me?",
+      "Do my eyes deceive me?",
+      "What? Why did you come back?",
+      "I can't believe it, you're back?"
+    ],
+    "options": [
+      { "label": "Come with me", "pointsTo":  "civilian_celebrate" },
+      { "label":  "Nope, just checking", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "civilian_rescued",
+    "texts": [
+      "We did it!",
+      "We made it!",
+      "That was a close one!",
+      "At last, sunlight!",
+      "I thought we'd never make it.",
+      "Oh, sweet daylight.",
+      "It's a miracle!"
+    ],
+    "options": [
+      { "label": "Glad to help", "pointsTo":  "civilian_payment" }
+    ]
+  },
+  {
+    "id": "civilian_payment",
+    "texts": [
+      "You've saved my life. Here's your payment. Thank you so much!"
+    ],
+    "options": [
+      { "label": "Glad to help", "pointsTo":  "civilian_payment" }
+    ]
+  },
+  {
+    "id": "civilian_grateful",
+    "texts": [
+      "Thanks again for helping me! I don't know what I'd do without you.",
+      "If it weren't for you, I'd be dead down there.",
+      "You saved my life. I am forever grateful.",
+      "Boy, we had some rough times down there, huh? Thanks again."
+    ],
+    "options": [
+      { "label": "No problem", "pointsTo": null }
+    ]
   }
+
 ]

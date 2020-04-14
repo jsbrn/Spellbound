@@ -1,5 +1,6 @@
 package world.entities;
 
+import world.Region;
 import world.Tiles;
 import misc.Location;
 import misc.MiscMath;
@@ -15,6 +16,7 @@ import world.entities.animations.Animation;
 import world.entities.animations.AnimationLayer;
 import world.entities.states.State;
 import world.events.EventDispatcher;
+import world.events.event.EntityChangeRegionEvent;
 import world.events.event.EntityCollisionEvent;
 
 import java.util.ArrayList;
@@ -135,9 +137,15 @@ public class Entity {
     }
 
     public void moveTo(Location new_) {
-        if (location != null && location.getRegion() != null) location.getRegion().removeEntity(this);
+        Region old = null;
+        if (location != null && location.getRegion() != null) {
+            location.getRegion().removeEntity(this);
+            old = location.getRegion();
+        }
         location = new_;
         location.getRegion().addEntity(this);
+        if (!location.getRegion().equals(old))
+            EventDispatcher.invoke(new EntityChangeRegionEvent(old, new_.getRegion(), this));
     }
 
     public void draw(float osx, float osy, float scale) {

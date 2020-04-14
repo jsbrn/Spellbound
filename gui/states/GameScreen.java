@@ -20,6 +20,7 @@ import world.Region;
 import world.World;
 import world.entities.Entity;
 import world.entities.types.humanoids.Zombie;
+import world.entities.types.humanoids.npcs.LostCivilian;
 import world.generators.region.DungeonGenerator;
 
 import java.util.ArrayList;
@@ -190,7 +191,7 @@ public class GameScreen extends BasicGameState {
         if (button == 2) {
             Random rng = new Random();
             for (int i = 0; i < 1; i++) {
-                Entity civ = new Zombie();
+                Entity civ = new LostCivilian();
                 Location player = World.getLocalPlayer().getLocation();
                 civ.moveTo(new Location(
                         player.getRegion(),

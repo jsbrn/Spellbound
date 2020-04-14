@@ -18,7 +18,7 @@ public class AttackState extends FollowState {
     private int moveCount = 0;
 
     public AttackState(Entity target, int followDistance, int attackDistance, int hearing) {
-        super(target, followDistance, hearing);
+        super(target, followDistance, hearing, true);
         this.rng = new Random();
         this.attackDistance = attackDistance;
     }

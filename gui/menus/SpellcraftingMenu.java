@@ -58,6 +58,7 @@ public class SpellcraftingMenu extends Modal {
                 spell.setName(nameField.getText());
                 target.getSpellbook().addSpell(spell);
                 target.addCrystals(-spell.getCrystalCost());
+                nameField.releaseFocus();
                 getGUI().popModal();
                 return true;
             }

@@ -26,8 +26,8 @@ public class SpeechBubble extends GUIElement {
         this.contents = new TextLabel("", 4, Chunk.TILE_SIZE * 5, 3, Color.black, false);
         this.options = new TextLabel("", 3, Color.gray, false);
         this.addChild(title, 4, -4, GUIAnchor.TOP_LEFT);
-        this.addChild(contents, Chunk.TILE_SIZE * 2, 12, GUIAnchor.TOP_LEFT);
-        this.addChild(options, 0, -4, GUIAnchor.BOTTOM_MIDDLE);
+        this.addChild(contents, Chunk.TILE_SIZE * 2, 8, GUIAnchor.TOP_LEFT);
+        this.addChild(options, 32, -4, GUIAnchor.BOTTOM_LEFT);
         this.background = Assets.getImage("assets/gui/dialogue.png");
     }
 

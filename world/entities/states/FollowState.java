@@ -5,6 +5,11 @@ import misc.MiscMath;
 import world.entities.Entity;
 import world.entities.actions.types.MoveAction;
 import world.entities.actions.types.ChangeAnimationAction;
+import world.events.Event;
+import world.events.EventDispatcher;
+import world.events.EventHandler;
+import world.events.EventListener;
+import world.events.event.EntityChangeRegionEvent;
 
 import java.util.Random;
 
@@ -18,18 +23,36 @@ public class FollowState extends State {
 
     private float vision = 0.5f;
     private int hearing;
+    private boolean allowLosing;
 
-    public FollowState(Entity following, int distance, int hearing) {
+    private EventListener listener;
+
+    public FollowState(Entity following, int distance, int hearing, boolean allowLosing) {
         this.following = following;
         this.lastSeen = following.getLocation();
         this.minimumDistance = distance;
         this.hearing = hearing;
+        this.allowLosing = allowLosing;
         this.rng = new Random();
     }
 
     @Override
     public void onEnter() {
 
+        listener = new EventListener()
+                .on(EntityChangeRegionEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        if (allowLosing) return;
+                        EntityChangeRegionEvent ecre = (EntityChangeRegionEvent)e;
+                        if (!ecre.getEntity().equals(following)) return;
+                        getParent().moveTo(new Location(following.getLocation()));
+                        getParent().clearAllActions();
+                        getParent().getLocation().lookAt(following.getLocation());
+                    }
+                });
+
+        EventDispatcher.register(listener);
     }
 
     @Override
@@ -40,14 +63,19 @@ public class FollowState extends State {
         boolean canSeeLastPosition = getParent().canSee((int)lastSeen.getCoordinates()[0], (int)lastSeen.getCoordinates()[1]) > 0.5;
         double min = canSeeLastPosition && canSeeTarget ? minimumDistance : 0;
 
+
         if (canSeeTarget || canHearTarget) {
             lastSeen = new Location(following.getLocation());
         } else {
             if (getParent().getActionQueue().isEmpty()
                     && getParent().getLocation().distanceTo(following.getLocation()) >= hearing) {
                 //lost em
-                getParent().exitState();
-                return;
+                if (allowLosing) {
+                    getParent().exitState();
+                    return;
+                } else {
+                    lastSeen = new Location(following.getLocation());
+                }
             }
         }
 
@@ -55,7 +83,7 @@ public class FollowState extends State {
             double distanceTo = getParent().getLocation().distanceTo(following.getLocation());
             if (distanceTo > min + 1) {
                 double[] startCoords = following.getLocation().getCoordinates();
-                double[] direction = MiscMath.getRotatedOffset(0, -(distanceTo - min), getParent().getLocation().angleBetween(lastSeen) - 45 + rng.nextInt(90));
+                double[] direction = MiscMath.getRotatedOffset(0, min, getParent().getLocation().angleBetween(lastSeen));
                 getParent().getActionQueue().queueAction(new ChangeAnimationAction("arms", "walking", false, false));
                 getParent().getActionQueue().queueAction(new ChangeAnimationAction("legs", "walking", false, false));
                 getParent().getActionQueue().queueAction(new MoveAction(startCoords[0] + direction[0], startCoords[1] + direction[1], false, true));
@@ -70,7 +98,7 @@ public class FollowState extends State {
 
     @Override
     public void onExit() {
-
+        EventDispatcher.unregister(listener);
     }
 
 }
