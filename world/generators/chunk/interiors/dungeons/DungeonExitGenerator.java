@@ -10,24 +10,10 @@ import world.entities.types.Chest;
 
 import java.util.Random;
 
-public class DungeonExitGenerator extends DungeonRoomGenerator {
+public class DungeonExitGenerator extends DungeonEntranceGenerator {
 
     public DungeonExitGenerator(boolean south, boolean east, boolean west) {
-        super(false, south, east, west);
-    }
-
-    @Override
-    public byte getTop(int x, int y) {
-        int half = Chunk.CHUNK_SIZE / 2;
-        if (x == half && y == getMinimum()) return Tiles.BROKEN_STONE_WALL;
-        return super.getTop(x, y);
-    }
-
-    @Override
-    public Portal getPortal(int x, int y) {
-        return x == Chunk.CHUNK_SIZE/2 && y == getMinimum()
-                ? new Portal("hole", 0, 2, true, World.getRegion("world"), "trapdoor")
-                : null;
+        super(south, east, west);
     }
 
     @Override

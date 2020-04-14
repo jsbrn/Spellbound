@@ -3,7 +3,6 @@ package world.generators.chunk.interiors.dungeons;
 import org.newdawn.slick.Color;
 import world.Tiles;
 import world.entities.Entity;
-import world.entities.types.Chest;
 import world.entities.types.humanoids.npcs.Bandit;
 
 import java.util.Random;
@@ -11,10 +10,12 @@ import java.util.Random;
 public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
 
     Random rng;
+    private int difficultyMultiplier;
 
-    public DungeonLivingQuartersGenerator(boolean north, boolean south, boolean east, boolean west) {
-        super(north, south, east, west);
+    public DungeonLivingQuartersGenerator(int difficultyMultiplier, boolean north, boolean south, boolean east, boolean west) {
+        super(1, north, south, east, west);
         this.rng = new Random();
+        this.difficultyMultiplier = difficultyMultiplier;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (!isWithinWalls(x, y)) return null;
-        return rng.nextInt(12) == 0 ? new Bandit() : null;
+        return rng.nextInt(12) == 0 ? new Bandit(difficultyMultiplier) : null;
     }
 
     @Override

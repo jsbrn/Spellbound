@@ -191,9 +191,9 @@ public class Region {
      * @param destinationName Name of destination portal.
      * @return Portal if found, null if not
      */
-    public Portal findPortalTo(Region destination, String destinationName) {
+    public Portal findPortal(String portalName, Region destination, String destinationName) {
         for (Portal p: portals.values())
-            if (p.getDestination().equals(destination) && p.getDestinationName().equals(destinationName))
+            if (p.getName().equals(portalName) && p.getDestination().equals(destination) && p.getDestinationName().equals(destinationName))
                 return p;
         return null;
     }

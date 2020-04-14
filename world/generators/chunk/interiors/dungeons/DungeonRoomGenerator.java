@@ -15,13 +15,14 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
 
     private Random rng;
     private boolean spawnLoot;
-    private int chestCount;
+    private int chestCount, lootMultiplier;
 
-    public DungeonRoomGenerator(boolean north, boolean south, boolean east, boolean west) {
+    public DungeonRoomGenerator(int lootMultiplier, boolean north, boolean south, boolean east, boolean west) {
         super(north, south, east, west);
         this.setSize(9);
         this.rng = new Random();
         this.spawnLoot = rng.nextFloat() < 0.75;
+        this.lootMultiplier = lootMultiplier;
     }
 
     @Override
@@ -42,13 +43,13 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y)
                 && rng.nextFloat() < 0.15) {
-            return rng.nextInt(10) == 0 ? new Bandit() : new SpikeTrap();
+            return rng.nextInt(10) == 0 ? new Bandit(1) : new SpikeTrap();
         }
         if (isWithinWalls(x, y)
                 && spawnLoot && rng.nextFloat() < 0.1
                 && chestCount < 3) {
             chestCount++;
-            return new Chest(rng.nextInt(4), false, rng.nextInt(3), 0.75f);
+            return new Chest(lootMultiplier * 2, false, rng.nextInt(3), 0.75f);
         }
         return null;
     }

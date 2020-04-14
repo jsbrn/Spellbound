@@ -28,7 +28,7 @@ public class ActivateAction extends Action {
 
             System.out.println("Found portal leading to "+origin.getDestination()+", "+origin.getDestinationName());
             origin.getDestination().forceLoadChunks();
-            Portal destination = origin.getDestination().findPortalTo(location.getRegion(), origin.getName());
+            Portal destination = origin.getDestination().findPortal(origin.getDestinationName(), location.getRegion(), origin.getName());
             System.out.println("Destination portal is "+destination);
             parent.getMover().stop();
             parent.moveTo(new Location(
@@ -36,8 +36,8 @@ public class ActivateAction extends Action {
                     destination.getCoordinates()[0] + 0.5 + (0.75 * destination.getExitDirection()[0]),
                     destination.getCoordinates()[1] + 0.5 + (0.75 * destination.getExitDirection()[1])));
             parent.getActionQueue().queueAction(new MoveAction(
-                    destination.getCoordinates()[0] + 0.5 + (destination.getExitDirection()[0] * 2),
-                    destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1] * 2),
+                    destination.getCoordinates()[0] + 0.5 + (destination.getExitDirection()[0]),
+                    destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1]),
                     false,
                     true
             ));

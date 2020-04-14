@@ -27,9 +27,8 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
     public Portal getPortal(int x, int y) {
         String dungeon_name = "dungeon_"+rng.nextInt();
         return (x == entrance_x && y == entrance_y)
-                ? new Portal(
-                        "trapdoor",
-                0, -1, false, World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(64, 8))),
+                ? new Portal("trapdoor", 0, 1, false,
+                World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(rng.nextInt(5) + 1, 16))),
                         "ladder")
                 : super.getPortal(x, y);
     }

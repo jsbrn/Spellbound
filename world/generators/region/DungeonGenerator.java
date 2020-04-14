@@ -16,11 +16,13 @@ public class DungeonGenerator implements RegionGenerator {
     private int[] cursor;
 
     private int maxBranchLength, segmentCount;
+    private int difficultyMultiplier;
 
-    public DungeonGenerator(int segmentCount, int maxBranchLength) {
+    public DungeonGenerator(int difficultyMultiplier, int size) {
         this.rng = new Random();
-        this.maxBranchLength = maxBranchLength;
-        this.segmentCount = segmentCount;
+        this.maxBranchLength = size / 2;
+        this.segmentCount = Math.max(2, size * difficultyMultiplier);
+        this.difficultyMultiplier = Math.max(1, difficultyMultiplier);
         this.cursor = new int[]{0, 0};
     }
 
@@ -38,16 +40,21 @@ public class DungeonGenerator implements RegionGenerator {
             }
         }
 
-        boolean[][] plan = clean(1, plan(rng.nextInt(size), rng.nextInt(size), size, segmentCount));
+        boolean[][] plan = clean(difficultyMultiplier > 1 ? 1 : 0, plan(rng.nextInt(size), rng.nextInt(size), size, segmentCount));
 
         int[] potentialEntrance = findRandom(plan, coords ->
-                (get(coords[0], coords[1] + 1, plan) || get(coords[0] + 1, coords[1], plan) || get(coords[0] - 1, coords[1], plan))
-                && adjacent(coords[0], coords[1], false, plan) == 1);
+                (get(coords[0]-1, coords[1], plan) || get(coords[0]+1, coords[1], plan) || get(coords[0], coords[1]+1, plan))
+                && !get(coords[0], coords[1]-1, plan)
+        );
 
         int[] potentialExit = findRandom(plan, coords ->
-                (get(coords[0], coords[1] + 1, plan) || get(coords[0] + 1, coords[1], plan) || get(coords[0] - 1, coords[1], plan))
-                && adjacent(coords[0], coords[1], false, plan) == 1
-                && coords[0] != potentialEntrance[0] && coords[1] != potentialEntrance[1]);
+                (get(coords[0]-1, coords[1], plan) || get(coords[0]+1, coords[1], plan) || get(coords[0], coords[1]+1, plan))
+                && !get(coords[0], coords[1]-1, plan));
+
+        if (potentialEntrance[0] == -1 || (potentialExit[0] == potentialEntrance[1] && potentialExit[1] == potentialEntrance[1])) {
+            potentialEntrance = new int[]{size / 2, size / 2};
+            potentialExit = new int[]{size - 1, size - 1};
+        }
 
         plan[potentialEntrance[0]][potentialEntrance[1]] = true;
         plan[potentialExit[0]][potentialExit[1]] = true;
@@ -151,7 +158,7 @@ public class DungeonGenerator implements RegionGenerator {
                 if (valid) potentials.add(potential);
             }
         }
-        return potentials.get(rng.nextInt(potentials.size()));
+        return potentials.isEmpty() ? new int[]{-1, -1} : potentials.get(rng.nextInt(potentials.size()));
     }
 
     private ChunkGenerator pickRoom(int x, int y, boolean[][] plan) {
@@ -160,13 +167,13 @@ public class DungeonGenerator implements RegionGenerator {
         boolean isHorizontalHallway = get(x - 1, y, plan) && get(x + 1, y, plan) && adjacent(x, y, false, plan) == 2;
         if (isVerticalHallway || isHorizontalHallway) {
             return (rng.nextInt(2) == 0
-                    ? (rng.nextInt(10) == 0 ? new DungeonKeyRoomGenerator(north, south, east, west) : new DungeonRoomGenerator(north, south, east, west))
+                    ? (rng.nextInt(10) == 0 ? new DungeonKeyRoomGenerator(north, south, east, west) : new DungeonRoomGenerator((int)difficultyMultiplier, north, south, east, west))
                     : (rng.nextInt(10) == 0 ? new DungeonLostCivilianRoom(north, south, east, west) : new DungeonHallwayGenerator(isHorizontalHallway)));
         } else {
-            if (rng.nextInt(12) == 0) return new DungeonZombieRoomGenerator(north, south, east, west);
-            if (rng.nextBoolean()) return rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(north, south, east, west);
+            if (rng.nextInt(12 / difficultyMultiplier) == 0) return new DungeonZombieRoomGenerator(north, south, east, west);
+            if (rng.nextBoolean()) return rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(difficultyMultiplier, north, south, east, west);
         }
-        return new DungeonRoomGenerator(north, south, east, west);
+        return new DungeonRoomGenerator(difficultyMultiplier, north, south, east, west);
     }
 
     private boolean get(int x, int y, boolean[][] map) {

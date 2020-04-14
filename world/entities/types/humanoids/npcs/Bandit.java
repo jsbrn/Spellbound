@@ -1,7 +1,6 @@
 package world.entities.types.humanoids.npcs;
 
 import org.newdawn.slick.Color;
-import world.World;
 import world.entities.magic.Spell;
 import world.entities.states.PatrolState;
 import world.entities.types.humanoids.HumanoidEntity;
@@ -11,8 +10,9 @@ import java.util.Random;
 public class Bandit extends HumanoidEntity {
 
     Random rng;
+    private int level;
 
-    public Bandit() {
+    public Bandit(int level) {
         super();
         this.setAllegiance("bandits");
         rng = new Random();

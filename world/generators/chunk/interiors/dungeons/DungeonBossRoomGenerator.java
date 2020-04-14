@@ -7,7 +7,7 @@ import world.Portal;
 public class DungeonBossRoomGenerator extends DungeonRoomGenerator {
 
     public DungeonBossRoomGenerator() {
-        super(false, true, false, false);
+        super(1, false, true, false, false);
         this.setSize(Chunk.CHUNK_SIZE);
     }
 

@@ -13,7 +13,7 @@ public class DungeonZombieRoomGenerator extends DungeonRoomGenerator {
     Random rng;
 
     public DungeonZombieRoomGenerator(boolean north, boolean south, boolean east, boolean west) {
-        super(north, south, east, west);
+        super(1, north, south, east, west);
         this.rng = new Random();
     }
 

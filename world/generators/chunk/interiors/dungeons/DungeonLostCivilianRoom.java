@@ -14,7 +14,7 @@ public class DungeonLostCivilianRoom extends DungeonLivingQuartersGenerator {
     boolean spawnedCivilian;
 
     public DungeonLostCivilianRoom(boolean north, boolean south, boolean east, boolean west) {
-        super(north, south, east, west);
+        super(1, north, south, east, west);
         this.rng = new Random();
     }
 
