@@ -35,6 +35,6 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
 
     @Override
     public Color getColor() {
-        return Color.gray;
+        return Color.orange.darker();
     }
 }

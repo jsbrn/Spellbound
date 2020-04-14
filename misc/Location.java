@@ -21,7 +21,7 @@ public class Location {
     public Location(Region region, int cx, int cy, double tx, double ty) {
         this.region = region;
         this.coordinates = new double[]{(cx * Chunk.CHUNK_SIZE) + tx, (cy * Chunk.CHUNK_SIZE) + ty};
-        this.lookDirection = 0;
+        this.lookDirection = 180;
     }
 
     public Region getRegion() {
