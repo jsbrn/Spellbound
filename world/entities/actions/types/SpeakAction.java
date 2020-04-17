@@ -16,7 +16,7 @@ public class SpeakAction extends Action {
     @Override
     public void onStart() {
         if (getParent().getLocation().getRegion().equals(World.getLocalPlayer().getLocation().getRegion()))
-            GameScreen.getGUI().floatText(getParent().getLocation(), text, Color.white, 1, 1000, -1, false);
+            GameScreen.getGUI().floatText(getParent().getLocation(), text, Color.white, 1, Math.max(1000, 400 * text.split("\\s").length), -1, false);
     }
 
     @Override

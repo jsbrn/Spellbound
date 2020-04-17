@@ -226,7 +226,7 @@
     ]
   },
   {
-    "id": "wishing_well_greeting",
+    "id": "wishing_well_initial_greeting",
     "texts": [
       "Speak your wish.",
       "What do you desire?",
@@ -236,20 +236,98 @@
       "What is it that you seek?"
     ],
     "options": [
-      { "label": "More mana", "pointsTo": null },
-      { "label": "More health", "pointsTo": null },
-      { "label": "More power", "pointsTo": null }
+      { "label": "More mana", "pointsTo": "fake_request" },
+      { "label": "More health", "pointsTo": "fake_request" },
+      { "label": "More power", "pointsTo": "fake_request" }
     ]
   },
   {
-    "id": "wishing_well_",
+    "id": "fake_request",
     "texts": [
-      ""
+      "If that is truly what you seek, then bring forth the treasure beyond the creek."
     ],
     "options": [
-      { "label": "More mana", "pointsTo": null },
-      { "label": "More health", "pointsTo": null },
-      { "label": "More money", "pointsTo": null }
+      { "label": "What?", "pointsTo": "wishing_well_backtrack" }
+    ]
+  },
+  {
+    "id": "wishing_well_backtrack",
+    "texts": [
+      "The creek. Bring me the treasure beyond the creek."
+    ],
+    "options": [
+      { "label": "There are no lakes for miles.", "pointsTo": "wishing_well_confusion" }
+    ]
+  },
+  {
+    "id": "wishing_well_confusion",
+    "texts": [
+      "What? Since when?"
+    ],
+    "options": [
+      { "label": "Uh...", "pointsTo": "wishing_well_sadness" }
+    ]
+  },
+  {
+    "id": "wishing_well_sadness",
+    "texts": [
+      "Wow. That's...that's a surprise. I could have sworn we had a lake around here."
+    ],
+    "options": [
+      { "label": "Sorry to disappoint you.", "pointsTo": "wishing_well_back_on_track" }
+    ]
+  },
+  {
+    "id": "wishing_well_back_on_track",
+    "texts": [
+      "Well...I suppose I could just charge you Gold like any other transaction."
+    ],
+    "options": [
+      { "label": "That would be great.", "pointsTo": "wishing_well_forgot" }
+    ]
+  },
+  {
+    "id": "wishing_well_forgot",
+    "texts": [
+      "What was it that you wanted?"
+    ],
+    "options": [
+      { "label": "More mana", "pointsTo": "request_mana" },
+      { "label": "More health", "pointsTo": "request_health" }
+    ]
+  },
+  {
+    "id": "wishing_well_greeting",
+    "texts": [
+      "You're back. What would you like?",
+      "Welcome back.",
+      "Greetings. Back for more?",
+      "What'll it be?",
+      "My reserves are boundless."
+    ],
+    "options": [
+      { "label": "More mana", "pointsTo": "request_mana" },
+      { "label": "More health", "pointsTo": "request_health" }
+    ]
+  },
+  {
+    "id": "request_mana",
+    "texts": [
+      "Excellent choice! 50 Gold for +10 Max Mana."
+    ],
+    "options": [
+      { "label": "Sounds good", "pointsTo": null },
+      { "label": "Changed my mind", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "request_health",
+    "texts": [
+      "Excellent choice! 100 Gold for +10 Max Health."
+    ],
+    "options": [
+      { "label": "Sounds good", "pointsTo": null },
+      { "label": "Changed my mind", "pointsTo": null }
     ]
   }
 
