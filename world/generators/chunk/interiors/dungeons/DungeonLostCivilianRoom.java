@@ -12,8 +12,9 @@ public class DungeonLostCivilianRoom extends DungeonLivingQuartersGenerator {
 
     Random rng;
     boolean spawnedCivilian;
+    int difficultyMultiplier;
 
-    public DungeonLostCivilianRoom(boolean north, boolean south, boolean east, boolean west) {
+    public DungeonLostCivilianRoom(int difficultyMultiplier, boolean north, boolean south, boolean east, boolean west) {
         super(1, north, south, east, west);
         this.rng = new Random();
     }
@@ -21,7 +22,7 @@ public class DungeonLostCivilianRoom extends DungeonLivingQuartersGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (!isWithinWalls(x, y)) return null;
-        Entity e = rng.nextInt(6) == 0 && !spawnedCivilian ? new LostCivilian() : null;
+        Entity e = rng.nextInt(6) == 0 && !spawnedCivilian ? new LostCivilian(difficultyMultiplier) : null;
         if (e != null) spawnedCivilian = true;
         return e;
     }

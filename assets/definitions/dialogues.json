@@ -224,6 +224,33 @@
     "options": [
       { "label": "No problem", "pointsTo": null }
     ]
+  },
+  {
+    "id": "wishing_well_greeting",
+    "texts": [
+      "Speak your wish.",
+      "What do you desire?",
+      "Speak.",
+      "What brings you to me on this day?",
+      "Tell me what it is you seek.",
+      "What is it that you seek?"
+    ],
+    "options": [
+      { "label": "More mana", "pointsTo": null },
+      { "label": "More health", "pointsTo": null },
+      { "label": "More power", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "wishing_well_",
+    "texts": [
+      ""
+    ],
+    "options": [
+      { "label": "More mana", "pointsTo": null },
+      { "label": "More health", "pointsTo": null },
+      { "label": "More money", "pointsTo": null }
+    ]
   }
 
 ]

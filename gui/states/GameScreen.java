@@ -191,7 +191,7 @@ public class GameScreen extends BasicGameState {
         if (button == 2) {
             Random rng = new Random();
             for (int i = 0; i < 1; i++) {
-                Entity civ = new LostCivilian();
+                Entity civ = new LostCivilian(1);
                 Location player = World.getLocalPlayer().getLocation();
                 civ.moveTo(new Location(
                         player.getRegion(),

@@ -2,6 +2,7 @@ package world.entities.states;
 
 import assets.definitions.Definitions;
 import assets.definitions.DialogueDefinition;
+import world.entities.types.humanoids.HumanoidEntity;
 import world.entities.types.humanoids.Player;
 import world.events.Event;
 import world.events.EventDispatcher;
@@ -38,9 +39,11 @@ public class TalkingToState extends State {
 
     @Override
     public void onEnter() {
-        getParent().getAnimationLayer("arms").setBaseAnimation("default");
-        getParent().getAnimationLayer("legs").setBaseAnimation("default");
-        getParent().getAnimationLayer("head").setBaseAnimation("talking");
+        if (getParent() instanceof HumanoidEntity) {
+            getParent().getAnimationLayer("arms").setBaseAnimation("default");
+            getParent().getAnimationLayer("legs").setBaseAnimation("default");
+            getParent().getAnimationLayer("head").setBaseAnimation("talking");
+        }
         EventDispatcher.register(talker);
         EventDispatcher.invoke(new ConversationStartedEvent(getParent(), to));
         EventDispatcher.invoke(new NPCSpeakEvent(getParent(), to, Definitions.getDialogue(getParent().getConversationStartingPoint())));
@@ -53,7 +56,7 @@ public class TalkingToState extends State {
 
     @Override
     public void onExit() {
-        getParent().getAnimationLayer("head").setBaseAnimation("default");
+        if (getParent() instanceof HumanoidEntity) getParent().getAnimationLayer("head").setBaseAnimation("default");
         EventDispatcher.unregister(talker);
         EventDispatcher.invoke(new ConversationEndedEvent(getParent(), to));
     }

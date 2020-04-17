@@ -9,13 +9,13 @@ import java.util.Random;
 public class TrapdoorFieldGenerator extends OpenFieldGenerator {
 
     private Random rng;
-    private boolean placed;
-    private int entrance_x, entrance_y;
+    private int entrance_x, entrance_y, difficulty;
 
-    public TrapdoorFieldGenerator() {
+    public TrapdoorFieldGenerator(int difficultyMultiplier) {
         this.rng = new Random();
         this.entrance_x = 2 + rng.nextInt(Chunk.CHUNK_SIZE - 4);
         this.entrance_y = 2 + rng.nextInt(Chunk.CHUNK_SIZE - 4);
+        this.difficulty = difficultyMultiplier;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
         String dungeon_name = "dungeon_"+rng.nextInt();
         return (x == entrance_x && y == entrance_y)
                 ? new Portal("trapdoor", 0, 1, false,
-                World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(rng.nextInt(5) + 1, 16))),
+                World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(1 + (difficulty), 16))),
                         "ladder")
                 : super.getPortal(x, y);
     }

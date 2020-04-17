@@ -17,7 +17,7 @@ public class LostCivilian extends Civilian {
 
     Random rng;
 
-    public LostCivilian() {
+    public LostCivilian(int difficultyMultiplier) {
         super();
         this.setName("Lost Civilian");
         this.setConversationStartingPoint("lost_civilian_greeting");
@@ -42,7 +42,7 @@ public class LostCivilian extends Civilian {
                         that.setConversationStartingPoint("civilian_redemption");
                     } else if (pre.getDialogue().getID().equals("civilian_payment")) {
                         that.enterState(new IdleState());
-                        pre.getPlayer().addGold(250, true);
+                        pre.getPlayer().addGold(50 * difficultyMultiplier, true);
                         that.setConversationStartingPoint("civilian_grateful");
                     }
                 }
