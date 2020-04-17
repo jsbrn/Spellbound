@@ -153,7 +153,10 @@ public class GUI {
         this.elements.add(element);
     }
 
-    public void removeAllElements() { elements.clear(); }
+    public void reset() {
+        modals.clear();
+        elements.clear();
+    }
 
     public void removeElement(GUIElement element) {
         if (elements.remove(element)) element.onHide();

@@ -17,6 +17,7 @@ public class DungeonLostCivilianRoom extends DungeonLivingQuartersGenerator {
     public DungeonLostCivilianRoom(int difficultyMultiplier, boolean north, boolean south, boolean east, boolean west) {
         super(1, north, south, east, west);
         this.rng = new Random();
+        this.difficultyMultiplier = difficultyMultiplier;
     }
 
     @Override

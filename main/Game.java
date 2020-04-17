@@ -16,7 +16,6 @@ import java.io.IOException;
 public class Game extends StateBasedGame {
 
     private static Game instance;
-    public static final int GAME_SCREEN = 0, MAIN_MENU = 1;
 
     public Game(String gameTitle) {
 
@@ -54,13 +53,15 @@ public class Game extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
         //initialize states
-        getState(GAME_SCREEN).init(gc, this);
-        getState(MAIN_MENU).init(gc, this);
+        getState(GameState.GAME_SCREEN).init(gc, this);
+        getState(GameState.MAIN_MENU).init(gc, this);
 
+        //load assets and json files
         Assets.load();
         Definitions.load();
+
         //load "menu" state on startup
-        this.enterState(MAIN_MENU);
+        this.enterState(GameState.MAIN_MENU);
     }
 
 }

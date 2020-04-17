@@ -6,7 +6,6 @@ import gui.elements.*;
 import gui.menus.Journal;
 import gui.menus.PauseMenu;
 import gui.menus.SpellcraftingMenu;
-import main.Game;
 import misc.MiscMath;
 
 import org.newdawn.slick.Color;
@@ -31,7 +30,7 @@ public class GameScreen extends GameState {
 
     @Override
     public int getID() {
-        return Game.GAME_SCREEN;
+        return GameState.GAME_SCREEN;
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
@@ -43,7 +42,6 @@ public class GameScreen extends GameState {
     @Override
     public void addGUIElements(GUI gui) {
         if (World.getLocalPlayer() == null) return;
-        gui.removeAllElements();
         SpellcraftingMenu spellcasting = new SpellcraftingMenu(World.getLocalPlayer());
         Journal spellbook = new Journal(World.getLocalPlayer(), spellcasting);
 

@@ -1,6 +1,6 @@
 package world.entities.types.humanoids;
 
-import gui.states.GameScreen;
+import gui.states.GameState;
 import main.Game;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
@@ -89,7 +89,7 @@ public class HumanoidEntity extends Entity {
     public void addGold(int gold, boolean verbose) {
         this.gold += gold;
         if (verbose) {
-            Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
+            Game.getGameState(GameState.GAME_SCREEN).getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
         }
     }
     public void addCrystals(int crystals) { this.crystals += crystals; }
@@ -105,7 +105,7 @@ public class HumanoidEntity extends Entity {
         this.hp = MiscMath.clamp(amount, 0, max_hp);
         if ((int)hp != oldHP && verbose) {
             int diff = (int)hp - oldHP;
-            Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(
+            Game.getGameState(GameState.GAME_SCREEN).getGUI().floatText(
                     getLocation(),
                     diff > 0 ? "+"+diff : ""+diff,
                     diff > 0 ? Color.green : Color.red,

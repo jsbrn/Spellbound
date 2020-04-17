@@ -9,6 +9,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public abstract class GameState extends BasicGameState {
 
+    public static final int GAME_SCREEN = 0, MAIN_MENU = 1;
+
     private String background;
     private Input input;
     private GUI gui;
@@ -40,7 +42,7 @@ public abstract class GameState extends BasicGameState {
 
     public final GUI getGUI() { return gui; }
     public final void resetGUI() {
-        gui.removeAllElements();
+        gui.reset();
         addGUIElements(gui);
     }
     protected abstract void addGUIElements(GUI gui);
