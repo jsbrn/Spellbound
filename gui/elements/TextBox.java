@@ -63,10 +63,10 @@ public class TextBox extends GUIElement {
     @Override
     public boolean onKeyDown(int key) {
         if (focused) {
-            boolean shifting = GameScreen.getInput().isKeyDown(Input.KEY_LSHIFT)
-                || GameScreen.getInput().isKeyDown(Input.KEY_RSHIFT);
-            boolean control = GameScreen.getInput().isKeyDown(Input.KEY_LCONTROL)
-                    || GameScreen.getInput().isKeyDown(Input.KEY_RCONTROL);
+            boolean shifting = getGUI().getParent().getInput().isKeyDown(Input.KEY_LSHIFT)
+                || getGUI().getParent().getInput().isKeyDown(Input.KEY_RSHIFT);
+            boolean control = getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL)
+                    || getGUI().getParent().getInput().isKeyDown(Input.KEY_RCONTROL);
             if (key == Input.KEY_BACK && !text.isEmpty()) {
                 if (control)
                     text = "";

@@ -7,6 +7,8 @@ import misc.Location;
 import org.newdawn.slick.*;
 import world.World;
 import world.entities.types.humanoids.HumanoidEntity;
+import world.events.EventDispatcher;
+import world.events.event.HumanoidRespawnEvent;
 
 public class Statusbar extends GUIElement {
 
@@ -68,6 +70,7 @@ public class Statusbar extends GUIElement {
             World.getLocalPlayer().resurrect();
             World.getLocalPlayer().moveTo(new Location(World.getRegion("player_home"), 6.5, 6.5));
             World.getLocalPlayer().getLocation().setLookDirection(180);
+            EventDispatcher.invoke(new HumanoidRespawnEvent(World.getLocalPlayer()));
             return true;
         }
         return false;

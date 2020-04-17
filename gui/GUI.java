@@ -4,6 +4,7 @@ import gui.elements.Modal;
 import gui.elements.PositionalTextLabel;
 import gui.elements.SpeechBubble;
 import gui.states.GameScreen;
+import gui.states.GameState;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -28,8 +29,10 @@ public class GUI {
     private float darkness;
     private int[] lastMousePosition;
     private boolean debugMode;
+    private GameState parent;
 
-    public GUI() {
+    public GUI(GameState parent) {
+        this.parent = parent;
         this.elements = new ArrayList<>();
         this.modals = new Stack<>();
         this.lastMousePosition = new int[]{0, 0};
@@ -133,6 +136,7 @@ public class GUI {
     }
 
     public void popModal() {
+        if (modals.isEmpty()) return;
         if (!modals.isEmpty()) modals.peek().hide();
         modals.pop();
         if (!modals.isEmpty()) modals.peek().onShow();
@@ -149,13 +153,15 @@ public class GUI {
         this.elements.add(element);
     }
 
+    public void removeAllElements() { elements.clear(); }
+
     public void removeElement(GUIElement element) {
         if (elements.remove(element)) element.onHide();
     }
 
     public void floatText(Location location, String text, Color color, int speed, int lifespan, double offset, boolean randomXDirection) {
         if (location.getRegion().equals(World.getRegion()))
-            GameScreen.getGUI().addElement(
+            addElement(
                     new PositionalTextLabel(location, text, color, randomXDirection ? MiscMath.random(-45, 45) : 0, speed, lifespan, offset),
                     -Integer.MAX_VALUE,
                     -Integer.MAX_VALUE,
@@ -166,11 +172,15 @@ public class GUI {
 
     public void toggleDebugMode() { debugMode = !debugMode; }
 
+    public GameState getParent() {
+        return parent;
+    }
+
     public void draw(Graphics g) {
 
-        int mouseGX = (int)(GameScreen.getInput().getMouseX() / Window.getScale()), mouseGY = (int)(GameScreen.getInput().getMouseY() / Window.getScale());
+        int mouseGX = (int)(parent.getInput().getMouseX() / Window.getScale()), mouseGY = (int)(parent.getInput().getMouseY() / Window.getScale());
         if (lastMousePosition[0] != mouseGX || lastMousePosition[1] != mouseGY) {
-            handleMouseMoved(GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY());
+            handleMouseMoved(parent.getInput().getMouseX(), parent.getInput().getMouseY());
             lastMousePosition[0] = mouseGX;
             lastMousePosition[1] = mouseGY;
         }

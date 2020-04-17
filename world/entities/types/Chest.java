@@ -1,6 +1,7 @@
 package world.entities.types;
 
 import gui.states.GameScreen;
+import main.Game;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.entities.actions.types.ChangeAnimationAction;
@@ -41,7 +42,7 @@ public class Chest extends Entity {
                         if (eae.getActivatedBy() instanceof HumanoidEntity) {
 
                             if (locked && ((HumanoidEntity)eae.getActivatedBy()).getKeyCount() < 1) {
-                                GameScreen.getGUI().floatText(
+                                Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(
                                         eae.getEntity().getLocation(),
                                         "Locked",
                                         Color.gray, 2, 500, -0.5f, false);
@@ -69,9 +70,9 @@ public class Chest extends Entity {
                             if (locked) ((HumanoidEntity) eae.getActivatedBy()).addKeys(-1);
 
                             if (empty) {
-                                GameScreen.getGUI().floatText(eae.getEntity().getLocation(), "Empty", Color.gray, 2, 500, -0.5f, false);
+                                Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "Empty", Color.gray, 2, 500, -0.5f, false);
                             } else {
-                                GameScreen.getGUI().floatText(eae.getEntity().getLocation(), "+"+amount+" "+type, Color.yellow, 2, 750, -0.5f, false);
+                                Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "+"+amount+" "+type, Color.yellow, 2, 750, -0.5f, false);
                             }
 
                             looted = true;

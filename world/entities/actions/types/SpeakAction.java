@@ -1,6 +1,7 @@
 package world.entities.actions.types;
 
 import gui.states.GameScreen;
+import main.Game;
 import org.newdawn.slick.Color;
 import world.World;
 import world.entities.actions.Action;
@@ -16,7 +17,7 @@ public class SpeakAction extends Action {
     @Override
     public void onStart() {
         if (getParent().getLocation().getRegion().equals(World.getLocalPlayer().getLocation().getRegion()))
-            GameScreen.getGUI().floatText(getParent().getLocation(), text, Color.white, 1, Math.max(1000, 400 * text.split("\\s").length), -1, false);
+            Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(getParent().getLocation(), text, Color.white, 1, Math.max(1000, 400 * text.split("\\s").length), -1, false);
     }
 
     @Override

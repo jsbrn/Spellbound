@@ -1,7 +1,9 @@
 package main;
 
 import assets.Assets;
+import assets.definitions.Definitions;
 import gui.states.GameScreen;
+import gui.states.GameState;
 import gui.states.MainMenuScreen;
 import misc.*;
 import org.newdawn.slick.AppGameContainer;
@@ -11,26 +13,32 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import java.io.IOException;
 
-public class SlickInitializer extends StateBasedGame {
+public class Game extends StateBasedGame {
 
-    public SlickInitializer(String gameTitle) {
+    private static Game instance;
+    public static final int GAME_SCREEN = 0, MAIN_MENU = 1;
+
+    public Game(String gameTitle) {
 
         super(gameTitle); //set window title to "gameTitle" string
-
         //add states
-        addState(new GameScreen(Assets.GAME_SCREEN));
+        addState(new GameScreen());
         addState(new MainMenuScreen());
+
+        instance = this;
+
     }
 
     public static void main(String args[]) throws IOException {
 
         //initialize the window
         try {
-            Window.WINDOW_INSTANCE = new AppGameContainer(new SlickInitializer(Window.WINDOW_TITLE));
+            Window.WINDOW_INSTANCE = new AppGameContainer(new Game(Window.WINDOW_TITLE));
             Window.WINDOW_INSTANCE.setDisplayMode(16*65, 45*16, false);
             Window.WINDOW_INSTANCE.setTargetFrameRate(60);
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
             Window.WINDOW_INSTANCE.setShowFPS(false);
+            Window.setResizable(true);
             Window.WINDOW_INSTANCE.start();
         } catch (SlickException e) {
 
@@ -38,13 +46,21 @@ public class SlickInitializer extends StateBasedGame {
 
     }
 
+    public static void switchTo(int gameState) {
+        instance.enterState(gameState);
+    }
+    public static GameState getGameState(int id) { return (GameState)instance.getState(id); }
+
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
         //initialize states
-        getState(Assets.GAME_SCREEN).init(gc, this);
-        getState(Assets.MAIN_MENU_SCREEN).init(gc, this);
+        getState(GAME_SCREEN).init(gc, this);
+        getState(MAIN_MENU).init(gc, this);
+
+        Assets.load();
+        Definitions.load();
         //load "menu" state on startup
-        this.enterState(Assets.MAIN_MENU_SCREEN);
+        this.enterState(MAIN_MENU);
     }
 
 }

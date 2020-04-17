@@ -1,11 +1,14 @@
 package world.entities.types.humanoids;
 
 import gui.states.GameScreen;
+import main.Game;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.entities.animations.Animation;
 import world.entities.magic.Spellbook;
+import world.events.EventDispatcher;
+import world.events.event.HumanoidDeathEvent;
 
 public class HumanoidEntity extends Entity {
 
@@ -86,7 +89,7 @@ public class HumanoidEntity extends Entity {
     public void addGold(int gold, boolean verbose) {
         this.gold += gold;
         if (verbose) {
-            GameScreen.getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
+            Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
         }
     }
     public void addCrystals(int crystals) { this.crystals += crystals; }
@@ -102,7 +105,7 @@ public class HumanoidEntity extends Entity {
         this.hp = MiscMath.clamp(amount, 0, max_hp);
         if ((int)hp != oldHP && verbose) {
             int diff = (int)hp - oldHP;
-            GameScreen.getGUI().floatText(
+            Game.getGameState(Game.GAME_SCREEN).getGUI().floatText(
                     getLocation(),
                     diff > 0 ? "+"+diff : ""+diff,
                     diff > 0 ? Color.green : Color.red,
@@ -110,6 +113,7 @@ public class HumanoidEntity extends Entity {
                     500, 0, true);
         }
         if (!isDead && hp == 0) {
+            EventDispatcher.invoke(new HumanoidDeathEvent(this));
             isDead = true;
             setIsTile(true);
             clearAllActions();

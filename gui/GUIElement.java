@@ -70,7 +70,7 @@ public abstract class GUIElement {
 
     public boolean mouseIntersects() {
         return MiscMath.pointIntersectsRect(
-                GameScreen.getInput().getMouseX() / Window.getScale(), GameScreen.getInput().getMouseY() / Window.getScale(),
+                getGUI().getParent().getInput().getMouseX() / Window.getScale(), getGUI().getParent().getInput().getMouseY() / Window.getScale(),
                 getCoordinates()[0],
                 getCoordinates()[1],
                 getDimensions()[0],
@@ -161,7 +161,7 @@ public abstract class GUIElement {
                 if (buffer == null) buffer = new Image((int)dimensions[0], (int)dimensions[1]);
                 drawBuffered(buffer.getGraphics(),
                         mouseIntersects(),
-                        GameScreen.getInput().isMouseButtonDown(0));
+                        getGUI().getParent().getInput().isMouseButtonDown(0));
                 g.drawImage(buffer.getScaledCopy(Window.getScale()),coordinates[0], coordinates[1]);
             }
         } catch (SlickException e) {

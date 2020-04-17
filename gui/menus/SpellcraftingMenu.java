@@ -29,7 +29,7 @@ public class SpellcraftingMenu extends Modal {
     private Spell spell;
 
     public SpellcraftingMenu(HumanoidEntity target) {
-        super("spellcasting.png");
+        super("assets/gui/spellcasting.png");
         this.target = target;
         this.buttons = new ArrayList<>();
         this.categories = new ArrayList<>();

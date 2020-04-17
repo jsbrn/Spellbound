@@ -3,6 +3,7 @@ package gui.elements;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.states.GameScreen;
+import main.Game;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -75,6 +76,6 @@ public class PositionalTextLabel extends GUIElement {
         double[] rotatedOffset = MiscMath.getRotatedOffset(0, -MiscMath.getConstant(speed * Chunk.TILE_SIZE, 1) * (elapsedTime / 1000), direction);
         float[] osc = Camera.getOnscreenCoordinates(location.getCoordinates()[0] + rotatedOffset[0], location.getCoordinates()[1] + rotatedOffset[1] + offset, Window.getScale());
         this.setOffset(osc[0]/Window.getScale(), osc[1]/Window.getScale());
-        if (elapsedTime >= lifespan) GameScreen.getGUI().removeElement(this);
+        if (elapsedTime >= lifespan) getGUI().removeElement(this);
     }
 }

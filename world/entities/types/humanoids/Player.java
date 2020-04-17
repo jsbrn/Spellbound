@@ -1,6 +1,7 @@
 package world.entities.types.humanoids;
 
 import gui.states.GameScreen;
+import main.Game;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
@@ -116,17 +117,19 @@ public class Player extends HumanoidEntity {
 
         int dx = 0, dy = 0;
 
-        if (GameScreen.getInput().isKeyDown(Input.KEY_W)) dy -= 1;
-        if (GameScreen.getInput().isKeyDown(Input.KEY_A)) dx -= 1;
-        if (GameScreen.getInput().isKeyDown(Input.KEY_S)) dy += 1;
-        if (GameScreen.getInput().isKeyDown(Input.KEY_D)) dx += 1;
+        if (Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_W)) dy -= 1;
+        if (Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_A)) dx -= 1;
+        if (Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_S)) dy += 1;
+        if (Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_D)) dx += 1;
 
         double targetX = getMover().findMoveTarget(dx, 0, Chunk.CHUNK_SIZE)[0];
         double targetY = getMover().findMoveTarget(0, dy, Chunk.CHUNK_SIZE)[1];
         if (getActionQueue().isEmpty()) {
 
-            double[] mouse_wc = Camera.getWorldCoordinates(GameScreen.getInput().getMouseX(), GameScreen.getInput().getMouseY(), Window.getScale());
-            if (GameScreen.getInput().isKeyDown(Input.KEY_LCONTROL))
+            double[] mouse_wc = Camera.getWorldCoordinates(
+                    Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().getMouseX(),
+                    Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().getMouseY(), Window.getScale());
+            if (Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL))
                 getLocation().setLookDirection((int)MiscMath.angleBetween(
                         getLocation().getCoordinates()[0],
                         getLocation().getCoordinates()[1],
@@ -139,7 +142,7 @@ public class Player extends HumanoidEntity {
                 getAnimationLayer("legs").setBaseAnimation("walking");
                 getMover().setTarget(targetX, targetY);
                 getMover().setLookTowardsTarget(false);
-                if (getActionQueue("arms").isEmpty() && !GameScreen.getInput().isKeyDown(Input.KEY_LCONTROL))
+                if (getActionQueue("arms").isEmpty() && !Game.getGameState(Game.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL))
                     getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
                 getAnimationLayer("arms").setBaseAnimation("default");

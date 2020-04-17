@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 public class Assets {
 
-    public static int GAME_SCREEN = 0, MAIN_MENU_SCREEN = 1;
     public static Image TILE_SPRITESHEET, PARTICLE;
 
     private static HashMap<Float, TrueTypeFont> fonts;

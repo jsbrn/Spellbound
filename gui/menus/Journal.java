@@ -26,7 +26,7 @@ public class Journal extends Modal {
     private Button copyButton, combineButton, destroyButton, moveUpButton;
 
     public Journal(HumanoidEntity target, SpellcraftingMenu spellcraftingMenu) {
-        super("spellbook_bg.png");
+        super("assets/gui/spellbook_bg.png");
         this.target = target;
         this.selectedSpell = -1;
         this.spellButtons = new ArrayList<>();
@@ -132,22 +132,22 @@ public class Journal extends Modal {
     }
 
     @Override
-    public void onShow() {
-        refresh();
-    }
-
-    @Override
     public boolean onKeyUp(int key) {
-        refresh();
-        return false;
+        if (key == Input.KEY_TAB) {
+            getGUI().popModal();
+            return true;
+        }
+        return super.onKeyUp(key);
     }
 
     @Override
-    public boolean onKeyDown(int key) {
-        if (key == Input.KEY_TAB || key == Input.KEY_ESCAPE) {
-            World.setPaused(false);
-        }
-        return super.onKeyDown(key);
+    public void onShow() {
+        World.setPaused(true);
+        refresh();
     }
 
+    @Override
+    public void onHide() {
+        World.setPaused(false);
+    }
 }

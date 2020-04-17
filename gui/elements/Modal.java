@@ -1,5 +1,6 @@
 package gui.elements;
 
+import assets.Assets;
 import gui.GUIElement;
 import org.newdawn.slick.*;
 import world.World;
@@ -8,12 +9,12 @@ public class Modal extends GUIElement {
 
     private Image image;
 
+    public Modal(Image image) {
+        this.image = image;
+    }
+
     public Modal(String image) {
-        try {
-            this.image = new Image("assets/gui/"+image, false, Image.FILTER_NEAREST);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+        this(Assets.getImage(image));
     }
 
     @Override
@@ -53,14 +54,14 @@ public class Modal extends GUIElement {
 
     @Override
     public boolean onKeyUp(int key) {
+        if (key == Input.KEY_ESCAPE) {
+            getGUI().popModal();
+        }
         return true;
     }
 
     @Override
     public boolean onKeyDown(int key) {
-        if (key == Input.KEY_TAB || key == Input.KEY_ESCAPE) {
-            getGUI().popModal();
-        }
         return true;
     }
 
