@@ -178,7 +178,7 @@ public abstract class GUIElement {
 
     protected abstract void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown);
 
-    protected final void drawDebug(Graphics g) {
+    protected void drawDebug(Graphics g) {
         g.setColor(Color.magenta);
         g.drawRect(
                 getOnscreenCoordinates()[0],

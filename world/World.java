@@ -52,6 +52,10 @@ public class World {
         getRegion().update();
     }
 
+    public static boolean exists() {
+        return player != null;
+    }
+
     public static boolean isPaused() { return paused; }
     public static void setPaused(boolean p) {
         paused = p;

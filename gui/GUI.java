@@ -27,6 +27,7 @@ public class GUI {
     private SpeechBubble speechBubble;
     private float darkness;
     private int[] lastMousePosition;
+    private boolean debugMode;
 
     public GUI() {
         this.elements = new ArrayList<>();
@@ -74,8 +75,6 @@ public class GUI {
             GUIElement e = elements.get(i);
             if (e.handleMouseMoved(ogx, ogy)) return true;
         }
-        //double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
-        //EventDispatcher.invoke(new MousePressedEvent(wc[0], wc[1]));
         return false;
     }
 
@@ -86,8 +85,6 @@ public class GUI {
             GUIElement e = elements.get(i);
             if (e.handleMousePressed(ogx, ogy, button)) return true;
         }
-        double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
-        EventDispatcher.invoke(new MousePressedEvent(wc[0], wc[1], button));
         return false;
     }
 
@@ -98,8 +95,6 @@ public class GUI {
             GUIElement e = elements.get(i);
             if (e.handleMouseRelease(ogx, ogy, button)) return true;
         }
-        double[] wc = Camera.getWorldCoordinates(osx, osy, Window.getScale());
-        EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
         return false;
     }
 
@@ -118,7 +113,6 @@ public class GUI {
             GUIElement e = elements.get(i);
             if (e.handleKeyDown(key)) return true;
         }
-        EventDispatcher.invoke(new KeyDownEvent(key));
         return false;
     }
 
@@ -128,7 +122,6 @@ public class GUI {
             GUIElement e = elements.get(i);
             if (e.handleKeyUp(key)) return true;
         }
-        EventDispatcher.invoke(new KeyUpEvent(key));
         return false;
     }
 
@@ -169,7 +162,11 @@ public class GUI {
                     GUIAnchor.TOP_LEFT);
     }
 
-    public void draw(Graphics g, boolean debug) {
+    public boolean isInDebugMode() { return debugMode; }
+
+    public void toggleDebugMode() { debugMode = !debugMode; }
+
+    public void draw(Graphics g) {
 
         int mouseGX = (int)(GameScreen.getInput().getMouseX() / Window.getScale()), mouseGY = (int)(GameScreen.getInput().getMouseY() / Window.getScale());
         if (lastMousePosition[0] != mouseGX || lastMousePosition[1] != mouseGY) {
@@ -190,7 +187,7 @@ public class GUI {
             GUIElement element = elements.get(i);
             if (element.isActive() && !element.equals(modals)) {
                 element.draw(g);
-                if (debug) element.drawDebug(g);
+                if (debugMode) element.drawDebug(g);
             }
         }
 
@@ -198,7 +195,7 @@ public class GUI {
             g.setColor(new Color(0, 0, 0, 0.5f));
             g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
             modal.draw(g);
-            if (debug) modal.drawDebug(g);
+            if (debugMode) modal.drawDebug(g);
         }
 
     }

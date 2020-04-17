@@ -2,6 +2,7 @@ package main;
 
 import assets.Assets;
 import gui.states.GameScreen;
+import gui.states.MainMenuScreen;
 import misc.*;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -18,6 +19,7 @@ public class SlickInitializer extends StateBasedGame {
 
         //add states
         addState(new GameScreen(Assets.GAME_SCREEN));
+        addState(new MainMenuScreen());
     }
 
     public static void main(String args[]) throws IOException {
@@ -40,8 +42,9 @@ public class SlickInitializer extends StateBasedGame {
     public void initStatesList(GameContainer gc) throws SlickException {
         //initialize states
         getState(Assets.GAME_SCREEN).init(gc, this);
+        getState(Assets.MAIN_MENU_SCREEN).init(gc, this);
         //load "menu" state on startup
-        this.enterState(Assets.GAME_SCREEN);
+        this.enterState(Assets.MAIN_MENU_SCREEN);
     }
 
 }

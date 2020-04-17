@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class Assets {
 
-    public static int GAME_SCREEN = 0;
+    public static int GAME_SCREEN = 0, MAIN_MENU_SCREEN = 1;
     public static Image TILE_SPRITESHEET, PARTICLE;
 
     private static HashMap<Float, TrueTypeFont> fonts;
@@ -30,10 +30,14 @@ public class Assets {
     }
 
     public static Image getImage(String image) {
+        return getImage(image, Image.FILTER_NEAREST);
+    }
+
+    public static Image getImage(String image, int filter) {
         if (images == null) images = new HashMap<>();
         if (images.containsKey(image)) return images.get(image);
         try {
-            Image instance = new Image(image, false, Image.FILTER_NEAREST);
+            Image instance = new Image(image, false, filter);
             images.put(image, instance);
             return instance;
         } catch (SlickException e) {

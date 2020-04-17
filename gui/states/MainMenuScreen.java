@@ -7,6 +7,7 @@ import gui.GUIAnchor;
 import gui.elements.*;
 import gui.menus.Journal;
 import gui.menus.SpellcraftingMenu;
+import main.SlickInitializer;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -19,117 +20,86 @@ import world.Chunk;
 import world.Region;
 import world.World;
 import world.entities.Entity;
-import world.entities.types.humanoids.Zombie;
 import world.entities.types.humanoids.npcs.LostCivilian;
 import world.generators.region.DungeonGenerator;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameScreen extends BasicGameState {
+public class MainMenuScreen extends BasicGameState {
 
     static StateBasedGame game;
     private static Input input;
-    private static boolean initialized, paused;
+    private static boolean initialized;
     private Graphics graphics;
 
     private static GUI gui;
-    private static Modal spellbook;
-    private static boolean debugMode, showTopLayer;
+    private Image title_bg;
 
-    private static MiniMap miniMap;
-    private static TextLabel deathMessage;
-
-    public GameScreen(int state) {
+    public MainMenuScreen() {
         this.initialized = false;
     }
 
     @Override
     public int getID() {
-        return Assets.GAME_SCREEN;
+        return Assets.MAIN_MENU_SCREEN;
     }
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         if (initialized) return;
-        showTopLayer = true;
-        game = sbg;
-        Assets.load();
-        Definitions.load();
-
-        initialized = true;
-    }
-
-    public static void initializeGUI() {
         gui = new GUI();
-        SpellcraftingMenu spellcasting = new SpellcraftingMenu(World.getLocalPlayer());
-        spellbook = new Journal(World.getLocalPlayer(), spellcasting);
+        game = sbg;
 
-        gui.addElement(new CameraViewport(), 0, 0, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Statusbar(World.getLocalPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Button(null, 16, 16, "spellbook.png", false) {
-            @Override
-            public boolean onKeyDown(int key) {
-                if (key == Input.KEY_TAB) {
-                    gui.stackModal(spellbook);
-                    World.setPaused(true);
-                    return true;
-                }
-                return false;
-            }
+        title_bg = Assets.getImage("assets/gui/title_bg.png", Image.FILTER_LINEAR);
+
+        gui.addElement(new Button(null, 24, 24, "icons/play.png", true) {
             @Override
             public boolean onClick(int button) {
-                gui.stackModal(spellbook);
-                World.setPaused(true);
+                World.init();
+                GameScreen.initializeGUI();
+                sbg.enterState(Assets.GAME_SCREEN);
                 return true;
             }
-        }, 4, 94, GUIAnchor.TOP_LEFT);
+        }, -(24*3)/2, 0, GUIAnchor.CENTER);
+        gui.addElement(new Button(null, 24, 24, "icons/settings.png", true) {
+            @Override
+            public boolean onClick(int button) {
+                return false;
+            }
+        }, 0, 0, GUIAnchor.CENTER);
+        gui.addElement(new Button(null, 24, 24, "icons/quit.png", true) {
+            @Override
+            public boolean onClick(int button) {
+                System.exit(0);
+                return true;
+            }
+        }, (24*3)/2, 0, GUIAnchor.CENTER);
 
-        miniMap = new MiniMap();
-        gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);
+        gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
+        gui.addElement(new TextLabel("Pre-Alpha", 8, Color.white, true), 32, 32, GUIAnchor.TOP_MIDDLE);
 
-        deathMessage = new TextLabel("Press R to continue", 4, Color.white, true);
-        gui.addElement(deathMessage, 0, 16, GUIAnchor.CENTER);
-
-        gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
-        gui.addElement(spellcasting, 0, 0, GUIAnchor.CENTER);
-        spellbook.hide();
-        spellcasting.hide();
-
-        gui.setSpeechBubble();
+        initialized = true;
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         graphics = g;
         input = gc.getInput();
         g.setFont(Assets.getFont(14));
-        if (World.getLocalPlayer() == null) return;
+        g.drawImage(title_bg.getScaledCopy(Window.getWidth(), Window.getHeight()), 0, 0);
         gui.draw(g);
 
         g.setFont(Assets.getFont(14));
 
+
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-
-        World.setTimeMultiplier(gc.getInput().isKeyDown(Input.KEY_LSHIFT) ? 0.5 : 1);
         MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
         input = gc.getInput();
-
-        if (World.getLocalPlayer().isDead()) deathMessage.show(); else deathMessage.hide();
-        if (!paused) World.update();
-        if (gc.getInput().isKeyDown(Input.KEY_ESCAPE)) sbg.enterState(Assets.MAIN_MENU_SCREEN);
-
     }
 
     @Override
     public void keyReleased(int key, char c) {
-
-        if (key == Input.KEY_Q)
-            GameScreen.getGUI().floatText(World.getLocalPlayer().getLocation(), "-1", Color.red, 4, 500, 0, true);
-        if (key == Input.KEY_F5) miniMap.setRegion(new Region("test_dungeon", 16, new DungeonGenerator(1, 16)));
-        if (key == Input.KEY_F6) miniMap.setRegion(null);
-
         if (key == Input.KEY_F11) {
             try {
                 Window.toggleFullScreen();
@@ -137,9 +107,7 @@ public class GameScreen extends BasicGameState {
                 e.printStackTrace();
             }
         }
-
         gui.onKeyUp(key);
-
     }
 
     @Override
@@ -165,9 +133,9 @@ public class GameScreen extends BasicGameState {
     }
 
     public static Input getInput() { return input; }
+
     public static GUI getGUI() {
         return gui;
     }
-    public static void setPaused(boolean p) { paused = p; }
 
 }
