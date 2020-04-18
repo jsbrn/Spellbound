@@ -1,14 +1,14 @@
 ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;RequiresEnergy;ConflictsWith;Description
-movement_caster;Aura;Movement;3;1;0;1;FALSE;movement_\w;Follow the caster.
-movement_follow;Follow;Movement;5;1;0;1;FALSE;movement_\w;Follow the target.
-movement_directional;Directional;Movement;2;1;0;1;FALSE;movement_\w;Propel towards the direction of the cast.
-movement_hover;Hover;Movement;1;1;0;1;FALSE;movement_\w;Move towards a single point and hover.
-rotation_directional;Forward;Rotation;1;1;0;1;TRUE;rotation_\w;Look towards the direction of movement.
-rotation_spin;Spin;Rotation;1;1;0;1;TRUE;rotation_\w;Rotate clockwise at a constant rate.
-rotation_counterspin;Counterspin;Rotation;1;1;0;1;TRUE;rotation_\w;Rotate counterclockwise at a constant rate.
-rotation_caster;Caster;Rotation;1;1;0;1;TRUE;rotation_\w;Face the caster.
-rotation_aim;Aim;Rotation;2;1;0;1;TRUE;rotation_\w;Face the aim direction (mouse).
-rotation_target;Track;Rotation;2;1;0;1;TRUE;rotation_\w;Face the target.
+movement_caster;Aura;Movement;3;1;0;1;FALSE;movement_\w+;Follow the caster.
+movement_follow;Follow;Movement;5;1;0;1;FALSE;movement_\w+;Follow the target.
+movement_directional;Directional;Movement;2;1;0;1;FALSE;movement_\w+;Propel towards the direction of the cast.
+movement_hover;Hover;Movement;1;1;0;1;FALSE;movement_\w+;Move towards a single point and hover.
+rotation_directional;Forward;Rotation;1;1;0;1;TRUE;rotation_\w+;Look towards the direction of movement.
+rotation_spin;Spin;Rotation;1;1;0;1;TRUE;rotation_\w+;Rotate clockwise at a constant rate.
+rotation_counterspin;Counterspin;Rotation;1;1;0;1;TRUE;rotation_\w+;Rotate counterclockwise at a constant rate.
+rotation_caster;Caster;Rotation;1;1;0;1;TRUE;rotation_\w+;Face the caster.
+rotation_aim;Aim;Rotation;2;1;0;1;TRUE;rotation_\w+;Face the aim direction (mouse).
+rotation_target;Track;Rotation;2;1;0;1;TRUE;rotation_\w+;Face the target.
 arc_narrow;Narrow;Arc Length;0;1;0;1;TRUE;-;Narrow arc to 45 degrees.
 arc_spread;Spread;Arc Length;1;1;0;3;TRUE;-;Increase arc by 30 degrees per level.
 radius_min;Reach;Radius;1;1;0;5;TRUE;-;Increase min radius by 1 tile per level.

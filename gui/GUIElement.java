@@ -1,7 +1,6 @@
 package gui;
 
-import gui.elements.SpeechBubble;
-import gui.states.GameScreen;
+import assets.Assets;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.*;
@@ -158,7 +157,8 @@ public abstract class GUIElement {
             int[] dimensions = getDimensions();
             float[] coordinates = getOnscreenCoordinates();
             if (buffered) {
-                if (buffer == null) buffer = new Image((int)dimensions[0], (int)dimensions[1]);
+                if (buffer == null) buffer = Assets.getCachedBuffer(dimensions[0], dimensions[1]);
+                buffer.getGraphics().clear();
                 drawBuffered(buffer.getGraphics(),
                         mouseIntersects(),
                         getGUI().getParent().getInput().isMouseButtonDown(0));

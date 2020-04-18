@@ -26,6 +26,8 @@ public class Zombie extends HumanoidEntity {
         getAnimationLayer("torso").setColor(Color.orange.darker());
         getAnimationLayer("legs").setColor(Color.cyan.darker());
         getAnimationLayer("arms").setColor(Color.orange.darker(0.75f));
+        getAnimationLayer("shirt").setBaseAnimation("dirty");
+        getAnimationLayer("hair").setColor(Color.black);
         setAllegiance("undead");
         Zombie that = this;
         EventDispatcher.register(new EventListener()

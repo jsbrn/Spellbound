@@ -1,5 +1,6 @@
 package gui.menus;
 
+import assets.Assets;
 import gui.GUIAnchor;
 import gui.elements.*;
 import misc.MiscMath;
@@ -10,6 +11,7 @@ import world.entities.magic.techniques.Techniques;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SpellcraftingMenu extends Modal {
 
@@ -18,9 +20,8 @@ public class SpellcraftingMenu extends Modal {
     private int currentCategory;
     private TextLabel categoryLabel;
     private TextLabel techniqueName, techniqueDescription, techniqueConflicts;
-    private ArrayList<Button> buttons;
+    private HashMap<String, Button> buttons;
     private TextBox nameField;
-
     private TextLabel crystalCost, dyesCost, manaCost, volatility;
     private ColorChooser colorChooser;
     private IconChooser iconChooser;
@@ -31,7 +32,7 @@ public class SpellcraftingMenu extends Modal {
     public SpellcraftingMenu(HumanoidEntity target) {
         super("assets/gui/spellcasting.png");
         this.target = target;
-        this.buttons = new ArrayList<>();
+        this.buttons = new HashMap<>();
         this.categories = new ArrayList<>();
         this.spell = new Spell();
 
@@ -130,8 +131,7 @@ public class SpellcraftingMenu extends Modal {
         String[] techniques = Techniques.getAll();
         for (int i = 0; i < techniques.length; i++) {
             String technique = techniques[i];
-            System.out.println(technique);
-            Button chooseButton = new Button(null, 16, 16, "icons/techniques/" + technique.toLowerCase() + ".png", true) {
+            Button chooseButton = new Button(null, 16, 16, "icons/techniques/"+technique+".png", true) {
                 private TextLabel levelLabel = new TextLabel("", 4, Color.yellow, true);
                 private TextLabel warningLabel = new TextLabel("!", 6, Color.red, true);
                 @Override
@@ -184,8 +184,8 @@ public class SpellcraftingMenu extends Modal {
                         removeChild(warningLabel);
 
                     if (!mouseIntersects()) return false;
-                    techniqueName.setText(Techniques.getName(technique));
-                    techniqueDescription.setText(Techniques.getDescription(technique));
+                    techniqueName.setText(target.getSpellbook().hasTechnique(technique) ? Techniques.getName(technique) : "Unknown Technique");
+                    techniqueDescription.setText(target.getSpellbook().hasTechnique(technique) ? Techniques.getDescription(technique) : "???");
                     ArrayList<String> conflicts = spell.getConflicts(technique);
                     String conflictNames = "";
                     for (int i = 0; i < conflicts.size(); i++)
@@ -194,9 +194,7 @@ public class SpellcraftingMenu extends Modal {
                     return true;
                 }
             };
-            buttons.add(chooseButton);
-            chooseButton.setToggled(spell.hasTechnique(technique));
-            chooseButton.setEnabled(Technique.createFrom(technique) != null);
+            buttons.put(technique, chooseButton);
             addChild(chooseButton, 0, 0, GUIAnchor.TOP_MIDDLE);
             chooseButton.hide();
         }
@@ -211,12 +209,14 @@ public class SpellcraftingMenu extends Modal {
         int p = 0;
         for (int i = 0; i < techniques.length; i++) {
             String technique = techniques[i];
-            Button b = buttons.get(i);
+            Button b = buttons.get(technique);
             b.hide();
             if (Techniques.getCategory(technique).equals(categories.get(currentCategory))) {
                 b.show();
-                b.setToggled(spell.hasTechnique(technique));
                 b.setOffset(((p % 5) * 18), 19 + 8 + ((p / 5) * 19));
+                b.setToggled(spell.hasTechnique(technique));
+                b.setEnabled(Technique.createFrom(technique) != null && target.getSpellbook().hasTechnique(technique));
+                b.setIcon(target.getSpellbook().hasTechnique(technique) ? Assets.getImage("assets/gui/icons/techniques/"+technique+".png") : Assets.getImage("assets/gui/icons/question_mark.png"));
                 p++;
             }
         }

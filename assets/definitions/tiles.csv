@@ -42,5 +42,6 @@ Blood Stain;FALSE;FALSE;2;1;0.9
 Key;FALSE;FALSE;2;1;0.9
 Furnace;TRUE;FALSE;2;1;0.9
 Tombstone;FALSE;FALSE;1;1;0.75
+Firepit;FALSE;FALSE;1;1;0.25
 Fence (Horizontal);TRUE;TRUE;1;0.5;1
 Fence Corner (Northeast);TRUE;TRUE;1;0.5;1

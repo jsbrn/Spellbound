@@ -18,7 +18,7 @@ public class MoveAction extends Action {
     @Override
     public void onStart() {
         Entity parent = getParent();
-        parent.getMover().setSpeed(3);
+        parent.getMover().setSpeed(4);
         target = new double[]{
                 (relative ? getParent().getLocation().getCoordinates()[0] : 0) + xy[0],
                 (relative ? getParent().getLocation().getCoordinates()[1] : 0) + xy[1]};

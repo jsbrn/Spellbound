@@ -32,11 +32,7 @@ public class MiniMap extends GUIElement {
     private Image getBuffer() {
         if (getRegion() == null) return null;
         if (buffer == null || buffer.getWidth() != getRegion().getSize()) {
-            try {
-                buffer = new Image(getRegion().getSize(), getRegion().getSize(), Image.FILTER_NEAREST);
-            } catch (SlickException e) {
-                e.printStackTrace();
-            }
+            buffer = Assets.getCachedBuffer(getRegion().getSize(), getRegion().getSize());
         }
         return buffer;
     }

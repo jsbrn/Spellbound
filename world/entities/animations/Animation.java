@@ -32,6 +32,12 @@ public class Animation {
         }
     }
 
+    public Animation(String image, int fps, int frame_width, int frame_height, Color filter) {
+        this(image, fps, -1, frame_height, false, true, filter);
+        this.frame_width = frame_width;
+        this.frame_count = sprite.getWidth() / frame_width;
+    }
+
     private int getFrame() {
         int mills = (int)((World.getCurrentTime() - start_time) % 1000);
         int frame = (mills / (1000 / (frame_count * fps))) % frame_count;
@@ -57,7 +63,7 @@ public class Animation {
     public void draw(float ex, float ey, float scale, int direction) {
         int frame = getFrame();
         sprite.startUse();
-        float y_offset = -(frame_height/2 * scale), x_offset = -0.5f * scale * (float)Chunk.TILE_SIZE;
+        float y_offset = -(frame_height/2 * scale), x_offset = -(frame_width/2 * scale);
         int src_y = (int)(!directional ? 0 : direction * frame_height);
         sprite.drawEmbedded(
                 ex + x_offset,

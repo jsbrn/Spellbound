@@ -171,7 +171,7 @@ public class DungeonGenerator implements RegionGenerator {
                     : (rng.nextInt(10) == 0 ? new DungeonLostCivilianRoom(difficultyMultiplier, north, south, east, west) : new DungeonHallwayGenerator(isHorizontalHallway)));
         } else {
             if (rng.nextInt(12 / difficultyMultiplier) == 0) return new DungeonZombieRoomGenerator(north, south, east, west);
-            if (rng.nextBoolean()) return rng.nextBoolean() ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(difficultyMultiplier, north, south, east, west);
+            if (rng.nextBoolean()) return rng.nextInt(Math.max(2, 10 - difficultyMultiplier)) == 0 ? new DungeonLibraryGenerator(north, south, east, west) : new DungeonLivingQuartersGenerator(difficultyMultiplier, north, south, east, west);
         }
         return new DungeonRoomGenerator(difficultyMultiplier, north, south, east, west);
     }

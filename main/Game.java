@@ -16,6 +16,7 @@ import java.io.IOException;
 public class Game extends StateBasedGame {
 
     private static Game instance;
+    private static String mouseCursor;
 
     public Game(String gameTitle) {
 
@@ -45,8 +46,17 @@ public class Game extends StateBasedGame {
 
     }
 
-    public static void switchTo(int gameState) {
-        instance.enterState(gameState);
+    public static void switchTo(int gameState) { instance.enterState(gameState); }
+    public static void setMouseCursor(String ref) {
+        try {
+            mouseCursor = ref;
+            instance.getContainer().setMouseCursor(
+                    Assets.getImage(mouseCursor)
+                            .getFlippedCopy(false, false)
+                            .getScaledCopy(Window.getScale()), 0, 0);
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
     }
     public static GameState getGameState(int id) { return (GameState)instance.getState(id); }
 

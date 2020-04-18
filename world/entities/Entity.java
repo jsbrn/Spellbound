@@ -154,6 +154,7 @@ public class Entity {
 
     public void draw(float osx, float osy, float scale, int direction) {
         for (AnimationLayer animationLayer: animationLayers.values()) {
+            if (animationLayer.isEnabled() == false) continue;
             Animation anim = animationLayer.getAnimationByName(animationLayer.getCurrentAnimation());
             if (anim != null)
                 anim.draw(

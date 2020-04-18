@@ -55,15 +55,17 @@ public class Chest extends Entity {
 
                             boolean empty = true;
                             String type = "";
-                            int amount = rng.nextInt(100) * lootMultiplier;
+                            int loot = lootType, amount = rng.nextInt(100) * lootMultiplier;
+
+                            if (lootType == RANDOM_LOOT) loot = rng.nextInt(6);
 
                             if (rng.nextFloat() < filledChance) {
-                                if (lootType == GOLD_LOOT) { amount /= 10; human.addGold(amount, false); type = "Gold"; }
-                                if (lootType == CRYSTAL_LOOT) { amount /= 20; human.addCrystals(amount); type = "Crystals"; }
-                                if (lootType == DYE_LOOT) { amount /= 30; human.addDyes(amount); type = "Dyes"; }
-                                if (lootType == TOME_LOOT) { amount = 1; human.addTomes(amount); type = "Tome"; }
-                                if (lootType == ARTIFACT_LOOT) { amount = 1; human.addArtifacts(amount); type = "Strange Artifact"; }
-                                if (lootType == KEY_LOOT) { amount = 1; human.addKeys(amount); type = "Key"; }
+                                if (loot == GOLD_LOOT) { amount /= 10; human.addGold(amount, false); type = "Gold"; }
+                                if (loot == CRYSTAL_LOOT) { amount /= 20; human.addCrystals(amount); type = "Crystals"; }
+                                if (loot == DYE_LOOT) { amount /= 30; human.addDyes(amount); type = "Dyes"; }
+                                if (loot == TOME_LOOT) { amount = 1; human.addTomes(amount); type = "Tome"; }
+                                if (loot == ARTIFACT_LOOT) { amount = 1; human.addArtifacts(amount); type = "Strange Artifact"; }
+                                if (loot == KEY_LOOT) { amount = 1; human.addKeys(amount); type = "Key"; }
                                 empty = amount <= 0;
                             }
 

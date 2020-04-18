@@ -23,7 +23,7 @@ public class Mover {
 
     public Mover() {
         this.DScore = 0;
-        this.speed = 3; //tiles per second
+        this.speed = 4; //tiles per second
         this.ignoreCollision = false;
         this.path = new LinkedList<>();
     }

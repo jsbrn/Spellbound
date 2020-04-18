@@ -2,6 +2,7 @@ package gui.states;
 
 import assets.Assets;
 import gui.GUI;
+import main.Game;
 import misc.Window;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -27,10 +28,11 @@ public abstract class GameState extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         input = container.getInput();
         addGUIElements(gui);
+        Game.setMouseCursor("assets/gui/cursors/default.png");
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-        g.setFont(Assets.getFont(14));
+
         if (background != null) g.drawImage(Assets.getImage(background, Image.FILTER_LINEAR).getScaledCopy(Window.getWidth(), Window.getHeight()), 0, 0);
         getGUI().draw(g);
     }

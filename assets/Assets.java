@@ -18,14 +18,30 @@ public class Assets {
 
     private static HashMap<Float, TrueTypeFont> fonts;
     private static HashMap<String, Image> images;
+    private static HashMap<String, Image> cachedBuffers;
 
     public static void load() {
         try {
             TILE_SPRITESHEET = new Image("assets/tiles.png", false, Image.FILTER_NEAREST);
             PARTICLE = new Image("assets/particle.png", false, Image.FILTER_NEAREST);
+            Assets.getCachedBuffer(16, 16);
         } catch (SlickException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Image getCachedBuffer(int w, int h) {
+        String key = w+""+h;
+        if (cachedBuffers == null) cachedBuffers = new HashMap<>();
+        if (cachedBuffers.containsKey(key)) return cachedBuffers.get(key);
+        try {
+            Image instance = new Image(w, h, Image.FILTER_NEAREST);
+            cachedBuffers.put(key, instance);
+            return instance;
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Image getImage(String image) {

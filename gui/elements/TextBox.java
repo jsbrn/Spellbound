@@ -51,7 +51,6 @@ public class TextBox extends GUIElement {
     @Override
     public boolean onMousePressed(int ogx, int ogy, int button) {
         focused = mouseIntersects();
-        System.out.println("Focused: "+focused);
         return focused;
     }
 

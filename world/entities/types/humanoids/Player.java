@@ -19,10 +19,13 @@ import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.*;
 
+import java.util.ArrayList;
+
 public class Player extends HumanoidEntity {
 
     private double[] moveTarget;
     private boolean allowUserMovement, godMode;
+    private ArrayList<int[]> discoveredChunks;
 
     public Player() {
 
@@ -107,6 +110,7 @@ public class Player extends HumanoidEntity {
         if (isDead()) return;
 
         if (godMode) {
+            this.getSpellbook().discoverAllTechniques();
             this.getMover().setSpeed(10);
             this.setHP(1000, true);
             this.getMover().setCollidable(false);
@@ -135,7 +139,7 @@ public class Player extends HumanoidEntity {
                         getLocation().getCoordinates()[1],
                         mouse_wc[0], mouse_wc[1]));
 
-            getMover().setSpeed(3);
+            getMover().setSpeed(4);
             getMover().setIndependent(true);
             if ((dx != 0 || dy != 0) && allowUserMovement) {
                 getAnimationLayer("arms").setBaseAnimation("walking");

@@ -10,11 +10,13 @@ public class AnimationLayer {
     private HashMap<String, Animation> animations;
     String baseAnimation;
     private Stack<String> animationStack;
+    private boolean enabled;
 
     public AnimationLayer() {
         this.animations = new HashMap<>();
         this.animationStack = new Stack<>();
         this.baseAnimation = "default";
+        this.enabled = true;
     }
 
     public void setBaseAnimation(String name) {
@@ -27,6 +29,14 @@ public class AnimationLayer {
     public void stackAnimation(String name) {
         animationStack.push(name);
         getAnimationByName(name).reset();
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public void addAnimation(String name, Animation a) {
