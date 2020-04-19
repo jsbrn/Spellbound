@@ -10,13 +10,11 @@ import java.util.Random;
 public class DungeonLibraryGenerator extends DungeonRoomGenerator {
 
     private int spacing;
-    Random rng;
 
-    public DungeonLibraryGenerator(boolean north, boolean south, boolean east, boolean west) {
-        super(1, north, south, east, west);
+    public DungeonLibraryGenerator(boolean north, boolean south, boolean east, boolean west, int seed) {
+        super(1, north, south, east, west, seed);
         this.setSize(10);
-        this.rng = new Random();
-        this.spacing = 3 + rng.nextInt(4);
+        this.spacing = 3 + rng().nextInt(4);
     }
 
     @Override
@@ -30,7 +28,7 @@ public class DungeonLibraryGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (!isWithinWalls(x, y)) return null;
-        return ((y-1) % spacing != 0 && rng.nextInt(12 + rng.nextInt(8)) == 0) ? new Chest(1, false, rng.nextBoolean() ? Chest.TOME_LOOT : Chest.GOLD_LOOT, 0.6f) : null;
+        return ((y-1) % spacing != 0 && rng().nextInt(12 + rng().nextInt(8)) == 0) ? new Chest(1, false, rng().nextBoolean() ? Chest.TOME_LOOT : Chest.GOLD_LOOT, 0.6f) : null;
     }
 
     @Override

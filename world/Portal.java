@@ -1,5 +1,7 @@
 package world;
 
+import org.json.simple.JSONObject;
+
 public class Portal {
 
     private Region destination;

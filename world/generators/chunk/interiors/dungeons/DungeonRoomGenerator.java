@@ -12,16 +12,14 @@ import world.generators.chunk.interiors.InteriorRoomGenerator;
 import java.util.Random;
 
 public class DungeonRoomGenerator extends InteriorRoomGenerator {
-
-    private Random rng;
+    
     private boolean spawnLoot;
     private int chestCount, lootMultiplier;
 
-    public DungeonRoomGenerator(int lootMultiplier, boolean north, boolean south, boolean east, boolean west) {
-        super(north, south, east, west);
+    public DungeonRoomGenerator(int lootMultiplier, boolean north, boolean south, boolean east, boolean west, int seed) {
+        super(north, south, east, west, seed);
         this.setSize(9);
-        this.rng = new Random();
-        this.spawnLoot = rng.nextFloat() < 0.75;
+        this.spawnLoot = rng().nextFloat() < 0.75;
         this.lootMultiplier = lootMultiplier;
     }
 
@@ -29,7 +27,7 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     public byte getBase(int x, int y) {
         byte tile = super.getBase(x, y);
         if (tile == Tiles.STONE_FLOOR) {
-            return (byte)(rng.nextFloat() < 0.2f ? Tiles.CRACKED_STONE_FLOOR + rng.nextInt(3) : Tiles.STONE_FLOOR);
+            return (byte)(rng().nextFloat() < 0.2f ? Tiles.CRACKED_STONE_FLOOR + rng().nextInt(3) : Tiles.STONE_FLOOR);
         }
         return tile;
     }
@@ -42,14 +40,14 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (isWithinWalls(x, y)
-                && rng.nextFloat() < 0.15) {
-            return rng.nextInt(10) == 0 ? new Bandit(1) : new SpikeTrap();
+                && rng().nextFloat() < 0.15) {
+            return rng().nextInt(10) == 0 ? new Bandit(1) : new SpikeTrap();
         }
         if (isWithinWalls(x, y)
-                && spawnLoot && rng.nextFloat() < 0.1
+                && spawnLoot && rng().nextFloat() < 0.1
                 && chestCount < 3) {
             chestCount++;
-            return new Chest(lootMultiplier * 2, false, rng.nextInt(3), 0.75f);
+            return new Chest(lootMultiplier * 2, false, rng().nextInt(3), 0.75f);
         }
         return null;
     }

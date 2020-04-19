@@ -9,12 +9,10 @@ import java.util.Random;
 
 public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
 
-    Random rng;
     private int difficultyMultiplier;
 
-    public DungeonLivingQuartersGenerator(int difficultyMultiplier, boolean north, boolean south, boolean east, boolean west) {
-        super(1, north, south, east, west);
-        this.rng = new Random();
+    public DungeonLivingQuartersGenerator(int difficultyMultiplier, boolean north, boolean south, boolean east, boolean west, int seed) {
+        super(1, north, south, east, west, seed);
         this.difficultyMultiplier = difficultyMultiplier;
     }
 
@@ -22,15 +20,15 @@ public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
     public byte getTop(int x, int y) {
         byte original = super.getTop(x, y);
         if (original != Tiles.AIR || !isWithinWalls(x, y)) return original;
-        return rng.nextInt(8) == 0
-                ? (byte)((rng.nextBoolean() ? Tiles.EMPTY_BOTTLES : Tiles.CHAIR))
+        return rng().nextInt(8) == 0
+                ? (byte)((rng().nextBoolean() ? Tiles.EMPTY_BOTTLES : Tiles.CHAIR))
                 : original;
     }
 
     @Override
     public Entity getEntity(int x, int y) {
         if (!isWithinWalls(x, y)) return null;
-        return rng.nextInt(12) == 0 ? new Bandit(difficultyMultiplier) : null;
+        return rng().nextInt(12) == 0 ? new Bandit(difficultyMultiplier) : null;
     }
 
     @Override

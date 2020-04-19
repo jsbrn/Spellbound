@@ -9,8 +9,8 @@ import world.entities.Entity;
 
 public class DungeonEntranceGenerator extends DungeonRoomGenerator {
 
-    public DungeonEntranceGenerator(boolean south, boolean east, boolean west) {
-        super(1, false, south, east, west);
+    public DungeonEntranceGenerator(boolean south, boolean east, boolean west, int seed) {
+        super(1, false, south, east, west, seed);
     }
 
     @Override

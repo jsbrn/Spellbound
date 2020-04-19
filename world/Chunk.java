@@ -5,6 +5,7 @@ import assets.definitions.Definitions;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
@@ -31,7 +32,8 @@ public class Chunk {
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
-
+        generator.setCX(x);
+        generator.setCY(y);
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
                 int wx = (coordinates[0] * Chunk.CHUNK_SIZE) + i, wy = (coordinates[1] * Chunk.CHUNK_SIZE) + j;

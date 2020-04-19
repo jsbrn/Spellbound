@@ -109,4 +109,9 @@ public class GameScreen extends GameState {
         gui.setSpeechBubble();
     }
 
+    @Override
+    public void keyReleased(int key, char c) {
+        super.keyReleased(key, c);
+        if (key == Input.KEY_F7) World.save(System.getProperty("user.home")+"/Desktop/world.json");
+    }
 }

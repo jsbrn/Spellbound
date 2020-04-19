@@ -11,11 +11,8 @@ import java.util.Random;
 
 public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
-    private Random rng;
-
-    public PlayerHomeGenerator() {
-        super(false, false, false, false);
-        this.rng = new Random();
+    public PlayerHomeGenerator(int seed) {
+        super(false, false, false, false, seed);
     }
 
     @Override

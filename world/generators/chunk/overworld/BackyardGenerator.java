@@ -10,10 +10,8 @@ import java.util.Random;
 
 public class BackyardGenerator extends OpenFieldGenerator {
 
-    private Random rng;
-
-    public BackyardGenerator() {
-        this.rng = new Random();
+    public BackyardGenerator(int seed) {
+        super(seed);
     }
 
     @Override

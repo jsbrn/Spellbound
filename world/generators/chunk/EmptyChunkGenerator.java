@@ -7,6 +7,10 @@ import world.entities.Entity;
 
 public class EmptyChunkGenerator extends ChunkGenerator {
 
+    public EmptyChunkGenerator(int seed) {
+        super(seed);
+    }
+
     @Override
     public byte getBase(int x, int y) {
         return Tiles.AIR;

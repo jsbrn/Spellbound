@@ -11,6 +11,10 @@ import java.util.Random;
 
 public class GraveyardGenerator extends OpenFieldGenerator {
 
+    public GraveyardGenerator(int seed) {
+        super(seed);
+    }
+
     @Override
     public byte getTop(int x, int y) {
         if (x > 1 && y > 1 && x <= Chunk.CHUNK_SIZE - 1 && y <= Chunk.CHUNK_SIZE - 1 && Math.random() <= 0.1)
@@ -22,7 +26,7 @@ public class GraveyardGenerator extends OpenFieldGenerator {
     public Entity getEntity(int x, int y) {
         return Math.random() <= 0.1
                 ? new Zombie()
-                : (Math.random() <= 0.05 ? new Chest(new Random().nextInt(3) + 1, false, Chest.GOLD_LOOT, 0.5f) : null);
+                : (rng().nextFloat() <= 0.05 ? new Chest(rng().nextInt(3) + 1, false, Chest.GOLD_LOOT, 0.5f) : null);
     }
 
     @Override

@@ -6,8 +6,8 @@ import world.Portal;
 
 public class DungeonBossRoomGenerator extends DungeonRoomGenerator {
 
-    public DungeonBossRoomGenerator() {
-        super(1, false, true, false, false);
+    public DungeonBossRoomGenerator(int seed) {
+        super(1, false, true, false, false, seed);
         this.setSize(Chunk.CHUNK_SIZE);
     }
 

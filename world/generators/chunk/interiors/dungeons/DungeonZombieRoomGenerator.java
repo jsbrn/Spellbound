@@ -10,18 +10,15 @@ import java.util.Random;
 
 public class DungeonZombieRoomGenerator extends DungeonRoomGenerator {
 
-    Random rng;
-
-    public DungeonZombieRoomGenerator(boolean north, boolean south, boolean east, boolean west) {
-        super(1, north, south, east, west);
-        this.rng = new Random();
+    public DungeonZombieRoomGenerator(boolean north, boolean south, boolean east, boolean west, int seed) {
+        super(1, north, south, east, west, seed);
     }
 
     @Override
     public byte getTop(int x, int y) {
         byte original = super.getTop(x, y);
         if (original != Tiles.AIR || !isWithinWalls(x, y)) return original;
-        return rng.nextInt(8) == 0
+        return rng().nextInt(8) == 0
                 ? Tiles.BLOOD_STAIN
                 : original;
     }
@@ -29,7 +26,7 @@ public class DungeonZombieRoomGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (!isWithinWalls(x, y)) return null;
-        return rng.nextInt(6) == 0 ? new Zombie() : null;
+        return rng().nextInt(6) == 0 ? new Zombie() : null;
     }
 
     @Override

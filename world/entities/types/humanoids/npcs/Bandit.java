@@ -16,6 +16,8 @@ public class Bandit extends HumanoidEntity {
         super();
         this.setAllegiance("bandits");
 
+        this.rng = new Random();
+
         Spell testSpell = new Spell();
         testSpell.addTechnique("movement_directional");
         testSpell.addTechnique("emission_radiate");
@@ -34,6 +36,8 @@ public class Bandit extends HumanoidEntity {
         getAnimationLayer("shirt").setBaseAnimation("dirty");
         getAnimationLayer("torso").setColor(Color.orange.darker());
         getAnimationLayer("shirt").setColor(Color.white);
+        getAnimationLayer("arms").setColor(Color.orange.darker());
+        getAnimationLayer("hair").setColor(HAIR_COLORS[HAIR_COLORS.length - 1 - rng.nextInt(2)]);
 
     }
 

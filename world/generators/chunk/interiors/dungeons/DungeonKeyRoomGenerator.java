@@ -11,8 +11,8 @@ import java.util.Random;
 
 public class DungeonKeyRoomGenerator extends DungeonRoomGenerator {
 
-    public DungeonKeyRoomGenerator(boolean north, boolean south, boolean east, boolean west) {
-        super(1, north, south, east, west);
+    public DungeonKeyRoomGenerator(boolean north, boolean south, boolean east, boolean west, int seed) {
+        super(1, north, south, east, west, seed);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class DungeonKeyRoomGenerator extends DungeonRoomGenerator {
     public Entity getEntity(int x, int y) {
         return x == Chunk.CHUNK_SIZE/2 && y == Chunk.CHUNK_SIZE/2
                 ? new Chest(1, false, Chest.KEY_LOOT, 1.0f)
-                : (isWithinWalls(x, y) && new Random().nextBoolean() ? new Bandit(1) : null);
+                : (isWithinWalls(x, y) && rng().nextBoolean() ? new Bandit(1) : null);
     }
 
     @Override

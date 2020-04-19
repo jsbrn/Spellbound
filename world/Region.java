@@ -3,6 +3,8 @@ package world;
 import assets.Assets;
 import misc.MiscMath;
 import misc.Window;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.magic.MagicSource;
@@ -30,8 +32,11 @@ public class Region {
 
     private long time;
 
+    private RegionGenerator generator;
+
     public Region(String name, int size, RegionGenerator generator) {
 
+        this.generator = generator;
         this.name = name;
         this.size = size;
 
@@ -287,6 +292,15 @@ public class Region {
                     Window.getWidth() - 200, i * 20);
         }
         for (MagicSource magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
+    }
+
+    public final JSONObject serialize() {
+        JSONObject serialized = new JSONObject();
+        JSONArray jsonPortals = new JSONArray();
+        serialized.put("name", name);
+        serialized.put("size", size);
+        serialized.put("entities", null);
+        return serialized;
     }
 
     @Override

@@ -10,10 +10,8 @@ import java.util.Random;
 
 public class OpenFieldGenerator extends ChunkGenerator {
 
-    private Random rng;
-
-    public OpenFieldGenerator() {
-        this.rng = new Random();
+    public OpenFieldGenerator(int seed) {
+        super(seed);
     }
 
     @Override
@@ -23,7 +21,7 @@ public class OpenFieldGenerator extends ChunkGenerator {
 
     @Override
     public byte getTop(int x, int y) {
-        return (byte)(rng.nextFloat() > 0.6 ? (rng.nextFloat() < 0.2 ? Tiles.FLOWERS : Tiles.TALL_GRASS) : 0);
+        return (byte)(rng().nextFloat() > 0.6 ? (rng().nextFloat() < 0.2 ? Tiles.FLOWERS : Tiles.TALL_GRASS) : 0);
     }
 
     @Override

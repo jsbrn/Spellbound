@@ -8,13 +8,12 @@ import java.util.Random;
 
 public class TrapdoorFieldGenerator extends OpenFieldGenerator {
 
-    private Random rng;
     private int entrance_x, entrance_y, difficulty;
 
-    public TrapdoorFieldGenerator(int difficultyMultiplier) {
-        this.rng = new Random();
-        this.entrance_x = 2 + rng.nextInt(Chunk.CHUNK_SIZE - 4);
-        this.entrance_y = 2 + rng.nextInt(Chunk.CHUNK_SIZE - 4);
+    public TrapdoorFieldGenerator(int difficultyMultiplier, int seed) {
+        super(seed);
+        this.entrance_x = 2 + rng().nextInt(Chunk.CHUNK_SIZE - 4);
+        this.entrance_y = 2 + rng().nextInt(Chunk.CHUNK_SIZE - 4);
         this.difficulty = difficultyMultiplier;
     }
 
@@ -25,10 +24,10 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
 
     @Override
     public Portal getPortal(int x, int y) {
-        String dungeon_name = "dungeon_"+rng.nextInt();
+        String dungeon_name = "dungeon_"+x+"_"+y;
         return (x == entrance_x && y == entrance_y)
                 ? new Portal("trapdoor", 0, 1, false,
-                World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(1 + (difficulty), 16))),
+                World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(1 + (difficulty), 16, World.getSeed() + getCX() + getCY()))),
                         "ladder")
                 : super.getPortal(x, y);
     }

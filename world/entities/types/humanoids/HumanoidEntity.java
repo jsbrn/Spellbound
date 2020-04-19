@@ -11,6 +11,9 @@ import world.entities.magic.Spellbook;
 import world.events.EventDispatcher;
 import world.events.event.HumanoidDeathEvent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class HumanoidEntity extends Entity {
@@ -40,6 +43,8 @@ public class HumanoidEntity extends Entity {
     }, SHIRT_STYLES = new String[]{
         "undershirt",
         "dirty"
+    }, SPECIAL_HAIR_STYLES = new String[]{
+        "hood"
     };
 
     private Spellbook spellbook;
@@ -78,6 +83,8 @@ public class HumanoidEntity extends Entity {
         this.addAnimation("legs", "walking", new Animation("humanoid/legs_walking.png", 2, 4, 16, true, true, Color.black));
         this.addAnimation("legs", "falling", new Animation("humanoid/legs_falling.png", 1, 1, 16, true, true, Color.black));
         this.addAnimation("legs", "pushed", new Animation("humanoid/legs_pushed.png", 6, 3, 16, false, true, Color.black));
+        this.addAnimation("legs", "dying", new Animation("humanoid/legs_dying.png", 4, 3, 16, false, false, Color.black));
+        this.addAnimation("legs", "dead", new Animation("humanoid/legs_dead.png", 1, 1, 16, false, false, Color.black));
         this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
         this.addAnimation("head", "talking", new Animation("humanoid/head_talking.png", 3, 2, 16, true, true, Color.white));
 
@@ -85,8 +92,6 @@ public class HumanoidEntity extends Entity {
         this.addAnimation("torso", "dead", new Animation("humanoid/torso_dead.png", 1, 1, 16, false, false, Color.white));
         this.addAnimation("arms", "dying", new Animation("humanoid/arms_dying.png", 4, 3, 16, false, false, Color.white));
         this.addAnimation("arms", "dead", new Animation("humanoid/arms_dead.png", 1, 1, 16, false, false, Color.white));
-        this.addAnimation("legs", "dying", new Animation("humanoid/legs_dying.png", 4, 3, 16, false, false, Color.white));
-        this.addAnimation("legs", "dead", new Animation("humanoid/legs_dead.png", 1, 1, 16, false, false, Color.white));
         this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false, Color.white));
         this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false, Color.white));
         this.addAnimation("arms", "dead", new Animation("humanoid/arms_dead.png", 1, 1, 16, false, false, Color.white));
@@ -95,7 +100,10 @@ public class HumanoidEntity extends Entity {
         this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false, Color.white));
         this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false, Color.white));
 
-        for (String hair: HAIR_STYLES)
+        ArrayList<String> hairs = new ArrayList<>();
+        hairs.addAll(Arrays.asList(HAIR_STYLES));
+        hairs.addAll(Arrays.asList(SPECIAL_HAIR_STYLES));
+        for (String hair: hairs)
             this.addAnimation("hair", hair, new Animation("humanoid/cosmetics/"+hair+".png", 1, 32, 32, Color.white));
 
         getAnimationLayer("hair").setBaseAnimation(HAIR_STYLES[rng.nextInt(HAIR_STYLES.length)]);

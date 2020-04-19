@@ -2,12 +2,17 @@ package world;
 
 import misc.Location;
 import misc.MiscMath;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.newdawn.slick.Graphics;
 import world.entities.types.humanoids.Player;
 import world.generators.region.DefaultWorldGenerator;
 import world.generators.region.DungeonGenerator;
 import world.generators.region.PlayerHomeRegionGenerator;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,20 +22,29 @@ public class World {
     private static Player player;
 
     private static long time;
+    private static int seed;
     private static double timeMultiplier;
     private static boolean paused;
 
     public static void init() {
+        init(0);
+    }
+
+    public static void init(int seed) {
         time = 0;
+        World.seed = seed;
         timeMultiplier = 1;
         regions = new HashMap<>();
         player = new Player();
-        addRegion(new Region("world", 16, new DefaultWorldGenerator()));
-        Region player_home = addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator()));
+        addRegion(new Region("world", 16, new DefaultWorldGenerator(seed)));
+        Region player_home = addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator(seed)));
         player.moveTo(new Location(player_home, 0, 0, Chunk.CHUNK_SIZE/2 + 0.5f, Chunk.CHUNK_SIZE/2 - 1 + 0.5f));
         player.getLocation().setLookDirection(180);
         Camera.setTarget(player);
+    }
 
+    public static int getSeed() {
+        return seed;
     }
 
     public static Region addRegion(Region region) {
@@ -41,9 +55,7 @@ public class World {
     public static Region getRegion(String name) {
         return regions.get(name);
     }
-
     public static Region getRegion() { return player.getLocation().getRegion(); }
-
     public static Player getLocalPlayer() { return player; }
 
     public static void update() {
@@ -55,16 +67,12 @@ public class World {
     public static boolean exists() {
         return player != null;
     }
-
     public static boolean isPaused() { return paused; }
     public static void setPaused(boolean p) {
         paused = p;
     }
-
     public static void setTimeMultiplier(double tm) { timeMultiplier = tm; }
-
     public static double getTimeMultiplier() { return timeMultiplier; }
-
     public static long getCurrentTime() { return time; }
 
     public static void draw(float scale, Graphics g, boolean debug) {
@@ -73,5 +81,26 @@ public class World {
     }
 
     public static void drawDebug(float scale, Graphics g) { getRegion().drawDebug(scale, g); }
+
+    public static void save(String url) {
+        try {
+            JSONObject world = serialize();
+            FileWriter file = new FileWriter(url);
+            file.write(world.toJSONString());
+            file.flush();
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static JSONObject serialize() {
+        JSONObject world = new JSONObject();
+        JSONArray jsonRegions = new JSONArray();
+        for (Region r: regions.values()) jsonRegions.add(r.serialize());
+        world.put("seed", seed);
+        world.put("regions", jsonRegions);
+        return world;
+    }
 
 }

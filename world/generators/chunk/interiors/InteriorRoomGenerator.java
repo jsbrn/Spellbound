@@ -11,10 +11,8 @@ public abstract class InteriorRoomGenerator extends ChunkGenerator {
     private int min = 2, max = Chunk.CHUNK_SIZE - 3;
     private boolean north, south, east, west;
 
-    private Random rng;
-
-    public InteriorRoomGenerator(boolean north, boolean south, boolean east, boolean west) {
-        this.rng = new Random();
+    public InteriorRoomGenerator(boolean north, boolean south, boolean east, boolean west, int seed) {
+        super(seed);
         this.north = north;
         this.south = south;
         this.east = east;

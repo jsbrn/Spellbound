@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.Camera;
 import world.Chunk;
+import world.World;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.types.ActivateAction;
 import world.entities.actions.types.CastSpellAction;
@@ -25,7 +26,6 @@ public class Player extends HumanoidEntity {
 
     private double[] moveTarget;
     private boolean allowUserMovement, godMode;
-    private ArrayList<int[]> discoveredChunks;
 
     public Player() {
 
