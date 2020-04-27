@@ -9,7 +9,7 @@ import java.util.Random;
 
 public abstract class ChunkGenerator {
 
-    private int cx, cy;
+    private int cx, cy, seed;
     private Random rng;
 
     public ChunkGenerator(int seed) {
@@ -18,8 +18,18 @@ public abstract class ChunkGenerator {
 
     public Random rng() { return rng; }
 
-    public final void setChunkX(int cx) { this.cx = cx; }
-    public final void setChunkY(int cy) { this.cy = cy; }
+    private void resetRNG() {
+        this.rng = new Random(seed + cx + cy);
+    }
+
+    public final void setChunkX(int cx) {
+        this.cx = cx;
+        resetRNG();
+    }
+    public final void setChunkY(int cy) {
+        this.cy = cy;
+        resetRNG();
+    }
     public int getChunkX() { return cx; }
     public int getChunkY() { return cy; }
 

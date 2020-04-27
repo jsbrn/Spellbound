@@ -3,7 +3,8 @@ package gui.elements;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.states.GameScreen;
-import misc.Location;
+import gui.states.GameState;
+import main.GameManager;
 import org.newdawn.slick.*;
 import world.World;
 import world.entities.types.humanoids.HumanoidEntity;
@@ -67,9 +68,9 @@ public class Statusbar extends GUIElement {
     @Override
     public boolean onKeyUp(int key) {
         if (key == Input.KEY_R && World.getLocalPlayer().isDead()) {
-            World.getLocalPlayer().resurrect();
-            World.getLocalPlayer().moveTo(new Location(World.getRegion("player_home"), 6.5, 6.5));
-            World.getLocalPlayer().getLocation().setLookDirection(180);
+            World.init();
+            World.load();
+            GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
             EventDispatcher.invoke(new HumanoidRespawnEvent(World.getLocalPlayer()));
             return true;
         }

@@ -10,6 +10,7 @@ import main.GameManager;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.World;
+import world.events.EventDispatcher;
 
 public class PauseMenu extends Modal {
 
@@ -29,6 +30,7 @@ public class PauseMenu extends Modal {
             public boolean onClick(int button) {
                 GameManager.switchTo(GameState.MAIN_MENU);
                 World.save();
+                EventDispatcher.unregisterAll();
                 return true;
             }
         }, 16, 0, GUIAnchor.CENTER);

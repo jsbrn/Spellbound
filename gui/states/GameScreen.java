@@ -79,7 +79,13 @@ public class GameScreen extends GameState {
         MiniMap miniMap = new MiniMap();
         gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);
 
-        TextLabel deathMessage = new TextLabel("Press R to continue", 4, Color.white, true);
+        TextLabel deathMessage = new TextLabel("Press R to continue", 4, Color.white, true){
+            @Override
+            public boolean onKeyUp(int key) {
+                return key != Input.KEY_R;
+            }
+        };
+
         EventDispatcher.register(new EventListener()
             .on(HumanoidDeathEvent.class.toString(), new EventHandler() {
                 @Override
@@ -115,8 +121,4 @@ public class GameScreen extends GameState {
         if (key == Input.KEY_F7) World.save();
     }
 
-    @Override
-    public void onResize(int width, int height) {
-
-    }
 }

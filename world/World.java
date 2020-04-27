@@ -100,14 +100,14 @@ public class World {
         }
     }
 
-    protected static JSONObject serialize() {
+    private static JSONObject serialize() {
         JSONObject world = new JSONObject();
         world.put("seed", seed);
         world.put("player", getLocalPlayer().serialize());
         return world;
     }
 
-    public static void deserialize() {
+    public static void load() {
         File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
         JSONParser parser = new JSONParser();
         try {

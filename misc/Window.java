@@ -30,8 +30,10 @@ public class Window {
             Window.WINDOW_INSTANCE.setDisplayMode(last_width, last_height, false);
         } else {
             try {
+                last_width = Window.getWidth();
+                last_height = Window.getHeight();
+                Window.WINDOW_INSTANCE.setDisplayMode(Window.getScreenWidth(), Window.getScreenHeight(), false);
                 Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
-
             } catch (LWJGLException e) {
                 e.printStackTrace();
             }
@@ -39,9 +41,7 @@ public class Window {
     }
 
     public static boolean wasResized() {
-        if (WINDOW_INSTANCE.getWidth() != last_width && WINDOW_INSTANCE.getHeight() != last_height) {
-            last_width = WINDOW_INSTANCE.getWidth();
-            last_height = WINDOW_INSTANCE.getHeight();
+        if (Display.getWidth() != Window.getWidth() || Display.getHeight() != Window.getHeight()) {
             return true;
         }
         return false;

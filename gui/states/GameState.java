@@ -4,6 +4,7 @@ import assets.Assets;
 import gui.GUI;
 import main.GameManager;
 import misc.Window;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -35,7 +36,8 @@ public abstract class GameState extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         if (background != null) g.drawImage(Assets.getImage(background, Image.FILTER_LINEAR).getScaledCopy(Window.getWidth(), Window.getHeight()), 0, 0);
         getGUI().draw(g);
-        if (Window.wasResized()) onResize(Window.getWidth(), Window.getHeight());
+        onResize(Window.getWidth(), Window.getHeight());
+        if (Window.wasResized()) onResize(Display.getWidth(), Display.getHeight());
     }
 
     @Override
@@ -88,6 +90,13 @@ public abstract class GameState extends BasicGameState {
         gui.handleMouseScroll(newValue > 0 ? -1 : 1);
     }
 
-    public abstract void onResize(int width, int height);
+    public void onResize(int width, int height) {
+        try {
+            if (Window.WINDOW_INSTANCE.isFullscreen()) return;
+            Window.WINDOW_INSTANCE.setDisplayMode(width, height, false);
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

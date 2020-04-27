@@ -5,7 +5,6 @@ import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.*;
 import main.GameManager;
-import misc.Window;
 import org.newdawn.slick.*;
 import world.Chunk;
 import world.World;
@@ -34,9 +33,10 @@ public class MainMenuScreen extends GameState {
                     World.init();
                     World.generate(0);
                     World.spawnPlayer(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, "player_home");
+                    World.save();
                 } else {
                     World.init();
-                    World.deserialize();
+                    World.load();
                 }
                 GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
                 GameManager.switchTo(GameState.GAME_SCREEN);
@@ -61,15 +61,6 @@ public class MainMenuScreen extends GameState {
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Pre-Alpha", 8, Color.white, true), 32, 32, GUIAnchor.TOP_MIDDLE);
-    }
-
-    @Override
-    public void onResize(int width, int height) {
-        try {
-            Window.WINDOW_INSTANCE.setDisplayMode(width, height, Window.isFullScreen());
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
     }
 
 }

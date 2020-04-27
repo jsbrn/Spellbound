@@ -4,6 +4,7 @@ import assets.Assets;
 import gui.GUIElement;
 import main.GameManager;
 import misc.Location;
+import misc.MiscMath;
 import misc.Window;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -114,14 +115,16 @@ public class CameraViewport extends GUIElement {
         for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
 
         String[] debugStrings = new String[]{
+                "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
                 "Entity count: "+World.getRegion().getEntities().size(),
                 "Region: "+World.getRegion().getName(),
-                "FPS: "+ Window.WINDOW_INSTANCE.getFPS()
+                "Coordinates: "+MiscMath.round(World.getLocalPlayer().getLocation().getCoordinates()[0], 0.25)
+                        +", "+MiscMath.round(World.getLocalPlayer().getLocation().getCoordinates()[1], 0.25)
         };
 
         g.setColor(Color.white);
-        for (int i = 0; i < debugStrings.length; i++)
-            g.drawString(debugStrings[i], 10, (Window.getHeight()) - (20*(i+1)));
+        for (int i = debugStrings.length - 1; i > -1; i--)
+            g.drawString(debugStrings[i], 10, (Window.getHeight()) - (20*((debugStrings.length-1-i)+1)));
 
     }
 }

@@ -24,4 +24,8 @@ public class EventDispatcher {
         listeners.remove(listener);
     }
 
+    public static void unregisterAll() {
+        listeners.clear();
+    }
+
 }
