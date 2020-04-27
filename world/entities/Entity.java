@@ -1,20 +1,27 @@
 package world.entities;
 
-import world.Region;
-import world.Tiles;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import sun.security.provider.ConfigFile;
+import world.*;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import world.Camera;
-import world.Chunk;
 import world.entities.actions.Action;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.ActionQueue;
 import world.entities.animations.Animation;
 import world.entities.animations.AnimationLayer;
 import world.entities.states.State;
+import world.entities.types.Chest;
+import world.entities.types.SpikeTrap;
+import world.entities.types.humanoids.Player;
+import world.entities.types.humanoids.Zombie;
+import world.entities.types.humanoids.npcs.Bandit;
+import world.entities.types.humanoids.npcs.Civilian;
+import world.entities.types.humanoids.npcs.LostCivilian;
 import world.events.EventDispatcher;
 import world.events.event.EntityChangeRegionEvent;
 import world.events.event.EntityCollisionEvent;
@@ -23,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Entity {
 
@@ -35,7 +43,7 @@ public class Entity {
     private LinkedHashMap<String, ActionQueue> actionQueues;
 
     private double radius;
-    private boolean isTile;
+    private boolean isTile, serializable;
     private String name;
 
     private List<Entity> lastTouching;
@@ -48,6 +56,14 @@ public class Entity {
         this.mover = new Mover();
         this.mover.setParent(this);
         this.conversationStartingPoint = "greeting";
+    }
+
+    public boolean isSerializable() {
+        return serializable;
+    }
+
+    public void setSerializable(boolean serializable) {
+        this.serializable = serializable;
     }
 
     public void update() {
@@ -221,6 +237,50 @@ public class Entity {
         this.conversationStartingPoint = dialogue_id;
     }
     public String getConversationStartingPoint() { return conversationStartingPoint; }
+
+    public JSONObject serialize() {
+        JSONObject serialized = new JSONObject();
+        serialized.put("x", getLocation().getCoordinates()[0]);
+        serialized.put("y", getLocation().getCoordinates()[1]);
+        serialized.put("dialogue", conversationStartingPoint);
+        serialized.put("type", getClass().getSimpleName());
+        serialized.put("anim_layers", animationLayers.entrySet().stream().map(layer -> {
+            JSONObject jsonLayer = new JSONObject();
+            Color color = layer.getValue().getColor();
+            jsonLayer.put("name", layer.getKey());
+            jsonLayer.put("current", layer.getValue().getBaseAnimation());
+            jsonLayer.put("color", new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).getRGB());
+            return jsonLayer;
+        }).collect(Collectors.toList()));
+        return serialized;
+    }
+
+    public void deserialize(JSONObject json) {
+        conversationStartingPoint = (String)json.get("dialogue");
+        for (Object layers: (JSONArray)json.get("anim_layers")) {
+            JSONObject jsonLayer = (JSONObject)layers;
+            java.awt.Color jColor = new java.awt.Color((new Long((long)jsonLayer.get("color")).intValue()));
+            String layerName = (String)jsonLayer.get("name");
+            getAnimationLayer(layerName).setBaseAnimation((String)jsonLayer.get("current"));
+            getAnimationLayer(layerName).setColor(new Color(jColor.getRed(), jColor.getGreen(), jColor.getBlue(), jColor.getAlpha()));
+        }
+    }
+
+    public static Entity create(JSONObject json) {
+        String type = (String)json.get("type");
+        Entity e = null;
+        switch (type) {
+            case "Zombie": e = new Zombie(); break;
+            case "Bandit": e = new Bandit((int)(long)json.get("level")); break;
+            case "Chest": e = new Chest((int)(long)json.get("lootMultiplier"), (boolean)json.get("locked"), (int)(long)json.get("lootType"), (float)(double)json.get("filledChance")); break;
+            case "Civilian": e = new Civilian(); break;
+            case "LostCivilian": e = new LostCivilian(1); break;
+            case "SpikeTrap": e = new SpikeTrap(); break;
+            default: e = null;
+        }
+        if (e != null) e.deserialize(json);
+        return e;
+    }
 
 
 }

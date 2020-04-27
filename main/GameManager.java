@@ -6,19 +6,24 @@ import gui.states.GameScreen;
 import gui.states.GameState;
 import gui.states.MainMenuScreen;
 import misc.*;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import java.io.File;
 import java.io.IOException;
 
-public class Game extends StateBasedGame {
+public class GameManager extends StateBasedGame {
 
-    private static Game instance;
+    private static GameManager instance;
     private static String mouseCursor;
 
-    public Game(String gameTitle) {
+    public GameManager(String gameTitle) {
 
         super(gameTitle); //set window title to "gameTitle" string
         //add states
@@ -31,14 +36,16 @@ public class Game extends StateBasedGame {
 
     public static void main(String args[]) throws IOException {
 
+        File root = new File(Assets.ROOT_DIRECTORY+"/world");
+        if (!root.exists()) root.mkdirs();
+
         //initialize the window
         try {
-            Window.WINDOW_INSTANCE = new AppGameContainer(new Game(Window.WINDOW_TITLE));
-            Window.WINDOW_INSTANCE.setDisplayMode(16*65, 45*16, false);
+            Window.WINDOW_INSTANCE = new AppGameContainer(new GameManager(Window.WINDOW_TITLE));
+            Window.WINDOW_INSTANCE.setDisplayMode(800, 600, false);
             Window.WINDOW_INSTANCE.setTargetFrameRate(60);
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
-            Window.WINDOW_INSTANCE.setShowFPS(false);
-            Window.setResizable(true);
+            Window.WINDOW_INSTANCE.setShowFPS(true);
             Window.WINDOW_INSTANCE.start();
         } catch (SlickException e) {
 
@@ -46,7 +53,7 @@ public class Game extends StateBasedGame {
 
     }
 
-    public static void switchTo(int gameState) { instance.enterState(gameState); }
+    public static void switchTo(int gameState) { instance.enterState(gameState, new FadeOutTransition(), new FadeInTransition()); }
     public static void setMouseCursor(String ref) {
         try {
             mouseCursor = ref;

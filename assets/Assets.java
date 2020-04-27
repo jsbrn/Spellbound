@@ -1,9 +1,5 @@
 package assets;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
@@ -15,6 +11,8 @@ import java.util.HashMap;
 public class Assets {
 
     public static Image TILE_SPRITESHEET, PARTICLE;
+
+    public static String ROOT_DIRECTORY = System.getProperty("user.home")+"/.spellbound";
 
     private static HashMap<Float, TrueTypeFont> fonts;
     private static HashMap<String, Image> images;
@@ -79,16 +77,21 @@ public class Assets {
         return font;
     }
 
-    public static String read(String internal) {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(Assets.class.getResourceAsStream("/assets/"+internal)));
+    public static String read(String url, boolean internal) {
+        BufferedReader bf = null;
         String contents = "";
         try {
+            bf = internal
+                    ? new BufferedReader(new InputStreamReader(Assets.class.getResourceAsStream("/assets/"+ url)))
+                    : new BufferedReader(new InputStreamReader(new FileInputStream(url)));
             while (true) {
                 String line = bf.readLine();
                 if (line == null) break;
                 contents += line.trim()+"\n";
             }
             bf.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

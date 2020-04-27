@@ -31,7 +31,6 @@ public class TalkingToState extends State {
                             EventDispatcher.invoke(new ConversationEndedEvent(getParent(), eae.getPlayer()));
                             getParent().exitState();
                         }
-
                     }
                 }
             });

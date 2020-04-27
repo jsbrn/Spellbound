@@ -1,9 +1,12 @@
 package world.entities.magic;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import world.entities.magic.techniques.Techniques;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Spellbook {
 
@@ -37,5 +40,19 @@ public class Spellbook {
     public void setParent(HumanoidEntity parent) { this.parent = parent; }
     public HumanoidEntity getParent() { return parent; }
 
+    public JSONObject serialize() {
+        JSONObject serialized = new JSONObject();
+        JSONArray jsonTechniques = new JSONArray();
+        jsonTechniques.addAll(discovered_techniques);
+        serialized.put("discovered_techniques", jsonTechniques);
+        JSONArray jsonSpells = new JSONArray();
+        jsonSpells.addAll(spells.stream().map(spell -> spell.serialize()).collect(Collectors.toList()));
+        serialized.put("spells", jsonSpells);
+        return serialized;
+    }
+
+    public void deserialize(JSONObject json) {
+
+    }
 
 }

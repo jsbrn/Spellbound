@@ -22,7 +22,7 @@ public class EmptyChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public Portal getPortal(int x, int y) {
+    public Portal getPortal() {
         return null;
     }
 

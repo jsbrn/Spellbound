@@ -1,11 +1,9 @@
 package world;
 
 import assets.Assets;
-import assets.definitions.Definitions;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
@@ -27,29 +25,25 @@ public class Chunk {
 
     private Color mapColor;
 
-    public Chunk(int x, int y, Region region, ChunkGenerator generator) {
+    public Chunk(int x, int y, Region region) {
         this.region = region;
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
-        generator.setCX(x);
-        generator.setCY(y);
+    }
+
+    protected void generate(ChunkGenerator generator, boolean spawnEntities) {
+        generator.setChunkX(coordinates[0]);
+        generator.setChunkY(coordinates[1]);
+        mapColor = generator.getColor();
+        base = generator.getTiles(false);
+        top = generator.getTiles(true);
+
         for (int j = 0; j < CHUNK_SIZE; j++) {
             for (int i = 0; i < CHUNK_SIZE; i++) {
                 int wx = (coordinates[0] * Chunk.CHUNK_SIZE) + i, wy = (coordinates[1] * Chunk.CHUNK_SIZE) + j;
-                base[i][j] = generator.getBase(i, j);
-                top[i][j] = generator.getTop(i, j);
-                mapColor = generator.getColor();
-                Portal p = generator.getPortal(i, j);
-                if (p != null) {
-                    p.setCoordinates(wx, wy);
-                    region.registerPortal((int)MiscMath.getIndex(
-                            (coordinates[0] * Chunk.CHUNK_SIZE) + i,
-                            (coordinates[1] * Chunk.CHUNK_SIZE) + j,
-                            Chunk.CHUNK_SIZE * region.getSize()), p);
-                }
                 Entity e = generator.getEntity(i, j);
-                if (e != null) e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
+                if (e != null && spawnEntities) e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
             }
         }
 

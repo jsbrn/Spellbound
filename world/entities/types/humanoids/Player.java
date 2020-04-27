@@ -1,14 +1,14 @@
 package world.entities.types.humanoids;
 
 import gui.states.GameState;
-import main.Game;
+import main.GameManager;
 import misc.MiscMath;
 import misc.Window;
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.Camera;
 import world.Chunk;
-import world.World;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.types.ActivateAction;
 import world.entities.actions.types.CastSpellAction;
@@ -19,8 +19,6 @@ import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.*;
-
-import java.util.ArrayList;
 
 public class Player extends HumanoidEntity {
 
@@ -121,19 +119,19 @@ public class Player extends HumanoidEntity {
 
         int dx = 0, dy = 0;
 
-        if (Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_W)) dy -= 1;
-        if (Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_A)) dx -= 1;
-        if (Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_S)) dy += 1;
-        if (Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_D)) dx += 1;
+        if (GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_W)) dy -= 1;
+        if (GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_A)) dx -= 1;
+        if (GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_S)) dy += 1;
+        if (GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_D)) dx += 1;
 
         double targetX = getMover().findMoveTarget(dx, 0, Chunk.CHUNK_SIZE)[0];
         double targetY = getMover().findMoveTarget(0, dy, Chunk.CHUNK_SIZE)[1];
         if (getActionQueue().isEmpty()) {
 
             double[] mouse_wc = Camera.getWorldCoordinates(
-                    Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().getMouseX(),
-                    Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().getMouseY(), Window.getScale());
-            if (Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL))
+                    GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().getMouseX(),
+                    GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().getMouseY(), Window.getScale());
+            if (GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL))
                 getLocation().setLookDirection((int)MiscMath.angleBetween(
                         getLocation().getCoordinates()[0],
                         getLocation().getCoordinates()[1],
@@ -146,7 +144,7 @@ public class Player extends HumanoidEntity {
                 getAnimationLayer("legs").setBaseAnimation("walking");
                 getMover().setTarget(targetX, targetY);
                 getMover().setLookTowardsTarget(false);
-                if (getActionQueue("arms").isEmpty() && !Game.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL))
+                if (getActionQueue("arms").isEmpty() && !GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL))
                     getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
                 getAnimationLayer("arms").setBaseAnimation("default");
@@ -158,5 +156,12 @@ public class Player extends HumanoidEntity {
     }
 
     public void activateGodMode() { godMode = true; }
+
+    @Override
+    public JSONObject serialize() {
+        JSONObject serialized = super.serialize();
+        serialized.put("region", getLocation().getRegion().getName());
+        return serialized;
+    }
 
 }

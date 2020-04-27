@@ -1,5 +1,6 @@
 package world.entities.types.humanoids.npcs;
 
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import world.entities.magic.Spell;
 import world.entities.states.PatrolState;
@@ -14,8 +15,9 @@ public class Bandit extends HumanoidEntity {
 
     public Bandit(int level) {
         super();
+        this.level = level;
         this.setAllegiance("bandits");
-
+        this.setSerializable(true);
         this.rng = new Random();
 
         Spell testSpell = new Spell();
@@ -39,6 +41,13 @@ public class Bandit extends HumanoidEntity {
         getAnimationLayer("arms").setColor(Color.orange.darker());
         getAnimationLayer("hair").setColor(HAIR_COLORS[HAIR_COLORS.length - 1 - rng.nextInt(2)]);
 
+    }
+
+    @Override
+    public JSONObject serialize() {
+        JSONObject serialized = super.serialize();
+        serialized.put("level", level);
+        return serialized;
     }
 
     @Override

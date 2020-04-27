@@ -1,19 +1,18 @@
 package world.entities.types.humanoids;
 
 import gui.states.GameState;
-import main.Game;
+import main.GameManager;
 import misc.MiscMath;
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.entities.animations.Animation;
-import world.entities.animations.AnimationLayer;
 import world.entities.magic.Spellbook;
 import world.events.EventDispatcher;
 import world.events.event.HumanoidDeathEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class HumanoidEntity extends Entity {
@@ -148,7 +147,7 @@ public class HumanoidEntity extends Entity {
     public void addGold(int gold, boolean verbose) {
         this.gold += gold;
         if (verbose) {
-            Game.getGameState(GameState.GAME_SCREEN).getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
+            GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
         }
     }
     public void addCrystals(int crystals) { this.crystals += crystals; }
@@ -164,7 +163,7 @@ public class HumanoidEntity extends Entity {
         this.hp = MiscMath.clamp(amount, 0, max_hp);
         if ((int)hp != oldHP && verbose) {
             int diff = (int)hp - oldHP;
-            Game.getGameState(GameState.GAME_SCREEN).getGUI().floatText(
+            GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(
                     getLocation(),
                     diff > 0 ? "+"+diff : ""+diff,
                     diff > 0 ? Color.green : Color.red,
@@ -223,5 +222,39 @@ public class HumanoidEntity extends Entity {
         this.spellbook = spellbook;
     }
 
+    @Override
+    public JSONObject serialize() {
+        JSONObject serialized = super.serialize();
+        serialized.put("hp", getHP());
+        serialized.put("max_hp", getMaxHP());
+        serialized.put("mana", getMana());
+        serialized.put("max_mana", getMaxMana());
+        serialized.put("stamina", getStamina());
+        serialized.put("max_stamina", getMaxStamina());
+        serialized.put("gold", getGoldCount());
+        serialized.put("crystals", getCrystalCount());
+        serialized.put("dyes", getDyeCount());
+        serialized.put("tomes", getTomeCount());
+        serialized.put("artifacts", getArtifactCount());
+        serialized.put("keys", getKeyCount());
+        serialized.put("is_dead", isDead);
+        serialized.put("spellbook", getSpellbook().serialize());
+        return serialized;
+    }
 
+    @Override
+    public void deserialize(JSONObject json) {
+        super.deserialize(json);
+        setHP((double)json.get("hp"), false);
+        setMaxHP((double)json.get("max_hp"));
+        setMana((double)json.get("mana"));
+        setMaxMana((double)json.get("max_mana"));
+        setStamina((double)json.get("stamina"));
+        setMaxStamina((double)json.get("max_stamina"));
+        addGold((int)(long)json.get("gold"), false);
+        addCrystals((int)(long)json.get("crystals"));
+        addDyes((int)(long)json.get("dyes"));
+        addTomes((int)(long)json.get("tomes"));
+        addKeys((int)(long)json.get("keys"));
+    }
 }

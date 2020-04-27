@@ -1,24 +1,29 @@
 package world;
 
+import assets.Assets;
 import misc.Location;
 import misc.MiscMath;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Graphics;
 import world.entities.types.humanoids.Player;
 import world.generators.region.DefaultWorldGenerator;
-import world.generators.region.DungeonGenerator;
-import world.generators.region.PlayerHomeRegionGenerator;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class World {
 
     private static HashMap<String, Region> regions;
+    private static ArrayList<Portal> portals;
     private static Player player;
 
     private static long time;
@@ -27,18 +32,21 @@ public class World {
     private static boolean paused;
 
     public static void init() {
-        init(0);
-    }
-
-    public static void init(int seed) {
         time = 0;
-        World.seed = seed;
         timeMultiplier = 1;
         regions = new HashMap<>();
-        player = new Player();
+        portals = new ArrayList<>();
+    }
+
+    public static void generate(int seed) {
+        World.seed = seed;
         addRegion(new Region("world", 16, new DefaultWorldGenerator(seed)));
-        Region player_home = addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator(seed)));
-        player.moveTo(new Location(player_home, 0, 0, Chunk.CHUNK_SIZE/2 + 0.5f, Chunk.CHUNK_SIZE/2 - 1 + 0.5f));
+        getRegion("world").plan();
+    }
+
+    public static void spawnPlayer(int x, int y, String region_name) {
+        player = new Player();
+        player.moveTo(new Location(getRegion(region_name), x + 0.5f, y - 1 + 0.5f));
         player.getLocation().setLookDirection(180);
         Camera.setTarget(player);
     }
@@ -52,9 +60,7 @@ public class World {
         return region;
     }
 
-    public static Region getRegion(String name) {
-        return regions.get(name);
-    }
+    public static Region getRegion(String name) { return regions.get(name); }
     public static Region getRegion() { return player.getLocation().getRegion(); }
     public static Player getLocalPlayer() { return player; }
 
@@ -82,10 +88,11 @@ public class World {
 
     public static void drawDebug(float scale, Graphics g) { getRegion().drawDebug(scale, g); }
 
-    public static void save(String url) {
+    public static void save() {
         try {
             JSONObject world = serialize();
-            FileWriter file = new FileWriter(url);
+            for (Region r: regions.values()) r.saveAllChunks();
+            FileWriter file = new FileWriter(Assets.ROOT_DIRECTORY+"/world/world.json");
             file.write(world.toJSONString());
             file.flush();
             file.close();
@@ -96,11 +103,27 @@ public class World {
 
     protected static JSONObject serialize() {
         JSONObject world = new JSONObject();
-        JSONArray jsonRegions = new JSONArray();
-        for (Region r: regions.values()) jsonRegions.add(r.serialize());
         world.put("seed", seed);
-        world.put("regions", jsonRegions);
+        world.put("player", getLocalPlayer().serialize());
         return world;
+    }
+
+    public static void deserialize() {
+        File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
+        JSONParser parser = new JSONParser();
+        try {
+            JSONObject world = (JSONObject)parser.parse(new FileReader(f));
+            seed = new Long((long)world.get("seed")).intValue();
+            generate(seed);
+            getRegion("world").loadSavedChunks();
+            JSONObject jsonPlayer = (JSONObject)world.get("player");
+            spawnPlayer((int)(double)jsonPlayer.get("x"), (int)(double)jsonPlayer.get("y"), (String)jsonPlayer.get("region"));
+            getLocalPlayer().deserialize(jsonPlayer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 }

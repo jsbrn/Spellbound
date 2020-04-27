@@ -7,8 +7,6 @@ import world.Tiles;
 import world.World;
 import world.entities.Entity;
 
-import java.util.Random;
-
 public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
     public PlayerHomeGenerator(int seed) {
@@ -44,10 +42,9 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
     }
 
     @Override
-    public Portal getPortal(int x, int y) {
-        return x == Chunk.CHUNK_SIZE/2 && y == getMinimum()
-                ? new Portal("door", 0, 2, true, World.getRegion("world"), "door")
-                : null;
+    public Portal getPortal() {
+        Portal door = new Portal("door", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true, World.getRegion("world"), "door");
+        return door;
     }
 
     @Override

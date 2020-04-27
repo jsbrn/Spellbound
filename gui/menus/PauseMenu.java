@@ -6,7 +6,7 @@ import gui.elements.Button;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
 import gui.states.GameState;
-import main.Game;
+import main.GameManager;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.World;
@@ -27,7 +27,8 @@ public class PauseMenu extends Modal {
         addChild(new Button(null, 24, 24, "icons/save.png", true) {
             @Override
             public boolean onClick(int button) {
-                Game.switchTo(GameState.MAIN_MENU);
+                GameManager.switchTo(GameState.MAIN_MENU);
+                World.save();
                 return true;
             }
         }, 16, 0, GUIAnchor.CENTER);

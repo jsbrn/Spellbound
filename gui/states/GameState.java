@@ -2,7 +2,7 @@ package gui.states;
 
 import assets.Assets;
 import gui.GUI;
-import main.Game;
+import main.GameManager;
 import misc.Window;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -25,16 +25,17 @@ public abstract class GameState extends BasicGameState {
     }
 
     @Override
-    public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        input = container.getInput();
+    public void init(GameContainer gc, StateBasedGame game) throws SlickException {
+        gc.setDefaultFont(Assets.getFont(14));
+        input = gc.getInput();
         addGUIElements(gui);
-        Game.setMouseCursor("assets/gui/cursors/default.png");
+        GameManager.setMouseCursor("assets/gui/cursors/default.png");
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-
         if (background != null) g.drawImage(Assets.getImage(background, Image.FILTER_LINEAR).getScaledCopy(Window.getWidth(), Window.getHeight()), 0, 0);
         getGUI().draw(g);
+        if (Window.wasResized()) onResize(Window.getWidth(), Window.getHeight());
     }
 
     @Override
@@ -52,6 +53,8 @@ public abstract class GameState extends BasicGameState {
 
     @Override
     public void keyReleased(int key, char c) {
+
+        if (key == getInput().KEY_F2) Window.takeScreenshot();
 
         if (key == getInput().KEY_F11) {
             try {
@@ -84,5 +87,7 @@ public abstract class GameState extends BasicGameState {
     public void mouseWheelMoved(int newValue) {
         gui.handleMouseScroll(newValue > 0 ? -1 : 1);
     }
+
+    public abstract void onResize(int width, int height);
 
 }

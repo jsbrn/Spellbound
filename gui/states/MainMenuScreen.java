@@ -4,9 +4,13 @@ import assets.Assets;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.*;
-import main.Game;
+import main.GameManager;
+import misc.Window;
 import org.newdawn.slick.*;
+import world.Chunk;
 import world.World;
+
+import java.io.File;
 
 public class MainMenuScreen extends GameState {
 
@@ -25,9 +29,17 @@ public class MainMenuScreen extends GameState {
         gui.addElement(new Button(null, 24, 24, "icons/play.png", true) {
             @Override
             public boolean onClick(int button) {
-                World.init();
-                Game.getGameState(GameState.GAME_SCREEN).resetGUI();
-                Game.switchTo(GameState.GAME_SCREEN);
+                File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
+                if (!f.exists()) {
+                    World.init();
+                    World.generate(0);
+                    World.spawnPlayer(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, "player_home");
+                } else {
+                    World.init();
+                    World.deserialize();
+                }
+                GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
+                GameManager.switchTo(GameState.GAME_SCREEN);
                 return true;
             }
         }, -(24*3)/2, 0, GUIAnchor.CENTER);
@@ -49,6 +61,15 @@ public class MainMenuScreen extends GameState {
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Pre-Alpha", 8, Color.white, true), 32, 32, GUIAnchor.TOP_MIDDLE);
+    }
+
+    @Override
+    public void onResize(int width, int height) {
+        try {
+            Window.WINDOW_INSTANCE.setDisplayMode(width, height, Window.isFullScreen());
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
     }
 
 }

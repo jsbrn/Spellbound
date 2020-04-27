@@ -6,8 +6,6 @@ import world.Portal;
 import world.World;
 import world.generators.region.PlayerHomeRegionGenerator;
 
-import java.util.Random;
-
 public class BackyardGenerator extends OpenFieldGenerator {
 
     public BackyardGenerator(int seed) {
@@ -23,10 +21,11 @@ public class BackyardGenerator extends OpenFieldGenerator {
     }
 
     @Override
-    public Portal getPortal(int x, int y) {
-        return (x == 6 && y == 5)
-                ? new Portal("door", 0, 1, true, World.getRegion("player_home"), "door")
-                : null;
+    public Portal getPortal() {
+        Portal door = new Portal("door", 6, 5, 0, 1, true,
+                    World.addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator(World.getSeed()))), "door");
+        door.setCoordinates(6, 5);
+        return door;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package world.entities.magic;
 
 import assets.Assets;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -131,6 +133,23 @@ public class Spell {
         int cost = 0;
         for (String technique: techniques) cost += Techniques.getManaCost(technique) * getLevel(technique);
         return cost;
+    }
+
+    public JSONObject serialize() {
+        JSONObject serialized = new JSONObject();
+        serialized.put("icon", iconIndex);
+        for (String t: techniques) serialized.put(t, getLevel(t));
+        return serialized;
+    }
+
+    public void deserialize(JSONObject json) {
+        for (String technique: Techniques.getAll()) {
+            if (json.get(technique) != null) {
+                addTechnique(technique);
+                setLevel(technique, (int)(long)json.get(technique));
+            }
+        }
+        iconIndex = (int)(long)json.get("icon");
     }
 
 }

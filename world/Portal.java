@@ -1,7 +1,5 @@
 package world;
 
-import org.json.simple.JSONObject;
-
 public class Portal {
 
     private Region destination;
@@ -10,7 +8,8 @@ public class Portal {
     private boolean directionalEntrance;
     private int[] exitDirection, coordinates;
 
-    public Portal(String name, int dx, int dy, boolean directionalEntrance, Region destination, String destination_name) {
+    public Portal(String name, int tx, int ty, int dx, int dy, boolean directionalEntrance, Region destination, String destination_name) {
+        this.coordinates = new int[]{tx, ty};
         this.destination = destination;
         this.destinationName = destination_name;
         this.name = name;

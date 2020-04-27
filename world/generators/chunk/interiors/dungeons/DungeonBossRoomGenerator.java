@@ -22,7 +22,7 @@ public class DungeonBossRoomGenerator extends DungeonRoomGenerator {
     }
 
     @Override
-    public Portal getPortal(int x, int y) {
+    public Portal getPortal() {
         return null;
     }
 

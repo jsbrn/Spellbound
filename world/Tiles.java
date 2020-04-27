@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 
 public class Tiles {
 
-    public static final int
+    public static final byte
             AIR = 0, GRASS = 1, WELL = 2, TALL_GRASS = 3, FLOWERS = 4,
             WOOD_HOUSE_LEFT = 5, WOOD_HOUSE_MIDDLE = 6, WOOD_HOUSE_RIGHT = 7,
             TREE = 8, WOOD_WALL_NORTH = 9, WOOD_WALL_DOOR_NORTH = 10, WOOD_FLOOR = 11,

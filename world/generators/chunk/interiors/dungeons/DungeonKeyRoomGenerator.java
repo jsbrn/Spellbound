@@ -7,8 +7,6 @@ import world.entities.Entity;
 import world.entities.types.Chest;
 import world.entities.types.humanoids.npcs.Bandit;
 
-import java.util.Random;
-
 public class DungeonKeyRoomGenerator extends DungeonRoomGenerator {
 
     public DungeonKeyRoomGenerator(boolean north, boolean south, boolean east, boolean west, int seed) {
@@ -16,7 +14,7 @@ public class DungeonKeyRoomGenerator extends DungeonRoomGenerator {
     }
 
     @Override
-    public Portal getPortal(int x, int y) {
+    public Portal getPortal() {
         return null;
     }
 
@@ -24,7 +22,7 @@ public class DungeonKeyRoomGenerator extends DungeonRoomGenerator {
     public Entity getEntity(int x, int y) {
         return x == Chunk.CHUNK_SIZE/2 && y == Chunk.CHUNK_SIZE/2
                 ? new Chest(1, false, Chest.KEY_LOOT, 1.0f)
-                : (isWithinWalls(x, y) && rng().nextBoolean() ? new Bandit(1) : null);
+                : (isWithinWalls(x, y) && rng().nextInt(3) == 0 ? new Bandit(1) : null);
     }
 
     @Override

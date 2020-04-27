@@ -51,6 +51,7 @@ public class LostCivilian extends Civilian {
                 @Override
                 public void handle(Event e) {
                     EntityChangeRegionEvent ecre = (EntityChangeRegionEvent)e;
+                    if (ecre.getFrom() == null) return;
                     if (ecre.getEntity().equals(that) && ecre.getTo().equals(World.getRegion("world"))) {
                         clearAllActions();
                         getActionQueue().queueAction(new SpeakAction(Definitions.getDialogue("civilian_rescued").getRandomText()));

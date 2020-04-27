@@ -112,6 +112,11 @@ public class GameScreen extends GameState {
     @Override
     public void keyReleased(int key, char c) {
         super.keyReleased(key, c);
-        if (key == Input.KEY_F7) World.save(System.getProperty("user.home")+"/Desktop/world.json");
+        if (key == Input.KEY_F7) World.save();
+    }
+
+    @Override
+    public void onResize(int width, int height) {
+
     }
 }

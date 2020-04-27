@@ -9,8 +9,6 @@ import world.entities.types.SpikeTrap;
 import world.entities.types.humanoids.npcs.Bandit;
 import world.generators.chunk.interiors.InteriorRoomGenerator;
 
-import java.util.Random;
-
 public class DungeonRoomGenerator extends InteriorRoomGenerator {
     
     private boolean spawnLoot;
@@ -33,7 +31,7 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
     }
 
     @Override
-    public Portal getPortal(int x, int y) {
+    public Portal getPortal() {
         return null;
     }
 

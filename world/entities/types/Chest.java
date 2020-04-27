@@ -1,7 +1,8 @@
 package world.entities.types;
 
 import gui.states.GameState;
-import main.Game;
+import main.GameManager;
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.entities.actions.types.ChangeAnimationAction;
@@ -18,9 +19,16 @@ import java.util.Random;
 public class Chest extends Entity {
 
     public static int GOLD_LOOT = 0, CRYSTAL_LOOT = 1, DYE_LOOT = 2, TOME_LOOT = 3, ARTIFACT_LOOT = 4, KEY_LOOT = 5, RANDOM_LOOT = 6;
-    private boolean looted;
+    private boolean looted, locked;
+    private int lootMultiplier, lootType;
+    private float filledChance;
 
     public Chest(int lootMultiplier, boolean locked, int lootType, float filledChance) {
+
+        this.lootMultiplier = lootMultiplier;
+        this.locked = locked;
+        this.lootType = lootType;
+        this.filledChance = filledChance;
 
         this.getMover().setCollidable(true);
         this.addAnimation("default", "closed", new Animation((locked ? "locked_" : "") + "chest.png", 1, 1, 16, true, false, Color.white));
@@ -42,7 +50,7 @@ public class Chest extends Entity {
                         if (eae.getActivatedBy() instanceof HumanoidEntity) {
 
                             if (locked && ((HumanoidEntity)eae.getActivatedBy()).getKeyCount() < 1) {
-                                Game.getGameState(GameState.GAME_SCREEN).getGUI().floatText(
+                                GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(
                                         eae.getEntity().getLocation(),
                                         "Locked",
                                         Color.gray, 2, 500, -0.5f, false);
@@ -72,9 +80,9 @@ public class Chest extends Entity {
                             if (locked) ((HumanoidEntity) eae.getActivatedBy()).addKeys(-1);
 
                             if (empty) {
-                                Game.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "Empty", Color.gray, 2, 500, -0.5f, false);
+                                GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "Empty", Color.gray, 2, 500, -0.5f, false);
                             } else {
-                                Game.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "+"+amount+" "+type, Color.yellow, 2, 750, -0.5f, false);
+                                GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "+"+amount+" "+type, Color.yellow, 2, 750, -0.5f, false);
                             }
 
                             looted = true;
@@ -84,6 +92,17 @@ public class Chest extends Entity {
             }
         ));
 
+    }
+
+    @Override
+    public JSONObject serialize() {
+        JSONObject serialized = super.serialize();
+        serialized.put("lootMultiplier", lootMultiplier);
+        serialized.put("lootType", lootType);
+        serialized.put("locked", locked);
+        serialized.put(looted, looted);
+        serialized.put("filledChance", filledChance);
+        return serialized;
     }
 
 }

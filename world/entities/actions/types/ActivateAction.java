@@ -27,7 +27,7 @@ public class ActivateAction extends Action {
                     && MiscMath.clamp(origin.getExitDirection()[1], -1, 1) == -offset[1])) return;
 
             System.out.println("Found portal leading to "+origin.getDestination()+", "+origin.getDestinationName());
-            origin.getDestination().forceLoadChunks();
+            origin.getDestination().plan();
             Portal destination = origin.getDestination().findPortal(origin.getDestinationName(), location.getRegion(), origin.getName());
             System.out.println("Destination portal is "+destination);
             parent.getMover().stop();

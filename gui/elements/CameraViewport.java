@@ -1,8 +1,6 @@
 package gui.elements;
 
-import gui.GUIAnchor;
 import gui.GUIElement;
-import gui.menus.PauseMenu;
 import misc.Location;
 import misc.Window;
 import org.lwjgl.input.Mouse;

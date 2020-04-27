@@ -1,5 +1,6 @@
 package misc;
 
+import assets.Assets;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -11,7 +12,9 @@ import org.newdawn.slick.imageout.ImageOut;
 import world.Chunk;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.stream.Collectors;
 
 public class Window {
 
@@ -27,37 +30,42 @@ public class Window {
             Window.WINDOW_INSTANCE.setDisplayMode(last_width, last_height, false);
         } else {
             try {
-                last_width = Window.getWidth();
-                last_height = Window.getHeight();
-                Window.WINDOW_INSTANCE.setDisplayMode(1920, 1080, false);
                 Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+
             } catch (LWJGLException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    public static boolean wasResized() {
+        if (WINDOW_INSTANCE.getWidth() != last_width && WINDOW_INSTANCE.getHeight() != last_height) {
+            last_width = WINDOW_INSTANCE.getWidth();
+            last_height = WINDOW_INSTANCE.getHeight();
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isFullScreen() {
         return WINDOW_INSTANCE.isFullscreen();
     }
 
-    public static void takeScreenshot(Graphics g) {
+    public static void takeScreenshot() {
         try {
             int month = Calendar.getInstance().get(Calendar.MONTH);
             int year = Calendar.getInstance().get(Calendar.YEAR);
             int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-            int hour = (int)(System.currentTimeMillis() / 1000 / 60 / 60) % 24;
-            int minute = (int)(System.currentTimeMillis() / 1000 / 60) % 60;
-            int second = (int)(System.currentTimeMillis() / 1000) % 60;
-            int mills = (int)(System.currentTimeMillis() % 1000);
+            int hour = Calendar.getInstance().get(Calendar.HOUR);
+            int minute = Calendar.getInstance().get(Calendar.MINUTE);
+            int second = Calendar.getInstance().get(Calendar.SECOND);
+            int mills = Calendar.getInstance().get(Calendar.MILLISECOND);
             Image scrn = new Image(Window.getWidth(), Window.getHeight());
-            String folder = System.getProperty("user.home") + "/Desktop/";
-            String file_url = folder + "Spellbound-" + year + "-" + month + "-" + day+"-"+hour+"-"+minute+"-"+second+"-"+mills;
-            g.copyArea(scrn, 0, 0);
+            String folder = Assets.ROOT_DIRECTORY+"/screenshots/";
+            String file_url = folder + year + "-" + month + "-" + day+" ("+System.currentTimeMillis()+")";
+            WINDOW_INSTANCE.getGraphics().copyArea(scrn, 0, 0);
             //make screenshots folder
-            if (new File(System.getProperty("user.home") + "/Desktop/").exists() == false) {
-                new File(System.getProperty("user.home") + "/Desktop/").mkdir();
-            }
+            new File(folder).mkdirs();
             ImageOut.write(scrn, file_url + ".png");
             System.out.println("Saved screenshot to " + file_url + ".png");
         } catch (SlickException ex) {

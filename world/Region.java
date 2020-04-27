@@ -1,10 +1,13 @@
 package world;
 
 import assets.Assets;
+import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Graphics;
 import world.entities.Entity;
 import world.entities.magic.MagicSource;
@@ -14,6 +17,9 @@ import world.events.event.EntityMovedEvent;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.region.RegionGenerator;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +33,10 @@ public class Region {
     private int size;
 
     private ArrayList<MagicSource> magic_sources;
-    private HashMap<Integer, Portal> portals;
+    private ArrayList<Portal> portals;
     private ArrayList<Entity> entities;
 
     private long time;
-
     private RegionGenerator generator;
 
     public Region(String name, int size, RegionGenerator generator) {
@@ -42,17 +47,9 @@ public class Region {
 
         this.time = 0;
 
-        chunks = new Chunk[size][size];
-        chunkGenerators = new ChunkGenerator[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                chunkGenerators[i][j] = generator.getChunkGenerator(i, j, size);
-            }
-        }
-
         magic_sources = new ArrayList<>();
         entities = new ArrayList<>();
-        portals = new HashMap<>();
+        portals = new ArrayList<>();
 
         EventDispatcher.register(new EventListener().on(EntityMovedEvent.class.toString(), e -> {
             EntityMovedEvent event = (EntityMovedEvent) e;
@@ -62,6 +59,22 @@ public class Region {
             }
         }));
 
+    }
+
+    public void plan() {
+        if (chunkGenerators != null) return;
+        chunks = new Chunk[size][size];
+        chunkGenerators = new ChunkGenerator[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                chunkGenerators[i][j] = generator.getChunkGenerator(i, j, size);
+                Portal p = chunkGenerators[i][j].getPortal();
+                if (p != null) {
+                    portals.add(p);
+                    p.setCoordinates(p.getCoordinates()[0] + (i * Chunk.CHUNK_SIZE),p.getCoordinates()[1] + (j * Chunk.CHUNK_SIZE));
+                }
+            }
+        }
     }
 
     public long getCurrentTime() { return time; }
@@ -170,8 +183,8 @@ public class Region {
         return outer.stream().filter(ms -> !(inner.contains(ms) && !outer.contains(ms))).collect(Collectors.toList());
     }
 
-    public void registerPortal(int index, Portal portal) {
-        portals.put(index, portal);
+    public void registerPortal(Portal portal) {
+        portals.add(portal);
     }
 
     public Portal getPortal(int index) {
@@ -179,15 +192,10 @@ public class Region {
     }
 
     public Portal getPortal(int wx, int wy) {
-        return getPortal((int)MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize()));
-    }
-
-    public void forceLoadChunks() {
-        for (int i = 0; i < getSize(); i++) {
-            for (int j = 0; j < getSize(); j++) {
-                getChunk(i, j);
-            }
-        }
+        return portals.stream().filter(portal -> {
+            int[] coordinates = portal.getCoordinates();
+            return coordinates[0] == wx && coordinates[1] == wy;
+        }).findFirst().orElse(null);
     }
 
     /**
@@ -197,7 +205,7 @@ public class Region {
      * @return Portal if found, null if not
      */
     public Portal findPortal(String portalName, Region destination, String destinationName) {
-        for (Portal p: portals.values())
+        for (Portal p: portals)
             if (p.getName().equals(portalName) && p.getDestination().equals(destination) && p.getDestinationName().equals(destinationName))
                 return p;
         return null;
@@ -210,8 +218,17 @@ public class Region {
     }
 
     public Chunk getChunk(int cx, int cy) {
+        if (chunkGenerators == null) plan();
         if (cx < 0 || cx >= chunkGenerators.length || cy < 0 || cy >= chunkGenerators[0].length) return null;
-        if (chunks[cx][cy] == null) chunks[cx][cy] = new Chunk(cx, cy, this, chunkGenerators[cx][cy]);
+        if (chunks[cx][cy] == null) {
+            boolean savedToDisk = new File(Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk").exists();
+            if (!savedToDisk) {
+                chunks[cx][cy] = new Chunk(cx, cy, this);
+                chunks[cx][cy].generate(chunkGenerators[cx][cy], true);
+            } else {
+                loadChunkFromFile(cx, cy);
+            }
+        }
         return chunks[cx][cy];
     }
 
@@ -239,7 +256,7 @@ public class Region {
             if (magicSource.getBody().isEmpty() && !magicSource.getBody().isSpawning()) magic_sources.remove(i);
         }
 
-        int radius = 2;
+        int radius = 1;
         int[] pchcoords = World.getLocalPlayer().getLocation().getChunkCoordinates();
         for (int j = -radius; j <= radius; j++) {
             for (int i = -radius; i <= radius; i++) {
@@ -294,13 +311,55 @@ public class Region {
         for (MagicSource magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
     }
 
-    public final JSONObject serialize() {
-        JSONObject serialized = new JSONObject();
-        JSONArray jsonPortals = new JSONArray();
-        serialized.put("name", name);
-        serialized.put("size", size);
-        serialized.put("entities", null);
-        return serialized;
+    private void saveChunk(int cx, int cy) {
+        JSONObject chunk = new JSONObject();
+        JSONArray jsonEntities = new JSONArray();
+        jsonEntities.addAll(
+                getEntities(cx * Chunk.CHUNK_SIZE, cy * Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE)
+                .stream()
+                .map(e -> e.serialize()).collect(Collectors.toList())
+        );
+        chunk.put("entities", jsonEntities);
+        try {
+            File regionFolder = new File(Assets.ROOT_DIRECTORY+"/world/"+name+"/");
+            regionFolder.mkdirs();
+            Files.write(new File(regionFolder.getAbsolutePath()+"/"+cx+"_"+cy+".chunk").toPath(), chunk.toJSONString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveAllChunks() {
+        if (chunks == null) return;
+        for (int cx = 0; cx < chunks.length; cx++)
+            for (int cy = 0; cy < chunks[0].length; cy++)
+                saveChunk(cx, cy);
+    }
+
+    public void loadSavedChunks() {
+        if (chunks == null) return;
+        for (int cx = 0; cx < chunks.length; cx++)
+            for (int cy = 0; cy < chunks[0].length; cy++)
+                loadChunkFromFile(cx, cy);
+    }
+
+    private void loadChunkFromFile(int cx, int cy) {
+        chunks[cx][cy] = new Chunk(cx, cy, this);
+        chunks[cx][cy].generate(chunkGenerators[cx][cy], false);
+        try {
+            JSONObject chunk = (JSONObject)new JSONParser().parse(Assets.read(Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk", false));
+            JSONArray jsonEntities = (JSONArray)chunk.get("entities");
+            jsonEntities
+                    .stream()
+                    .forEach(json -> {
+                        JSONObject jsonObject = (JSONObject)json;
+                        Entity e = Entity.create(jsonObject);
+                        if (e == null) return;
+                        e.moveTo(new Location(this, (double)jsonObject.get("x"), (double)jsonObject.get("y")));
+                    });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

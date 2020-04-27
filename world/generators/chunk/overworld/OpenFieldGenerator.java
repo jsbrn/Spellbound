@@ -6,8 +6,6 @@ import world.Tiles;
 import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
-import java.util.Random;
-
 public class OpenFieldGenerator extends ChunkGenerator {
 
     public OpenFieldGenerator(int seed) {
@@ -25,7 +23,7 @@ public class OpenFieldGenerator extends ChunkGenerator {
     }
 
     @Override
-    public Portal getPortal(int x, int y) {
+    public Portal getPortal() {
         return null;
     }
 

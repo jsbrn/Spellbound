@@ -1,12 +1,16 @@
 package world.entities.animations;
 
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.w3c.dom.Entity;
 import world.Chunk;
 import world.World;
 
-public class Animation {
+import java.io.Serializable;
+
+public class Animation implements Serializable {
 
     private Image sprite;
     private Color filter;

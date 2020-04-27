@@ -5,9 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import world.Tiles;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Definitions {
@@ -18,7 +16,7 @@ public class Definitions {
         dialogueDefinitions = new HashMap<>();
         try {
             JSONParser parser = new JSONParser();
-            JSONArray dialogues = (JSONArray)parser.parse(Assets.read("definitions/dialogues.json"));
+            JSONArray dialogues = (JSONArray)parser.parse(Assets.read("definitions/dialogues.json", true));
             for (Object o: dialogues) dialogueDefinitions.put((String)((JSONObject)o).get("id"), new DialogueDefinition((JSONObject)o));
         } catch (ParseException e) {
             e.printStackTrace();

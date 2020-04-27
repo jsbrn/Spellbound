@@ -2,8 +2,6 @@ package gui.elements;
 
 import gui.GUIAnchor;
 import gui.GUIElement;
-import gui.states.GameScreen;
-import main.Game;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;

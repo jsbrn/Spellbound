@@ -1,6 +1,7 @@
 package world.generators.chunk;
 
 import org.newdawn.slick.Color;
+import world.Chunk;
 import world.Portal;
 import world.entities.Entity;
 
@@ -17,14 +18,22 @@ public abstract class ChunkGenerator {
 
     public Random rng() { return rng; }
 
-    public final void setCX(int cx) { this.cx = cx; }
-    public final void setCY(int cy) { this.cy = cy; }
-    public int getCX() { return cx; }
-    public int getCY() { return cy; }
+    public final void setChunkX(int cx) { this.cx = cx; }
+    public final void setChunkY(int cy) { this.cy = cy; }
+    public int getChunkX() { return cx; }
+    public int getChunkY() { return cy; }
+
+    public byte[][] getTiles(boolean top) {
+        byte[][] base = new byte[Chunk.CHUNK_SIZE][Chunk.CHUNK_SIZE];
+        for (int i = 0; i < base.length; i++)
+            for (int j = 0; j < base[0].length; j++)
+                base[i][j] = top ? getTop(i, j) : getBase(i, j);
+        return base;
+    }
 
     public abstract byte getBase(int x, int y);
     public abstract byte getTop(int x, int y);
-    public abstract Portal getPortal(int x, int y);
+    public abstract Portal getPortal();
     public abstract Entity getEntity(int x, int y);
 
     public abstract Color getColor();

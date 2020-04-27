@@ -1,9 +1,6 @@
 package assets;
 
-import assets.Assets;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CSVReader {
 
@@ -13,7 +10,7 @@ public class CSVReader {
     public CSVReader(String csvUrl, char delimiter) {
         this.columnHeaders = new ArrayList<>();
         this.rowIndices = new ArrayList<>();
-        String str = Assets.read(csvUrl);
+        String str = Assets.read(csvUrl, true);
         String[] rows = str.split("\n");
         String[] headers = rows[0].split(delimiter+"+");
         this.contents = new String[rows.length][];
