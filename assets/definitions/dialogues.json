@@ -236,64 +236,9 @@
       "What is it that you seek?"
     ],
     "options": [
-      { "label": "More mana", "pointsTo": "fake_request" },
-      { "label": "More health", "pointsTo": "fake_request" },
-      { "label": "More power", "pointsTo": "fake_request" }
-    ]
-  },
-  {
-    "id": "fake_request",
-    "texts": [
-      "If that is truly what you seek, then bring forth the treasure beyond the creek."
-    ],
-    "options": [
-      { "label": "What?", "pointsTo": "wishing_well_backtrack" }
-    ]
-  },
-  {
-    "id": "wishing_well_backtrack",
-    "texts": [
-      "The creek. Bring me the treasure beyond the creek."
-    ],
-    "options": [
-      { "label": "There are no lakes for miles.", "pointsTo": "wishing_well_confusion" }
-    ]
-  },
-  {
-    "id": "wishing_well_confusion",
-    "texts": [
-      "What? Since when?"
-    ],
-    "options": [
-      { "label": "Uh...", "pointsTo": "wishing_well_sadness" }
-    ]
-  },
-  {
-    "id": "wishing_well_sadness",
-    "texts": [
-      "Wow. That's...that's a surprise. I could have sworn we had a lake around here."
-    ],
-    "options": [
-      { "label": "Sorry to disappoint you.", "pointsTo": "wishing_well_back_on_track" }
-    ]
-  },
-  {
-    "id": "wishing_well_back_on_track",
-    "texts": [
-      "Well...I suppose I could just charge you Gold like any other transaction."
-    ],
-    "options": [
-      { "label": "That would be great.", "pointsTo": "wishing_well_forgot" }
-    ]
-  },
-  {
-    "id": "wishing_well_forgot",
-    "texts": [
-      "What was it that you wanted?"
-    ],
-    "options": [
-      { "label": "More mana", "pointsTo": "request_mana" },
-      { "label": "More health", "pointsTo": "request_health" }
+      { "label": "Mana", "pointsTo": "request_mana" },
+      { "label": "Health", "pointsTo": "request_health" },
+      { "label": "Knowledge", "pointsTo": "request_knowledge" }
     ]
   },
   {
@@ -313,7 +258,7 @@
   {
     "id": "request_mana",
     "texts": [
-      "Excellent choice! 50 Gold for +10 Max Mana."
+      "Excellent choice! 100 Gold for +10 Max Mana."
     ],
     "options": [
       { "label": "Sounds good", "pointsTo": null },
@@ -323,11 +268,40 @@
   {
     "id": "request_health",
     "texts": [
-      "Excellent choice! 100 Gold for +10 Max Health."
+      "Excellent choice! 250 Gold for +10 Max Health."
     ],
     "options": [
       { "label": "Sounds good", "pointsTo": null },
       { "label": "Changed my mind", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "request_knowledge",
+    "texts": [
+      "What would you like to know about?"
+    ],
+    "options": [
+      { "label": "Objective", "pointsTo": "objective_info" },
+      { "label": "Spellcrafting", "pointsTo": "spellcraft_info"},
+      { "label": "Exploration", "pointsTo": null}
+    ]
+  },
+  {
+    "id": "objective_info",
+    "texts": [
+      "If I'm not mistaken, your roommate is in need of your help."
+    ],
+    "options": [
+      { "label": "I understand.", "pointsTo":  null}
+    ]
+  },
+  {
+    "id": "spellcraft_info",
+    "texts": [
+      "A Spell is simply a combination of Magic Techniques. As you explore the world, you will find Spell Tomes that teach you different techniques."
+    ],
+    "options": [
+      { "label": "I understand.", "pointsTo":  null}
     ]
   }
 

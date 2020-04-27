@@ -33,9 +33,9 @@ public class Chest extends Entity {
         this.filledChance = filledChance;
 
         this.getMover().setCollidable(true);
-        this.addAnimation("default", "closed", new Animation((locked ? "locked_" : "") + "chest.png", 1, 1, 16, true, false, Color.white));
-        this.addAnimation("default", "opening", new Animation("chest_opening.png", 3, 3, 16, false, false, Color.white));
-        this.addAnimation("default", "opened", new Animation("chest_opened.png", 1, 1, 16, true, false, Color.white));
+        this.addAnimation("default", "closed", new Animation((locked ? "locked_" : "") + "chest.png", 1, 1, 16, true, false));
+        this.addAnimation("default", "opening", new Animation("chest_opening.png", 3, 3, 16, false, false));
+        this.addAnimation("default", "opened", new Animation("chest_opened.png", 1, 1, 16, true, false));
         this.getAnimationLayer("default").setBaseAnimation("closed");
 
         Chest that = this;

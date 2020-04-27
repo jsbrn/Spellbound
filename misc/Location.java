@@ -18,6 +18,11 @@ public class Location {
         this(region, (int)(wx / Chunk.CHUNK_SIZE), (int)(wy / Chunk.CHUNK_SIZE), wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
     }
 
+    public Location(Region region, double wx, double wy, int lookDirection) {
+        this(region, wx, wy);
+        this.lookDirection = lookDirection;
+    }
+
     public Location(Region region, int cx, int cy, double tx, double ty) {
         this.region = region;
         this.coordinates = new double[]{(cx * Chunk.CHUNK_SIZE) + tx, (cy * Chunk.CHUNK_SIZE) + ty};

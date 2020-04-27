@@ -32,7 +32,7 @@ public class MainMenuScreen extends GameState {
                 if (!f.exists()) {
                     World.init();
                     World.generate(0);
-                    World.spawnPlayer(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, "player_home");
+                    World.spawnPlayer(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, 180, "player_home");
                     World.save();
                 } else {
                     World.init();

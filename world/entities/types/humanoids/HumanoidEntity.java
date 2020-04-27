@@ -68,36 +68,36 @@ public class HumanoidEntity extends Entity {
 
         this.spellbook = new Spellbook(this);
 
-        this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true, Color.white));
+        this.addAnimation("torso", "default", new Animation("humanoid/torso_idle.png", 2, 1, 16, true, true));
 
         for (String shirt: SHIRT_STYLES)
             this.addAnimation("shirt", shirt, new Animation("humanoid/cosmetics/"+shirt+".png", 1, 32, 32, Color.white));
 
-        this.addAnimation("arms", "default", new Animation("humanoid/arms_idle.png", 2, 1, 16, true, true, Color.white));
-        this.addAnimation("arms", "walking", new Animation("humanoid/arms_walking.png", 2, 4, 16, true, true, Color.white));
-        this.addAnimation("arms", "casting", new Animation("humanoid/arms_casting.png", 4, 3, 16, false, true, Color.white));
-        this.addAnimation("arms", "falling", new Animation("humanoid/arms_falling.png", 1, 1, 16, true, true, Color.white));
-        this.addAnimation("arms", "pushed", new Animation("humanoid/arms_pushed.png", 6, 3, 16, false, true, Color.white));
-        this.addAnimation("legs", "default", new Animation("humanoid/legs_idle.png", 2, 1, 16, true, true, Color.black));
-        this.addAnimation("legs", "walking", new Animation("humanoid/legs_walking.png", 2, 4, 16, true, true, Color.black));
-        this.addAnimation("legs", "falling", new Animation("humanoid/legs_falling.png", 1, 1, 16, true, true, Color.black));
-        this.addAnimation("legs", "pushed", new Animation("humanoid/legs_pushed.png", 6, 3, 16, false, true, Color.black));
-        this.addAnimation("legs", "dying", new Animation("humanoid/legs_dying.png", 4, 3, 16, false, false, Color.black));
-        this.addAnimation("legs", "dead", new Animation("humanoid/legs_dead.png", 1, 1, 16, false, false, Color.black));
-        this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true, Color.white));
-        this.addAnimation("head", "talking", new Animation("humanoid/head_talking.png", 3, 2, 16, true, true, Color.white));
+        this.addAnimation("arms", "default", new Animation("humanoid/arms_idle.png", 2, 1, 16, true, true));
+        this.addAnimation("arms", "walking", new Animation("humanoid/arms_walking.png", 2, 4, 16, true, true));
+        this.addAnimation("arms", "casting", new Animation("humanoid/arms_casting.png", 4, 3, 16, false, true));
+        this.addAnimation("arms", "falling", new Animation("humanoid/arms_falling.png", 1, 1, 16, true, true));
+        this.addAnimation("arms", "pushed", new Animation("humanoid/arms_pushed.png", 6, 3, 16, false, true));
+        this.addAnimation("legs", "default", new Animation("humanoid/legs_idle.png", 2, 1, 16, true, true));
+        this.addAnimation("legs", "walking", new Animation("humanoid/legs_walking.png", 2, 4, 16, true, true));
+        this.addAnimation("legs", "falling", new Animation("humanoid/legs_falling.png", 1, 1, 16, true, true));
+        this.addAnimation("legs", "pushed", new Animation("humanoid/legs_pushed.png", 6, 3, 16, false, true));
+        this.addAnimation("legs", "dying", new Animation("humanoid/legs_dying.png", 4, 3, 16, false, false));
+        this.addAnimation("legs", "dead", new Animation("humanoid/legs_dead.png", 1, 1, 16, false, false));
+        this.addAnimation("head", "default", new Animation("humanoid/head_idle.png", 2, 1, 16, true, true));
+        this.addAnimation("head", "talking", new Animation("humanoid/head_talking.png", 3, 2, 16, true, true));
 
-        this.addAnimation("torso", "dying", new Animation("humanoid/torso_dying.png", 4, 3, 16, false, false, Color.white));
-        this.addAnimation("torso", "dead", new Animation("humanoid/torso_dead.png", 1, 1, 16, false, false, Color.white));
-        this.addAnimation("arms", "dying", new Animation("humanoid/arms_dying.png", 4, 3, 16, false, false, Color.white));
-        this.addAnimation("arms", "dead", new Animation("humanoid/arms_dead.png", 1, 1, 16, false, false, Color.white));
-        this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false, Color.white));
-        this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false, Color.white));
-        this.addAnimation("arms", "dead", new Animation("humanoid/arms_dead.png", 1, 1, 16, false, false, Color.white));
-        this.addAnimation("legs", "dying", new Animation("humanoid/legs_dying.png", 4, 3, 16, false, false, Color.white));
-        this.addAnimation("legs", "dead", new Animation("humanoid/legs_dead.png", 1, 1, 16, false, false, Color.white));
-        this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false, Color.white));
-        this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false, Color.white));
+        this.addAnimation("torso", "dying", new Animation("humanoid/torso_dying.png", 4, 3, 16, false, false));
+        this.addAnimation("torso", "dead", new Animation("humanoid/torso_dead.png", 1, 1, 16, false, false));
+        this.addAnimation("arms", "dying", new Animation("humanoid/arms_dying.png", 4, 3, 16, false, false));
+        this.addAnimation("arms", "dead", new Animation("humanoid/arms_dead.png", 1, 1, 16, false, false));
+        this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false));
+        this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false));
+        this.addAnimation("arms", "dead", new Animation("humanoid/arms_dead.png", 1, 1, 16, false, false));
+        this.addAnimation("legs", "dying", new Animation("humanoid/legs_dying.png", 4, 3, 16, false, false));
+        this.addAnimation("legs", "dead", new Animation("humanoid/legs_dead.png", 1, 1, 16, false, false));
+        this.addAnimation("head", "dying", new Animation("humanoid/head_dying.png", 4, 3, 16, false, false));
+        this.addAnimation("head", "dead", new Animation("humanoid/head_dead.png", 1, 1, 16, false, false));
 
         ArrayList<String> hairs = new ArrayList<>();
         hairs.addAll(Arrays.asList(HAIR_STYLES));
@@ -111,6 +111,7 @@ public class HumanoidEntity extends Entity {
         Color shirt = new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
         getAnimationLayer("torso").setColor(shirt);
         getAnimationLayer("arms").setColor(shirt.darker());
+        getAnimationLayer("legs").setColor(Color.black);
         getAnimationLayer("head").setColor(new Color(SKIN_COLORS[rng.nextInt(SKIN_COLORS.length)]));
         getAnimationLayer("hair").setColor(new Color(HAIR_COLORS[rng.nextInt(HAIR_COLORS.length)]));
         getAnimationLayer("shirt").setColor(shirt.brighter());
@@ -256,5 +257,6 @@ public class HumanoidEntity extends Entity {
         addDyes((int)(long)json.get("dyes"));
         addTomes((int)(long)json.get("tomes"));
         addKeys((int)(long)json.get("keys"));
+        getSpellbook().deserialize((JSONObject)json.get("spellbook"));
     }
 }

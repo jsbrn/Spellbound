@@ -1,11 +1,8 @@
 package world.entities.animations;
 
-import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.w3c.dom.Entity;
-import world.Chunk;
 import world.World;
 
 import java.io.Serializable;
@@ -13,13 +10,12 @@ import java.io.Serializable;
 public class Animation implements Serializable {
 
     private Image sprite;
-    private Color filter;
     private int frame_count, original_fps, fps;
     private float frame_width, frame_height;
     private long start_time;
     private boolean loop, directional;
 
-    public Animation(String image, int fps, int frame_count, int frame_height, boolean loops, boolean directional, Color filter) {
+    public Animation(String image, int fps, int frame_count, int frame_height, boolean loops, boolean directional) {
         try {
             this.frame_count = frame_count;
             this.original_fps = fps;
@@ -30,14 +26,13 @@ public class Animation implements Serializable {
             this.frame_height = frame_height;
             this.loop = loops;
             this.directional = directional;
-            this.filter = filter;
         } catch (SlickException e) {
             e.printStackTrace();
         }
     }
 
     public Animation(String image, int fps, int frame_width, int frame_height, Color filter) {
-        this(image, fps, -1, frame_height, false, true, filter);
+        this(image, fps, -1, frame_height, false, true);
         this.frame_width = frame_width;
         this.frame_count = sprite.getWidth() / frame_width;
     }
@@ -58,13 +53,11 @@ public class Animation implements Serializable {
 
     public boolean finished() { return !loop && loopCount() > 0; }
 
-    public void setColor(Color color) { filter = color; }
-
     public void reset() {
         this.start_time = World.getCurrentTime();
     }
 
-    public void draw(float ex, float ey, float scale, int direction) {
+    public void draw(float ex, float ey, float scale, int direction, Color filter) {
         int frame = getFrame();
         sprite.startUse();
         float y_offset = -(frame_height/2 * scale), x_offset = -(frame_width/2 * scale);

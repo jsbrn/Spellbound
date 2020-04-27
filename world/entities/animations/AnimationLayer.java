@@ -55,7 +55,6 @@ public class AnimationLayer {
     }
 
     public void setColor(Color color) {
-        for (Animation anim: animations.values()) anim.setColor(color);
         this.color = color;
     }
 

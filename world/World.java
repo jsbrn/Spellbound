@@ -44,9 +44,9 @@ public class World {
         getRegion("world").plan();
     }
 
-    public static void spawnPlayer(int x, double y, String region_name) {
+    public static void spawnPlayer(int x, int y, int lookDirection, String region_name) {
         player = new Player();
-        player.moveTo(new Location(getRegion(region_name), x + 0.5, y + 0.5));
+        player.moveTo(new Location(getRegion(region_name), x + 0.5, y + 0.5, lookDirection));
         player.getLocation().setLookDirection(180);
         Camera.setTarget(player);
     }
@@ -115,7 +115,7 @@ public class World {
             seed = new Long((long)world.get("seed")).intValue();
             generate(seed);
             JSONObject jsonPlayer = (JSONObject)world.get("player");
-            spawnPlayer((int)(double)jsonPlayer.get("x"), (int)(double)jsonPlayer.get("y"), (String)jsonPlayer.get("region"));
+            spawnPlayer((int)(double)jsonPlayer.get("x"), (int)(double)jsonPlayer.get("y"), (int)(long)jsonPlayer.get("rotation"), (String)jsonPlayer.get("region"));
             getLocalPlayer().deserialize(jsonPlayer);
         } catch (IOException e) {
             e.printStackTrace();

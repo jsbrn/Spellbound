@@ -18,6 +18,7 @@ public class Spellbook {
     public Spellbook(HumanoidEntity parent) {
         this.spells = new ArrayList<>();
         this.discovered_techniques = new ArrayList<>();
+        discoverTechnique("");
         this.parent = parent;
     }
 
@@ -52,7 +53,15 @@ public class Spellbook {
     }
 
     public void deserialize(JSONObject json) {
-
+        spells.clear();
+        JSONArray discovered = (JSONArray)json.get("discovered_techniques");
+        discovered.forEach(t -> discoverTechnique((String)t));
+        JSONArray jsonSpells = (JSONArray)json.get("spells");
+        jsonSpells.forEach(js -> {
+            Spell spell = new Spell();
+            spell.deserialize((JSONObject)js);
+            addSpell(spell);
+        });
     }
 
 }

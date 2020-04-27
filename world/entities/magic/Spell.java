@@ -137,7 +137,14 @@ public class Spell {
 
     public JSONObject serialize() {
         JSONObject serialized = new JSONObject();
+        JSONArray jsonColor = new JSONArray();
+        jsonColor.add(color.getRed());
+        jsonColor.add(color.getGreen());
+        jsonColor.add(color.getBlue());
+        jsonColor.add(color.getAlpha());
+        serialized.put("name", name);
         serialized.put("icon", iconIndex);
+        serialized.put("color", jsonColor);
         for (String t: techniques) serialized.put(t, getLevel(t));
         return serialized;
     }
@@ -149,6 +156,13 @@ public class Spell {
                 setLevel(technique, (int)(long)json.get(technique));
             }
         }
+        JSONArray jsonColor = (JSONArray)json.get("color");
+        color = new Color(
+                (int)(long)jsonColor.get(0),
+                (int)(long)jsonColor.get(1),
+                (int)(long)jsonColor.get(2),
+                (int)(long)jsonColor.get(3));
+        name = (String)json.get("name");
         iconIndex = (int)(long)json.get("icon");
     }
 

@@ -21,7 +21,7 @@ public class Zombie extends HumanoidEntity {
     private HumanoidEntity target;
 
     public Zombie() {
-        getAnimationLayer("arms").addAnimation("outstretched", new Animation("humanoid/arms_outstretched.png", 1, 1, 16, true, true, Color.white));
+        getAnimationLayer("arms").addAnimation("outstretched", new Animation("humanoid/arms_outstretched.png", 1, 1, 16, true, true));
         getAnimationLayer("head").setColor(Color.green.darker(0.75f));
         getAnimationLayer("torso").setColor(Color.orange.darker());
         getAnimationLayer("legs").setColor(Color.cyan.darker());

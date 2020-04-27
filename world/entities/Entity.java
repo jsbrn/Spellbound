@@ -17,6 +17,7 @@ import world.entities.animations.AnimationLayer;
 import world.entities.states.State;
 import world.entities.types.Chest;
 import world.entities.types.SpikeTrap;
+import world.entities.types.WishingWell;
 import world.entities.types.humanoids.Player;
 import world.entities.types.humanoids.Zombie;
 import world.entities.types.humanoids.npcs.Bandit;
@@ -177,7 +178,8 @@ public class Entity {
                         isTile ? (int)osx : osx,
                         isTile ? (int)osy : osy,
                         scale,
-                        direction);
+                        direction,
+                        animationLayer.getColor());
         }
     }
 
@@ -242,6 +244,7 @@ public class Entity {
         JSONObject serialized = new JSONObject();
         serialized.put("x", getLocation().getCoordinates()[0]);
         serialized.put("y", getLocation().getCoordinates()[1]);
+        serialized.put("rotation", getLocation().getLookDirection());
         serialized.put("region", getLocation().getRegion().getName());
         serialized.put("dialogue", conversationStartingPoint);
         serialized.put("type", getClass().getSimpleName());
@@ -250,7 +253,13 @@ public class Entity {
             Color color = layer.getValue().getColor();
             jsonLayer.put("name", layer.getKey());
             jsonLayer.put("current", layer.getValue().getBaseAnimation());
-            jsonLayer.put("color", new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).getRGB());
+
+            JSONArray jsonColor = new JSONArray();
+            jsonColor.add(color.getRed());
+            jsonColor.add(color.getGreen());
+            jsonColor.add(color.getBlue());
+            jsonColor.add(color.getAlpha());
+            jsonLayer.put("color", jsonColor);
             return jsonLayer;
         }).collect(Collectors.toList()));
         return serialized;
@@ -260,10 +269,15 @@ public class Entity {
         conversationStartingPoint = (String)json.get("dialogue");
         for (Object layers: (JSONArray)json.get("anim_layers")) {
             JSONObject jsonLayer = (JSONObject)layers;
-            java.awt.Color jColor = new java.awt.Color((new Long((long)jsonLayer.get("color")).intValue()));
             String layerName = (String)jsonLayer.get("name");
             getAnimationLayer(layerName).setBaseAnimation((String)jsonLayer.get("current"));
-            getAnimationLayer(layerName).setColor(new Color(jColor.getRed(), jColor.getGreen(), jColor.getBlue(), jColor.getAlpha()));
+
+            JSONArray jsonColor = (JSONArray)jsonLayer.get("color");
+            getAnimationLayer(layerName).setColor(new Color(
+                    (int)(long)jsonColor.get(0),
+                    (int)(long)jsonColor.get(1),
+                    (int)(long)jsonColor.get(2),
+                    (int)(long)jsonColor.get(3)));
         }
     }
 
@@ -277,11 +291,12 @@ public class Entity {
             case "Civilian": e = new Civilian(); break;
             case "LostCivilian": e = new LostCivilian(1); break;
             case "SpikeTrap": e = new SpikeTrap(); break;
+            case "WishingWell": e = new WishingWell(); break;
             default: e = null;
         }
         if (e != null) {
             String region_name = (String)json.get("region");
-            e.moveTo(new Location(World.getRegion(region_name), (double)json.get("x"), (double)json.get("y")));
+            e.moveTo(new Location(World.getRegion(region_name), (double)json.get("x"), (double)json.get("y"), (int)(long)json.get("rotation")));
             e.deserialize(json);
         }
         return e;
