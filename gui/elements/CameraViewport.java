@@ -1,6 +1,8 @@
 package gui.elements;
 
+import assets.Assets;
 import gui.GUIElement;
+import main.GameManager;
 import misc.Location;
 import misc.Window;
 import org.lwjgl.input.Mouse;
@@ -11,6 +13,7 @@ import world.Camera;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;
+import world.entities.magic.MagicSource;
 import world.entities.types.humanoids.npcs.LostCivilian;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
@@ -86,7 +89,7 @@ public class CameraViewport extends GUIElement {
     @Override
     public void drawOver(Graphics g) {
         if (World.exists()) {
-            World.draw(Window.getScale(), g, getGUI().isInDebugMode());
+            World.draw(Window.getScale(), g);
         }
     }
 
@@ -102,25 +105,23 @@ public class CameraViewport extends GUIElement {
         ArrayList<Entity> entities = World.getRegion().getEntities((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
         float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0], (int)mouse_wc[1], Window.getScale());
 
+        World.getRegion().drawDebug(Window.getScale(), g);
+
+        g.setFont(Assets.getFont(14));
+
         g.setColor(Color.black);
         g.drawRect(osc[0], osc[1], 1 * Window.getScale() * Chunk.TILE_SIZE, 1 * Window.getScale() * Chunk.TILE_SIZE);
         for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
 
         String[] debugStrings = new String[]{
                 "Entity count: "+World.getRegion().getEntities().size(),
-                World.getLocalPlayer().getLocation().toString(),
-                //World.getPlayer().getLocation().getChunk().debug(),
-                "Screen Center: "+(Window.getWidth()/2)+", "+(Window.getHeight()/2),
-                "ORIGIN: "+origin_osc[0]+", "+origin_osc[1],
-                "OSC: "+Mouse.getX()+", "+Mouse.getY()+" @ "+Window.getScale(),
-                "OSC->WC: "+mouse_wc[0]+", "+mouse_wc[1],
-                "WC->OSC: "+mouse_osc[0]+", "+mouse_osc[1],
-                "Player can see: "+World.getLocalPlayer().canSee((int)mouse_wc[0], (int)mouse_wc[1])
+                "Region: "+World.getRegion().getName(),
+                "FPS: "+ Window.WINDOW_INSTANCE.getFPS()
         };
 
         g.setColor(Color.white);
         for (int i = 0; i < debugStrings.length; i++)
-            g.drawString(debugStrings[i], 10, (Window.getHeight() / 2) + (20*i));
+            g.drawString(debugStrings[i], 10, (Window.getHeight()) - (20*(i+1)));
 
     }
 }

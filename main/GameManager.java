@@ -45,7 +45,15 @@ public class GameManager extends StateBasedGame {
             Window.WINDOW_INSTANCE.setDisplayMode(800, 600, false);
             Window.WINDOW_INSTANCE.setTargetFrameRate(60);
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
-            Window.WINDOW_INSTANCE.setShowFPS(true);
+            Window.WINDOW_INSTANCE.setIcons(new String[]{
+                    "assets/gui/icons/favicon/icon_16x16.png",
+                    "assets/gui/icons/favicon/icon_32x32.png",
+                    "assets/gui/icons/favicon/icon_48x48.png",
+                    "assets/gui/icons/favicon/icon_64x64.png",
+                    "assets/gui/icons/favicon/icon_80x80.png",
+                    "assets/gui/icons/favicon/icon_96x96.png",
+                    "assets/gui/icons/favicon/icon_112x112.png",
+            });
             Window.WINDOW_INSTANCE.start();
         } catch (SlickException e) {
 

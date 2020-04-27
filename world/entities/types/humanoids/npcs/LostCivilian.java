@@ -1,6 +1,7 @@
 package world.entities.types.humanoids.npcs;
 
 import assets.definitions.Definitions;
+import org.json.simple.JSONObject;
 import world.World;
 import world.entities.actions.types.SpeakAction;
 import world.entities.states.*;
@@ -64,6 +65,16 @@ public class LostCivilian extends Civilian {
 
     }
 
+    @Override
+    public JSONObject serialize() {
+        JSONObject serialized = super.serialize();
+        serialized.put("rescued", getConversationStartingPoint().equals("civilian_grateful"));
+        return serialized;
+    }
 
-
+    @Override
+    public void deserialize(JSONObject json) {
+        super.deserialize(json);
+        if ((boolean)json.get("rescued")) enterState(new IdleState());
+    }
 }

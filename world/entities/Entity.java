@@ -242,6 +242,7 @@ public class Entity {
         JSONObject serialized = new JSONObject();
         serialized.put("x", getLocation().getCoordinates()[0]);
         serialized.put("y", getLocation().getCoordinates()[1]);
+        serialized.put("region", getLocation().getRegion().getName());
         serialized.put("dialogue", conversationStartingPoint);
         serialized.put("type", getClass().getSimpleName());
         serialized.put("anim_layers", animationLayers.entrySet().stream().map(layer -> {
@@ -278,7 +279,11 @@ public class Entity {
             case "SpikeTrap": e = new SpikeTrap(); break;
             default: e = null;
         }
-        if (e != null) e.deserialize(json);
+        if (e != null) {
+            String region_name = (String)json.get("region");
+            e.moveTo(new Location(World.getRegion(region_name), (double)json.get("x"), (double)json.get("y")));
+            e.deserialize(json);
+        }
         return e;
     }
 

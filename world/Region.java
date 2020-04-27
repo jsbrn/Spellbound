@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +67,8 @@ public class Region {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 chunkGenerators[i][j] = generator.getChunkGenerator(i, j, size);
+                chunkGenerators[i][j].setChunkX(i);
+                chunkGenerators[i][j].setChunkY(j);
                 Portal p = chunkGenerators[i][j].getPortal();
                 if (p != null) {
                     portals.add(p);
@@ -217,6 +218,17 @@ public class Region {
         return current.get(wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
     }
 
+    public ChunkGenerator getChunkGenerator(int cx, int cy) {
+        if (cx < 0 || cx >= chunkGenerators.length || cy < 0 || cy >= chunkGenerators[0].length) return null;
+        return chunkGenerators[cx][cy];
+    }
+
+    public boolean doesChunkExist(int cx, int cy) {
+        if (chunks == null) return false;
+        if (cx < 0 || cx >= chunks.length || cy < 0 || cy >= chunks[0].length) return false;
+        return chunks[cx][cy] != null;
+    }
+
     public Chunk getChunk(int cx, int cy) {
         if (chunkGenerators == null) plan();
         if (cx < 0 || cx >= chunkGenerators.length || cy < 0 || cy >= chunkGenerators[0].length) return null;
@@ -269,7 +281,7 @@ public class Region {
 
     }
 
-    public void draw(float scale, Graphics g, boolean debug) {
+    public void draw(float scale, Graphics g) {
         int[] pchcoords = World.getLocalPlayer().getLocation().getChunkCoordinates();
         float[] oscoords = Camera.getOnscreenCoordinates(0, 0, scale);
 
@@ -288,7 +300,6 @@ public class Region {
                         adj.drawBase(osx, osy, scale);
                     } else {
                         adj.drawTop(osx, osy, scale);
-                        if (debug && cx == pchcoords[0] && cy == pchcoords[1]) adj.drawDebug(osx, osy, scale, g);
                     }
                 }
             }
@@ -298,18 +309,16 @@ public class Region {
         Assets.PARTICLE.endUse();
     }
 
-    public int getSize() { return size; }
-
     public void drawDebug(float scale, Graphics g) {
         for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
             e.drawDebug(scale, g);
-            g.drawString(
-                    e.getClass().getSimpleName()+" "+e.getLocation().getGlobalIndex(),
-                    Window.getWidth() - 200, i * 20);
         }
         for (MagicSource magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
+
     }
+
+    public int getSize() { return size; }
 
     private void saveChunk(int cx, int cy) {
         JSONObject chunk = new JSONObject();
@@ -333,7 +342,7 @@ public class Region {
         if (chunks == null) return;
         for (int cx = 0; cx < chunks.length; cx++)
             for (int cy = 0; cy < chunks[0].length; cy++)
-                saveChunk(cx, cy);
+                if (chunks[cx][cy] != null) saveChunk(cx, cy);
     }
 
     public void loadSavedChunks() {
@@ -347,7 +356,9 @@ public class Region {
         chunks[cx][cy] = new Chunk(cx, cy, this);
         chunks[cx][cy].generate(chunkGenerators[cx][cy], false);
         try {
-            JSONObject chunk = (JSONObject)new JSONParser().parse(Assets.read(Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk", false));
+            String url = Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk";
+            if (!new File(url).exists()) return;
+            JSONObject chunk = (JSONObject)new JSONParser().parse(Assets.read(url, false));
             JSONArray jsonEntities = (JSONArray)chunk.get("entities");
             jsonEntities
                     .stream()
@@ -355,7 +366,7 @@ public class Region {
                         JSONObject jsonObject = (JSONObject)json;
                         Entity e = Entity.create(jsonObject);
                         if (e == null) return;
-                        e.moveTo(new Location(this, (double)jsonObject.get("x"), (double)jsonObject.get("y")));
+                        //e.moveTo(new Location(this, (double)jsonObject.get("x"), (double)jsonObject.get("y")));
                     });
         } catch (ParseException e) {
             e.printStackTrace();

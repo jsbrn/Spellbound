@@ -23,6 +23,7 @@ public class Chunk {
     private byte[][] base;
     private byte[][] top;
 
+    private boolean generated;
     private Color mapColor;
 
     public Chunk(int x, int y, Region region) {
@@ -33,8 +34,6 @@ public class Chunk {
     }
 
     protected void generate(ChunkGenerator generator, boolean spawnEntities) {
-        generator.setChunkX(coordinates[0]);
-        generator.setChunkY(coordinates[1]);
         mapColor = generator.getColor();
         base = generator.getTiles(false);
         top = generator.getTiles(true);
@@ -47,6 +46,12 @@ public class Chunk {
             }
         }
 
+        generated = true;
+
+    }
+
+    public boolean isEmpty() {
+        return !generated;
     }
 
     public void update() {

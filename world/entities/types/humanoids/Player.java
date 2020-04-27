@@ -157,11 +157,4 @@ public class Player extends HumanoidEntity {
 
     public void activateGodMode() { godMode = true; }
 
-    @Override
-    public JSONObject serialize() {
-        JSONObject serialized = super.serialize();
-        serialized.put("region", getLocation().getRegion().getName());
-        return serialized;
-    }
-
 }

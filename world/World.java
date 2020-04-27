@@ -44,9 +44,9 @@ public class World {
         getRegion("world").plan();
     }
 
-    public static void spawnPlayer(int x, int y, String region_name) {
+    public static void spawnPlayer(int x, double y, String region_name) {
         player = new Player();
-        player.moveTo(new Location(getRegion(region_name), x + 0.5f, y - 1 + 0.5f));
+        player.moveTo(new Location(getRegion(region_name), x + 0.5, y + 0.5));
         player.getLocation().setLookDirection(180);
         Camera.setTarget(player);
     }
@@ -81,9 +81,8 @@ public class World {
     public static double getTimeMultiplier() { return timeMultiplier; }
     public static long getCurrentTime() { return time; }
 
-    public static void draw(float scale, Graphics g, boolean debug) {
-        getRegion().draw(scale, g, debug);
-        if (debug) drawDebug(scale, g);
+    public static void draw(float scale, Graphics g) {
+        getRegion().draw(scale, g);
     }
 
     public static void drawDebug(float scale, Graphics g) { getRegion().drawDebug(scale, g); }
@@ -115,7 +114,6 @@ public class World {
             JSONObject world = (JSONObject)parser.parse(new FileReader(f));
             seed = new Long((long)world.get("seed")).intValue();
             generate(seed);
-            getRegion("world").loadSavedChunks();
             JSONObject jsonPlayer = (JSONObject)world.get("player");
             spawnPlayer((int)(double)jsonPlayer.get("x"), (int)(double)jsonPlayer.get("y"), (String)jsonPlayer.get("region"));
             getLocalPlayer().deserialize(jsonPlayer);

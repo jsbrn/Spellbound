@@ -80,7 +80,7 @@ public class MiniMap extends GUIElement {
             Region current = getRegion();
             for (int x = 0; x < current.getSize(); x++) {
                 for (int y = 0; y < current.getSize(); y++) {
-                    map.setColor(current.getChunk(x, y).getMapColor());
+                    map.setColor(current.doesChunkExist(x, y) ? current.getChunkGenerator(x, y).getColor() : Color.blue);
                     map.fillRect(x , y, 1, 1);
                 }
             }
