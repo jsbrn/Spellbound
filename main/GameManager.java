@@ -7,7 +7,6 @@ import gui.states.GameState;
 import gui.states.MainMenuScreen;
 import misc.*;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -46,7 +45,7 @@ public class GameManager extends StateBasedGame {
             Window.WINDOW_INSTANCE.setTargetFrameRate(60);
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
             Window.WINDOW_INSTANCE.setShowFPS(false);
-            Window.WINDOW_INSTANCE.setUpdateOnlyWhenVisible(true);
+            //Window.WINDOW_INSTANCE.setUpdateOnlyWhenVisible(true);
             Window.WINDOW_INSTANCE.setAlwaysRender(false);
             Display.setResizable(true);
             Window.WINDOW_INSTANCE.setIcons(new String[]{
@@ -57,6 +56,7 @@ public class GameManager extends StateBasedGame {
                     "assets/gui/icons/favicon/icon_80x80.png",
                     "assets/gui/icons/favicon/icon_96x96.png",
                     "assets/gui/icons/favicon/icon_112x112.png",
+                    "assets/gui/icons/favicon/icon_128x128.png"
             });
             //Window.toggleFullScreen();
             Window.WINDOW_INSTANCE.start();
@@ -66,7 +66,10 @@ public class GameManager extends StateBasedGame {
 
     }
 
-    public static void switchTo(int gameState) { instance.enterState(gameState, new FadeOutTransition(), new FadeInTransition()); }
+    public static void switchTo(int gameState) {
+        instance.enterState(gameState, new FadeOutTransition(), new FadeInTransition());
+        ((GameState)instance.getState(gameState)).onEnter();
+    }
     public static void setMouseCursor(String ref) {
         try {
             mouseCursor = ref;
@@ -86,7 +89,6 @@ public class GameManager extends StateBasedGame {
         getState(GameState.GAME_SCREEN).init(gc, this);
         getState(GameState.MAIN_MENU).init(gc, this);
 
-        //load assets and json files
         Assets.load();
         Definitions.load();
 

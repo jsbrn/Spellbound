@@ -99,4 +99,6 @@ public abstract class GameState extends BasicGameState {
         }
     }
 
+    public abstract void onEnter();
+
 }

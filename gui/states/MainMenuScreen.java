@@ -63,4 +63,9 @@ public class MainMenuScreen extends GameState {
         gui.addElement(new TextLabel("Pre-Alpha", 8, Color.white, true), 32, 32, GUIAnchor.TOP_MIDDLE);
     }
 
+    @Override
+    public void onEnter() {
+
+    }
+
 }

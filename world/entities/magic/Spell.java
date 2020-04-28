@@ -49,6 +49,10 @@ public class Spell {
     }
 
     public void addTechnique(String technique) { this.techniques.add(technique); }
+    public void addTechnique(String technique, int level) {
+        addTechnique(technique);
+        setLevel(technique, level);
+    }
     public void removeTechnique(String technique) {
         this.techniques.remove(technique);
         this.levels.remove(technique);

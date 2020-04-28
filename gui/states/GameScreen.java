@@ -121,4 +121,9 @@ public class GameScreen extends GameState {
         if (key == Input.KEY_F7) World.save();
     }
 
+    @Override
+    public void onEnter() {
+
+    }
+
 }

@@ -15,6 +15,7 @@ import world.Chunk;
 import world.World;
 import world.entities.Entity;
 import world.entities.magic.MagicSource;
+import world.entities.types.humanoids.Collector;
 import world.entities.types.humanoids.npcs.LostCivilian;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
@@ -43,15 +44,15 @@ public class CameraViewport extends GUIElement {
         if (button == 2) {
             Random rng = new Random();
             for (int i = 0; i < 1; i++) {
-                Entity civ = new LostCivilian(1);
+                Entity civ = new Collector();
                 Location player = World.getLocalPlayer().getLocation();
                 civ.moveTo(new Location(
                         player.getRegion(),
                         mouse_wcoords[0],
-                        mouse_wcoords[1]));
+                        mouse_wcoords[1],
+                        (int)MiscMath.random(0, 360)));
             }
         }
-        if (button == Input.MOUSE_RIGHT_BUTTON) World.getLocalPlayer().activateGodMode();
         double[] wc = Camera.getWorldCoordinates(ogx * Window.getScale(), ogy * Window.getScale(), Window.getScale());
         EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
         return true;
@@ -78,6 +79,7 @@ public class CameraViewport extends GUIElement {
     @Override
     public boolean onKeyUp(int key) {
         if (key == Input.KEY_F3) getGUI().toggleDebugMode();
+        if (key == Input.KEY_F12) World.getLocalPlayer().activateGodMode();
         EventDispatcher.invoke(new KeyUpEvent(key));
         return true;
     }

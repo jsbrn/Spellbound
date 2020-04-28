@@ -18,6 +18,7 @@ import world.entities.states.State;
 import world.entities.types.Chest;
 import world.entities.types.SpikeTrap;
 import world.entities.types.WishingWell;
+import world.entities.types.humanoids.Collector;
 import world.entities.types.humanoids.Player;
 import world.entities.types.humanoids.Zombie;
 import world.entities.types.humanoids.npcs.Bandit;
@@ -292,6 +293,7 @@ public class Entity {
             case "LostCivilian": e = new LostCivilian(1); break;
             case "SpikeTrap": e = new SpikeTrap(); break;
             case "WishingWell": e = new WishingWell(); break;
+            case "Collector": e = new Collector(); break;
             default: e = null;
         }
         if (e != null) {

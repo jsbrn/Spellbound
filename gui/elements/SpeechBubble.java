@@ -23,10 +23,10 @@ public class SpeechBubble extends GUIElement {
 
     public SpeechBubble() {
         this.title = new TextLabel("", 6, Chunk.TILE_SIZE * 5, 1, Color.white, true);
-        this.contents = new TextLabel("", 4, Chunk.TILE_SIZE * 5, 3, Color.black, false);
+        this.contents = new TextLabel("", 4, (Chunk.TILE_SIZE*11)/2, 4, Color.black, false);
         this.options = new TextLabel("", 3, Color.gray, false);
         this.addChild(title, 4, -4, GUIAnchor.TOP_LEFT);
-        this.addChild(contents, Chunk.TILE_SIZE * 2, 8, GUIAnchor.TOP_LEFT);
+        this.addChild(contents, Chunk.TILE_SIZE * 2, 5, GUIAnchor.TOP_LEFT);
         this.addChild(options, 32, -4, GUIAnchor.BOTTOM_LEFT);
         this.background = Assets.getImage("assets/gui/dialogue.png");
     }

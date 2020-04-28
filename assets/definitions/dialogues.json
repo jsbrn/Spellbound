@@ -1,5 +1,85 @@
 [
   {
+    "id": "collector_initial_greeting",
+    "texts": [
+      "Well, well, well. You must be new in town.",
+      "Well, look who we have here. A newbie!",
+      "You know, I don't think we've met.",
+      "You're not from around here, are you?"
+    ],
+    "options": [
+      { "label": "Who are you?", "pointsTo": "collector_introduction"}
+    ]
+  },
+  {
+    "id": "collector_introduction",
+    "texts": [
+      "You can call me...The Collector. I buy and sell pretty much anything. But I mostly deal in magical items."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": "collector_explanation"}
+    ]
+  },
+  {
+    "id": "collector_explanation",
+    "texts": [
+      "You know. Crystals, dyes. And spell books from people who met an...untimely demise."
+    ],
+    "options": [
+      { "label": "Is that legal?", "pointsTo": "collector_morality"}
+    ]
+  },
+  {
+    "id": "collector_morality",
+    "texts": [
+      "Look, I don't know what you're doing all the way out here in the middle of nowhere, and I don't really care."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": "collector_morality_2"}
+    ]
+  },
+  {
+    "id": "collector_morality_2",
+    "texts": [
+      "But what I do know is that you look like somebody who could do well with a guy like me on your side. And vice versa."
+    ],
+    "options": [
+      { "label": "What do you mean?", "pointsTo": "collector_morality_3"}
+    ]
+  },
+  {
+    "id": "collector_morality_3",
+    "texts": [
+      "I think we can make a lot of money together, if you're willing. Bring me any goodies you find on your adventures, and I'll pay you."
+    ],
+    "options": [
+      { "label": "I'll do my best", "pointsTo": "collector_pleased"}
+    ]
+  },
+  {
+    "id": "collector_pleased",
+    "texts": [
+      "We're going to do great things together, you and me. You'll see."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": null}
+    ]
+  },
+  {
+    "id": "collector_greeting",
+    "texts": [
+      "Welcome back! What have you brought me?",
+      "My favorite adventurer! What'll it be?",
+      "Good to see you, pal. Buying or selling?",
+      "Got something for me?",
+      "What'll it be?"
+    ],
+    "options": [
+      { "label": "Buy", "pointsTo": "collector_buy"},
+      { "label": "Sell", "pointsTo": "collector_sell"}
+    ]
+  },
+  {
     "id": "help_messages",
     "texts": [
       "Help!",
