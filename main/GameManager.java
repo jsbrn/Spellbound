@@ -45,9 +45,8 @@ public class GameManager extends StateBasedGame {
             Window.WINDOW_INSTANCE.setTargetFrameRate(60);
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
             Window.WINDOW_INSTANCE.setShowFPS(false);
-            //Window.WINDOW_INSTANCE.setUpdateOnlyWhenVisible(true);
-            Window.WINDOW_INSTANCE.setAlwaysRender(false);
-            Display.setResizable(true);
+            Window.WINDOW_INSTANCE.setUpdateOnlyWhenVisible(false);
+            Window.WINDOW_INSTANCE.setAlwaysRender(true);
             Window.WINDOW_INSTANCE.setIcons(new String[]{
                     "assets/gui/icons/favicon/icon_16x16.png",
                     "assets/gui/icons/favicon/icon_32x32.png",
