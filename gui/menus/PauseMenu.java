@@ -28,7 +28,6 @@ public class PauseMenu extends Modal {
         addChild(new Button(null, 24, 24, "icons/save.png", true) {
             @Override
             public boolean onClick(int button) {
-                World.save();
                 GameManager.switchTo(GameState.MAIN_MENU);
                 EventDispatcher.unregisterAll();
                 return true;

@@ -23,7 +23,7 @@ public class Chunk {
     private byte[][] base;
     private byte[][] top;
 
-    private boolean generated;
+    private boolean generated, discovered;
     private Color mapColor;
 
     public Chunk(int x, int y, Region region) {
@@ -50,11 +50,20 @@ public class Chunk {
 
     }
 
+    public void setDiscovered(boolean discovered) {
+        this.discovered = discovered;
+    }
+
+    public boolean wasDiscovered() {
+        return discovered;
+    }
+
     public boolean isEmpty() {
         return !generated;
     }
 
     public void update() {
+        discovered = true;
         ArrayList<Entity> entities = region
                 .getEntities((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
         for (int i = entities.size() - 1; i >= 0; i--) entities.get(i).update();

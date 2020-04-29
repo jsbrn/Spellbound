@@ -68,15 +68,42 @@
   {
     "id": "collector_greeting",
     "texts": [
-      "Welcome back! What have you brought me?",
-      "My favorite adventurer! What'll it be?",
-      "Good to see you, pal. Buying or selling?",
-      "Got something for me?",
-      "What'll it be?"
+      "What have you brought me?",
+      "My favorite customer! What'll it be?",
+      "Buying or selling?",
+      "Got something for me?"
     ],
     "options": [
       { "label": "Buy", "pointsTo": "collector_buy"},
       { "label": "Sell", "pointsTo": "collector_sell"}
+    ]
+  },
+  {
+    "id": "collector_buy",
+    "texts": [
+      "What do you need?",
+      "What can I sell you today?",
+      "What are you looking for?"
+    ],
+    "options": [
+      { "label": "10 Crystals (-20GP)", "pointsTo": "collector_buy_crystals" },
+      { "label": "Spells", "pointsTo": "collector_buy_spells" },
+      { "label":  "Healing (-1GP/HP)", "pointsTo": "collector_heal" }
+    ]
+  },
+  {
+    "id": "collector_sell",
+    "texts": [
+      "Let's take a look at what you've got.",
+      "I can't wait to see what you've found.",
+      "Let's take a look.",
+      "I've got the coin if you've got the treasure."
+    ],
+    "options": [
+      { "label": "Sell 10 Crystals (+15GP)", "pointsTo": "collector_sell_crystals" },
+      { "label":  "Sell 10 Dyes (+5GP)", "pointsTo": "collector_sell_dyes" },
+      { "label":  "Sell tome (+50GP)", "pointsTo": "collector_sell_tome" },
+      { "label":  "Sell artifact (+100GP)", "pointsTo": "collector_sell_artifact" }
     ]
   },
   {

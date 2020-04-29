@@ -3,6 +3,7 @@ package world.entities.actions.types;
 import misc.Location;
 import misc.MiscMath;
 import world.Portal;
+import world.World;
 import world.entities.Entity;
 import world.entities.actions.Action;
 import world.events.EventDispatcher;
@@ -40,7 +41,13 @@ public class ActivateAction extends Action {
                     destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1]),
                     false,
                     true
-            ));
+            ) {
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                    World.save();
+                }
+            });
             EventDispatcher.invoke(new EntityChangeRegionEvent(destination.getDestination(), origin.getDestination(), parent));
             return;
 

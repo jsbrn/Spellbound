@@ -229,6 +229,11 @@ public class Region {
         return chunks[cx][cy] != null;
     }
 
+    public boolean isChunkDiscovered(int cx, int cy) {
+        if (!doesChunkExist(cx, cy)) return false;
+        return chunks[cx][cy].wasDiscovered();
+    }
+
     public Chunk getChunk(int cx, int cy) {
         if (chunkGenerators == null) plan();
         if (cx < 0 || cx >= chunkGenerators.length || cy < 0 || cy >= chunkGenerators[0].length) return null;
@@ -329,6 +334,7 @@ public class Region {
                 .map(e -> e.serialize()).collect(Collectors.toList())
         );
         chunk.put("entities", jsonEntities);
+        chunk.put("discovered", chunks[cx][cy].wasDiscovered());
         try {
             File regionFolder = new File(Assets.ROOT_DIRECTORY+"/world/"+name+"/");
             regionFolder.mkdirs();
@@ -359,6 +365,7 @@ public class Region {
             String url = Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk";
             if (!new File(url).exists()) return;
             JSONObject chunk = (JSONObject)new JSONParser().parse(Assets.read(url, false));
+            chunks[cx][cy].setDiscovered((boolean)chunk.get("discovered"));
             JSONArray jsonEntities = (JSONArray)chunk.get("entities");
             jsonEntities
                     .stream()
