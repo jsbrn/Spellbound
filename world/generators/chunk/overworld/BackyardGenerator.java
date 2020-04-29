@@ -29,7 +29,7 @@ public class BackyardGenerator extends OpenFieldGenerator {
     }
 
     @Override
-    public Color getColor() {
-        return Color.orange;
+    public String getIcon() {
+        return "assets/gui/icons/minimap/home.png";
     }
 }

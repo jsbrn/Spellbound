@@ -32,4 +32,9 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
     public Color getColor() {
         return Color.orange.darker();
     }
+
+    @Override
+    public String getIcon() {
+        return "assets/gui/icons/minimap/trapdoor.png";
+    }
 }

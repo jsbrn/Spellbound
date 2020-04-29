@@ -22,7 +22,7 @@ public class WishingWellFieldGenerator extends OpenFieldGenerator {
     }
 
     @Override
-    public Color getColor() {
-        return Color.yellow;
+    public String getIcon() {
+        return "assets/animations/wishing_well.png";
     }
 }

@@ -10,6 +10,7 @@ import org.newdawn.slick.SlickException;
 import world.Chunk;
 import world.Region;
 import world.World;
+import world.generators.chunk.ChunkGenerator;
 
 public class MiniMap extends GUIElement {
 
@@ -89,6 +90,10 @@ public class MiniMap extends GUIElement {
         }
     }
 
+    private float getMapScale() {
+        return size / (float)getRegion().getSize();
+    }
+
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
         b.drawImage(Assets.getImage("assets/gui/minimap.png"), 0, 0);
@@ -99,14 +104,29 @@ public class MiniMap extends GUIElement {
     @Override
     public void drawOver(Graphics g) {
         super.drawOver(g);
+        Region current = getRegion();
+        for (int x = 0; x < current.getSize(); x++) {
+            for (int y = 0; y < current.getSize(); y++) {
+                ChunkGenerator generator = current.getChunkGenerator(x, y);
+                if (generator == null || generator.getIcon() == null) continue;
+                Image icon = Assets.getImage(current.isChunkDiscovered(x, y) ? generator.getIcon() : "assets/gui/icons/minimap/unknown.png");
+                g.drawImage(icon,
+                        getOnscreenCoordinates()[0] + (Window.getScale()*(2 + ((x+0.5f) * getMapScale()))) - (icon.getWidth()/2),
+                        getOnscreenCoordinates()[1] + (Window.getScale()*(2 + ((y+0.5f) * getMapScale())) - (icon.getHeight()/2))
+                );
+            }
+        }
+
         double[] coords = World.getLocalPlayer().getLocation().getCoordinates();
         double[] percentage = new double[]{
-                coords[0] / (getRegion().getSize() * Chunk.CHUNK_SIZE),
-                coords[1] / (getRegion().getSize() * Chunk.CHUNK_SIZE)
+                coords[0] / (current.getSize() * Chunk.CHUNK_SIZE),
+                coords[1] / (current.getSize() * Chunk.CHUNK_SIZE)
         };
         World.getLocalPlayer().draw(
                 getOnscreenCoordinates()[0] + (Window.getScale()*2) + ((float)percentage[0] * size * Window.getScale()),
                 getOnscreenCoordinates()[1] + (Window.getScale()*2) + ((float)percentage[1] * size * Window.getScale()), 1);
+
+
     }
 
 }

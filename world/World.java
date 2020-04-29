@@ -117,6 +117,7 @@ public class World {
             JSONObject jsonPlayer = (JSONObject)world.get("player");
             spawnPlayer((int)(double)jsonPlayer.get("x"), (int)(double)jsonPlayer.get("y"), (int)(long)jsonPlayer.get("rotation"), (String)jsonPlayer.get("region"));
             getLocalPlayer().deserialize(jsonPlayer);
+            for (Region r: regions.values()) r.loadSavedChunks();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {

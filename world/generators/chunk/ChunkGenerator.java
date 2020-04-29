@@ -47,5 +47,6 @@ public abstract class ChunkGenerator {
     public abstract Entity getEntity(int x, int y);
 
     public abstract Color getColor();
+    public abstract String getIcon();
 
 }

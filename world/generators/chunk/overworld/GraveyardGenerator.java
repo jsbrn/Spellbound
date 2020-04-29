@@ -30,7 +30,7 @@ public class GraveyardGenerator extends OpenFieldGenerator {
     }
 
     @Override
-    public Color getColor() {
-        return Color.gray;
+    public String getIcon() {
+        return "assets/gui/icons/minimap/graveyard.png";
     }
 }

@@ -26,7 +26,8 @@ public class DungeonKeyRoomGenerator extends DungeonRoomGenerator {
     }
 
     @Override
-    public Color getColor() {
-        return Color.yellow;
+    public String getIcon() {
+        return "assets/gui/icons/key.png";
     }
+
 }

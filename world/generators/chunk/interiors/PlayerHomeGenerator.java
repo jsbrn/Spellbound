@@ -56,4 +56,10 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
     public Color getColor() {
         return Color.orange;
     }
+
+    @Override
+    public String getIcon() {
+        return null;
+    }
+
 }

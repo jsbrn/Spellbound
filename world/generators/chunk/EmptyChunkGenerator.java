@@ -33,4 +33,9 @@ public class EmptyChunkGenerator extends ChunkGenerator {
     public Color getColor() {
         return Color.black;
     }
+
+    @Override
+    public String getIcon() {
+        return null;
+    }
 }

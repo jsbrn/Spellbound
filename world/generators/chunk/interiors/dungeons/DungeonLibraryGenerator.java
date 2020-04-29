@@ -35,4 +35,9 @@ public class DungeonLibraryGenerator extends DungeonRoomGenerator {
     public Color getColor() {
         return Color.orange;
     }
+
+    @Override
+    public String getIcon() {
+        return "assets/gui/icons/tome.png";
+    }
 }

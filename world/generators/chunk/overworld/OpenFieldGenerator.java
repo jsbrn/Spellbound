@@ -36,4 +36,9 @@ public class OpenFieldGenerator extends ChunkGenerator {
     public Color getColor() {
         return Color.green;
     }
+
+    @Override
+    public String getIcon() {
+        return null;
+    }
 }

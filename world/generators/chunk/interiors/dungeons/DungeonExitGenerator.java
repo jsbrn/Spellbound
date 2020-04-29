@@ -24,7 +24,8 @@ public class DungeonExitGenerator extends DungeonEntranceGenerator {
     }
 
     @Override
-    public Color getColor() {
-        return Color.red;
+    public String getIcon() {
+        return "assets/gui/icons/minimap/door.png";
     }
+
 }
