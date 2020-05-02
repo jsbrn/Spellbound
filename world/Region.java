@@ -359,11 +359,11 @@ public class Region {
     }
 
     private void loadChunkFromFile(int cx, int cy) {
+        String url = Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk";
+        if (!new File(url).exists()) return;
         chunks[cx][cy] = new Chunk(cx, cy, this);
         chunks[cx][cy].generate(chunkGenerators[cx][cy], false);
         try {
-            String url = Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk";
-            if (!new File(url).exists()) return;
             JSONObject chunk = (JSONObject)new JSONParser().parse(Assets.read(url, false));
             chunks[cx][cy].setDiscovered((boolean)chunk.get("discovered"));
             JSONArray jsonEntities = (JSONArray)chunk.get("entities");
