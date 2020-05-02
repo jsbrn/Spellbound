@@ -93,6 +93,7 @@ public class Entity {
     }
 
     public void enterState(State state) {
+        clearAllActions();
         exitState();
         currentState = state;
         if (currentState != null) {

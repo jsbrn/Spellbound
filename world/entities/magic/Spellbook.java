@@ -35,7 +35,7 @@ public class Spellbook {
 
     public int getTechniqueCount() { return discovered_techniques.size(); }
     public void discoverTechnique(String technique) { this.discovered_techniques.add(technique); }
-    public void discoverAllTechniques() { for (String t: Techniques.getAll()) discoverTechnique(t); }
+    public void discoverAllTechniques() { discovered_techniques.clear(); for (String t: Techniques.getAll()) discoverTechnique(t); }
     public boolean hasTechnique(String technique) { return technique != null && this.discovered_techniques.contains(technique); }
 
     public void setParent(HumanoidEntity parent) { this.parent = parent; }
@@ -54,6 +54,7 @@ public class Spellbook {
 
     public void deserialize(JSONObject json) {
         spells.clear();
+        discovered_techniques.clear();
         JSONArray discovered = (JSONArray)json.get("discovered_techniques");
         discovered.forEach(t -> discoverTechnique((String)t));
         JSONArray jsonSpells = (JSONArray)json.get("spells");

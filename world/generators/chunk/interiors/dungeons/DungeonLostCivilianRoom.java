@@ -27,7 +27,8 @@ public class DungeonLostCivilianRoom extends DungeonLivingQuartersGenerator {
     }
 
     @Override
-    public Color getColor() {
-        return Color.pink.darker();
+    public String getIcon() {
+        return "assets/gui/icons/minimap/exclamation.png";
     }
+
 }

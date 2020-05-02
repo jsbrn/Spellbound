@@ -147,7 +147,7 @@ public class HumanoidEntity extends Entity {
     public void addGold(int gold, boolean verbose) {
         this.gold += gold;
         if (verbose) {
-            GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(getLocation(), "+"+gold+" Gold", Color.yellow, 1, 1000, -1, false);
+            GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(getLocation(), (gold > 0 ? "+" : "")+gold+" Gold", Color.yellow, 1, 1000, -1, false);
         }
     }
     public void addCrystals(int crystals) { this.crystals += crystals; }

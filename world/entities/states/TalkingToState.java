@@ -33,6 +33,13 @@ public class TalkingToState extends State {
                         }
                     }
                 }
+            })
+            .on(HumanoidDeathEvent.class.toString(), new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    HumanoidDeathEvent hde = (HumanoidDeathEvent)e;
+                    if (hde.getHumanoid().equals(getParent()) || hde.getHumanoid().equals(to)) getParent().exitState();
+                }
             });
     }
 

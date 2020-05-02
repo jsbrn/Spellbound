@@ -19,7 +19,7 @@ public class DungeonGenerator extends RegionGenerator {
 
     public DungeonGenerator(int difficultyMultiplier, int size, int seed) {
         super(seed);
-        this.maxBranchLength = size / 2;
+        this.maxBranchLength = size / 3;
         this.segmentCount = Math.max(2, size * difficultyMultiplier);
         this.difficultyMultiplier = Math.max(1, difficultyMultiplier);
         this.cursor = new int[]{0, 0};

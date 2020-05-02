@@ -39,7 +39,7 @@ public class Zombie extends HumanoidEntity {
                     if (!(ece.getWith() instanceof HumanoidEntity) || ((HumanoidEntity) ece.getWith()).isAlliedTo(that) || ((HumanoidEntity) ece.getWith()).isDead()) return;
                     ece.getWith().clearAllActions();
                     ece.getWith().getActionQueue().queueAction(new KnockbackAction(
-                            1.5,
+                            1,
                             MiscMath.angleBetween(
                                     getLocation().getCoordinates()[0],
                                     getLocation().getCoordinates()[1],

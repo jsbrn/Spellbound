@@ -1,5 +1,6 @@
 package world.entities.types.humanoids;
 
+import assets.SpellFactory;
 import gui.states.GameState;
 import main.GameManager;
 import misc.MiscMath;
@@ -37,17 +38,7 @@ public class Player extends HumanoidEntity {
         this.setMaxMana(100);
         this.setMana(100);
 
-        Spell kb = new Spell();
-        kb.addTechnique("physical_weight");
-        kb.addTechnique("movement_directional");
-        kb.addTechnique("physical_speed");
-        kb.addTechnique("physical_collision");
-        kb.addTechnique("physical_energy");
-        kb.setLevel("physical_energy", 4);
-        kb.setLevel("physical_speed", 2);
-        kb.setName("Green Ball of Fury");
-        kb.setColor(Color.green);
-        getSpellbook().addSpell(kb);
+        getSpellbook().addSpell(SpellFactory.createSpell(SpellFactory.DAMAGE, 3));
 
         this.getAnimationLayer("head").setColor(SKIN_COLORS[0]);
 

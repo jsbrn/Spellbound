@@ -1,6 +1,6 @@
 [
   {
-    "id": "collector_initial_greeting",
+    "id": "collector_introduction",
     "texts": [
       "Well, well, well. You must be new in town.",
       "Well, look who we have here. A newbie!",
@@ -8,69 +8,87 @@
       "You're not from around here, are you?"
     ],
     "options": [
-      { "label": "Who are you?", "pointsTo": "collector_introduction"}
+      { "label": "Give me my friend's amulet.", "pointsTo": "collector_1"}
     ]
   },
   {
-    "id": "collector_introduction",
+    "id": "collector_1",
     "texts": [
-      "You can call me...The Collector. I buy and sell pretty much anything. But I mostly deal in magical items."
+      "Not much for small talk, huh? Look, we made a bet last night and he lost. Fair and square."
     ],
     "options": [
-      { "label": "Continue", "pointsTo": "collector_explanation"}
+      { "label": "I don't care.", "pointsTo": "collector_2"}
     ]
   },
   {
-    "id": "collector_explanation",
+    "id": "collector_2",
     "texts": [
-      "You know. Crystals, dyes. And spell books from people who met an...untimely demise."
+      "Well, unlike your friend, I'm a man of my word, and I don't give up easy. But I'll cut you a deal. If you help me with my...problem...I'll give you the amulet back."
     ],
     "options": [
-      { "label": "Is that legal?", "pointsTo": "collector_morality"}
+      { "label": "Go on...", "pointsTo": "collector_3"}
     ]
   },
   {
-    "id": "collector_morality",
+    "id": "collector_3",
     "texts": [
-      "Look, I don't know what you're doing all the way out here in the middle of nowhere, and I don't really care."
+      "I'm a collector of sorts, and I've been looking for Strange Artifacts scattered around the world. But it's getting harder and harder to find them these days."
     ],
     "options": [
-      { "label": "Continue", "pointsTo": "collector_morality_2"}
+      { "label": "What do they do?", "pointsTo": "collector_4"}
     ]
   },
   {
-    "id": "collector_morality_2",
+    "id": "collector_4",
     "texts": [
-      "But what I do know is that you look like somebody who could do well with a guy like me on your side. And vice versa."
+      "None of your business, errand boy! Are you in or not?"
     ],
     "options": [
-      { "label": "What do you mean?", "pointsTo": "collector_morality_3"}
+      { "label": "I guess I don't have a choice.", "pointsTo": "collector_5"}
     ]
   },
   {
-    "id": "collector_morality_3",
+    "id": "collector_5",
     "texts": [
-      "I think we can make a lot of money together, if you're willing. Bring me any goodies you find on your adventures, and I'll pay you."
+      "Not if you want that amulet back. I'd start by exploring the dungeons nearby. The farther you travel, the more dangerous they get."
     ],
     "options": [
-      { "label": "I'll do my best", "pointsTo": "collector_pleased"}
+      { "label": "Thanks for the tip.", "pointsTo": "collector_6"}
     ]
   },
   {
-    "id": "collector_pleased",
+    "id": "collector_6",
     "texts": [
-      "We're going to do great things together, you and me. You'll see."
+      "One more thing. You'll probably need a Healing spell. Take this one."
     ],
     "options": [
-      { "label": "Continue", "pointsTo": null}
+      { "label": "(Accept healing spell)", "pointsTo": "collector_7"}
+    ]
+  },
+  {
+    "id": "collector_7",
+    "texts": [
+      "If you need anything more, talk to your roommate. I'm a busy man!"
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": "collector_8"}
+    ]
+  },
+  {
+    "id": "collector_8",
+    "texts": [
+      "Now get going! Time is of the essence! The survival of my project depends on those artifacts!"
+    ],
+    "options": [
+      { "label": "OK, OK...sheesh.", "pointsTo": null}
     ]
   },
   {
     "id": "collector_greeting",
     "texts": [
-      "What have you brought me?",
-      "My favorite customer! What'll it be?",
-      "Buying or selling?",
+      "Found anything good?",
+      "What do you have for me?",
+      "I hope you've got more of those Artifacts.",
       "Got something for me?"
     ],
     "options": [
@@ -82,22 +100,38 @@
     "id": "collector_buy",
     "texts": [
       "What do you need?",
-      "What can I sell you today?",
+      "I just restocked my supplies. Take a look.",
       "What are you looking for?"
     ],
     "options": [
-      { "label": "10 Crystals (-20GP)", "pointsTo": "collector_buy_crystals" },
-      { "label": "Spells", "pointsTo": "collector_buy_spells" },
-      { "label":  "Healing (-1GP/HP)", "pointsTo": "collector_heal" }
+      { "label": "Buy 10 Crystals (-20GP)", "pointsTo": "collector_buy_crystals" },
+      { "label": "Buy a Spell...", "pointsTo": "collector_choose_spell" }
+    ]
+  },
+  {
+    "id": "collector_choose_spell",
+    "texts": [
+      "What kind of Spell are you looking for?",
+      "Got a specific one in mind?",
+      "If I don't have it, it doesn't exist. Actually, that's not true. But it's catchy, right?",
+      "I'll take your money, but you know you can craft your own spells, right?"
+    ],
+    "options": [
+      { "label": "Damage (-100GP)", "pointsTo": null },
+      { "label": "Healing (-50GP)", "pointsTo": null },
+      { "label": "Blast (-25GP)", "pointsTo": null },
+      { "label": "Dash (-25GP)", "pointsTo": null },
+      { "label": "Barrier (-75GP)", "pointsTo": null }
     ]
   },
   {
     "id": "collector_sell",
     "texts": [
       "Let's take a look at what you've got.",
-      "I can't wait to see what you've found.",
-      "Let's take a look.",
-      "I've got the coin if you've got the treasure."
+      "This better be good...",
+      "Let's take a peek inside that bag of yours.",
+      "Impress me.",
+      "Don't try anything."
     ],
     "options": [
       { "label": "Sell 10 Crystals (+15GP)", "pointsTo": "collector_sell_crystals" },

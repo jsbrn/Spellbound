@@ -1,5 +1,6 @@
 package world.entities.types.humanoids;
 
+import assets.SpellFactory;
 import assets.definitions.Definitions;
 import misc.MiscMath;
 import org.json.simple.JSONObject;
@@ -26,6 +27,8 @@ import java.util.stream.Collectors;
 public class Collector extends Civilian {
 
     private int deals;
+    private int[] spellPrices = new int[]{0, 50, 25, 25, 75};
+    private String[] spellTypes = new String[]{"damage", "healing", "blast", "dash"};
 
     public Collector() {
         setName("The Collector");
@@ -38,7 +41,7 @@ public class Collector extends Civilian {
         getAnimationLayer("hair").setColor(Color.darkGray);
         getAnimationLayer("hair").setBaseAnimation("hood");
         setAllegiance("collector");
-        setConversationStartingPoint("collector_initial_greeting");
+        setConversationStartingPoint("collector_introduction");
         Collector that = this;
         EventDispatcher.register(new EventListener()
             .on(PlayerReplyEvent.class.toString(), new EventHandler() {
@@ -46,7 +49,30 @@ public class Collector extends Civilian {
                 public void handle(Event e) {
                     PlayerReplyEvent pre = (PlayerReplyEvent)e;
                     if (!pre.getNPC().equals(that)) return;
-                    if (pre.getDialogue().getID().equals("collector_pleased")) setConversationStartingPoint("collector_greeting");
+                    boolean notEnough = false, inventoryFull = pre.getPlayer().getSpellbook().getSpells().size() >= 9;
+                    if (pre.getDialogue().getID().equals("collector_8")) setConversationStartingPoint("collector_greeting");
+                    if (pre.getDialogue().getID().equals("collector_buy_crystals")) {
+                        if (pre.getPlayer().getGoldCount() >= 20) {
+                            exitState();
+                            getActionQueue().queueAction(new SpeakAction("Consider it done."));
+                            pre.getPlayer().addCrystals(10);
+                            pre.getPlayer().addGold(-20, true);
+                        } else {
+                            notEnough = true;
+                        }
+                    } else if (pre.getDialogue().getID().equals("collector_choose_spell")) {
+                        if (pre.getOption() < 0) return;
+                        int price = spellPrices[pre.getOption()];
+                        if (pre.getPlayer().getGoldCount() < price) {
+                            exitState();
+                            getActionQueue().queueAction(new SpeakAction("You don't have enough money for that!"));
+                            return;
+                        } else {
+                            exitState();
+                            pre.getPlayer().getSpellbook().addSpell(SpellFactory.createSpell(spellTypes[pre.getOption()], (int)MiscMath.random(1, 2)));
+                            getActionQueue().queueAction(new SpeakAction("Consider it done!"));
+                        }
+                    }
                 }
             })
         );

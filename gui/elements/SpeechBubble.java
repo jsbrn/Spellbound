@@ -27,7 +27,7 @@ public class SpeechBubble extends GUIElement {
         this.title = new TextLabel("", 6, Chunk.TILE_SIZE * 5, 1, Color.white, true);
         this.contents = new TextLabel("", 4, (Chunk.TILE_SIZE*11)/2, 6, Color.black, false);
         this.options = new ArrayList<>();
-        this.addChild(title, 4, -3, GUIAnchor.TOP_LEFT);
+        this.addChild(title, 4, -8, GUIAnchor.TOP_LEFT);
         this.addChild(contents, Chunk.TILE_SIZE * 2, 5, GUIAnchor.TOP_LEFT);
         this.background = Assets.getImage("assets/gui/dialogue.png");
     }
@@ -41,17 +41,18 @@ public class SpeechBubble extends GUIElement {
         this.contents.setText(dialogue.getRandomText());
         String optionsLabel = "";
         this.options.forEach(b -> removeChild(b));
+        this.options.clear();
         for (int o = 0; o < dialogue.getOptionCount(); o++) {
             String text = dialogue.getOptionText(o);
             int optionId = o;
-            Button option = new Button(dialogue.getOptionText(optionId), Assets.getFont(3 * (int)Window.getScale()).getWidth(text)/(int)Window.getScale() + 4, 6, null, true) {
+            Button option = new Button(dialogue.getOptionText(optionId), getDimensions()[0], 6, null, true) {
                 @Override
                 public boolean onClick(int button) {
                     EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, optionId));
                     return true;
                 }
             };
-            addChild(option, -2, -2 + (-o * 7), GUIAnchor.TOP_RIGHT);
+            addChild(option, 0, -(dialogue.getOptionCount() - 1 - o) * 7, GUIAnchor.BOTTOM_MIDDLE);
             options.add(option);
         }
         this.dialogue = dialogue;
@@ -59,7 +60,7 @@ public class SpeechBubble extends GUIElement {
 
     @Override
     public int[] getDimensions() {
-        return new int[]{background.getWidth(), background.getHeight()};
+        return new int[]{background.getWidth(), background.getHeight() + (options.size() * 7)};
     }
 
     @Override
