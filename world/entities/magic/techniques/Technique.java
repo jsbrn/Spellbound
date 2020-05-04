@@ -1,6 +1,7 @@
 package world.entities.magic.techniques;
 
 import world.entities.magic.MagicSource;
+import world.entities.magic.techniques.affected.AffectedGroupTechnique;
 import world.entities.magic.techniques.arc.ArcNarrowTechnique;
 import world.entities.magic.techniques.arc.ArcSpreadTechnique;
 import world.entities.magic.techniques.effects.*;
@@ -39,6 +40,9 @@ public abstract class Technique {
     public static Technique createFrom(String name) {
         Technique creation;
         switch(name) {
+            case "affect_self": creation = new AffectedGroupTechnique(); break;
+            case "affect_allies": creation = new AffectedGroupTechnique(); break;
+            case "affect_enemies": creation = new AffectedGroupTechnique(); break;
             case "trigger_cast": creation = new CastTriggerTechnique(); break;
             case "trigger_depletion": creation = new DepletionTriggerTechnique(); break;
             case "trigger_collision": creation = new IntersectionTriggerTechnique(); break;

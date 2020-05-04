@@ -1,8 +1,10 @@
 package assets;
 
+import org.json.simple.JSONObject;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+import world.Region;
 
 import java.awt.*;
 import java.io.*;
@@ -75,6 +77,19 @@ public class Assets {
         TrueTypeFont font = new TrueTypeFont(awtFont, false);
         fonts.put(size, font);
         return font;
+    }
+
+    public static void write(String url, String contents) {
+        try {
+            File file = new File(url);
+            if (!file.isDirectory()) file.getParentFile().mkdirs();
+            FileWriter fileWriter = new FileWriter(url);
+            fileWriter.write(contents);
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String read(String url, boolean internal) {

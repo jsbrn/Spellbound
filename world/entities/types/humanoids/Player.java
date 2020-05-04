@@ -31,7 +31,7 @@ public class Player extends HumanoidEntity {
         super();
 
         this.allowUserMovement = true;
-        this.setAllegiance("players");
+        this.setAllegiance("player");
         this.getMover().setIndependent(true);
         this.getMover().setLookTowardsTarget(false);
 
@@ -99,9 +99,9 @@ public class Player extends HumanoidEntity {
         if (isDead()) return;
 
         if (godMode) {
-            this.getSpellbook().discoverAllTechniques();
             this.getMover().setSpeed(10);
             this.setHP(1000, true);
+            this.setMana(100);
             this.getMover().setCollidable(false);
             this.getMover().setIgnoreCollision(true);
         }
@@ -146,6 +146,12 @@ public class Player extends HumanoidEntity {
 
     }
 
-    public void activateGodMode() { godMode = true; }
+    public void activateGodMode() {
+        godMode = true;
+        this.getSpellbook().discoverAllTechniques();
+        this.addGold(1000, true);
+        this.addCrystals(1000);
+        this.addDyes(1000);
+    }
 
 }

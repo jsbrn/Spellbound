@@ -57,7 +57,7 @@ public class MagicSource {
                 .filter(e -> !e.equals(caster) && !lastColliding.contains(e))
                 .forEach(e -> {
                     if (e.isTile()) return;
-                    if ((e instanceof HumanoidEntity && !((HumanoidEntity) e).isAlliedTo((HumanoidEntity)caster)))
+                    if ((e instanceof HumanoidEntity && affects(e)))
                         EventDispatcher.invoke(new MagicImpactEvent(this, e));
                 });
         lastColliding = colliding;
@@ -124,6 +124,14 @@ public class MagicSource {
         for (Technique t: techniques)
             if (t instanceof EffectTechnique)
                 ((EffectTechnique) t).affectContinuous(this);
+    }
+
+    public boolean affects(Entity e) {
+        if (!(e instanceof HumanoidEntity)) return false;
+        HumanoidEntity he = (HumanoidEntity)e;
+        return (this.hasTechnique("affect_self") && he.equals(this.getCaster())) ||
+                (this.hasTechnique("affect_allies") && he.isAlliedTo((HumanoidEntity)this.getCaster())) ||
+                (this.hasTechnique("affect_enemies") && !he.isAlliedTo((HumanoidEntity)this.getCaster()));
     }
 
     public List<Entity> getCollidingEntities() {

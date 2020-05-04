@@ -1,5 +1,6 @@
 package gui.menus;
 
+import assets.Assets;
 import gui.GUIAnchor;
 import gui.elements.Button;
 import gui.elements.IconLabel;
@@ -113,8 +114,15 @@ public class Journal extends Modal {
             Button button = new Button(null, 16, 16, null, true) {
                 @Override
                 public boolean onClick(int button) {
-                    if (selectedSpell == index) selectedSpell = -1; else selectedSpell = index;
-                    refresh();
+                    if (button == 0) {
+                        if (selectedSpell == index) selectedSpell = -1;
+                        else selectedSpell = index;
+                        refresh();
+                    } else if (button == Input.MOUSE_MIDDLE_BUTTON) {
+                        selectedSpell = index;
+                        Spell exporting = target.getSpellbook().getSpell(selectedSpell);
+                        Assets.write(Assets.ROOT_DIRECTORY+"/exported/"+exporting.getName()+".json", exporting.serialize().toJSONString());
+                    }
                     return true;
                 }
             };

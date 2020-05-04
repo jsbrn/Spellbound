@@ -88,16 +88,9 @@ public class World {
     public static void drawDebug(float scale, Graphics g) { getRegion().drawDebug(scale, g); }
 
     public static void save() {
-        try {
-            JSONObject world = serialize();
-            for (Region r: regions.values()) r.saveAllChunks();
-            FileWriter file = new FileWriter(Assets.ROOT_DIRECTORY+"/world/world.json");
-            file.write(world.toJSONString());
-            file.flush();
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JSONObject world = serialize();
+        for (Region r: regions.values()) r.saveAllChunks();
+        Assets.write(Assets.ROOT_DIRECTORY+"/world/world.json", world.toJSONString());
     }
 
     private static JSONObject serialize() {

@@ -119,9 +119,7 @@
     "options": [
       { "label": "Damage (-100GP)", "pointsTo": null },
       { "label": "Healing (-50GP)", "pointsTo": null },
-      { "label": "Blast (-25GP)", "pointsTo": null },
-      { "label": "Dash (-25GP)", "pointsTo": null },
-      { "label": "Barrier (-75GP)", "pointsTo": null }
+      { "label": "Blast (-25GP)", "pointsTo": null }
     ]
   },
   {

@@ -40,7 +40,7 @@ public class Collector extends Civilian {
         getAnimationLayer("shirt").setBaseAnimation("undershirt");
         getAnimationLayer("hair").setColor(Color.darkGray);
         getAnimationLayer("hair").setBaseAnimation("hood");
-        setAllegiance("collector");
+        setAllegiance("player");
         setConversationStartingPoint("collector_introduction");
         Collector that = this;
         EventDispatcher.register(new EventListener()

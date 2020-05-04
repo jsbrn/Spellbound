@@ -19,7 +19,8 @@ public class EffectIncreaseTechnique extends EffectTechnique {
 
     @Override
     public void affectOnce(MagicSource cast, HumanoidEntity e) {
-        if (cast.hasTechnique("trait_hp")) e.addHP(getLevel() * MiscMath.random(3, 8), true);
+        if (cast.hasTechnique("trait_hp"))
+            e.addHP(getLevel() * MiscMath.random(4, 6), true);
         if (cast.hasTechnique("trait_mana")) e.addMana(getLevel() * MiscMath.random(3, 8));
     }
 

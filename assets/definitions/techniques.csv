@@ -1,4 +1,7 @@
 ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;RequiresEnergy;ConflictsWith;Description
+affect_self;Affect Self;Affected;0;5;0;1;FALSE;-;Affect you (the caster).
+affect_allies;Affect Allies;Affected;0;5;0;1;FALSE;-;Affect your allies.
+affect_enemies;Affect Enemies;Affected;0;5;0;1;FALSE;-;Affect your enemies.
 movement_caster;Aura;Movement;3;1;0;1;FALSE;movement_\w+;Follow the caster.
 movement_follow;Follow;Movement;5;1;0;1;FALSE;movement_\w+;Follow the target.
 movement_directional;Directional;Movement;2;1;0;1;FALSE;movement_\w+;Propel towards the direction of the cast.

@@ -14,7 +14,7 @@ public abstract class EffectTechnique extends Technique {
         cast.getCollidingEntities().stream()
                 .filter(e -> e instanceof HumanoidEntity)
                 .map(e -> (HumanoidEntity)e)
-                .filter(he -> !he.isAlliedTo((HumanoidEntity)cast.getCaster()))
+                .filter(cast::affects)
                 .collect(Collectors.toList())
                 .forEach(he -> affectOnce(cast, he));
     }
@@ -23,7 +23,7 @@ public abstract class EffectTechnique extends Technique {
         cast.getCollidingEntities().stream()
                 .filter(e -> e instanceof HumanoidEntity)
                 .map(e -> (HumanoidEntity)e)
-                .filter(he -> !he.isAlliedTo((HumanoidEntity)cast.getCaster()))
+                .filter(cast::affects)
                 .collect(Collectors.toList())
                 .forEach(he -> affectContinuous(cast, he));
     }

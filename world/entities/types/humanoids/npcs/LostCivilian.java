@@ -24,7 +24,7 @@ public class LostCivilian extends Civilian {
         this.setConversationStartingPoint("lost_civilian_greeting");
         this.rng = new Random();
         this.enterState(new CallForHelpState());
-
+        setAllegiance("player");
         LostCivilian that = this;
         EventDispatcher.register(new EventListener()
             .on(PlayerReplyEvent.class.toString(), new EventHandler() {
