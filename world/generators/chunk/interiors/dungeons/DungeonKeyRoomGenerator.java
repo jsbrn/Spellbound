@@ -1,11 +1,10 @@
 package world.generators.chunk.interiors.dungeons;
 
-import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Portal;
 import world.entities.Entity;
 import world.entities.types.Chest;
-import world.entities.types.humanoids.npcs.Bandit;
+import world.entities.types.humanoids.enemies.Bandit;
 
 public class DungeonKeyRoomGenerator extends DungeonRoomGenerator {
 

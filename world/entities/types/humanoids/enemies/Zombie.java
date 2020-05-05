@@ -1,4 +1,4 @@
-package world.entities.types.humanoids;
+package world.entities.types.humanoids.enemies;
 
 import misc.MiscMath;
 import org.newdawn.slick.Color;
@@ -8,6 +8,7 @@ import world.entities.actions.types.KnockbackAction;
 import world.entities.actions.types.MoveAction;
 import world.entities.animations.Animation;
 import world.entities.states.PatrolState;
+import world.entities.types.humanoids.HumanoidEntity;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;

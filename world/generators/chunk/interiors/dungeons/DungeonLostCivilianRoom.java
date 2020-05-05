@@ -1,12 +1,7 @@
 package world.generators.chunk.interiors.dungeons;
 
-import org.newdawn.slick.Color;
-import world.Tiles;
 import world.entities.Entity;
-import world.entities.types.humanoids.npcs.Bandit;
 import world.entities.types.humanoids.npcs.LostCivilian;
-
-import java.util.Random;
 
 public class DungeonLostCivilianRoom extends DungeonLivingQuartersGenerator {
     

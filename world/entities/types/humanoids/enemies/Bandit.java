@@ -1,4 +1,4 @@
-package world.entities.types.humanoids.npcs;
+package world.entities.types.humanoids.enemies;
 
 import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;

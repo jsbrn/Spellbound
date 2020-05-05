@@ -3,14 +3,10 @@ package world.generators.chunk.overworld;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.Chunk;
-import world.Portal;
 import world.Tiles;
-import world.World;
 import world.entities.Entity;
 import world.entities.types.Chest;
-import world.entities.types.humanoids.npcs.Bandit;
-
-import java.util.Random;
+import world.entities.types.humanoids.enemies.Bandit;
 
 public class BanditCampGenerator extends ForestGenerator {
 

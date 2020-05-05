@@ -6,6 +6,7 @@ import world.Portal;
 import world.Tiles;
 import world.World;
 import world.entities.Entity;
+import world.entities.types.humanoids.npcs.Roommate;
 
 public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
@@ -49,7 +50,7 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
     @Override
     public Entity getEntity(int x, int y) {
-        return null;
+        return x == 5 && y == 5 ? new Roommate() : null;
     }
 
     @Override

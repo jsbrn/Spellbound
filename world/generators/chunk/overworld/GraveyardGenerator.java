@@ -1,13 +1,10 @@
 package world.generators.chunk.overworld;
 
-import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Tiles;
 import world.entities.Entity;
 import world.entities.types.Chest;
-import world.entities.types.humanoids.Zombie;
-
-import java.util.Random;
+import world.entities.types.humanoids.enemies.Zombie;
 
 public class GraveyardGenerator extends OpenFieldGenerator {
 

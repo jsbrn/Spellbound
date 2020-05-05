@@ -1,14 +1,8 @@
 package world.generators.chunk.overworld;
 
-import org.newdawn.slick.Color;
 import world.Chunk;
-import world.Tiles;
 import world.entities.Entity;
-import world.entities.types.Chest;
 import world.entities.types.WishingWell;
-import world.entities.types.humanoids.Zombie;
-
-import java.util.Random;
 
 public class WishingWellFieldGenerator extends OpenFieldGenerator {
 

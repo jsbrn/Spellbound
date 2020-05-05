@@ -2,7 +2,6 @@ package gui.elements;
 
 import assets.Assets;
 import gui.GUIElement;
-import main.GameManager;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -14,9 +13,7 @@ import world.Camera;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;
-import world.entities.magic.MagicSource;
-import world.entities.types.humanoids.Collector;
-import world.entities.types.humanoids.npcs.LostCivilian;
+import world.entities.types.humanoids.npcs.Collector;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;

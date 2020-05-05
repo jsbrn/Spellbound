@@ -1,5 +1,73 @@
 [
   {
+    "id": "roommate_introduction",
+    "texts": [
+      "Wow. What a night, huh? I've got a nasty headache."
+    ],
+    "options": [
+      { "label": "It was a night to remember.", "pointsTo": "roommate_2"}
+    ]
+  },
+  {
+    "id": "roommate_2",
+    "texts": [
+      "Guess we'd better start cleaning up the place. Hey, can you do me a favor?"
+    ],
+    "options": [
+      { "label": "Sure.", "pointsTo": "roommate_3"}
+    ]
+  },
+  {
+    "id": "roommate_3",
+    "texts": [
+      "There's a guy outside the house. I think I gave him my Amulet last night, but I want it back now. Can you go get it?"
+    ],
+    "options": [
+      { "label": "Why is he still here?", "pointsTo": "roommate_4"}
+    ]
+  },
+  {
+    "id": "roommate_4",
+    "texts": [
+      "I don't know, man. Some people can't take a hint. I'd go out myself but it's WAY too bright outside, ya know?"
+    ],
+    "options": [
+      { "label": "Fine, I'll talk to him.", "pointsTo": "roommate_5"}
+    ]
+  },
+  {
+    "id": "roommate_5",
+    "texts": [
+      "This is why we're friends. You're the best."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": null}
+    ]
+  },
+  {
+    "id": "roommate_greeting",
+    "texts": [
+      "Got my amulet?",
+      "Hey!",
+      "Don't worry, I'll get this cleaned up soon.",
+      "Did you get the amulet?",
+      "I sure do miss that amulet.",
+      "What a night.",
+      "Man, I can't believe I gave that guy my amulet. What a con artist!",
+      "This place is a dump.",
+      "I'd rather move than clean this dump.",
+      "Did you know there are hidden underground rooms near our house? Spooky.",
+      "Why don't we have any furniture?",
+      "I think we should buy a bed at some point.",
+      "It's me, your best friend.",
+      "If I close my eyes I can pretend we live in a nicer neighborhood.",
+      "One day I might enroll at that magic school up north. You should come with me."
+    ],
+    "options": [
+      { "label": "Talk to you later.", "pointsTo": null}
+    ]
+  },
+  {
     "id": "collector_introduction",
     "texts": [
       "Well, well, well. You must be new in town.",
@@ -59,7 +127,7 @@
   {
     "id": "collector_6",
     "texts": [
-      "One more thing. You'll probably need a Healing spell. Take this one."
+      "One more thing. You'll probably need a Healing spell. Take this one, on the house. But the next one will cost ya."
     ],
     "options": [
       { "label": "(Accept healing spell)", "pointsTo": "collector_7"}
@@ -68,7 +136,7 @@
   {
     "id": "collector_7",
     "texts": [
-      "If you need anything more, talk to your roommate. I'm a busy man!"
+      "If you need more information, talk to your friend. I've got places to be."
     ],
     "options": [
       { "label": "Continue", "pointsTo": "collector_8"}
@@ -77,7 +145,7 @@
   {
     "id": "collector_8",
     "texts": [
-      "Now get going! Time is of the essence! The survival of my project depends on those artifacts!"
+      "Now get going! Time is of the essence. The survival of my project depends on those artifacts!"
     ],
     "options": [
       { "label": "OK, OK...sheesh.", "pointsTo": null}
@@ -100,11 +168,11 @@
     "id": "collector_buy",
     "texts": [
       "What do you need?",
-      "I just restocked my supplies. Take a look.",
-      "What are you looking for?"
+      "What are you looking for?",
+      "Make it quick. I'm a busy man."
     ],
     "options": [
-      { "label": "Buy 10 Crystals (-20GP)", "pointsTo": "collector_buy_crystals" },
+      { "label": "Buy 10 Crystals (-20GP)", "pointsTo": null },
       { "label": "Buy a Spell...", "pointsTo": "collector_choose_spell" }
     ]
   },
@@ -113,29 +181,27 @@
     "texts": [
       "What kind of Spell are you looking for?",
       "Got a specific one in mind?",
-      "If I don't have it, it doesn't exist. Actually, that's not true. But it's catchy, right?",
+      "If I don't have it, it doesn't exist. It's not true in the slightest, but it's catchy.",
       "I'll take your money, but you know you can craft your own spells, right?"
     ],
     "options": [
       { "label": "Damage (-100GP)", "pointsTo": null },
       { "label": "Healing (-50GP)", "pointsTo": null },
-      { "label": "Blast (-25GP)", "pointsTo": null }
+      { "label": "Barrier (-25GP)", "pointsTo": null }
     ]
   },
   {
     "id": "collector_sell",
     "texts": [
-      "Let's take a look at what you've got.",
+      "Let's see what you've got.",
       "This better be good...",
       "Let's take a peek inside that bag of yours.",
       "Impress me.",
-      "Don't try anything."
+      "I hope you're not wasting my time."
     ],
     "options": [
-      { "label": "Sell 10 Crystals (+15GP)", "pointsTo": "collector_sell_crystals" },
-      { "label":  "Sell 10 Dyes (+5GP)", "pointsTo": "collector_sell_dyes" },
-      { "label":  "Sell tome (+50GP)", "pointsTo": "collector_sell_tome" },
-      { "label":  "Sell artifact (+100GP)", "pointsTo": "collector_sell_artifact" }
+      { "label": "Sell 10 Crystals (+15GP)", "pointsTo": null },
+      { "label":  "Sell artifacts (+100GP per)", "pointsTo": null }
     ]
   },
   {
@@ -156,7 +222,13 @@
       "Hi!",
       "What do you want?",
       "Hello.",
-      "Nice weather we're having."
+      "Nice weather we're having.",
+      "Going into that dungeon?",
+      "You look like an explorer.",
+      "Oh, hi there!",
+      "I've heard there are horrible monsters in those crypts.",
+      "Ever been down those trapdoors? I'm too scared to go, myself.",
+      "Are you an explorer? Have you ever seen a dungeon?"
     ],
     "options": [
       { "label": "What's your story?", "pointsTo": "backstory" },
@@ -166,11 +238,7 @@
   {
     "id": "backstory",
     "texts": [
-      "I don't know you enough to talk about this.",
-      "Uh, do I know you?",
-      "I could ask you the same thing.",
-      "If I told you, I'd have to kill you. Haha! I'm just kidding around.",
-      "Sorry, I just don't have the time."
+      "I'm just a lowly Civilian, with no goals or aspirations. I don't even have a name. How cruel!"
     ],
     "options": [
       { "label": "OK", "pointsTo": null }

@@ -8,7 +8,7 @@ import world.Tiles;
 import world.entities.Entity;
 import world.entities.types.Chest;
 import world.entities.types.SpikeTrap;
-import world.entities.types.humanoids.npcs.Bandit;
+import world.entities.types.humanoids.enemies.Bandit;
 import world.generators.chunk.interiors.InteriorRoomGenerator;
 
 public class DungeonRoomGenerator extends InteriorRoomGenerator {

@@ -24,7 +24,7 @@ public class Journal extends Modal {
 
     private ArrayList<Button> spellButtons;
     private int selectedSpell;
-    private Button copyButton, combineButton, destroyButton, moveUpButton;
+    private Button createButton, copyButton, combineButton, destroyButton, moveUpButton;
 
     public Journal(HumanoidEntity target, SpellcraftingMenu spellcraftingMenu) {
         super("assets/gui/spellbook_bg.png");
@@ -51,14 +51,14 @@ public class Journal extends Modal {
         addChild(tomes, 56, 24, GUIAnchor.TOP_LEFT);
         addChild(artifacts, 56, 48, GUIAnchor.TOP_LEFT);
         addChild(keys, 56, 72, GUIAnchor.TOP_LEFT);
-        addChild(new Button("+", 8, 8, null, true) {
+        createButton = new Button("+", 8, 8, null, true) {
             @Override
             public boolean onClick(int button) {
                 spellcraftingMenu.reset(null);
                 getGUI().stackModal(spellcraftingMenu);
                 return true;
             }
-        }, -12, 4, GUIAnchor.TOP_RIGHT);
+        };
         copyButton = new Button("Copy", 16, 8, null, true) {
             @Override
             public boolean onClick(int button) {
@@ -96,6 +96,7 @@ public class Journal extends Modal {
         addChild(copyButton, 91, -10, GUIAnchor.BOTTOM_LEFT);
         addChild(destroyButton, 109, -10, GUIAnchor.BOTTOM_LEFT);
         addChild(moveUpButton, 131, -10, GUIAnchor.BOTTOM_LEFT);
+        addChild(createButton, -12, 4, GUIAnchor.TOP_RIGHT);
     }
 
     private void refresh() {
@@ -105,7 +106,7 @@ public class Journal extends Modal {
         tomes.setText(target.getTomeCount()+"");
         artifacts.setText(target.getArtifactCount()+"");
         keys.setText(target.getKeyCount()+"");
-
+        createButton.setEnabled(target.getSpellbook().getSpells().size() < 9);
         spellButtons.stream().forEach(this::removeChild);
         spellButtons.clear();
         for (int i = 0; i < target.getSpellbook().getSpells().size(); i++) {

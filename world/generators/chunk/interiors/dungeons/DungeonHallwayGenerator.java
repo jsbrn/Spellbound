@@ -5,9 +5,7 @@ import world.Tiles;
 import world.entities.Entity;
 import world.entities.types.Chest;
 import world.entities.types.SpikeTrap;
-import world.entities.types.humanoids.npcs.Bandit;
-
-import java.util.Random;
+import world.entities.types.humanoids.enemies.Bandit;
 
 public class DungeonHallwayGenerator extends DungeonRoomGenerator {
 

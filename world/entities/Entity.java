@@ -2,15 +2,12 @@ package world.entities;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import sun.security.provider.ConfigFile;
 import world.*;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import world.entities.actions.Action;
-import world.entities.actions.ActionGroup;
 import world.entities.actions.ActionQueue;
 import world.entities.animations.Animation;
 import world.entities.animations.AnimationLayer;
@@ -18,12 +15,12 @@ import world.entities.states.State;
 import world.entities.types.Chest;
 import world.entities.types.SpikeTrap;
 import world.entities.types.WishingWell;
-import world.entities.types.humanoids.Collector;
-import world.entities.types.humanoids.Player;
-import world.entities.types.humanoids.Zombie;
-import world.entities.types.humanoids.npcs.Bandit;
+import world.entities.types.humanoids.npcs.Collector;
+import world.entities.types.humanoids.enemies.Zombie;
+import world.entities.types.humanoids.enemies.Bandit;
 import world.entities.types.humanoids.npcs.Civilian;
 import world.entities.types.humanoids.npcs.LostCivilian;
+import world.entities.types.humanoids.npcs.Roommate;
 import world.events.EventDispatcher;
 import world.events.event.EntityChangeRegionEvent;
 import world.events.event.EntityCollisionEvent;
@@ -295,6 +292,7 @@ public class Entity {
             case "SpikeTrap": e = new SpikeTrap(); break;
             case "WishingWell": e = new WishingWell(); break;
             case "Collector": e = new Collector(); break;
+            case "Roommate": e = new Roommate(); break;
             default: e = null;
         }
         if (e != null) {
