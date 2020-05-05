@@ -6,11 +6,8 @@ import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
-import misc.Window;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import world.Chunk;
 import world.World;
 import world.entities.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;
@@ -31,20 +28,20 @@ public class Journal extends Modal {
         this.target = target;
         this.selectedSpell = -1;
         this.spellButtons = new ArrayList<>();
-        addChild(new TextLabel("Inventory", 5, Color.black, false), 12, 4, GUIAnchor.TOP_LEFT);
-        addChild(new TextLabel("Your Spells", 5, Color.black, false), 24, 4, GUIAnchor.TOP_MIDDLE);
+        addChild(new TextLabel("Inventory", 5, Color.black, false, false), 12, 4, GUIAnchor.TOP_LEFT);
+        addChild(new TextLabel("Your Spells", 5, Color.black, false, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new IconLabel("icons/gold.png"), 16, 16, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/crystal.png"), 16, 40, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/dyes.png"), 16, 64, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/tome.png"), 48, 16, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/artifact.png"), 48, 40, GUIAnchor.TOP_LEFT);
         addChild(new IconLabel("icons/key.png"), 48, 64, GUIAnchor.TOP_LEFT);
-        gold = new TextLabel(target.getGoldCount()+"", 8, Color.white, true);
-        crystals = new TextLabel(target.getCrystalCount()+"", 8, Color.white, true);
-        dyes = new TextLabel(target.getDyeCount()+"", 8, Color.white, true);
-        tomes = new TextLabel(target.getTomeCount()+"", 8, Color.white, true);
-        artifacts = new TextLabel(target.getArtifactCount()+"", 8, Color.white, true);
-        keys = new TextLabel(target.getKeyCount()+"", 8, Color.white, true);
+        gold = new TextLabel(target.getGoldCount()+"", 8, Color.white, true, false);
+        crystals = new TextLabel(target.getCrystalCount()+"", 8, Color.white, true, false);
+        dyes = new TextLabel(target.getDyeCount()+"", 8, Color.white, true, false);
+        tomes = new TextLabel(target.getTomeCount()+"", 8, Color.white, true, false);
+        artifacts = new TextLabel(target.getArtifactCount()+"", 8, Color.white, true, false);
+        keys = new TextLabel(target.getKeyCount()+"", 8, Color.white, true, false);
         addChild(gold, 24, 24, GUIAnchor.TOP_LEFT);
         addChild(crystals, 24, 48, GUIAnchor.TOP_LEFT);
         addChild(dyes, 24, 72, GUIAnchor.TOP_LEFT);
@@ -59,6 +56,7 @@ public class Journal extends Modal {
                 return true;
             }
         };
+        createButton.setTooltipText("Create a new spell");
         copyButton = new Button("Copy", 16, 8, null, true) {
             @Override
             public boolean onClick(int button) {
@@ -80,6 +78,7 @@ public class Journal extends Modal {
                 return true;
             }
         };
+        destroyButton.setTooltipText("Break down the spell to learn techniques and get resources back.");
         moveUpButton = new Button(null, 8, 8, "icons/arrow_up.png", true) {
             @Override
             public boolean onClick(int button) {
@@ -128,6 +127,11 @@ public class Journal extends Modal {
                 }
             };
             spellButtons.add(button);
+            button.setTooltipText(
+                    spell.getName()+"" +
+                    "\n"+"-------------------"+"" +
+                    "\nCost: "+spell.getManaCost()+" Mana" +
+                    "\nVolatility: "+(int)(spell.getVolatility()*100)+"%");
             button.setIcon(spell.getIcon());
             button.setIconFilter(spell.getColor());
             button.setToggled(i == selectedSpell);

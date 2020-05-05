@@ -60,7 +60,7 @@ public class ColorChooser extends GUIElement {
     public void setColor(Color c) {
         float[] hsb = java.awt.Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), new float[3]);
         int col = (int)MiscMath.round(hsb[1] * cols, 1 / (float)cols);
-        int row = (int)MiscMath.round(col == 0 ? hsb[2] * rows : hsb[0] * rows, 1 / (float)rows);
+        int row = (int)MiscMath.round(col == 0 ? (1-hsb[2]) * rows : hsb[0] * rows, 1 / (float)rows);
         clicked[0] = row; clicked[1] = col;
     }
 

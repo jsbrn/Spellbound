@@ -24,8 +24,8 @@ public class SpeechBubble extends GUIElement {
     private ArrayList<Button> options;
 
     public SpeechBubble() {
-        this.title = new TextLabel("", 6, Chunk.TILE_SIZE * 5, 1, Color.white, true);
-        this.contents = new TextLabel("", 4, (Chunk.TILE_SIZE*11)/2, 6, Color.black, false);
+        this.title = new TextLabel("", 6, Chunk.TILE_SIZE * 5, 1, Color.white, true, false);
+        this.contents = new TextLabel("", 4, (Chunk.TILE_SIZE*11)/2, 6, Color.black, false, false);
         this.options = new ArrayList<>();
         this.addChild(title, 4, -8, GUIAnchor.TOP_LEFT);
         this.addChild(contents, Chunk.TILE_SIZE * 2, 5, GUIAnchor.TOP_LEFT);

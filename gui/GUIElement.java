@@ -17,6 +17,7 @@ public abstract class GUIElement {
     private boolean buffered = true;
     private ArrayList<GUIElement> children = new ArrayList<>();
     private boolean inactive;
+    private String tooltipText;
 
     public final void setAnchor(GUIAnchor anchor) { this.anchor = anchor; }
     public final void setOffset(double gx, double gy) { offset = new double[]{gx, gy}; }
@@ -67,7 +68,20 @@ public abstract class GUIElement {
 
     public void onHide() {}
 
-    public boolean mouseIntersects() {
+    public final String getTooltipText() {
+        if (!isActive()) return null;
+        for (int i = children.size() - 1; i > -1; i--) {
+            String hovered = children.get(i).getTooltipText();
+            if (hovered != null) return hovered;
+        }
+        return mouseIntersects() && isActive() && tooltipText != null && tooltipText.length() > 0 ? tooltipText : null;
+    }
+
+    public final void setTooltipText(String tooltipText) {
+        this.tooltipText = tooltipText;
+    }
+
+    public final boolean mouseIntersects() {
         return MiscMath.pointIntersectsRect(
                 getGUI().getParent().getInput().getMouseX() / Window.getScale(), getGUI().getParent().getInput().getMouseY() / Window.getScale(),
                 getCoordinates()[0],

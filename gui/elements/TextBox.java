@@ -1,9 +1,7 @@
 package gui.elements;
 
-import assets.Assets;
 import gui.GUIAnchor;
 import gui.GUIElement;
-import gui.states.GameScreen;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -20,7 +18,7 @@ public class TextBox extends GUIElement {
         this.dims = new int[]{w, h};
         this.text = "";
         this.focused = false;
-        this.label = new TextLabel("", h-3, w-2, 1, Color.black, false);
+        this.label = new TextLabel("", h-3, w-2, 1, Color.black, false, false);
         addChild(label, 1, 1, GUIAnchor.TOP_LEFT);
     }
 
@@ -62,6 +60,7 @@ public class TextBox extends GUIElement {
     @Override
     public boolean onKeyDown(int key) {
         if (focused) {
+            getGUI().getParent().getInput().enableKeyRepeat();
             boolean shifting = getGUI().getParent().getInput().isKeyDown(Input.KEY_LSHIFT)
                 || getGUI().getParent().getInput().isKeyDown(Input.KEY_RSHIFT);
             boolean control = getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL)
@@ -87,6 +86,7 @@ public class TextBox extends GUIElement {
 
     @Override
     public boolean onKeyUp(int key) {
+        getGUI().getParent().getInput().disableKeyRepeat();
         return false;
     }
 

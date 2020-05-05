@@ -92,7 +92,7 @@
   {
     "id": "roommate_controls_2",
     "texts": [
-      "Keep your voice down! If the Omniscience catches me breaking the immersion, I'll be replaced. I'll tell you if you promise to keep it to yourself."
+      "Keep your voice down! If the Omniscient One catches me breaking the immersion, I'll be replaced. I'll tell you if you promise to keep it to yourself."
     ],
     "options": [
       { "label": "I promise.", "pointsTo": "roommate_list_controls"}
@@ -203,16 +203,25 @@
       "Be careful when combining Techniques. Sometimes they conflict with each other. The more that conflict, the more volatile your spell will become."
     ],
     "options": [
-      { "label": "Thanks for the tip.", "pointsTo": "roommate_spellcrafting_6"}
+      { "label": "Continue", "pointsTo": "roommate_spellcrafting_6"}
     ]
   },
   {
     "id": "roommate_spellcrafting_6",
     "texts": [
+      "When spells become unstable, they do unpredictable things. Sometimes they misfire. Sometimes they blow up in your face. So be careful out there!"
+    ],
+    "options": [
+      { "label": "Thanks for the tip.", "pointsTo": "roommate_spellcrafting_7"}
+    ]
+  },
+  {
+    "id": "roommate_spellcrafting_7",
+    "texts": [
       "No problem. Also, I'm pretty sure the guy outside sells pre-made Spells if you need one in a pinch."
     ],
     "options": [
-      { "label": "Good to know.", "pointsTo": null }
+      { "label": "Good to know.", "pointsTo": "roommate_spellcrafting_7" }
     ]
   },
   {
@@ -588,20 +597,6 @@
       "What brings you to me on this day?",
       "Tell me what it is you seek.",
       "What is it that you seek?"
-    ],
-    "options": [
-      { "label": "Mana", "pointsTo": "request_mana" },
-      { "label": "Health", "pointsTo": "request_health" },
-    ]
-  },
-  {
-    "id": "wishing_well_greeting",
-    "texts": [
-      "You're back. What would you like?",
-      "Welcome back.",
-      "Greetings. Back for more?",
-      "What'll it be?",
-      "My reserves are boundless."
     ],
     "options": [
       { "label": "More mana", "pointsTo": "request_mana" },

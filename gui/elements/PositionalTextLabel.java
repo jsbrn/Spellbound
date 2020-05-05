@@ -25,7 +25,7 @@ public class PositionalTextLabel extends GUIElement {
 
     private PositionalTextLabel(Location location, String text, Color color) {
         this.location = location;
-        addChild(new TextLabel(text, 4, color, true), 0, 0, GUIAnchor.CENTER);
+        addChild(new TextLabel(text, 4, color, true, false), 0, 0, GUIAnchor.CENTER);
     }
 
     @Override

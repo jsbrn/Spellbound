@@ -2,7 +2,6 @@ package gui.elements;
 
 import gui.GUIAnchor;
 import gui.GUIElement;
-import gui.states.GameScreen;
 import gui.states.GameState;
 import main.GameManager;
 import org.newdawn.slick.*;
@@ -21,9 +20,9 @@ public class Statusbar extends GUIElement {
 
     public Statusbar(HumanoidEntity target) {
         this.target = target;
-        healthLabel = new TextLabel("0/0", 3, Color.white, false);
-        manaLabel = new TextLabel("0/0", 3, Color.white, false);
-        staminaLabel = new TextLabel("0/0", 3, Color.white, false);
+        healthLabel = new TextLabel("0/0", 3, Color.white, false, false);
+        manaLabel = new TextLabel("0/0", 3, Color.white, false, false);
+        staminaLabel = new TextLabel("0/0", 3, Color.white, false, false);
         this.addChild(healthLabel, 5, -8, GUIAnchor.CENTER);
         this.addChild(manaLabel, 5, -1, GUIAnchor.CENTER);
         this.addChild(staminaLabel, 5, 6, GUIAnchor.CENTER);

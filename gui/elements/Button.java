@@ -16,7 +16,7 @@ public abstract class Button extends GUIElement {
 
     public Button(String text, int w, int h, String icon, boolean showBackground) {
         if (text != null)
-            this.addChild(new TextLabel(text, 3, w, 1, Color.white, true), 0, -1, GUIAnchor.CENTER);
+            this.addChild(new TextLabel(text, 3, w, 1, Color.white, true, false), 0, -1, GUIAnchor.CENTER);
         this.showBackground = showBackground;
         this.dims = new int[]{w, h};
         this.color = new Color(170, 115, 65);

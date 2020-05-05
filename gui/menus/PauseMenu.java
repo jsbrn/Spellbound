@@ -16,7 +16,7 @@ public class PauseMenu extends Modal {
 
     public PauseMenu() {
         super(Assets.getImage("assets/gui/blank.png"));
-        addChild(new TextLabel("Paused", 5, Color.white, true), 0, -48, GUIAnchor.TOP_MIDDLE);
+        addChild(new TextLabel("Paused", 5, Color.white, true, false), 0, -48, GUIAnchor.TOP_MIDDLE);
         addChild(new Button(null, 24, 24, "icons/play.png", true) {
             @Override
             public boolean onClick(int button) {

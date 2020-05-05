@@ -8,28 +8,31 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class TextLabel extends GUIElement {
 
     private String text;
-    private Color color;
-    private boolean shadow;
-    private int maxWidth, maxLines;
+    private Color color, backgroundColor;
+    private boolean shadow, background;
+    private int maxWidth, maxLines, actualWidth;
     private float lineHeight;
     private ArrayList<String> lines;
 
-    public TextLabel(String text, int lineHeight, Color color, boolean shadow) {
-        this(text, lineHeight, Integer.MAX_VALUE, 16, color, shadow);
+    public TextLabel(String text, int lineHeight, Color color, boolean shadow, boolean background) {
+        this(text, lineHeight, Integer.MAX_VALUE, 16, color, shadow, background);
     }
 
-    public TextLabel(String text, int lineHeight, int maxWidth, int maxLines, Color color, boolean shadow) {
+    public TextLabel(String text, int lineHeight, int maxWidth, int maxLines, Color color, boolean shadow, boolean background) {
         this.text = text;
         this.color = color;
         this.maxWidth = maxWidth;
         this.maxLines = maxLines;
         this.lineHeight = lineHeight;
-        this.lines = getLines(text);
         this.shadow = shadow;
+        this.background = background;
+        this.backgroundColor = new Color(0, 0, 0, 0.75f);
         this.setBuffered(false);
     }
 
@@ -37,14 +40,21 @@ public class TextLabel extends GUIElement {
         this.color = color;
     }
 
-    private ArrayList<String> getLines(String text) {
-        String[] words = text.split("\\s");
+    private ArrayList<String> computeLines(String text) {
+        String[] words = text.replace("\n", " \n ").split(" +");
         ArrayList<String> rows = new ArrayList<String>();
         rows.add("");
+        int longestRowSize = 0;
         int currentRowSize = 0;
         int currentRowIndex = 0;
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
+            if (word.equals("\n")) { //forced new line
+                currentRowIndex += 1;
+                rows.add("");
+                currentRowSize = 0;
+                continue;
+            }
             int size = (int)(getFont().getWidth(" "+word) / Window.getScale());
             if (currentRowSize + size < maxWidth) {
                 rows.set(currentRowIndex, rows.get(currentRowIndex) + " " + word);
@@ -61,13 +71,24 @@ public class TextLabel extends GUIElement {
                 }
             }
         }
+        //compute actual width
+        for (String row: rows) {
+            int width = (int)(getFont().getWidth(row) / Window.getScale());
+            if (width > longestRowSize) longestRowSize = width;
+        }
+        actualWidth = longestRowSize;
         return rows;
+    }
+
+    private ArrayList<String> getLines() {
+        if (lines == null) lines = computeLines(text);
+        return lines;
     }
 
     public void setText(String newtext) {
         newtext = newtext.replaceAll("’", "'");
         if (!newtext.equals(text)) {
-            lines = getLines(newtext);
+            lines = computeLines(newtext);
             text = newtext;
         }
     }
@@ -76,10 +97,9 @@ public class TextLabel extends GUIElement {
 
     @Override
     public int[] getDimensions() {
-        int textWidth = (int)(getFont().getWidth(text) / Window.getScale());
         return new int[]{
-                textWidth < maxWidth ? textWidth : maxWidth,
-                lines.size() * (int)lineHeight
+                actualWidth,
+                getLines().size() * (int)lineHeight
         };
     }
 
@@ -112,18 +132,26 @@ public class TextLabel extends GUIElement {
     }
 
     @Override
+    public void drawUnder(Graphics g) {
+        if (!background || text.length() == 0) return;
+        float[] coords = getOnscreenCoordinates();
+        g.setColor(backgroundColor);
+        g.fillRect(coords[0], coords[1], (getDimensions()[0] + 1) * Window.getScale(), (getDimensions()[1] + 2) * Window.getScale());
+    }
+
+    @Override
     public void drawOver(Graphics g) {
         float[] coords = getOnscreenCoordinates();
         g.setFont(Assets.getFont(lineHeight * Window.getScale()));
-        for (int i = 0; i < lines.size(); i++) {
-            float x = coords[0] - Window.getScale();
+        for (int i = 0; i < getLines().size(); i++) {
+            float x = (coords[0] + (background ? 1 : 0)) - Window.getScale();
             float y = coords[1] + (i * lineHeight * Window.getScale());
             if (shadow) {
                 g.setColor(color.darker().darker());
-                g.drawString(lines.get(i), (int)x + 1, (int)y + 1);
+                g.drawString(getLines().get(i), (int)x + 1, (int)y + 1);
             }
             g.setColor(color);
-            g.drawString(lines.get(i), (int)x, (int)y);
+            g.drawString(getLines().get(i), (int)x, (int)y);
         }
     }
 

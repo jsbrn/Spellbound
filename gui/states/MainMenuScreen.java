@@ -24,8 +24,7 @@ public class MainMenuScreen extends GameState {
 
     @Override
     public void addGUIElements(GUI gui) {
-
-        gui.addElement(new Button(null, 24, 24, "icons/play.png", true) {
+        Button playButton = new Button(null, 24, 24, "icons/play.png", true) {
             @Override
             public boolean onClick(int button) {
                 File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
@@ -42,7 +41,8 @@ public class MainMenuScreen extends GameState {
                 GameManager.switchTo(GameState.GAME_SCREEN);
                 return true;
             }
-        }, -(24*3)/2, 0, GUIAnchor.CENTER);
+        };
+        gui.addElement(playButton, -(24*3)/2, 0, GUIAnchor.CENTER);
         Button settings = new Button(null, 24, 24, "icons/settings.png", true) {
             @Override
             public boolean onClick(int button) {
@@ -60,7 +60,7 @@ public class MainMenuScreen extends GameState {
         }, (24*3)/2, 0, GUIAnchor.CENTER);
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
-        gui.addElement(new TextLabel("Pre-Alpha", 8, Color.white, true), 32, 32, GUIAnchor.TOP_MIDDLE);
+        gui.addElement(new TextLabel("Pre-Alpha", 8, Color.white, true, false), 32, 32, GUIAnchor.TOP_MIDDLE);
     }
 
     @Override

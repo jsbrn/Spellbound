@@ -60,7 +60,7 @@ public class GameScreen extends GameState {
         gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
         gui.addElement(pauseMenu, 0,0, GUIAnchor.CENTER);
         pauseMenu.hide();
-        gui.addElement(new Button(null, 16, 16, "spellbook.png", false) {
+        Button spellbookButton = new Button(null, 16, 16, "spellbook.png", false) {
             @Override
             public boolean onKeyUp(int key) {
                 if (key == Input.KEY_TAB) {
@@ -74,12 +74,14 @@ public class GameScreen extends GameState {
                 gui.stackModal(spellbook);
                 return true;
             }
-        }, 4, 94, GUIAnchor.TOP_LEFT);
+        };
+        spellbookButton.setTooltipText("Journal (TAB)");
+        gui.addElement(spellbookButton, 4, 94, GUIAnchor.TOP_LEFT);
 
         MiniMap miniMap = new MiniMap();
         gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);
 
-        TextLabel deathMessage = new TextLabel("Press R to continue", 4, Color.white, true){
+        TextLabel deathMessage = new TextLabel("Press R to continue", 4, Color.white, true, false){
             @Override
             public boolean onKeyUp(int key) {
                 return key != Input.KEY_R;

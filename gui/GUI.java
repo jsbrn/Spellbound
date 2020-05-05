@@ -3,14 +3,13 @@ package gui;
 import gui.elements.Modal;
 import gui.elements.PositionalTextLabel;
 import gui.elements.SpeechBubble;
-import gui.states.GameScreen;
+import gui.elements.TextLabel;
 import gui.states.GameState;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import world.Camera;
 import world.World;
 import world.events.Event;
 import world.events.EventDispatcher;
@@ -18,6 +17,7 @@ import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -26,7 +26,7 @@ public class GUI {
     private ArrayList<GUIElement> elements;
     private Stack<Modal> modals;
     private SpeechBubble speechBubble;
-    private float darkness;
+    private TextLabel tooltip;
     private int[] lastMousePosition;
     private boolean debugMode;
     private GameState parent;
@@ -36,8 +36,10 @@ public class GUI {
         this.elements = new ArrayList<>();
         this.modals = new Stack<>();
         this.lastMousePosition = new int[]{0, 0};
+        this.tooltip = new TextLabel("", 4,96, Integer.MAX_VALUE, Color.white, true, true);
     }
 
+    /**TODO: All GUI Elements have a listener that is registered and unregistered with the element. Remove the static SpeechBubble.*/
     public void setSpeechBubble() {
         speechBubble = new SpeechBubble();
         this.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
@@ -69,6 +71,16 @@ public class GUI {
 
     public SpeechBubble getSpeechBubble() {
         return speechBubble;
+    }
+
+    public String getToolTipText() {
+        if (!modals.isEmpty()) return modals.peek().getTooltipText();
+        for (int i = elements.size() - 1; i > -1; i--) {
+            String text = elements.get(i).getTooltipText();
+            if (text == null) continue;
+            return text;
+        }
+        return null;
     }
 
     public final boolean handleMouseMoved(int osx, int osy) {
@@ -142,10 +154,6 @@ public class GUI {
         if (!modals.isEmpty()) modals.peek().onShow();
     }
 
-    public void setFade(float alpha) {
-        darkness = alpha;
-    }
-
     public void addElement(GUIElement element, int ogx, int ogy, GUIAnchor anchor) {
         element.setOffset(ogx, ogy);
         element.setAnchor(anchor);
@@ -188,13 +196,6 @@ public class GUI {
             lastMousePosition[1] = mouseGY;
         }
 
-        darkness = (float)MiscMath.tween(1f, darkness, 0f, 1f, 0.6f);
-        if (darkness > 0) {
-            g.setColor(new Color(0, 0, 0, darkness));
-            g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
-            g.setColor(Color.white);
-        }
-
         for (int i = 0; i < elements.size(); i++) {
             if (i >= elements.size()) break;
             GUIElement element = elements.get(i);
@@ -210,6 +211,18 @@ public class GUI {
             modal.draw(g);
             if (debugMode) modal.drawDebug(g);
         }
+
+        String tooltipText = getToolTipText();
+        tooltip.setOffset(mouseGX + 4, mouseGY);
+        if (tooltipText != null) {
+            tooltip.setText(tooltipText);
+            tooltip.show();
+        } else {
+            tooltip.setText("");
+            tooltip.hide();
+        }
+
+        tooltip.draw(g);
 
     }
 

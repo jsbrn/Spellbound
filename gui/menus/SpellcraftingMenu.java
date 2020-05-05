@@ -43,14 +43,14 @@ public class SpellcraftingMenu extends Modal {
                 return super.onKeyUp(key);
             }
         };
-        crystalCost = new TextLabel("0", 8, Color.white, true);
-        dyesCost = new TextLabel("0", 8, Color.white, true);
-        manaCost = new TextLabel("0", 8, Color.white, true);
-        volatility = new TextLabel("", 4, Color.yellow, true);
-        categoryLabel = new TextLabel("...", 4, Color.gray, false);
-        techniqueName = new TextLabel("-", 5, Color.black, false);
-        techniqueDescription = new TextLabel("", 4, 100, 3, Color.gray, false);
-        techniqueConflicts = new TextLabel("", 4, 100, 3, Color.red, false);
+        crystalCost = new TextLabel("0", 8, Color.white, true, false);
+        dyesCost = new TextLabel("0", 8, Color.white, true, false);
+        manaCost = new TextLabel("0", 8, Color.white, true, false);
+        volatility = new TextLabel("", 4, Color.yellow, true, false);
+        categoryLabel = new TextLabel("...", 4, Color.gray, false, false);
+        techniqueName = new TextLabel("-", 5, Color.black, false, false);
+        techniqueDescription = new TextLabel("", 4, 100, 3, Color.gray, false, false);
+        techniqueConflicts = new TextLabel("", 4, 100, 3, Color.red, false, false);
         createButton = new Button("Create!", 24, 8, null, true) {
             @Override
             public boolean onClick(int button) {
@@ -74,7 +74,10 @@ public class SpellcraftingMenu extends Modal {
             @Override
             public boolean onMousePressed(int ogx, int ogy, int button) {
                 boolean clicked = super.onMousePressed(ogx, ogy, button);
-                if (clicked) { spell.setColor(getColor()); iconChooser.setColor(getColor()); }
+                if (clicked) {
+                    spell.setColor(getColor()); iconChooser.setColor(getColor());
+                    refresh();
+                }
                 return clicked;
             }
         };
@@ -89,8 +92,8 @@ public class SpellcraftingMenu extends Modal {
         addChild(dyesCost, 28+8, -20, GUIAnchor.BOTTOM_LEFT);
         addChild(manaCost, 48+8, -20, GUIAnchor.BOTTOM_LEFT);
         addChild(volatility, 11, -16, GUIAnchor.BOTTOM_LEFT);
-        addChild(new TextLabel("New Spell", 5, Color.white, true), 8, 4, GUIAnchor.TOP_LEFT);
-        addChild(new TextLabel("Discovered Techniques", 5, Color.white, true), 24, 4, GUIAnchor.TOP_MIDDLE);
+        addChild(new TextLabel("New Spell", 5, Color.white, true, false), 8, 4, GUIAnchor.TOP_LEFT);
+        addChild(new TextLabel("Discovered Techniques", 5, Color.white, true, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new Button("Cancel", 24, 8, null, true) {
             @Override
             public boolean onClick(int button) {
@@ -132,8 +135,8 @@ public class SpellcraftingMenu extends Modal {
         for (int i = 0; i < techniques.length; i++) {
             String technique = techniques[i];
             Button chooseButton = new Button(null, 16, 16, "icons/techniques/"+technique+".png", true) {
-                private TextLabel levelLabel = new TextLabel("", 4, Color.yellow, true);
-                private TextLabel warningLabel = new TextLabel("!", 6, Color.red, true);
+                private TextLabel levelLabel = new TextLabel("", 4, Color.yellow, true, false);
+                private TextLabel warningLabel = new TextLabel("!", 6, Color.red, true, false);
                 @Override
                 public boolean onClick(int button) {
                     if (button == 0) {
@@ -223,17 +226,29 @@ public class SpellcraftingMenu extends Modal {
     }
 
     private void refreshRequirements() {
+        boolean notEnoughCrystals = spell.getCrystalCost() > target.getCrystalCount();
+        boolean notEnoughDyes = spell.getDyeCost() > target.getDyeCount();
+        boolean notEnoughMaxMana = spell.getManaCost() > target.getMaxMana();
+        boolean noName = nameField.getText().trim().isEmpty();
+        boolean noTechniques = spell.isEmpty();
         this.crystalCost.setText(spell.getCrystalCost()+"");
-        this.crystalCost.setColor(spell.getCrystalCost() > target.getCrystalCount() ? Color.red : Color.white);
+        this.crystalCost.setColor(notEnoughCrystals ? Color.red : Color.white);
         this.dyesCost.setText(spell.getDyeCost()+"");
         this.dyesCost.setColor(spell.getDyeCost() > target.getDyeCount() ? Color.red : Color.white);
         this.manaCost.setText(spell.getManaCost()+"");
         this.manaCost.setColor(spell.getManaCost() > target.getMaxMana() ? Color.yellow : Color.white);
         this.volatility.setText(spell.getVolatility() < 0.05 ? "" : (int)(spell.getVolatility()*100)+"% Volatile");
         this.createButton.setEnabled(
-                target.getCrystalCount() >= spell.getCrystalCost()
-                && !nameField.getText().trim().isEmpty()
-                && !spell.isEmpty());
+                !notEnoughCrystals
+                && !noName
+                && !noTechniques
+                && !notEnoughDyes);
+        createButton.setTooltipText("");
+        if (noTechniques) createButton.setTooltipText("The spell is empty.");
+        if (noName) createButton.setTooltipText("Give your spell a name.");
+        if (notEnoughMaxMana) createButton.setTooltipText("You need more Mana to cast this!");
+        if (notEnoughDyes) createButton.setTooltipText("You need more Dyes!");
+        if (notEnoughCrystals) createButton.setTooltipText("You need more Crystals!");
     }
 
     @Override
