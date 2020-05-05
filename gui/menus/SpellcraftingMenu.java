@@ -225,7 +225,8 @@ public class SpellcraftingMenu extends Modal {
     private void refreshRequirements() {
         this.crystalCost.setText(spell.getCrystalCost()+"");
         this.crystalCost.setColor(spell.getCrystalCost() > target.getCrystalCount() ? Color.red : Color.white);
-        this.dyesCost.setText("0");
+        this.dyesCost.setText(spell.getDyeCost()+"");
+        this.dyesCost.setColor(spell.getDyeCost() > target.getDyeCount() ? Color.red : Color.white);
         this.manaCost.setText(spell.getManaCost()+"");
         this.manaCost.setColor(spell.getManaCost() > target.getMaxMana() ? Color.yellow : Color.white);
         this.volatility.setText(spell.getVolatility() < 0.05 ? "" : (int)(spell.getVolatility()*100)+"% Volatile");

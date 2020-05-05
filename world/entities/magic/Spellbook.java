@@ -20,6 +20,7 @@ public class Spellbook {
         this.discovered_techniques = new ArrayList<>();
         discoverTechnique("");
         this.parent = parent;
+        for (String t: Techniques.getAll()) if (Techniques.isDefault(t)) discoverTechnique(t);
     }
 
     public void cast(double wx, double wy) {

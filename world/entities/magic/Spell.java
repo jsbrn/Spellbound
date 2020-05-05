@@ -139,6 +139,15 @@ public class Spell {
         return cost;
     }
 
+    public int getDyeCost() {
+        double cmax = Math.max(color.getRed(), Math.max(color.getGreen(), color.getBlue()));
+        double cmin = Math.min(color.getRed(), Math.min(color.getGreen(), color.getBlue()));
+        int delta = (int)(cmax - cmin);
+        int lightness = (int)((cmax + cmin) / 2);
+        int saturation = delta == 0 ? 0 : delta / (1 - Math.abs((lightness*2)-1));
+        return (int)((saturation / 255f) * 10);
+    }
+
     public JSONObject serialize() {
         JSONObject serialized = new JSONObject();
         JSONArray jsonColor = new JSONArray();

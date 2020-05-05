@@ -43,8 +43,6 @@ public class Roommate extends HumanoidEntity {
                     PlayerReplyEvent pre = (PlayerReplyEvent)e;
                     if (pre.getDialogue().getID().equals("roommate_5")) {
                         setConversationStartingPoint("roommate_greeting");
-                    } else {
-
                     }
                 }
             })

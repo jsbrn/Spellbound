@@ -41,7 +41,16 @@
       "This is why we're friends. You're the best."
     ],
     "options": [
-      { "label": "Continue", "pointsTo": null}
+      { "label": "Continue", "pointsTo": "roommate_6"}
+    ]
+  },
+  {
+    "id": "roommate_6",
+    "texts": [
+      "Don't tell anyone I told you, but you can press E while facing something to interact with it. Like the door."
+    ],
+    "options": [
+      { "label": "Very helpful, thank you.", "pointsTo": null}
     ]
   },
   {
@@ -64,7 +73,146 @@
       "One day I might enroll at that magic school up north. You should come with me."
     ],
     "options": [
+      { "label": "What are the controls?", "pointsTo": "roommate_controls" },
+      { "label": "How do I craft spells?", "pointsTo": "roommate_spellcrafting"},
+      { "label": "What's around here?", "pointsTo": "roommate_exploration"},
+      { "label": "Why don't we have furniture?", "pointsTo": "roommate_house"},
       { "label": "Talk to you later.", "pointsTo": null}
+    ]
+  },
+  {
+    "id": "roommate_controls",
+    "texts": [
+      "Controls? Controls to what? Why are you talking like that?"
+    ],
+    "options": [
+      { "label": "You know what I want.", "pointsTo": "roommate_controls_2"}
+    ]
+  },
+  {
+    "id": "roommate_controls_2",
+    "texts": [
+      "Keep your voice down! If the Omniscience catches me breaking the immersion, I'll be replaced. I'll tell you if you promise to keep it to yourself."
+    ],
+    "options": [
+      { "label": "I promise.", "pointsTo": "roommate_list_controls"}
+    ]
+  },
+  {
+    "id": "roommate_list_controls",
+    "texts": [
+      "Press TAB to open your Journal, WASD to move, CTRL to strafe, Left Mouse to cast and E to interact. ESCAPE will back out of most menus or pause."
+    ],
+    "options": [
+      { "label": "I appreciate this.", "pointsTo": "roommate_controls_4" }
+    ]
+  },
+  {
+    "id": "roommate_controls_4",
+    "texts": [
+      "You'd better. You don't know who I'm dealing with."
+    ],
+    "options": [
+      { "label": "This sounds like a conversation for another time.", "pointsTo": null}
+    ]
+  },
+  {
+    "id": "roommate_house",
+    "texts": [
+      "Furniture costs money."
+    ],
+    "options": [
+      { "label": "Fair point.", "pointsTo": null}
+    ]
+  },
+  {
+    "id": "roommate_exploration",
+    "texts": [
+      "There's not a lot around here except campsites and cemeteries, for some reason. Also that creepy guy outside."
+    ],
+    "options": [
+      { "label": "I thought you knew him.", "pointsTo": "roommate_exploration_2"}
+    ]
+  },
+  {
+    "id": "roommate_exploration_2",
+    "texts": [
+      "I wish. He just kinda showed up at the party last night, and we were all too drunk to care."
+    ],
+    "options": [
+      { "label": "Yikes.", "pointsTo": "roommate_exploration_3"}
+    ]
+  },
+  {
+    "id": "roommate_exploration_3",
+    "texts": [
+      "Yea. I'm hoping he leaves soon. OH, before I forget, there's a Wishing Well north of here. All you gotta do is drop some money in and all your wildest dreams will come true."
+    ],
+    "options": [
+      { "label": "Neat!", "pointsTo": "roommate_exploration_4"}
+    ]
+  },
+  {
+    "id": "roommate_exploration_4",
+    "texts": [
+      "I thought so, until it jammed or something and ate all my coins! Stupid thing hates me."
+    ],
+    "options": [
+      { "label": "See you around.", "pointsTo": null}
+    ]
+  },
+  {
+    "id": "roommate_spellcrafting",
+    "texts": [
+      "It's straightforward, but pay attention to the details. Press TAB to open your Journal, then press the + button in the corner."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": "roommate_spellcrafting_2"}
+    ]
+  },
+  {
+    "id": "roommate_spellcrafting_2",
+    "texts": [
+      "You'll see a list of Magic Techniques that you can combine to create custom spells. Each one changes a specific behaviour or property of the spell."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": "roommate_spellcrafting_3"}
+    ]
+  },
+  {
+    "id": "roommate_spellcrafting_3",
+    "texts": [
+      "You probably don't have many right now to choose from, but as you explore the world, you'll discover more, and your spells will become more powerful and complex."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": "roommate_spellcrafting_4"}
+    ]
+  },
+  {
+    "id": "roommate_spellcrafting_4",
+    "texts": [
+      "To create a spell, you'll need Magic Crystals. They're found in dungeons. To cast a spell, you'll need to have enough Mana. Mana regenerates over time."
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": "roommate_spellcrafting_5"}
+    ]
+  },
+  {
+    "id": "roommate_spellcrafting_5",
+    "texts": [
+      "Be careful when combining Techniques. Sometimes they conflict with each other. The more that conflict, the more volatile your spell will become."
+    ],
+    "options": [
+      { "label": "Thanks for the tip.", "pointsTo": "roommate_spellcrafting_6"}
+    ]
+  },
+  {
+    "id": "roommate_spellcrafting_6",
+    "texts": [
+      "No problem. Also, I'm pretty sure the guy outside sells pre-made Spells if you need one in a pinch."
+    ],
+    "options": [
+      { "label": "Good to know.", "pointsTo": null }
     ]
   },
   {
@@ -437,7 +585,6 @@
     "texts": [
       "Speak your wish.",
       "What do you desire?",
-      "Speak.",
       "What brings you to me on this day?",
       "Tell me what it is you seek.",
       "What is it that you seek?"
@@ -445,7 +592,6 @@
     "options": [
       { "label": "Mana", "pointsTo": "request_mana" },
       { "label": "Health", "pointsTo": "request_health" },
-      { "label": "Knowledge", "pointsTo": "request_knowledge" }
     ]
   },
   {
@@ -459,7 +605,30 @@
     ],
     "options": [
       { "label": "More mana", "pointsTo": "request_mana" },
-      { "label": "More health", "pointsTo": "request_health" }
+      { "label": "More health", "pointsTo": "request_health" },
+      { "label": "I wish for unlimited wishes.", "pointsTo": "wishing_well_annoyed"},
+      { "label": "Did you take my roommate's money?", "pointsTo": "wishing_well_defense" }
+    ]
+  },
+  {
+    "id": "wishing_well_annoyed",
+    "texts": [
+      "Oh, my aching head.",
+      "Very funny.",
+      "I wish for you to leave.",
+      "You think you're so funny, don't you?"
+    ],
+    "options": [
+      { "label": "Continue", "pointsTo": null }
+    ]
+  },
+  {
+    "id": "wishing_well_defense",
+    "texts": [
+      "Your friend has his own version of the truth. I am fair and impartial."
+    ],
+    "options": [
+      { "label": "I'm not going to get involved.", "pointsTo": null }
     ]
   },
   {
@@ -480,35 +649,6 @@
     "options": [
       { "label": "Sounds good", "pointsTo": null },
       { "label": "Changed my mind", "pointsTo": null }
-    ]
-  },
-  {
-    "id": "request_knowledge",
-    "texts": [
-      "What would you like to know about?"
-    ],
-    "options": [
-      { "label": "Objective", "pointsTo": "objective_info" },
-      { "label": "Spellcrafting", "pointsTo": "spellcraft_info"},
-      { "label": "Exploration", "pointsTo": null}
-    ]
-  },
-  {
-    "id": "objective_info",
-    "texts": [
-      "If I'm not mistaken, your roommate is in need of your help."
-    ],
-    "options": [
-      { "label": "I understand.", "pointsTo":  null}
-    ]
-  },
-  {
-    "id": "spellcraft_info",
-    "texts": [
-      "A Spell is simply a combination of Magic Techniques. As you explore the world, you will find Spell Tomes that teach you different techniques."
-    ],
-    "options": [
-      { "label": "I understand.", "pointsTo":  null}
     ]
   }
 

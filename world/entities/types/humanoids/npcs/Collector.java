@@ -4,14 +4,19 @@ import assets.SpellFactory;
 import misc.MiscMath;
 import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
+import world.World;
 import world.entities.actions.types.SpeakAction;
+import world.entities.states.TalkingToState;
+import world.entities.types.humanoids.HumanoidEntity;
+import world.entities.types.humanoids.Player;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
+import world.events.event.EntityActivatedEvent;
 import world.events.event.PlayerReplyEvent;
 
-public class Collector extends Civilian {
+public class Collector extends HumanoidEntity {
 
     private int deals;
     private int[] spellPrices = new int[]{0, 50, 25, 25, 75};
@@ -19,6 +24,8 @@ public class Collector extends Civilian {
 
     public Collector() {
         setName("The Collector");
+        setMaxHP(Integer.MAX_VALUE);
+        setHP(Integer.MAX_VALUE, false);
         getAnimationLayer("head").setColor(Color.white);
         getAnimationLayer("torso").setColor(Color.darkGray);
         getAnimationLayer("legs").setColor(Color.black);
@@ -31,6 +38,16 @@ public class Collector extends Civilian {
         setConversationStartingPoint("collector_introduction");
         Collector that = this;
         EventDispatcher.register(new EventListener()
+            .on(EntityActivatedEvent.class.toString(), new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    if (isDead()) return;
+                    EntityActivatedEvent eae = (EntityActivatedEvent)e;
+                    if (eae.getEntity().equals(that) && eae.getActivatedBy() instanceof Player) {
+                        enterState(new TalkingToState((Player)eae.getActivatedBy()));
+                    }
+                }
+            })
             .on(PlayerReplyEvent.class.toString(), new EventHandler() {
                 @Override
                 public void handle(Event e) {
@@ -90,6 +107,13 @@ public class Collector extends Civilian {
                 }
             })
         );
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (canSee(World.getLocalPlayer()) > 0 && getConversationStartingPoint().equals("collector_introduction") && getCurrentState() == null)
+            enterState(new TalkingToState(World.getLocalPlayer()));
     }
 
     @Override

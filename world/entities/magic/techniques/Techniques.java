@@ -24,6 +24,8 @@ public class Techniques {
 
     public static int getMaxLevel(String id) { return reader().getInteger("MaxLevel", id); }
 
+    public static boolean isDefault(String id) { return reader().getBoolean("Default", id);}
+
     public static String getConflictsWith(String id) { return reader().get("ConflictsWith", id); }
     public static String getRequires(String id) { return reader().get("Requires", id); }
 
