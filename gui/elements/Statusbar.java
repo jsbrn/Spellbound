@@ -18,6 +18,8 @@ public class Statusbar extends GUIElement {
 
     private TextLabel healthLabel, manaLabel, staminaLabel;
 
+    private IconLabel amuletIndicator;
+
     public Statusbar(HumanoidEntity target) {
         this.target = target;
         healthLabel = new TextLabel("0/0", 3, Color.white, false, false);
@@ -26,6 +28,8 @@ public class Statusbar extends GUIElement {
         this.addChild(healthLabel, 5, -8, GUIAnchor.CENTER);
         this.addChild(manaLabel, 5, -1, GUIAnchor.CENTER);
         this.addChild(staminaLabel, 5, 6, GUIAnchor.CENTER);
+        amuletIndicator = new IconLabel("icons/amulet.png");
+        this.addChild(amuletIndicator, 56, 0, GUIAnchor.TOP_LEFT);
         try {
             this.image = new Image("assets/gui/statusbar.png", false, Image.FILTER_NEAREST);
             this.healthColor = new Color(1f, 0f, 0f, 0.5f);
@@ -81,6 +85,8 @@ public class Statusbar extends GUIElement {
         healthLabel.setText(target.getHP() < 1 ? "!!!" : (int)target.getHP()+"/"+(int)target.getMaxHP());
         manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxMana());
         staminaLabel.setText((int)target.getStamina()+"/"+(int)target.getMaxStamina());
+
+        if (target.hasAmulet()) amuletIndicator.show(); else amuletIndicator.hide();
 
         b.drawImage(image, 0, 0);
         b.setColor(healthColor);

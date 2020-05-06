@@ -2,6 +2,7 @@ package world.entities.types.humanoids.npcs;
 
 import world.World;
 import world.entities.Entity;
+import world.entities.actions.types.SpeakAction;
 import world.entities.states.IdleState;
 import world.entities.states.TalkingToState;
 import world.entities.types.humanoids.HumanoidEntity;
@@ -43,6 +44,19 @@ public class Roommate extends HumanoidEntity {
                     PlayerReplyEvent pre = (PlayerReplyEvent)e;
                     if (pre.getDialogue().getID().equals("roommate_5")) {
                         setConversationStartingPoint("roommate_greeting");
+                    } else if (pre.getDialogue().getID().equals("roommate_greeting")) {
+                        if (pre.getOption() == 0) {
+                            if (pre.getPlayer().hasAmulet()) {
+                                //you did it!
+                                setConversationStartingPoint("roommate_satisfied");
+                                exitState();
+                                getActionQueue().queueAction(new SpeakAction("Thank you!"));
+                                pre.getPlayer().setHasAmulet(false);
+                            } else {
+                                exitState();
+                                getActionQueue().queueAction(new SpeakAction("Liar!"));
+                            }
+                        }
                     }
                 }
             })

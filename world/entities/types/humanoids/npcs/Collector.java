@@ -51,20 +51,46 @@ public class Collector extends HumanoidEntity {
             .on(PlayerReplyEvent.class.toString(), new EventHandler() {
                 @Override
                 public void handle(Event e) {
+                    /**
+                     * TODO: This is horrible, horrible temporary code. Convert to proper Merchant UI/component in the future.
+                     */
                     PlayerReplyEvent pre = (PlayerReplyEvent)e;
                     if (!pre.getNPC().equals(that)) return;
                     String id = pre.getDialogue().getID();
                     boolean notEnough = false, inventoryFull = pre.getPlayer().getSpellbook().getSpells().size() >= 9;
-                    if (id.equals("collector_8")) setConversationStartingPoint("collector_greeting");
-                    if (id.equals("collector_buy")) {
-                        if (pre.getPlayer().getGoldCount() >= 20) {
+                    if (id.equals("collector_8")) setConversationStartingPoint("collector_demand");
+                    if (id.equals("collector_demand") && pre.getOption() == 0) {
+                        if (pre.getPlayer().getArtifactCount() < 5) {
                             exitState();
-                            getActionQueue().queueAction(new SpeakAction("Consider it done."));
-                            pre.getPlayer().addCrystals(10);
-                            pre.getPlayer().addGold(-20, true);
+                            getActionQueue().queueAction(new SpeakAction("Liar!"));
                         } else {
-                            getActionQueue().queueAction(new SpeakAction("You don't have enough for that."));
-                            return;
+                            //winner!
+                            setConversationStartingPoint("collector_greeting");
+                            pre.getPlayer().addArtifacts(-pre.getPlayer().getArtifactCount());
+                            pre.getPlayer().setHasAmulet(true);
+                            getActionQueue().queueAction(new SpeakAction("Great stuff! Here's your amulet."));
+                        }
+                    } else if (id.equals("collector_buy")) {
+                        if (pre.getOption() == 0) {
+                            if (pre.getPlayer().getGoldCount() >= 25) {
+                                exitState();
+                                getActionQueue().queueAction(new SpeakAction("Consider it done."));
+                                pre.getPlayer().addCrystals(10);
+                                pre.getPlayer().addGold(-25, true);
+                            } else {
+                                getActionQueue().queueAction(new SpeakAction("You don't have enough for that."));
+                                return;
+                            }
+                        } else if (pre.getOption() == 1) {
+                            if (pre.getPlayer().getGoldCount() >= 10) {
+                                exitState();
+                                getActionQueue().queueAction(new SpeakAction("Consider it done."));
+                                pre.getPlayer().addDyes(10);
+                                pre.getPlayer().addGold(-10, true);
+                            } else {
+                                getActionQueue().queueAction(new SpeakAction("You don't have enough for that."));
+                                return;
+                            }
                         }
                     } else if (id.equals("collector_sell")) {
                         if (pre.getOption() == 0) {
@@ -76,15 +102,6 @@ public class Collector extends HumanoidEntity {
                                 getActionQueue().queueAction(new SpeakAction("Nice try."));
                                 return;
                             }
-                        } else if (pre.getOption() == 1) {
-                            int artifacts = pre.getPlayer().getArtifactCount();
-                            if (artifacts == 0) {
-                                getActionQueue().queueAction(new SpeakAction("Nice try."));
-                                return;
-                            }
-                            pre.getPlayer().addArtifacts(-artifacts);
-                            pre.getPlayer().addGold(100 * artifacts, true);
-                            getActionQueue().queueAction(new SpeakAction("Pleasure doing business with you!"));
                         }
                     } else if (pre.getDialogue().getID().equals("collector_choose_spell")) {
                         if (pre.getOption() < 0) return;

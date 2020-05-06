@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Journal extends Modal {
 
     private HumanoidEntity target;
-    private TextLabel gold, crystals, dyes, tomes, artifacts, keys;
+    private TextLabel gold, crystals, dyes, artifacts, keys;
 
     private ArrayList<Button> spellButtons;
     private int selectedSpell;
@@ -31,43 +31,38 @@ public class Journal extends Modal {
         addChild(new TextLabel("Inventory", 5, Color.black, false, false), 12, 4, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Your Spells", 5, Color.black, false, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new IconLabel("icons/gold.png"), 16, 16, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/crystal.png"), 16, 40, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/dyes.png"), 16, 64, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/tome.png"), 48, 16, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/artifact.png"), 48, 40, GUIAnchor.TOP_LEFT);
-        addChild(new IconLabel("icons/key.png"), 48, 64, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/crystal.png"), 48, 16, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/dyes.png"), 16, 42, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/artifact.png"), 16, 68, GUIAnchor.TOP_LEFT);
+        addChild(new IconLabel("icons/key.png"), 48, 42, GUIAnchor.TOP_LEFT);
         gold = new TextLabel(target.getGoldCount()+"", 8, Color.white, true, false);
         crystals = new TextLabel(target.getCrystalCount()+"", 8, Color.white, true, false);
         dyes = new TextLabel(target.getDyeCount()+"", 8, Color.white, true, false);
-        tomes = new TextLabel(target.getTomeCount()+"", 8, Color.white, true, false);
-        artifacts = new TextLabel(target.getArtifactCount()+"", 8, Color.white, true, false);
+        artifacts = new TextLabel(target.getArtifactCount()+"/5", 6, Color.darkGray, false, false);
         keys = new TextLabel(target.getKeyCount()+"", 8, Color.white, true, false);
         addChild(gold, 24, 24, GUIAnchor.TOP_LEFT);
-        addChild(crystals, 24, 48, GUIAnchor.TOP_LEFT);
-        addChild(dyes, 24, 72, GUIAnchor.TOP_LEFT);
-        addChild(tomes, 56, 24, GUIAnchor.TOP_LEFT);
-        addChild(artifacts, 56, 48, GUIAnchor.TOP_LEFT);
-        addChild(keys, 56, 72, GUIAnchor.TOP_LEFT);
+        addChild(crystals, 56, 24, GUIAnchor.TOP_LEFT);
+        addChild(dyes, 24, 48, GUIAnchor.TOP_LEFT);
+        addChild(artifacts, 32, 69, GUIAnchor.TOP_LEFT);
+        addChild(keys, 56, 48, GUIAnchor.TOP_LEFT);
         createButton = new Button("+", 8, 8, null, true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 spellcraftingMenu.reset(null);
                 getGUI().stackModal(spellcraftingMenu);
-                return true;
             }
         };
         createButton.setTooltipText("Create a new spell");
         copyButton = new Button("Copy", 16, 8, null, true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 spellcraftingMenu.reset(target.getSpellbook().getSpell(selectedSpell));
                 getGUI().stackModal(spellcraftingMenu);
-                return true;
             }
         };
         destroyButton = new Button("Destroy", 20, 8, null, true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 if  (selectedSpell >= 0) {
                     target.addCrystals(target.getSpellbook().getSpell(selectedSpell).getCrystalCost() / 4);
                     target.getSpellbook().getSpells().remove(selectedSpell);
@@ -75,21 +70,19 @@ public class Journal extends Modal {
                 if (selectedSpell >= target.getSpellbook().getSpells().size())
                     selectedSpell = target.getSpellbook().getSpells().size() - 1;
                 refresh();
-                return true;
             }
         };
         destroyButton.setTooltipText("Break down the spell to learn techniques and get resources back.");
         moveUpButton = new Button(null, 8, 8, "icons/arrow_up.png", true) {
             @Override
-            public boolean onClick(int button) {
-                if (selectedSpell == 0) return false;
+            public void onClick(int button) {
+                if (selectedSpell == 0) return;
                 Spell selected = target.getSpellbook().getSpell(selectedSpell);
-                if (selected == null) return false;
+                if (selected == null) return;
                 target.getSpellbook().getSpells().remove(selected);
                 target.getSpellbook().getSpells().add(selectedSpell-1, selected);
                 selectedSpell--;
                 refresh();
-                return true;
             }
         };
         addChild(copyButton, 91, -10, GUIAnchor.BOTTOM_LEFT);
@@ -102,8 +95,7 @@ public class Journal extends Modal {
         gold.setText(target.getGoldCount()+"");
         crystals.setText(target.getCrystalCount()+"");
         dyes.setText(target.getDyeCount()+"");
-        tomes.setText(target.getTomeCount()+"");
-        artifacts.setText(target.getArtifactCount()+"");
+        artifacts.setText(target.getArtifactCount()+"/5\nFound");
         keys.setText(target.getKeyCount()+"");
         createButton.setEnabled(target.getSpellbook().getSpells().size() < 9);
         spellButtons.stream().forEach(this::removeChild);
@@ -113,7 +105,7 @@ public class Journal extends Modal {
             int index = i;
             Button button = new Button(null, 16, 16, null, true) {
                 @Override
-                public boolean onClick(int button) {
+                public void onClick(int button) {
                     if (button == 0) {
                         if (selectedSpell == index) selectedSpell = -1;
                         else selectedSpell = index;
@@ -123,7 +115,6 @@ public class Journal extends Modal {
                         Spell exporting = target.getSpellbook().getSpell(selectedSpell);
                         Assets.write(Assets.ROOT_DIRECTORY+"/exported/"+exporting.getName()+".json", exporting.serialize().toJSONString());
                     }
-                    return true;
                 }
             };
             spellButtons.add(button);

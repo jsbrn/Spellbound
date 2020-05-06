@@ -19,18 +19,16 @@ public class PauseMenu extends Modal {
         addChild(new TextLabel("Paused", 5, Color.white, true, false), 0, -48, GUIAnchor.TOP_MIDDLE);
         addChild(new Button(null, 24, 24, "icons/play.png", true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 getGUI().popModal();
-                return true;
             }
         }, -16, 0, GUIAnchor.CENTER);
 
         addChild(new Button(null, 24, 24, "icons/save.png", true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 GameManager.switchTo(GameState.MAIN_MENU);
                 EventDispatcher.unregisterAll();
-                return true;
             }
         }, 16, 0, GUIAnchor.CENTER);
     }

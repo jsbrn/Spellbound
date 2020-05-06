@@ -49,9 +49,9 @@ public class HumanoidEntity extends Entity {
     private Spellbook spellbook;
     private double hp, mana, stamina, max_hp, max_mana, max_stamina;
 
-    private boolean isDead;
+    private boolean isDead, hasAmulet;
     private String allegiance;
-    private int crystals, gold, dyes, tomes, keys, artifacts;
+    private int crystals, gold, dyes, keys, artifacts;
 
     public HumanoidEntity() {
 
@@ -130,6 +130,14 @@ public class HumanoidEntity extends Entity {
     public void setAllegiance(String allegiance) { this.allegiance = allegiance; }
     public boolean isAlliedTo(HumanoidEntity e) { return e.allegiance.equals(allegiance); }
 
+    public void setHasAmulet(boolean hasAmulet) {
+        this.hasAmulet = hasAmulet;
+    }
+
+    public boolean hasAmulet() {
+        return hasAmulet;
+    }
+
     public double getHP() { return hp; }
     public double getMana() { return mana; }
     public double getStamina() { return stamina; }
@@ -141,7 +149,6 @@ public class HumanoidEntity extends Entity {
     public int getGoldCount() { return gold; }
     public int getDyeCount() { return dyes; }
     public int getKeyCount() { return keys; }
-    public int getTomeCount() { return tomes; }
     public int getArtifactCount() { return artifacts; }
 
     public void addGold(int gold, boolean verbose) {
@@ -153,7 +160,6 @@ public class HumanoidEntity extends Entity {
     public void addCrystals(int crystals) { this.crystals += crystals; }
     public void addDyes(int dyes) { this.dyes += dyes; }
     public void addKeys(int keys) { this.keys += keys; }
-    public void addTomes(int tomes) { this.tomes += tomes; }
     public void addArtifacts(int artifacts) { this.artifacts += artifacts; }
 
     public void setMana(double mana) { this.mana = MiscMath.clamp(mana, 0, max_mana); }
@@ -234,10 +240,10 @@ public class HumanoidEntity extends Entity {
         serialized.put("gold", getGoldCount());
         serialized.put("crystals", getCrystalCount());
         serialized.put("dyes", getDyeCount());
-        serialized.put("tomes", getTomeCount());
         serialized.put("artifacts", getArtifactCount());
         serialized.put("keys", getKeyCount());
         serialized.put("is_dead", isDead);
+        serialized.put("has_amulet", hasAmulet);
         serialized.put("spellbook", getSpellbook().serialize());
         return serialized;
     }
@@ -254,8 +260,8 @@ public class HumanoidEntity extends Entity {
         addGold((int)(long)json.get("gold"), false);
         addCrystals((int)(long)json.get("crystals"));
         addDyes((int)(long)json.get("dyes"));
-        addTomes((int)(long)json.get("tomes"));
         addKeys((int)(long)json.get("keys"));
+        setHasAmulet((boolean)json.get("has_amulet"));
         getSpellbook().deserialize((JSONObject)json.get("spellbook"));
     }
 }

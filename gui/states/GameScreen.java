@@ -5,6 +5,7 @@ import gui.GUIAnchor;
 import gui.elements.*;
 import gui.menus.Journal;
 import gui.menus.PauseMenu;
+import gui.menus.PopupMenu;
 import gui.menus.SpellcraftingMenu;
 import misc.MiscMath;
 
@@ -70,9 +71,8 @@ public class GameScreen extends GameState {
                 return false;
             }
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 gui.stackModal(spellbook);
-                return true;
             }
         };
         spellbookButton.setTooltipText("Journal (TAB)");
@@ -113,6 +113,10 @@ public class GameScreen extends GameState {
         gui.addElement(spellcasting, 0, 0, GUIAnchor.CENTER);
         spellbook.hide();
         spellcasting.hide();
+
+        gui.addElement(new TextLabel("Spellbound Demo Build", 4, Color.white, true, false), 0, 2, GUIAnchor.TOP_MIDDLE);
+
+        gui.stackModal(new PopupMenu("New Discovery", "Projectile","You've won a free iPad! Please come and collect your prize.", "icons/amulet.png", Color.black));
 
         gui.setSpeechBubble();
     }

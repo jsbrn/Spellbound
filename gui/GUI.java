@@ -36,7 +36,7 @@ public class GUI {
         this.elements = new ArrayList<>();
         this.modals = new Stack<>();
         this.lastMousePosition = new int[]{0, 0};
-        this.tooltip = new TextLabel("", 4,96, Integer.MAX_VALUE, Color.white, true, true);
+        this.tooltip = new TextLabel("", 4,96, Integer.MAX_VALUE, Color.white, false, true);
     }
 
     /**TODO: All GUI Elements have a listener that is registered and unregistered with the element. Remove the static SpeechBubble.*/
@@ -142,6 +142,7 @@ public class GUI {
 
     public void stackModal(Modal element) {
         if (element != null) {
+            if (!elements.contains(element)) addElement(element, 0, 0, GUIAnchor.CENTER);
             modals.add(element);
             element.show();
         }
@@ -150,7 +151,7 @@ public class GUI {
     public void popModal() {
         if (modals.isEmpty()) return;
         if (!modals.isEmpty()) modals.peek().hide();
-        modals.pop();
+        elements.remove(modals.pop());
         if (!modals.isEmpty()) modals.peek().onShow();
     }
 

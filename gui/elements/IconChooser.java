@@ -7,8 +7,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import java.util.ArrayList;
-
 public class IconChooser extends GUIElement {
 
     private String folder;
@@ -25,18 +23,16 @@ public class IconChooser extends GUIElement {
         this.folder = folder;
         this.left = new Button(null, 8, 8, "icons/arrow_left.png", true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 index = index == 0 ? iconCount - 1 : index - 1;
                 refresh();
-                return true;
             }
         };
         this.right = new Button(null, 8, 8, "icons/arrow_right.png", true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 index = index == iconCount - 1 ? 0 : index + 1;
                 refresh();
-                return true;
             }
         };
         this.iconLabel = new IconLabel();

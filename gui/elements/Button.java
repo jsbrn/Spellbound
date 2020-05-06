@@ -9,7 +9,7 @@ import org.newdawn.slick.Image;
 public abstract class Button extends GUIElement {
 
     private int[] dims;
-    private Color color, highlightColor, disabledColor;
+    private Color color, toggledColor, disabledColor;
     private boolean toggled, showBackground, disabled;
 
     private IconLabel iconLabel;
@@ -20,7 +20,7 @@ public abstract class Button extends GUIElement {
         this.showBackground = showBackground;
         this.dims = new int[]{w, h};
         this.color = new Color(170, 115, 65);
-        this.highlightColor = new Color(105, 196, 235);
+        this.toggledColor = new Color(105, 196, 235);
         this.disabledColor = new Color(100, 100, 100);
         this.iconLabel = icon != null ? new IconLabel(icon) : new IconLabel();
         this.addChild(iconLabel, 0, 0, GUIAnchor.CENTER);
@@ -38,12 +38,8 @@ public abstract class Button extends GUIElement {
         iconLabel.setFilter(filter);
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setHighlightColor(Color color) {
-        this.highlightColor = color;
+    private Color getCurrentColor() {
+        return toggled ? toggledColor : (disabled ? disabledColor : color);
     }
 
     @Override
@@ -73,7 +69,7 @@ public abstract class Button extends GUIElement {
     public boolean isToggled() { return toggled; }
     public void setToggled(boolean t) { toggled = t; }
 
-    public abstract boolean onClick(int button);
+    public abstract void onClick(int button);
 
     @Override
     public boolean onMouseMoved(int ogx, int ogy) { return false; }
@@ -91,13 +87,14 @@ public abstract class Button extends GUIElement {
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
         if (!showBackground) return;
-        Color c = disabled ? disabledColor : (mouseHovering || toggled ? highlightColor : color);
-        Color darker = c.darker(), lighter = c.brighter();
+        boolean pushedIn = (mouseDown && mouseIntersects()) || toggled;
+        Color c = toggled ? toggledColor : (mouseIntersects() ? getCurrentColor().brighter(0.3f) : getCurrentColor());
+        Color darkBorder = pushedIn ? c.brighter() : c.darker(), lightBorder = pushedIn ? c.darker() : c.brighter();
         for (int i = 0; i < dims[0]; i++) {
             for (int j = 0; j < dims[1]; j++) {
                 b.setColor(c);
-                if (i == dims[0] - 1 || j == dims[1] - 1) b.setColor(!(mouseDown && mouseHovering) && !toggled ? darker : lighter);
-                if (i == 0 || j == 0) b.setColor(!(mouseDown && mouseHovering) && !toggled ? lighter : darker);
+                if (i == dims[0] - 1 || j == dims[1] - 1) b.setColor(darkBorder);
+                if (i == 0 || j == 0) b.setColor(lightBorder);
                 b.fillRect(i, j, 1, 1);
             }
         }

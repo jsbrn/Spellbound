@@ -47,9 +47,8 @@ public class SpeechBubble extends GUIElement {
             int optionId = o;
             Button option = new Button(dialogue.getOptionText(optionId), getDimensions()[0], 6, null, true) {
                 @Override
-                public boolean onClick(int button) {
+                public void onClick(int button) {
                     EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, optionId));
-                    return true;
                 }
             };
             addChild(option, 0, -(dialogue.getOptionCount() - 1 - o) * 7, GUIAnchor.BOTTOM_MIDDLE);
@@ -90,9 +89,7 @@ public class SpeechBubble extends GUIElement {
 
     @Override
     public boolean onKeyUp(int key) {
-        if (key >= 2 && key <= 9) {
-            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, key - 2));
-        } else if (key == Input.KEY_ESCAPE) {
+        if (key == Input.KEY_ESCAPE || key == Input.KEY_TAB) {
             EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, -1));
         }
         return true;

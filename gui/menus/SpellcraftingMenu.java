@@ -53,7 +53,7 @@ public class SpellcraftingMenu extends Modal {
         techniqueConflicts = new TextLabel("", 4, 100, 3, Color.red, false, false);
         createButton = new Button("Create!", 24, 8, null, true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 spell.setColor(colorChooser.getColor());
                 spell.setIconIndex(iconChooser.getIndex());
                 spell.setName(nameField.getText());
@@ -61,7 +61,6 @@ public class SpellcraftingMenu extends Modal {
                 target.addCrystals(-spell.getCrystalCost());
                 nameField.releaseFocus();
                 getGUI().popModal();
-                return true;
             }
         };
 
@@ -96,8 +95,8 @@ public class SpellcraftingMenu extends Modal {
         addChild(new TextLabel("Discovered Techniques", 5, Color.white, true, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new Button("Cancel", 24, 8, null, true) {
             @Override
-            public boolean onClick(int button) {
-                getGUI().popModal(); return true;
+            public void onClick(int button) {
+                getGUI().popModal();
             }
         }, 12, -6, GUIAnchor.BOTTOM_LEFT);
 
@@ -105,19 +104,18 @@ public class SpellcraftingMenu extends Modal {
 
         leftButton = new Button(null, 8, 8, "icons/arrow_left.png", true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 currentCategory = (int)MiscMath.clamp(currentCategory-1, 0, categories.size()-1);
                 refreshTechniquesPanel();
-                return true;
             }
         };
 
         rightButton = new Button(null, 8, 8, "icons/arrow_right.png", true) {
             @Override
-            public boolean onClick(int button) {
+            public void onClick(int button) {
                 currentCategory = (int)MiscMath.clamp(currentCategory+1, 0, categories.size()-1);
                 refreshTechniquesPanel();
-                return true;
+
             }
         };
 
@@ -138,7 +136,7 @@ public class SpellcraftingMenu extends Modal {
                 private TextLabel levelLabel = new TextLabel("", 4, Color.yellow, true, false);
                 private TextLabel warningLabel = new TextLabel("!", 6, Color.red, true, false);
                 @Override
-                public boolean onClick(int button) {
+                public void onClick(int button) {
                     if (button == 0) {
                         if (spell.hasTechnique(technique)) {
                             spell.addLevel(technique);
@@ -164,7 +162,6 @@ public class SpellcraftingMenu extends Modal {
                     levelLabel.setText(Techniques.getMaxLevel(technique) > 1 ? spell.getLevel(technique)+"/"+Techniques.getMaxLevel(technique) : "");
                     setToggled(spell.hasTechnique(technique));
                     refreshRequirements();
-                    return true;
                 }
 
                 @Override

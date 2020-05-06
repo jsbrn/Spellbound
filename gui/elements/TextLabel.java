@@ -76,7 +76,7 @@ public class TextLabel extends GUIElement {
             int width = (int)(getFont().getWidth(row) / Window.getScale());
             if (width > longestRowSize) longestRowSize = width;
         }
-        actualWidth = longestRowSize;
+        actualWidth = longestRowSize - 1;
         return rows;
     }
 

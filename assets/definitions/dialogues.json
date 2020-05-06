@@ -54,6 +54,23 @@
     ]
   },
   {
+    "id": "roommate_satisfied",
+    "texts": [
+      "Thank you so much for helping me!",
+      "Wow, I thought I'd never get it back!",
+      "Thank you so much. This amulet is a family heirloom.",
+      "You're the best!",
+      "I'm so glad you didn't get killed out there looking for those artifacts.",
+      "I hope you didn't have to go into those awful crypts for this thing. I appreciate it."
+    ],
+    "options": [
+      {
+        "label": "Glad I could help.",
+        "pointsTo": null
+      }
+    ]
+  },
+  {
     "id": "roommate_greeting",
     "texts": [
       "Got my amulet?",
@@ -73,6 +90,7 @@
       "One day I might enroll at that magic school up north. You should come with me."
     ],
     "options": [
+      { "label": "I have your amulet.", "pointsTo": null},
       { "label": "What are the controls?", "pointsTo": "roommate_controls" },
       { "label": "How do I craft spells?", "pointsTo": "roommate_spellcrafting"},
       { "label": "What's around here?", "pointsTo": "roommate_exploration"},
@@ -221,16 +239,16 @@
       "No problem. Also, I'm pretty sure the guy outside sells pre-made Spells if you need one in a pinch."
     ],
     "options": [
-      { "label": "Good to know.", "pointsTo": "roommate_spellcrafting_7" }
+      { "label": "Good to know.", "pointsTo": null }
     ]
   },
   {
     "id": "collector_introduction",
     "texts": [
-      "Well, well, well. You must be new in town.",
-      "Well, look who we have here. A newbie!",
       "You know, I don't think we've met.",
-      "You're not from around here, are you?"
+      "I don't think we've met.",
+      "I don't remember seeing you last night. Have we met?",
+      "How's the hangover?"
     ],
     "options": [
       { "label": "Give me my friend's amulet.", "pointsTo": "collector_1"}
@@ -309,12 +327,29 @@
     ]
   },
   {
+    "id": "collector_demand",
+    "texts": [
+      "Got something for me?",
+      "Did you find my artifacts?",
+      "How's the hunt?",
+      "I see you're still alive. That's a good sign.",
+      "How's it going?",
+      "Still looking?",
+      "I'm hoping to get those artifacts by sundown."
+    ],
+    "options": [
+      { "label": "I have all 5 artifacts.", "pointsTo":  null},
+      { "label": "I'm still looking.", "pointsTo": "collector_greeting"}
+    ]
+  },
+  {
     "id": "collector_greeting",
     "texts": [
-      "Found anything good?",
-      "What do you have for me?",
-      "I hope you've got more of those Artifacts.",
-      "Got something for me?"
+      "What are you here for?",
+      "Buying or selling?",
+      "Doing a little shopping, are we?",
+      "I've got exactly what you need.",
+      "I've got the best prices in all the land."
     ],
     "options": [
       { "label": "Buy", "pointsTo": "collector_buy"},
@@ -329,7 +364,8 @@
       "Make it quick. I'm a busy man."
     ],
     "options": [
-      { "label": "Buy 10 Crystals (-20GP)", "pointsTo": null },
+      { "label": "Buy 10 Crystals (-25GP)", "pointsTo": null },
+      { "label": "Buy 10 Dyes (-10GP)", "pointsTo": null },
       { "label": "Buy a Spell...", "pointsTo": "collector_choose_spell" }
     ]
   },
@@ -357,8 +393,7 @@
       "I hope you're not wasting my time."
     ],
     "options": [
-      { "label": "Sell 10 Crystals (+15GP)", "pointsTo": null },
-      { "label":  "Sell artifacts (+100GP per)", "pointsTo": null }
+      { "label": "Sell 10 Crystals (+15GP)", "pointsTo": null }
     ]
   },
   {
