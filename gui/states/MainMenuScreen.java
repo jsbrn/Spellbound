@@ -4,6 +4,7 @@ import assets.Assets;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.*;
+import gui.menus.PopupMenu;
 import main.GameManager;
 import org.newdawn.slick.*;
 import world.Chunk;
@@ -38,6 +39,16 @@ public class MainMenuScreen extends GameState {
                     World.load();
                 }
                 GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
+                World.setPaused(true);
+                GameManager.getGameState(GameState.GAME_SCREEN).getGUI().stackModal(new PopupMenu(
+                        "Please Note",
+                        "",
+                        "This is a very simple demo of the core mechanics (the spell crafting and dungeon crawling). " +
+                                "It is NOT the final game. There will be bugs. " +
+                                "I'll be releasing the Alpha version of the game soon. " +
+                                "Follow the itch.io devlog to stay up-to-date.",
+                        "icons/tome.png",
+                        Color.white));
                 GameManager.switchTo(GameState.GAME_SCREEN);
             }
         };

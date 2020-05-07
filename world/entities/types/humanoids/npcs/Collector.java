@@ -1,6 +1,9 @@
 package world.entities.types.humanoids.npcs;
 
 import assets.SpellFactory;
+import gui.menus.PopupMenu;
+import gui.states.GameState;
+import main.GameManager;
 import misc.MiscMath;
 import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
@@ -68,7 +71,13 @@ public class Collector extends HumanoidEntity {
                             setConversationStartingPoint("collector_greeting");
                             pre.getPlayer().addArtifacts(-pre.getPlayer().getArtifactCount());
                             pre.getPlayer().setHasAmulet(true);
-                            getActionQueue().queueAction(new SpeakAction("Great stuff! Here's your amulet."));
+                            GameManager.getGameState(GameState.GAME_SCREEN).getGUI().stackModal(new PopupMenu(
+                                    "Congratulations!",
+                                    "You found the Amulet",
+                                    "You found all 5 Artifacts and the Collector has given you the Amulet. All that's left is to find your friend and return it.",
+                                    "icons/amulet.png",
+                                    Color.white
+                            ));
                         }
                     } else if (id.equals("collector_buy")) {
                         if (pre.getOption() == 0) {

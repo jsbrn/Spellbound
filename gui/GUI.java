@@ -25,7 +25,6 @@ public class GUI {
 
     private ArrayList<GUIElement> elements;
     private Stack<Modal> modals;
-    private SpeechBubble speechBubble;
     private TextLabel tooltip;
     private int[] lastMousePosition;
     private boolean debugMode;
@@ -37,40 +36,6 @@ public class GUI {
         this.modals = new Stack<>();
         this.lastMousePosition = new int[]{0, 0};
         this.tooltip = new TextLabel("", 4,96, Integer.MAX_VALUE, Color.white, false, true);
-    }
-
-    /**TODO: All GUI Elements have a listener that is registered and unregistered with the element. Remove the static SpeechBubble.*/
-    public void setSpeechBubble() {
-        speechBubble = new SpeechBubble();
-        this.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
-        speechBubble.hide();
-
-        EventDispatcher.register(new EventListener()
-                .on(NPCSpeakEvent.class.toString(), new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        NPCSpeakEvent cse = (NPCSpeakEvent)e;
-                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
-                            speechBubble.setSpeaker(cse.getNPC());
-                            speechBubble.setDialogue(cse.getDialogue());
-                            speechBubble.show();
-                        }
-                    }
-                })
-                .on(ConversationEndedEvent.class.toString(), new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        ConversationEndedEvent cse = (ConversationEndedEvent)e;
-                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
-                            speechBubble.hide();
-                        }
-                    }
-                })
-        );
-    }
-
-    public SpeechBubble getSpeechBubble() {
-        return speechBubble;
     }
 
     public String getToolTipText() {

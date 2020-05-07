@@ -2,6 +2,7 @@ package gui.elements;
 
 import assets.Assets;
 import gui.GUIElement;
+import gui.menus.CheatCodeMenu;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -37,19 +38,6 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public boolean onMouseRelease(int ogx, int ogy, int button) {
-        double[] mouse_wcoords = Camera.getWorldCoordinates(ogx * Window.getScale(), ogy * Window.getScale(), Window.getScale());
-        if (button == 2) {
-            Random rng = new Random();
-            for (int i = 0; i < 1; i++) {
-                Entity civ = new Collector();
-                Location player = World.getLocalPlayer().getLocation();
-                civ.moveTo(new Location(
-                        player.getRegion(),
-                        mouse_wcoords[0],
-                        mouse_wcoords[1],
-                        (int)MiscMath.random(0, 360)));
-            }
-        }
         double[] wc = Camera.getWorldCoordinates(ogx * Window.getScale(), ogy * Window.getScale(), Window.getScale());
         EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
         return true;
@@ -76,7 +64,7 @@ public class CameraViewport extends GUIElement {
     @Override
     public boolean onKeyUp(int key) {
         if (key == Input.KEY_F3) getGUI().toggleDebugMode();
-        if (key == Input.KEY_F12) World.getLocalPlayer().activateGodMode();
+        if (key == Input.KEY_F12) getGUI().stackModal(new CheatCodeMenu());
         EventDispatcher.invoke(new KeyUpEvent(key));
         return true;
     }

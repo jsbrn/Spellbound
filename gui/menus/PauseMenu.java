@@ -34,14 +34,6 @@ public class PauseMenu extends Modal {
     }
 
     @Override
-    public boolean onKeyUp(int key) {
-        if (key == Input.KEY_ESCAPE) {
-            getGUI().popModal();
-        }
-        return true;
-    }
-
-    @Override
     public boolean onKeyDown(int key) {
         return true;
     }

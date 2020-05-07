@@ -19,8 +19,10 @@ import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
+import world.events.event.ConversationEndedEvent;
 import world.events.event.HumanoidDeathEvent;
 import world.events.event.HumanoidRespawnEvent;
+import world.events.event.NPCSpeakEvent;
 
 
 public class GameScreen extends GameState {
@@ -35,7 +37,6 @@ public class GameScreen extends GameState {
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        World.setTimeMultiplier(gc.getInput().isKeyDown(Input.KEY_LSHIFT) ? 0.5 : 1);
         MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
         World.update();
     }
@@ -116,9 +117,32 @@ public class GameScreen extends GameState {
 
         gui.addElement(new TextLabel("Spellbound Demo Build", 4, Color.white, true, false), 0, 2, GUIAnchor.TOP_MIDDLE);
 
-        gui.stackModal(new PopupMenu("New Discovery", "Projectile","You've won a free iPad! Please come and collect your prize.", "icons/amulet.png", Color.black));
+        SpeechBubble speechBubble = new SpeechBubble();
+        gui.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
+        speechBubble.hide();
+        EventDispatcher.register(new EventListener()
+                .on(NPCSpeakEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        NPCSpeakEvent cse = (NPCSpeakEvent)e;
+                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
+                            speechBubble.setSpeaker(cse.getNPC());
+                            speechBubble.setDialogue(cse.getDialogue());
+                            speechBubble.show();
+                        }
+                    }
+                })
+                .on(ConversationEndedEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        ConversationEndedEvent cse = (ConversationEndedEvent)e;
+                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
+                            speechBubble.hide();
+                        }
+                    }
+                })
+        );
 
-        gui.setSpeechBubble();
     }
 
     @Override

@@ -1,5 +1,9 @@
 package world.entities.types.humanoids.npcs;
 
+import gui.menus.PopupMenu;
+import gui.states.GameState;
+import main.GameManager;
+import org.newdawn.slick.Color;
 import world.World;
 import world.entities.Entity;
 import world.entities.actions.types.SpeakAction;
@@ -46,14 +50,22 @@ public class Roommate extends HumanoidEntity {
                         setConversationStartingPoint("roommate_greeting");
                     } else if (pre.getDialogue().getID().equals("roommate_greeting")) {
                         if (pre.getOption() == 0) {
+                            exitState();
                             if (pre.getPlayer().hasAmulet()) {
                                 //you did it!
-                                setConversationStartingPoint("roommate_satisfied");
-                                exitState();
-                                getActionQueue().queueAction(new SpeakAction("Thank you!"));
                                 pre.getPlayer().setHasAmulet(false);
+                                setConversationStartingPoint("roommate_satisfied");
+                                GameManager.getGameState(GameState.GAME_SCREEN).getGUI().stackModal(new PopupMenu(
+                                        "Victory",
+                                        "Thanks for playing!",
+                                        "You've successfully returned the Amulet, and the game is now complete. " +
+                                                "But don't worry. There are still plenty of dungeons to loot and spells to discover. " +
+                                                "I am working on a much larger main quest, and much more." +
+                                                "Stay tuned!",
+                                        "icons/amulet.png",
+                                        Color.white
+                                ));
                             } else {
-                                exitState();
                                 getActionQueue().queueAction(new SpeakAction("Liar!"));
                             }
                         }

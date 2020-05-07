@@ -1,5 +1,6 @@
 package world.entities.types;
 
+import gui.menus.PopupMenu;
 import gui.states.GameState;
 import main.GameManager;
 import org.json.simple.JSONObject;
@@ -73,7 +74,7 @@ public class Chest extends Entity {
                                         if (loot == GOLD_LOOT) { amount /= 10; human.addGold(amount, false); type = "Gold"; }
                                         if (loot == CRYSTAL_LOOT) { amount /= 20; human.addCrystals(amount); type = "Crystals"; }
                                         if (loot == DYE_LOOT) { amount /= 30; human.addDyes(amount); type = "Dyes"; }
-                                        if (loot == TOME_LOOT) { amount = 1; }//human.addTomes(amount); type = "Tome"; }
+                                        if (loot == TOME_LOOT) { amount = 1; type = "Tome"; }
                                         if (loot == ARTIFACT_LOOT) { amount = 1; human.addArtifacts(amount); type = "Strange Artifact"; }
                                         if (loot == KEY_LOOT) { amount = 1; human.addKeys(amount); type = "Key"; }
                                         empty = amount <= 0;
@@ -85,6 +86,15 @@ public class Chest extends Entity {
                                         GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "Empty", Color.gray, 2, 500, -0.5f, false);
                                     } else {
                                         GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "+"+amount+" "+type, Color.yellow, 2, 750, -0.5f, false);
+                                    }
+
+                                    if (lootType == ARTIFACT_LOOT) {
+                                        GameManager.getGameState(GameState.GAME_SCREEN).getGUI().stackModal(new PopupMenu(
+                                                "Artifact Found", "",
+                                                "You found a mysterious Artifact! Could this be what the Collector is looking for?",
+                                                "icons/artifact.png",
+                                                Color.white
+                                        ));
                                     }
 
                                     looted = true;
