@@ -47,7 +47,7 @@
   {
     "id": "roommate_6",
     "texts": [
-      "Don't tell anyone I told you, but you can press E while facing something to interact with it. Like the door."
+      "Don't tell anyone I told you, but you can press E while facing something to interact with it. Like me, or the door."
     ],
     "options": [
       { "label": "Very helpful, thank you.", "pointsTo": null}

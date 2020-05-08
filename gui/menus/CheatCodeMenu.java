@@ -45,7 +45,7 @@ public class CheatCodeMenu extends Modal {
 
     private void checkCode() {
         String code = input.getText();
-        if (code.equals("omni")) {
+        if (code.equals("6mdm")) {
             World.getLocalPlayer().activateGodMode();
         }
         if (code.equals("speedrun")) {
@@ -57,11 +57,22 @@ public class CheatCodeMenu extends Modal {
         if (code.equals("freelunch")) {
             spawnChest();
         }
+        if (code.equals("magicman")) {
+            World.getLocalPlayer().getSpellbook().discoverAllTechniques();
+        }
+        if (code.equals("xray")) {
+            for (int i = 0; i < World.getRegion().getSize(); i++)
+                for (int j = 0; j < World.getRegion().getSize(); j++)
+                World.getRegion().getChunk(i, j).setDiscovered(true);
+        }
+        if (code.equals("lockpick")) {
+            World.getLocalPlayer().addKeys(10);
+        }
     }
 
     private void spawnChest() {
         double[] playerCoords = World.getLocalPlayer().getLocation().getCoordinates();
-        Entity lootChest = new Chest(10, false, Chest.RANDOM_LOOT, 1.0f);
+        Entity lootChest = new Chest(2.0f, false, Chest.RANDOM_LOOT, 1.0f);
         Location player = World.getLocalPlayer().getLocation();
         lootChest.moveTo(new Location(
                 player.getRegion(),
@@ -78,11 +89,13 @@ public class CheatCodeMenu extends Modal {
 
     @Override
     public void onShow() {
+        input.grabFocus();
         World.setPaused(true);
     }
 
     @Override
     public void onHide() {
+        input.releaseFocus();
         World.setPaused(false);
     }
 }

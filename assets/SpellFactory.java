@@ -3,7 +3,11 @@ package assets;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
 import world.entities.magic.Spell;
+import world.entities.magic.Spellbook;
+import world.entities.magic.techniques.Techniques;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 
 public class SpellFactory {
@@ -26,6 +30,14 @@ public class SpellFactory {
         int randomized = base - 2 + rng.nextInt(5);
         int actual = (int)MiscMath.clamp(randomized, 0, adjectives.length - 1);
         return adjectives[actual];
+    }
+
+    public static String discoverRandomTechnique(Spellbook spellbook, float maxRarity) {
+        String[] techniques = Techniques.getAll();
+        return Arrays.asList(techniques).stream()
+                .sorted((t1, t2) -> rng.nextInt(techniques.length))
+                .filter(t -> !spellbook.hasTechnique(t) && Techniques.getRarity(t) <= maxRarity)
+                .findFirst().orElse(null);
     }
 
     public static Spell createDamageSpell(int level) {

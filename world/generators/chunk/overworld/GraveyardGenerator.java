@@ -23,7 +23,7 @@ public class GraveyardGenerator extends OpenFieldGenerator {
     public Entity getEntity(int x, int y) {
         return Math.random() <= 0.1
                 ? new Zombie()
-                : (rng().nextFloat() <= 0.05 ? new Chest(rng().nextInt(3) + 1, false, Chest.GOLD_LOOT, 0.5f) : null);
+                : (rng().nextFloat() <= 0.05 ? new Chest((rng().nextInt(3) + 1) / 10f, false, Chest.GOLD_LOOT, 0.5f) : null);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class PopupMenu extends Modal {
         addChild(new TextLabel(subtitle, 4, Color.gray, false, false), 0, 16, GUIAnchor.TOP_MIDDLE);
         IconLabel iconLabel = new IconLabel(icon);
         iconLabel.setFilter(iconFilter);
-        addChild(iconLabel, 0, 24, GUIAnchor.TOP_MIDDLE);
+        addChild(iconLabel, 0, -24, GUIAnchor.CENTER);
         addChild(new TextLabel(description, 4, (int)(16*4.75), 9, Color.darkGray, false, false), 0, 48, GUIAnchor.TOP_MIDDLE);
         addChild(new Button("Continue", 32, 8, null, true) {
             @Override

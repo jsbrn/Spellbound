@@ -22,12 +22,10 @@ public class Statusbar extends GUIElement {
 
     public Statusbar(HumanoidEntity target) {
         this.target = target;
-        healthLabel = new TextLabel("0/0", 3, Color.white, false, false);
-        manaLabel = new TextLabel("0/0", 3, Color.white, false, false);
-        staminaLabel = new TextLabel("0/0", 3, Color.white, false, false);
-        this.addChild(healthLabel, 5, -8, GUIAnchor.CENTER);
-        this.addChild(manaLabel, 5, -1, GUIAnchor.CENTER);
-        this.addChild(staminaLabel, 5, 6, GUIAnchor.CENTER);
+        healthLabel = new TextLabel("-", 4, Color.white, true, false);
+        manaLabel = new TextLabel("-", 4, Color.white, true, false);
+        this.addChild(healthLabel, 5, 5, GUIAnchor.TOP_MIDDLE);
+        this.addChild(manaLabel, 5, 12, GUIAnchor.TOP_MIDDLE);
         amuletIndicator = new IconLabel("icons/amulet.png");
         this.addChild(amuletIndicator, 56, 0, GUIAnchor.TOP_LEFT);
         try {
@@ -83,18 +81,15 @@ public class Statusbar extends GUIElement {
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
         healthLabel.setText(target.getHP() < 1 ? "!!!" : (int)target.getHP()+"/"+(int)target.getMaxHP());
-        manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxMana());
-        staminaLabel.setText((int)target.getStamina()+"/"+(int)target.getMaxStamina());
+        manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxHP());
 
         if (target.hasAmulet()) amuletIndicator.show(); else amuletIndicator.hide();
 
         b.drawImage(image, 0, 0);
         b.setColor(healthColor);
-        b.fillRect(16, 8, (int)(32 * (target.getHP() / target.getMaxHP())), 3);
+        b.fillRect(16, 6, (int)(32 * (target.getHP() / target.getMaxHP())), 3);
         b.setColor(manaColor);
-        b.fillRect(16, 15, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
-        b.setColor(staminaColor);
-        b.fillRect(16, 22, (int)(32 * (target.getStamina() / target.getMaxStamina())), 3);
+        b.fillRect(16, 13, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
     }
 
 }

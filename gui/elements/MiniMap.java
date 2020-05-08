@@ -2,6 +2,7 @@ package gui.elements;
 
 import assets.Assets;
 import gui.GUIElement;
+import misc.MiscMath;
 import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -105,11 +106,14 @@ public class MiniMap extends GUIElement {
     public void drawOver(Graphics g) {
         super.drawOver(g);
         Region current = getRegion();
+        int[] player_cc = World.getLocalPlayer().getLocation().getChunkCoordinates();
         for (int x = 0; x < current.getSize(); x++) {
             for (int y = 0; y < current.getSize(); y++) {
                 ChunkGenerator generator = current.getChunkGenerator(x, y);
+                int distance = (int)MiscMath.distanceSquared(player_cc[0], player_cc[1], x, y);
                 if (generator == null || generator.getIcon() == null) continue;
                 Image icon = Assets.getImage(current.isChunkDiscovered(x, y) ? generator.getIcon() : "assets/gui/icons/minimap/unknown.png");
+                if (distance > 64 && !current.isChunkDiscovered(x, y)) continue;
                 g.drawImage(icon,
                         getOnscreenCoordinates()[0] + (Window.getScale()*(2 + ((x+0.5f) * getMapScale()))) - (icon.getWidth()/2),
                         getOnscreenCoordinates()[1] + (Window.getScale()*(2 + ((y+0.5f) * getMapScale())) - (icon.getHeight()/2))

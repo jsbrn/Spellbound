@@ -59,7 +59,7 @@ public class GameScreen extends GameState {
             }
         }, 0, 0, GUIAnchor.TOP_LEFT);
         gui.addElement(new Statusbar(World.getLocalPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 38, GUIAnchor.TOP_LEFT);
+        gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 26, GUIAnchor.TOP_LEFT);
         gui.addElement(pauseMenu, 0,0, GUIAnchor.CENTER);
         pauseMenu.hide();
         Button spellbookButton = new Button(null, 16, 16, "spellbook.png", false) {
@@ -77,7 +77,7 @@ public class GameScreen extends GameState {
             }
         };
         spellbookButton.setTooltipText("Journal (TAB)");
-        gui.addElement(spellbookButton, 4, 94, GUIAnchor.TOP_LEFT);
+        gui.addElement(spellbookButton, 2, 82, GUIAnchor.TOP_LEFT);
 
         MiniMap miniMap = new MiniMap();
         gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);

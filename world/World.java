@@ -40,7 +40,7 @@ public class World {
 
     public static void generate(int seed) {
         World.seed = seed;
-        addRegion(new Region("world", 16, new DefaultWorldGenerator(seed)));
+        addRegion(new Region("world", 24, new DefaultWorldGenerator(seed)));
         getRegion("world").plan();
     }
 

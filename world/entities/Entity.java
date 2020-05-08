@@ -286,7 +286,7 @@ public class Entity {
         switch (type) {
             case "Zombie": e = new Zombie(); break;
             case "Bandit": e = new Bandit((int)(long)json.get("level")); break;
-            case "Chest": e = new Chest((int)(long)json.get("lootMultiplier"), (boolean)json.get("locked"), (int)(long)json.get("lootType"), (float)(double)json.get("filledChance")); break;
+            case "Chest": e = new Chest((float)(double)json.get("lootMultiplier"), (boolean)json.get("locked"), (int)(long)json.get("lootType"), (float)(double)json.get("filledChance")); break;
             case "Civilian": e = new Civilian(); break;
             case "LostCivilian": e = new LostCivilian(1); break;
             case "SpikeTrap": e = new SpikeTrap(); break;

@@ -3,6 +3,8 @@ package world.entities.magic.techniques;
 import assets.CSVReader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Techniques {
 
@@ -26,8 +28,9 @@ public class Techniques {
 
     public static boolean isDefault(String id) { return reader().getBoolean("Default", id);}
 
+    public static float getRarity(String id) { return (float)reader().getDouble("Rarity", id); }
+
     public static String getConflictsWith(String id) { return reader().get("ConflictsWith", id); }
-    public static String getRequires(String id) { return reader().get("Requires", id); }
 
     public static boolean getRequiresEnergy(String id) { return reader().getBoolean("RequiresEnergy", id); }
 

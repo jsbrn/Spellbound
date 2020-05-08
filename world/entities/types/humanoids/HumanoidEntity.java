@@ -123,7 +123,6 @@ public class HumanoidEntity extends Entity {
         if (isDead()) return;
         super.update();
         addMana(MiscMath.getConstant(max_mana, 20));
-        addStamina(MiscMath.getConstant(max_stamina, 7.5));
     }
 
     public String getAllegiance() { return allegiance; }
@@ -140,10 +139,8 @@ public class HumanoidEntity extends Entity {
 
     public double getHP() { return hp; }
     public double getMana() { return mana; }
-    public double getStamina() { return stamina; }
     public double getMaxHP() { return max_hp; }
     public double getMaxMana() { return max_mana; }
-    public double getMaxStamina() { return max_stamina; }
 
     public int getCrystalCount() { return crystals; }
     public int getGoldCount() { return gold; }
@@ -195,8 +192,6 @@ public class HumanoidEntity extends Entity {
         }
     }
     public void addHP(double amount, boolean verbose) { setHP(hp + amount, verbose); }
-    public void setStamina(double amount) { this.stamina = MiscMath.clamp(amount, 0, max_stamina); }
-    public void addStamina(double amount) { setStamina(stamina + amount); }
 
     public void setMaxHP(double amount) { this.max_hp = amount; }
     public void setMaxMana(double amount) { this.max_mana = amount; }
@@ -206,7 +201,6 @@ public class HumanoidEntity extends Entity {
         if (isDead) {
             setHP(max_hp, true);
             setMana(max_mana);
-            setStamina(0); //probably out of breath if you come back from the dead.
             clearAllActions();
             setIsTile(false);
             getAnimationLayer("torso").setBaseAnimation("default");
@@ -235,8 +229,6 @@ public class HumanoidEntity extends Entity {
         serialized.put("max_hp", getMaxHP());
         serialized.put("mana", getMana());
         serialized.put("max_mana", getMaxMana());
-        serialized.put("stamina", getStamina());
-        serialized.put("max_stamina", getMaxStamina());
         serialized.put("gold", getGoldCount());
         serialized.put("crystals", getCrystalCount());
         serialized.put("dyes", getDyeCount());
@@ -255,12 +247,11 @@ public class HumanoidEntity extends Entity {
         setMaxHP((double)json.get("max_hp"));
         setMana((double)json.get("mana"));
         setMaxMana((double)json.get("max_mana"));
-        setStamina((double)json.get("stamina"));
-        setMaxStamina((double)json.get("max_stamina"));
         addGold((int)(long)json.get("gold"), false);
         addCrystals((int)(long)json.get("crystals"));
         addDyes((int)(long)json.get("dyes"));
         addKeys((int)(long)json.get("keys"));
+        addArtifacts((int)(long)json.get("artifacts"));
         setHasAmulet((boolean)json.get("has_amulet"));
         getSpellbook().deserialize((JSONObject)json.get("spellbook"));
     }

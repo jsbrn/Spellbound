@@ -80,6 +80,8 @@ public class TextBox extends GUIElement {
         return false;
     }
 
+    public void grabFocus() { this.focused = true; }
+
     public void releaseFocus() {
         this.focused = false;
     }

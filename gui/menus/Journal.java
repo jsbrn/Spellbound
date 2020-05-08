@@ -64,7 +64,8 @@ public class Journal extends Modal {
             @Override
             public void onClick(int button) {
                 if  (selectedSpell >= 0) {
-                    target.addCrystals(target.getSpellbook().getSpell(selectedSpell).getCrystalCost() / 4);
+                    target.addCrystals(target.getSpellbook().getSpell(selectedSpell).getCrystalCost() / 2);
+                    target.addDyes((int)(target.getSpellbook().getSpell(selectedSpell).getDyeCost() * 0.75));
                     target.getSpellbook().getSpells().remove(selectedSpell);
                 }
                 if (selectedSpell >= target.getSpellbook().getSpells().size())
@@ -72,7 +73,6 @@ public class Journal extends Modal {
                 refresh();
             }
         };
-        destroyButton.setTooltipText("Break down the spell to learn techniques and get resources back.");
         moveUpButton = new Button(null, 8, 8, "icons/arrow_up.png", true) {
             @Override
             public void onClick(int button) {
@@ -112,9 +112,9 @@ public class Journal extends Modal {
                         refresh();
                     } else if (button == Input.MOUSE_MIDDLE_BUTTON) {
                         selectedSpell = index;
-                        Spell exporting = target.getSpellbook().getSpell(selectedSpell);
-                        Assets.write(Assets.ROOT_DIRECTORY+"/exported/"+exporting.getName()+".json", exporting.serialize().toJSONString());
+                        Assets.write(Assets.ROOT_DIRECTORY+"/exported/"+spell.getName()+".json", spell.serialize().toJSONString());
                     }
+                    destroyButton.setTooltipText("Destroy spell to learn techniques and harvest resources (+"+(spell.getCrystalCost()/2)+" Crystals, +"+(int)(spell.getDyeCost()*0.75)+" Dyes)");
                 }
             };
             spellButtons.add(button);

@@ -109,6 +109,7 @@ public class GUI {
         if (element != null) {
             if (!elements.contains(element)) addElement(element, 0, 0, GUIAnchor.CENTER);
             modals.add(element);
+            if (element.isActive()) element.onShow();
             element.show();
         }
     }

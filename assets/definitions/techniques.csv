@@ -1,41 +1,41 @@
-ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;RequiresEnergy;ConflictsWith;Description;Default
-affect_self;Affect Self;Affected;0;5;0;1;FALSE;-;Affect you (the caster).;TRUE
-affect_allies;Affect Allies;Affected;0;5;0;1;FALSE;-;Affect your allies.;TRUE
-affect_enemies;Affect Enemies;Affected;0;5;0;1;FALSE;-;Affect your enemies.;TRUE
-movement_caster;Aura;Movement;3;1;0;1;FALSE;movement_\w+;Follow the caster.;TRUE
-movement_follow;Follow;Movement;5;1;0;1;FALSE;movement_\w+;Follow the target.;FALSE
-movement_directional;Directional;Movement;2;1;0;1;FALSE;movement_\w+;Propel towards the direction of the cast.;TRUE
-movement_hover;Hover;Movement;1;1;0;1;FALSE;movement_\w+;Move towards a single point and hover.;FALSE
-rotation_directional;Forward;Rotation;1;1;0;1;TRUE;rotation_\w+;Look towards the direction of movement.;FALSE
-rotation_spin;Spin;Rotation;1;1;0;1;TRUE;rotation_\w+;Rotate clockwise at a constant rate.;FALSE
-rotation_counterspin;Counterspin;Rotation;1;1;0;1;TRUE;rotation_\w+;Rotate counterclockwise at a constant rate.;FALSE
-rotation_caster;Caster;Rotation;1;1;0;1;TRUE;rotation_\w+;Face the caster.;FALSE
-rotation_aim;Aim;Rotation;2;1;0;1;TRUE;rotation_\w+;Face the aim direction (mouse).;FALSE
-rotation_target;Track;Rotation;2;1;0;1;TRUE;rotation_\w+;Face the target.;TRUE
-arc_narrow;Narrow;Arc Length;0;1;0;1;TRUE;-;Narrow arc to 45 degrees.;FALSE
-arc_spread;Spread;Arc Length;1;1;0;3;TRUE;-;Increase arc by 30 degrees per level.;FALSE
-radius_min;Reach;Radius;1;1;0;5;TRUE;-;Increase min radius by 1 tile per level.;FALSE
-radius_max;Depth;Radius;1;1;0;5;TRUE;-;Increase max radius by 1 tile per level.;TRUE
-radius_expand;Expand;Radius;1;2;0;3;TRUE;radius_shrink;Increase thickness over time. Amount determined by level.;FALSE
-radius_shrink;Shrink;Radius;1;2;0;1;TRUE;radius_expand;Decrease thickness to 0 over time.;FALSE
-emission_radiate;Radiate;Emission;0;0;0;1;TRUE;emission_gravitate;Particles radiate outwards.;TRUE
-emission_gravitate;Gravitate;Emission;0;0;0;1;TRUE;emission_radiate;Particles radiate inwards.;FALSE
-emission_density;Density;Emission;0;1;0;5;TRUE;-;Increase particle count.;TRUE
-physical_barrier;Barrier;Physical;1;1;0;5;TRUE;-;Drain the energy of intersecting magic based on density.;FALSE
-physical_collision;Collision;Physical;1;2;0;1;TRUE;-;Spell energy depletes after any collision.;FALSE
-physical_weight;Weight;Physical;1;1;0;5;TRUE;-;Push any colliding enemies (apply knockback based on Speed and Weight).;TRUE
-physical_energy;Charge;Physical;1;3;0;10;TRUE;-;Increase starting energy by 2 per level. Energy depletes at a rate of 1 per second.;FALSE
-physical_torque;Torque;Physical;0;1;0;5;TRUE;-;Increase rotation speed per level.;FALSE
-physical_speed;Speed;Physical;0;1;0;5;TRUE;-;Increase movement speed per level.;TRUE
-effects_absorb;Absorb;Effects;1;2;0;3;TRUE;effects_increase|trait_x|trait_y;Drain a numerical value on the target(s) to fill the caster’s.;FALSE
-effects_decrease;Drain;Effects;1;2;0;3;TRUE;(effects_\w+)|trait_x|trait_y;Reduce a numerical value on the target(s).;TRUE
-effects_increase;Fill;Effects;1;2;0;3;TRUE;(effects_\w+)|trait_x|trait_y;Increase a numerical value on the target(s).;FALSE
-effects_randomize;Randomize;Effects;0;5;0;5;TRUE;effects_\w+;Randomize the selected value on the target (relative to original value);FALSE
-trait_hp;Health;Trait Selectors;0;1;0;1;FALSE;trait_maxhp;Select target’s HP.;TRUE
-trait_mana;Mana;Trait Selectors;0;1;0;1;FALSE;trait_maxmana;Select target’s mana.;FALSE
-trait_x;Longtitude;Trait Selectors;0;1;0;1;FALSE;-;Select target’s X coordinate.;FALSE
-trait_y;Latitude;Trait Selectors;0;1;0;1;FALSE;-;Select target’s Y coordinate.;FALSE
-trigger_cast;Cast;Triggers;1;1;0;1;TRUE;-;Apply effects once on cast.;FALSE
-trigger_depletion;Depletion;Triggers;1;1;0;1;TRUE;-;Apply effects once when spell dissipates.;FALSE
-trigger_impact;Impact;Triggers;1;1;0;1;TRUE;-;Apply effects on impact with an enemy.;TRUE
-trigger_collision;Intersection;Triggers;1;1;0;1;TRUE;-;Apply continuous effects to enemies in range.;FALSE
+ID;Name;Category;ManaCost;CrystalCost;EnergyUse;MaxLevel;RequiresEnergy;ConflictsWith;Description;Default;Rarity
+affect_self;Affect Self;Affected;0;5;0;1;FALSE;-;Affect you (the caster).;TRUE;0
+affect_allies;Affect Allies;Affected;0;5;0;1;FALSE;-;Affect your allies.;TRUE;0
+affect_enemies;Affect Enemies;Affected;0;5;0;1;FALSE;-;Affect your enemies.;TRUE;0
+movement_caster;Aura;Movement;3;1;0;1;FALSE;movement_\w+;Follow the caster.;TRUE;0
+movement_follow;Follow;Movement;5;1;0;1;FALSE;movement_\w+;Follow the target.;FALSE;0.75
+movement_directional;Directional;Movement;2;1;0;1;FALSE;movement_\w+;Propel towards the direction of the cast.;TRUE;0
+movement_hover;Hover;Movement;1;1;0;1;FALSE;movement_\w+;Move towards a single point and hover.;FALSE;0.3
+rotation_directional;Forward;Rotation;1;1;0;1;TRUE;rotation_\w+;Look towards the direction of movement.;FALSE;0
+rotation_spin;Spin;Rotation;1;1;0;1;TRUE;rotation_\w+;Rotate clockwise at a constant rate.;FALSE;0.1
+rotation_counterspin;Counterspin;Rotation;1;1;0;1;TRUE;rotation_\w+;Rotate counterclockwise at a constant rate.;FALSE;0.1
+rotation_caster;Caster;Rotation;1;1;0;1;TRUE;rotation_\w+;Face the caster.;FALSE;0.2
+rotation_aim;Aim;Rotation;2;1;0;1;TRUE;rotation_\w+;Face the aim direction (mouse).;FALSE;0.6
+rotation_target;Track;Rotation;2;1;0;1;TRUE;rotation_\w+;Face the target.;TRUE;0.5
+arc_narrow;Narrow;Arc Length;0;1;0;1;TRUE;-;Narrow arc to 45 degrees.;FALSE;0.2
+arc_spread;Spread;Arc Length;1;1;0;3;TRUE;-;Increase arc by 30 degrees per level.;FALSE;0.2
+radius_min;Reach;Radius;1;1;0;5;TRUE;-;Increase min radius by 1 tile per level.;FALSE;0.1
+radius_max;Depth;Radius;1;1;0;5;TRUE;-;Increase max radius by 1 tile per level.;TRUE;0.1
+radius_expand;Expand;Radius;1;2;0;3;TRUE;radius_shrink;Increase thickness over time. Amount determined by level.;FALSE;0.6
+radius_shrink;Shrink;Radius;1;2;0;1;TRUE;radius_expand;Decrease thickness to 0 over time.;FALSE;0.4
+emission_radiate;Radiate;Emission;0;0;0;1;TRUE;emission_gravitate;Particles radiate outwards.;TRUE;0.1
+emission_gravitate;Gravitate;Emission;0;0;0;1;TRUE;emission_radiate;Particles radiate inwards.;FALSE;0.1
+emission_density;Density;Emission;0;1;0;5;TRUE;-;Increase particle count.;TRUE;0
+physical_barrier;Barrier;Physical;1;1;0;5;TRUE;-;Drain the energy of intersecting magic based on density.;FALSE;0
+physical_collision;Collision;Physical;1;2;0;1;TRUE;-;Spell energy depletes after any collision.;FALSE;0.8
+physical_weight;Weight;Physical;1;1;0;5;TRUE;-;Push any colliding enemies (apply knockback based on Speed and Weight).;TRUE;0
+physical_energy;Charge;Physical;1;3;0;10;TRUE;-;Increase starting energy by 2 per level. Energy depletes at a rate of 1 per second.;FALSE;0
+physical_torque;Torque;Physical;0;1;0;5;TRUE;-;Increase rotation speed per level.;FALSE;0
+physical_speed;Speed;Physical;0;1;0;5;TRUE;-;Increase movement speed per level.;TRUE;0
+effects_absorb;Absorb;Effects;3;2;0;3;TRUE;effects_increase|trait_x|trait_y;Drain a numerical value on the target(s) to fill the caster’s.;FALSE;0
+effects_decrease;Decrease;Effects;2;2;0;3;TRUE;(effects_\w+);Reduce a numerical value on the target(s).;TRUE;0
+effects_increase;Increase;Effects;2;2;0;3;TRUE;(effects_\w+);Increase a numerical value on the target(s).;FALSE;0
+effects_randomize;Randomize;Effects;2;5;0;5;TRUE;effects_\w+;Randomize the selected value on the target (relative to original value);FALSE;0
+trait_hp;Health;Trait Selectors;1;1;0;1;FALSE;trait_maxhp;Select target’s HP.;TRUE;0
+trait_mana;Mana;Trait Selectors;1;1;0;1;FALSE;trait_maxmana;Select target’s mana.;FALSE;0
+trait_x;Longtitude;Trait Selectors;8;1;0;1;FALSE;-;Select target’s X coordinate.;FALSE;0.7
+trait_y;Latitude;Trait Selectors;8;1;0;1;FALSE;-;Select target’s Y coordinate.;FALSE;0.7
+trigger_cast;Cast;Triggers;1;1;0;1;TRUE;-;Apply effects once on cast.;TRUE;0
+trigger_depletion;Depletion;Triggers;1;1;0;1;TRUE;-;Apply effects once when spell dissipates.;FALSE;0.6
+trigger_impact;Impact;Triggers;1;1;0;1;TRUE;-;Apply effects on impact with an enemy.;TRUE;0
+trigger_collision;Intersection;Triggers;1;1;0;1;TRUE;-;Apply continuous effects to enemies in range.;FALSE;0.3

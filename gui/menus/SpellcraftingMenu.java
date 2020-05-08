@@ -256,8 +256,24 @@ public class SpellcraftingMenu extends Modal {
         return true;
     }
 
+    @Override
+    public void onShow() {
+        nameField.grabFocus();
+    }
+
+    @Override
+    public void onHide() {
+        nameField.releaseFocus();
+    }
+
     public void reset(Spell template) {
         this.spell = template == null ? new Spell() : new Spell(template);
+        if (template == null) {
+            spell.addTechnique("trigger_cast");
+            spell.addTechnique("affect_self");
+            spell.addTechnique("affect_allies");
+            spell.addTechnique("affect_enemies");
+        }
         this.currentCategory = 0;
         refresh();
     }

@@ -24,7 +24,7 @@ public class BanditCampGenerator extends ForestGenerator {
 
     @Override
     public Entity getEntity(int x, int y) {
-        if (x == Chunk.CHUNK_SIZE/2 && y == Chunk.CHUNK_SIZE/2 - 2) return new Chest(3, false, Chest.RANDOM_LOOT, 0.8f);
+        if (x == Chunk.CHUNK_SIZE/2 && y == Chunk.CHUNK_SIZE/2 - 2) return new Chest(0.3f, false, Chest.RANDOM_LOOT, 0.8f);
         if (MiscMath.distance(x, y, Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2) < 3 + rng().nextInt(2))
             return rng().nextInt(10) == 0 ? new Bandit(rng().nextInt(3) + 1) : null;
         return super.getEntity(x, y);

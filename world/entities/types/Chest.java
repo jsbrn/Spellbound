@@ -1,13 +1,16 @@
 package world.entities.types;
 
+import assets.SpellFactory;
 import gui.menus.PopupMenu;
 import gui.states.GameState;
 import main.GameManager;
+import misc.MiscMath;
 import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import world.entities.Entity;
 import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.animations.Animation;
+import world.entities.magic.techniques.Techniques;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.events.Event;
 import world.events.EventDispatcher;
@@ -21,12 +24,12 @@ public class Chest extends Entity {
 
     public static int GOLD_LOOT = 0, CRYSTAL_LOOT = 1, DYE_LOOT = 2, TOME_LOOT = 3, ARTIFACT_LOOT = 4, KEY_LOOT = 5, RANDOM_LOOT = 6;
     private boolean looted, locked;
-    private int lootMultiplier, lootType;
-    private float filledChance;
+    private int lootType;
+    private float filledChance, lootMultiplier;
 
     private EventListener listener;
 
-    public Chest(int lootMultiplier, boolean locked, int lootType, float filledChance) {
+    public Chest(float lootMultiplier, boolean locked, int lootType, float filledChance) {
 
         this.lootMultiplier = lootMultiplier;
         this.locked = locked;
@@ -66,7 +69,7 @@ public class Chest extends Entity {
 
                                     boolean empty = true;
                                     String type = "";
-                                    int loot = lootType, amount = rng.nextInt(100) * lootMultiplier;
+                                    int loot = lootType, amount = (int)(rng.nextInt(1000) * lootMultiplier);
 
                                     if (lootType == RANDOM_LOOT) loot = rng.nextInt(6);
 
@@ -95,6 +98,18 @@ public class Chest extends Entity {
                                                 "icons/artifact.png",
                                                 Color.white
                                         ));
+                                    } else if (lootType == TOME_LOOT) {
+                                        String newTechnique = SpellFactory.discoverRandomTechnique(human.getSpellbook(), lootMultiplier);
+                                        if (newTechnique != null) {
+                                            human.getSpellbook().discoverTechnique(newTechnique);
+                                            GameManager.getGameState(GameState.GAME_SCREEN).getGUI().stackModal(new PopupMenu(
+                                                    "New Technique",
+                                                    Techniques.getName(newTechnique),
+                                                    Techniques.getDescription(newTechnique),
+                                                    "icons/techniques/"+newTechnique+".png",
+                                                    Color.darkGray
+                                            ));
+                                        }
                                     }
 
                                     looted = true;

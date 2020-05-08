@@ -12,10 +12,10 @@ public class DefaultWorldGenerator extends RegionGenerator {
 
     public DefaultWorldGenerator(int seed) {
         super(seed);
-        well = new int[]{8, 6};
     }
 
     public ChunkGenerator getChunkGenerator(int x, int y, int size) {
+        if (well == null) well = new int[]{rng().nextInt(size), rng().nextInt(size)};
         int chunk_seed = getSeed() + x + y;
         if (x == well[0] && y == well[1]) return new WishingWellFieldGenerator(chunk_seed);
         if (x == size/2 && y == size/2) return new BackyardGenerator(chunk_seed);

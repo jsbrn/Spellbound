@@ -1,6 +1,7 @@
 package world.entities.magic.techniques.effects;
 
 import misc.MiscMath;
+import world.entities.actions.types.KnockbackAction;
 import world.entities.magic.MagicSource;
 import world.entities.types.humanoids.HumanoidEntity;
 
@@ -22,6 +23,11 @@ public class EffectIncreaseTechnique extends EffectTechnique {
         if (cast.hasTechnique("trait_hp"))
             e.addHP(getLevel() * MiscMath.random(4, 6), true);
         if (cast.hasTechnique("trait_mana")) e.addMana(getLevel() * MiscMath.random(3, 8));
+        if (cast.hasTechnique("trait_x") || cast.hasTechnique("trait_y")) {
+            e.clearAllActions();
+            double angle = cast.hasTechnique("trait_x") && cast.hasTechnique("trait_y") ? 45 : (cast.hasTechnique("trait_x") ? 90 : 0);
+            e.getActionQueue().queueAction(new KnockbackAction(2*getLevel(), angle));
+        }
     }
 
     @Override

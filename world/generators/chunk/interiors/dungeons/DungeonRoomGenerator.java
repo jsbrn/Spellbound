@@ -47,7 +47,7 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
                 && spawnLoot && rng().nextFloat() < MiscMath.distance(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, x, y) / 100
                 && chestCount < 3) {
             chestCount++;
-            return new Chest(lootMultiplier * 2, false, rng().nextInt(3), 0.75f);
+            return new Chest(lootMultiplier * 2 / 10f, false, rng().nextInt(3), 0.75f);
         }
         return null;
     }

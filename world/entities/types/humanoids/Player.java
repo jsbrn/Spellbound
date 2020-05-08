@@ -148,7 +148,6 @@ public class Player extends HumanoidEntity {
 
     public void activateGodMode() {
         godMode = true;
-        this.getSpellbook().discoverAllTechniques();
         this.addGold(1000, true);
         this.addCrystals(1000);
         this.addDyes(1000);
