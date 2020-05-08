@@ -3,6 +3,9 @@ package gui.menus;
 import assets.Assets;
 import gui.GUIAnchor;
 import gui.elements.*;
+import gui.states.GameScreen;
+import gui.states.GameState;
+import main.GameManager;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -67,6 +70,18 @@ public class CheatCodeMenu extends Modal {
         }
         if (code.equals("lockpick")) {
             World.getLocalPlayer().addKeys(10);
+        }
+        if (code.equals("freecam")) {
+            Camera.setManualMode(true);
+        }
+        if (code.equals("fixedcam")) {
+            Camera.setManualMode(false);
+        }
+        if (code.equals("cinematic")) {
+            Camera.setSpeed(5);
+        }
+        if (code.equals("gui")) {
+            ((GameScreen)GameManager.getGameState(GameState.GAME_SCREEN)).toggleHUD();
         }
     }
 

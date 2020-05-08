@@ -14,6 +14,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import world.Camera;
 import world.World;
 import world.events.Event;
 import world.events.EventDispatcher;
@@ -27,8 +28,12 @@ import world.events.event.NPCSpeakEvent;
 
 public class GameScreen extends GameState {
 
-    public GameScreen() {
+    private boolean showHUD;
+
+    public GameScreen()
+    {
         super();
+        showHUD = true;
     }
 
     @Override
@@ -39,6 +44,21 @@ public class GameScreen extends GameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
         World.update();
+
+        if (Camera.isManualMode()) {
+            int dx = 0, dy = 0;
+            if (gc.getInput().isKeyDown(Input.KEY_LEFT)) dx = -1;
+            if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) dx = 1;
+            if (gc.getInput().isKeyDown(Input.KEY_UP)) dy = -1;
+            if (gc.getInput().isKeyDown(Input.KEY_DOWN)) dy = 1;
+            Camera.move(dx, dy);
+        }
+
+    }
+
+    public void toggleHUD() {
+        showHUD = !showHUD;
+        resetGUI();
     }
 
     @Override
@@ -46,9 +66,8 @@ public class GameScreen extends GameState {
         if (World.getLocalPlayer() == null) return;
         SpellcraftingMenu spellcasting = new SpellcraftingMenu(World.getLocalPlayer());
         Journal spellbook = new Journal(World.getLocalPlayer(), spellcasting);
-
         PauseMenu pauseMenu = new PauseMenu();
-        gui.addElement(new CameraViewport() {
+        CameraViewport viewport = new CameraViewport() {
             @Override
             public boolean onKeyUp(int key) {
                 if (key == Input.KEY_ESCAPE) {
@@ -57,7 +76,10 @@ public class GameScreen extends GameState {
                 }
                 return super.onKeyUp(key);
             }
-        }, 0, 0, GUIAnchor.TOP_LEFT);
+        };
+
+
+        if (showHUD) gui.addElement(viewport, 0, 0, GUIAnchor.TOP_LEFT);
         gui.addElement(new Statusbar(World.getLocalPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
         gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 26, GUIAnchor.TOP_LEFT);
         gui.addElement(pauseMenu, 0,0, GUIAnchor.CENTER);
@@ -142,6 +164,8 @@ public class GameScreen extends GameState {
                     }
                 })
         );
+
+        if (!showHUD) gui.addElement(viewport, 0, 0, GUIAnchor.TOP_LEFT);
 
     }
 

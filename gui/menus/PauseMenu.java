@@ -32,6 +32,7 @@ public class PauseMenu extends Modal {
                 EventDispatcher.unregisterAll();
             }
         }, 16, 0, GUIAnchor.CENTER);
+
     }
 
     @Override

@@ -75,6 +75,12 @@ public class CameraViewport extends GUIElement {
     }
 
     @Override
+    public void drawUnder(Graphics g) {
+        g.setColor(Color.black);
+        g.fillRect(0, 0, Window.getWidth(), Window.getHeight());
+    }
+
+    @Override
     public void drawOver(Graphics g) {
         if (World.exists()) {
             World.draw(Window.getScale(), g);
