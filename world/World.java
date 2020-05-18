@@ -31,11 +31,12 @@ public class World {
     private static double timeMultiplier;
     private static boolean paused;
 
-    public static void init() {
+    public static void init(Player p) {
         time = 0;
         timeMultiplier = 1;
         regions = new HashMap<>();
         portals = new ArrayList<>();
+        player = p == null ? new Player() : p;
     }
 
     public static void generate(int seed) {
@@ -45,7 +46,6 @@ public class World {
     }
 
     public static void spawnPlayer(int x, int y, int lookDirection, String region_name) {
-        player = new Player();
         player.moveTo(new Location(getRegion(region_name), x + 0.5, y + 0.5, lookDirection));
         player.getLocation().setLookDirection(180);
         Camera.setTarget(player);

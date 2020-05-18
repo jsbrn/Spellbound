@@ -69,7 +69,7 @@ public class Statusbar extends GUIElement {
     @Override
     public boolean onKeyUp(int key) {
         if (key == Input.KEY_R && World.getLocalPlayer().isDead()) {
-            World.init();
+            World.init(null);
             World.load();
             GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
             EventDispatcher.invoke(new HumanoidRespawnEvent(World.getLocalPlayer()));
