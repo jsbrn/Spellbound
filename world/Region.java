@@ -175,7 +175,7 @@ public class Region {
     public List<MagicSource> getMagicSources(double wx, double wy, double radius) {
         List<MagicSource> outer = magic_sources.stream().filter(ms -> {
             double[] coords = ms.getBody().getLocation().getCoordinates();
-            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getDepthRadius(), wx, wy, radius);
+            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getDepthRadius() + ms.getBody().getReachRadius(), wx, wy, radius);
         }).collect(Collectors.toList()),
         inner = magic_sources.stream().filter(ms -> {
             double[] coords = ms.getBody().getLocation().getCoordinates();

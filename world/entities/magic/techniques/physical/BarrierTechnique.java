@@ -17,8 +17,8 @@ public class BarrierTechnique extends Technique {
     public void update(MagicSource cast) {
         List<MagicSource> colliding = cast.getCollidingMagic();
         colliding.stream().forEach(ms -> {
-            ms.addEnergy(MiscMath.getConstant(-getLevel() * 4, 1));
-            ms.addMoveSpeed(MiscMath.getConstant(-getLevel() * 2, 1));
+            ms.addEnergy(MiscMath.getConstant(-getLevel() * 16, 1));
+            ms.addMoveSpeed(MiscMath.getConstant(-getLevel() * 4, 1));
         });
     }
 

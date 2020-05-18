@@ -155,9 +155,11 @@ public class MagicSource {
         ), outer = body.getLocation().getRegion().getMagicSources(
                 body.getLocation().getCoordinates()[0],
                 body.getLocation().getCoordinates()[1],
-                body.getDepthRadius()
+                body.getDepthRadius() + body.getReachRadius()
         );
-        return outer.stream().filter(e -> !(inner.contains(e) && !outer.contains(e))).collect(Collectors.toList());
+        return outer.stream()
+                .filter(e -> !e.equals(this) && !(inner.contains(e) && !outer.contains(e)))
+                .collect(Collectors.toList());
     }
 
     public void setEnergy(double e) { energy = e; }
