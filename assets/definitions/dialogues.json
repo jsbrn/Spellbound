@@ -218,7 +218,7 @@
   {
     "id": "roommate_spellcrafting_5",
     "texts": [
-      "Be careful when combining Techniques. Sometimes they conflict with each other. The more that conflict, the more volatile your spell will become."
+      "Be careful when combining Techniques. If too many conflict with each other, your spell could become...unpredictable."
     ],
     "options": [
       { "label": "Continue", "pointsTo": "roommate_spellcrafting_6"}
@@ -227,7 +227,7 @@
   {
     "id": "roommate_spellcrafting_6",
     "texts": [
-      "When spells become unstable, they do unpredictable things. Sometimes they misfire. Sometimes they blow up in your face. So be careful out there!"
+      "It might even blow up in your face! Haha, I kid. I think. It's been a minute since I've done any magic myself."
     ],
     "options": [
       { "label": "Thanks for the tip.", "pointsTo": "roommate_spellcrafting_7"}
@@ -339,7 +339,24 @@
     ],
     "options": [
       { "label": "I have all 5 artifacts.", "pointsTo":  null},
-      { "label": "I'm still looking.", "pointsTo": "collector_greeting"}
+      { "label": "You mentioned some kind of project?", "pointsTo":  "collector_deflection"},
+      { "label": "I'm here to trade.", "pointsTo": "collector_greeting"}
+    ]
+  },
+  {
+    "id": "collector_deflection",
+    "texts": [
+      "Like I said, it's none of your business!",
+      "You're pretty nosy, you know that?",
+      "Stop asking me silly questions and get back to work!",
+      "That information is on a need-to-know basis.",
+      "There's no way I'm telling you. You smell like a rat!",
+      "Who's asking?",
+      "What are you, the Secret Project Police?",
+      "You're starting to getting on my nerves, kid."
+    ],
+    "options": [
+      { "label": "Sorry I asked.", "pointsTo":  null}
     ]
   },
   {
@@ -366,7 +383,18 @@
     "options": [
       { "label": "Buy 10 Crystals (-25GP)", "pointsTo": null },
       { "label": "Buy 10 Dyes (-10GP)", "pointsTo": null },
-      { "label": "Buy a Spell...", "pointsTo": "collector_choose_spell" }
+      { "label": "Buy a Spell...", "pointsTo": "collector_choose_spell" },
+      { "label": "Buy the Book of Knowledge (-1000GP)", "pointsTo": "collector_unlock_techniques" }
+    ]
+  },
+  {
+    "id": "collector_unlock_techniques",
+    "texts": [
+      "Reading the Book of Knowledge will unlock all Magic Techniques. It will also make you go mad with power, probably. Still want to buy it?"
+    ],
+    "options": [
+      { "label": "Yes! (-1000GP)", "pointsTo": null },
+      { "label": "I changed my mind.", "pointsTo": "collector_greeting"}
     ]
   },
   {

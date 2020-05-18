@@ -20,6 +20,7 @@ public class EffectAbsorbTechnique extends EffectTechnique {
     @Override
     public void affectOnce(MagicSource cast, HumanoidEntity e) {
         if (cast.getCaster() instanceof HumanoidEntity) return;
+
         HumanoidEntity caster = (HumanoidEntity)cast.getCaster();
         if (cast.hasTechnique("trait_hp") && e.getHP() > 0) {
             e.addHP(-getLevel() * 2, true);

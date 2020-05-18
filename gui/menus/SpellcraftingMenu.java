@@ -47,6 +47,7 @@ public class SpellcraftingMenu extends Modal {
         dyesCost = new TextLabel("0", 8, Color.white, true, false);
         manaCost = new TextLabel("0", 8, Color.white, true, false);
         volatility = new TextLabel("", 4, Color.yellow, true, false);
+        volatility.hide(); // temporary (spell volatility will be introduced later)
         categoryLabel = new TextLabel("...", 4, Color.gray, false, false);
         techniqueName = new TextLabel("-", 5, Color.black, false, false);
         techniqueDescription = new TextLabel("", 4, 100, 3, Color.gray, false, false);

@@ -7,6 +7,7 @@ import main.GameManager;
 import misc.MiscMath;
 import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Game;
 import world.World;
 import world.entities.actions.types.SpeakAction;
 import world.entities.states.TalkingToState;
@@ -62,6 +63,21 @@ public class Collector extends HumanoidEntity {
                     String id = pre.getDialogue().getID();
                     boolean notEnough = false, inventoryFull = pre.getPlayer().getSpellbook().getSpells().size() >= 9;
                     if (id.equals("collector_8")) setConversationStartingPoint("collector_demand");
+                    if (id.equals("collector_unlock_techniques")) {
+                        if (pre.getOption() == 0) {
+                            if (pre.getPlayer().getGoldCount() >= 1000) {
+                                pre.getPlayer().getSpellbook().discoverAllTechniques();
+                                GameManager.getGameState(GameState.GAME_SCREEN).getGUI().stackModal(new PopupMenu(
+                                        "Book of Knowledge",
+                                        "All Techniques Unlocked",
+                                        "You read the Book of Knowledge and now have access to all Magic Techniques in the Spellcrafting menu. Press TAB to open your Journal.",
+                                        "icons/tome.png", Color.white));
+                                pre.getPlayer().addGold(-1000, true);
+                            } else {
+                                getActionQueue().queueAction(new SpeakAction("You need more gold, kid!"));
+                            }
+                        }
+                    }
                     if (id.equals("collector_demand") && pre.getOption() == 0) {
                         if (pre.getPlayer().getArtifactCount() < 5) {
                             exitState();
