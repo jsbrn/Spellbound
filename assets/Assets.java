@@ -1,6 +1,8 @@
 package assets;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
@@ -111,6 +113,18 @@ public class Assets {
             e.printStackTrace();
         }
         return contents;
+    }
+
+    public static JSONObject json(String url, boolean internal) {
+        String read = read(url, internal);
+        JSONParser parser = new JSONParser();
+        try {
+            JSONObject json = (JSONObject)parser.parse(read);
+            return json;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

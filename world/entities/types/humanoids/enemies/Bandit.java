@@ -1,5 +1,6 @@
 package world.entities.types.humanoids.enemies;
 
+import assets.SpellFactory;
 import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
 import world.entities.magic.Spell;
@@ -20,19 +21,7 @@ public class Bandit extends HumanoidEntity {
         this.setSerializable(true);
         this.rng = new Random();
 
-        Spell testSpell = new Spell();
-        testSpell.addTechnique("movement_directional");
-        testSpell.addTechnique("emission_radiate");
-        testSpell.addTechnique("trigger_impact");
-        testSpell.addTechnique("physical_collision");
-        testSpell.addTechnique("effects_decrease");
-        testSpell.addTechnique("trait_hp");
-        testSpell.addTechnique("physical_weight");
-        testSpell.addTechnique("physical_energy", 5);
-        testSpell.addTechnique("emission_density", 5);
-        testSpell.addTechnique("physical_speed", 2);
-        testSpell.setColor(Color.yellow);
-        this.getSpellbook().addSpell(testSpell);
+        getSpellbook().addSpell(SpellFactory.createSpell(SpellFactory.DAMAGE, level));
 
         getAnimationLayer("shirt").setBaseAnimation("dirty");
         getAnimationLayer("torso").setColor(Color.orange.darker());
