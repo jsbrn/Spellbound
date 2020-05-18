@@ -23,7 +23,7 @@ import java.util.Random;
 public class PlayerCustomizationMenu extends Modal {
 
     private Player creation;
-    private TextBox nameField;
+    private TextBox nameField, seedField;
     private Button createButton;
 
     private Random rng;
@@ -42,14 +42,24 @@ public class PlayerCustomizationMenu extends Modal {
                 return super.onKeyUp(key);
             }
         };
+        nameField.setText(rng.nextInt(10000000)+"");
+
+        seedField = new TextBox(64, 8) {
+            @Override
+            public boolean onKeyUp(int key) {
+                return super.onKeyUp(key);
+            }
+        };
         nameField.setText("Player");
         createButton = new Button("Play!", 24, 8, null, true) {
             @Override
             public void onClick(int button) {
+                String seed = seedField.getText().replaceAll("[^\\d]", "");
                 nameField.releaseFocus();
+                creation.setName(nameField.getText());
                 getGUI().popModal();
                 World.init(creation);
-                World.generate(0);
+                World.generate(Integer.parseInt(seed.isEmpty() ? "0" : seed));
                 World.spawnPlayer(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, 180, "player_home");
                 World.save();
                 ((MainMenuScreen)getGUI().getParent()).startGame();
@@ -57,8 +67,9 @@ public class PlayerCustomizationMenu extends Modal {
         };
 
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
-        addChild(new TextLabel("No world options available.", 3, Color.white, true, false), 8, 24, GUIAnchor.TOP_LEFT);
-
+        addChild(new TextLabel("World Options", 5, Color.white, true, false), 8, 24, GUIAnchor.TOP_LEFT);
+        addChild(new TextLabel("Seed", 3, Color.white, true, false), 8, 32, GUIAnchor.TOP_LEFT);
+        addChild(seedField, 8, 36, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Player Name", 5, Color.white, true, false), 8, 4, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Character Customization", 5, Color.white, true, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new Button("Cancel", 24, 8, null, true) {

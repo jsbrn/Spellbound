@@ -12,6 +12,10 @@ import world.Chunk;
 import world.World;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MainMenuScreen extends GameState {
 
@@ -41,6 +45,23 @@ public class MainMenuScreen extends GameState {
 
     @Override
     public void addGUIElements(GUI gui) {
+
+        Button deleteSave = new Button("Delete your save file", 48, 8, null, true) {
+            @Override
+            public void onClick(int button) {
+                try {
+                    Files.walk(Paths.get(Assets.ROOT_DIRECTORY+"/world/"))
+                            .map(Path::toFile)
+                            .sorted((o1, o2) -> -o1.compareTo(o2))
+                            .forEach(File::delete);
+                    setEnabled(false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        };
+
         Button playButton = new Button(null, 24, 24, "icons/play.png", true) {
             @Override
             public void onClick(int button) {
@@ -52,25 +73,23 @@ public class MainMenuScreen extends GameState {
                     World.load();
                     startGame();
                 }
+                deleteSave.setEnabled(true);
             }
         };
-        gui.addElement(playButton, -(24*3)/2, 0, GUIAnchor.CENTER);
-        Button settings = new Button(null, 24, 24, "icons/settings.png", true) {
-            @Override
-            public void onClick(int button) {
-            }
-        };
-        settings.setEnabled(false);
-        gui.addElement(settings, 0, 0, GUIAnchor.CENTER);
-        gui.addElement(new Button(null, 24, 24, "icons/quit.png", true) {
+        playButton.setTooltipText("Play the game!");
+        gui.addElement(playButton, -(16*3)/2, 0, GUIAnchor.CENTER);
+        Button quit = new Button(null, 24, 24, "icons/quit.png", true) {
             @Override
             public void onClick(int button) {
                 System.exit(0);
             }
-        }, (24*3)/2, 0, GUIAnchor.CENTER);
+        };
+        quit.setTooltipText("Quit");
+        gui.addElement(quit, (16*3)/2, 0, GUIAnchor.CENTER);
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Demo", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);
+        gui.addElement(deleteSave, -2, -2, GUIAnchor.BOTTOM_RIGHT);
     }
 
     @Override
