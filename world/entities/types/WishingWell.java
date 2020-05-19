@@ -1,5 +1,7 @@
 package world.entities.types;
 
+import gui.sound.SoundManager;
+import org.newdawn.slick.Sound;
 import world.entities.Entity;
 import world.entities.actions.types.SpeakAction;
 import world.entities.animations.Animation;
@@ -11,6 +13,7 @@ import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityActivatedEvent;
 import world.events.event.PlayerReplyEvent;
+import world.sounds.SoundEmitter;
 
 public class WishingWell extends Entity {
 
@@ -19,6 +22,7 @@ public class WishingWell extends Entity {
         getMover().setCollidable(true);
         addAnimation("default", "idle", new Animation("wishing_well.png", 1, 1, 16, false, false));
         addAnimation("default", "cast", new Animation("wishing_well_effect.png", 8, 3, 16, false, false));
+        addSoundEmitter("activated", new SoundEmitter(new Sound[]{SoundManager.DISCOVERY}, this));
         getAnimationLayer("default").setBaseAnimation("idle");
         setConversationStartingPoint("wishing_well_initial_greeting");
         setName("Wishing Well");
@@ -50,6 +54,7 @@ public class WishingWell extends Entity {
                             getActionQueue().queueAction(new SpeakAction("Consider it done."));
                             ece.getPlayer().addGold(-mana_cost, true);
                             ece.getPlayer().setMaxMana(ece.getPlayer().getMaxMana() + 10);
+                            getSoundEmitter("activated").play();
                         }
                     } else if (ece.getDialogue().getID().equals("request_health") && ece.getOption() == 0) {
                         if (ece.getPlayer().getGoldCount() < hp_cost) {
@@ -59,6 +64,7 @@ public class WishingWell extends Entity {
                             getActionQueue().queueAction(new SpeakAction("Consider it done."));
                             ece.getPlayer().addGold(-hp_cost, true);
                             ece.getPlayer().setMaxHP(ece.getPlayer().getMaxHP() + 10);
+                            getSoundEmitter("activated").play();
                         }
                     }
                 }

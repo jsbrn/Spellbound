@@ -24,6 +24,7 @@ import world.entities.types.humanoids.npcs.Roommate;
 import world.events.EventDispatcher;
 import world.events.event.EntityChangeRegionEvent;
 import world.events.event.EntityCollisionEvent;
+import world.sounds.SoundEmitter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,8 +42,10 @@ public class Entity {
     private LinkedHashMap<String, AnimationLayer> animationLayers;
     private LinkedHashMap<String, ActionQueue> actionQueues;
 
+    private LinkedHashMap<String, SoundEmitter> soundEmitters;
+
     private double radius;
-    private boolean isTile, serializable;
+    private boolean isTile;
     private String name;
 
     private List<Entity> lastTouching;
@@ -55,14 +58,7 @@ public class Entity {
         this.mover = new Mover();
         this.mover.setParent(this);
         this.conversationStartingPoint = "greeting";
-    }
-
-    public boolean isSerializable() {
-        return serializable;
-    }
-
-    public void setSerializable(boolean serializable) {
-        this.serializable = serializable;
+        this.soundEmitters = new LinkedHashMap<>();
     }
 
     public void update() {
@@ -75,6 +71,16 @@ public class Entity {
         mover.update();
         for (ActionQueue queue: actionQueues.values())
             queue.update();
+
+        for (SoundEmitter emitter: soundEmitters.values()) emitter.update();
+    }
+
+    public void addSoundEmitter(String name, SoundEmitter emitter) {
+        soundEmitters.put(name, emitter);
+    }
+
+    public SoundEmitter getSoundEmitter(String name) {
+        return soundEmitters.get(name);
     }
 
     public void clearAllActions() {

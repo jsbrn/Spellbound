@@ -1,6 +1,8 @@
 package world.generators.region;
 
+import gui.sound.SoundManager;
 import misc.MiscMath;
+import org.newdawn.slick.Sound;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.overworld.*;
 
@@ -25,6 +27,11 @@ public class DefaultWorldGenerator extends RegionGenerator {
         return rng().nextFloat() <= 0.04
                 ? new TrapdoorFieldGenerator((int)(MiscMath.distance(x, y, size/2, size/2)) / 2, chunk_seed)
                 : (rng().nextFloat() < 0.25f ? new OpenFieldGenerator(chunk_seed) : new ForestGenerator(chunk_seed));
+    }
+
+    @Override
+    public Sound getBackgroundAmbience() {
+        return SoundManager.FOREST_AMBIENCE;
     }
 
 }

@@ -1,5 +1,6 @@
 package world.entities.actions.types;
 
+import gui.sound.SoundManager;
 import misc.Location;
 import misc.MiscMath;
 import world.Portal;
@@ -36,6 +37,7 @@ public class ActivateAction extends Action {
                     origin.getDestination(),
                     destination.getCoordinates()[0] + 0.5 + (0.75 * destination.getExitDirection()[0]),
                     destination.getCoordinates()[1] + 0.5 + (0.75 * destination.getExitDirection()[1])));
+            SoundManager.playSound(origin.getSound(), 1.0f, parent.getLocation());
             parent.getActionQueue().queueAction(new MoveAction(
                     destination.getCoordinates()[0] + 0.5 + (destination.getExitDirection()[0]),
                     destination.getCoordinates()[1] + 0.5 + (destination.getExitDirection()[1]),

@@ -1,7 +1,9 @@
 package world.entities.types.humanoids.enemies;
 
+import gui.sound.SoundManager;
 import misc.MiscMath;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Sound;
 import world.Chunk;
 import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.actions.types.KnockbackAction;
@@ -14,6 +16,9 @@ import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityCollisionEvent;
+import world.events.event.HumanoidDamageEvent;
+import world.events.event.HumanoidDeathEvent;
+import world.sounds.SoundEmitter;
 
 import java.util.stream.Collectors;
 
@@ -29,6 +34,12 @@ public class Zombie extends HumanoidEntity {
         getAnimationLayer("arms").setColor(Color.orange.darker(0.75f));
         getAnimationLayer("shirt").setBaseAnimation("dirty");
         getAnimationLayer("hair").setColor(Color.black);
+
+        addSoundEmitter("idle", new SoundEmitter(5000, 1000, 1.0f, new Sound[]{SoundManager.ZOMBIE_IDLE_1, SoundManager.ZOMBIE_IDLE_2}, this));
+        addSoundEmitter("death", new SoundEmitter(new Sound[]{SoundManager.ZOMBIE_DEATH}, this));
+        addSoundEmitter("pain", new SoundEmitter(new Sound[]{SoundManager.ZOMBIE_PAIN}, this));
+        addSoundEmitter("bite", new SoundEmitter(new Sound[]{SoundManager.ZOMBIE_BITE}, this));
+
         setAllegiance("undead");
         Zombie that = this;
         EventDispatcher.register(new EventListener()
@@ -49,6 +60,27 @@ public class Zombie extends HumanoidEntity {
                     ((HumanoidEntity)ece.getWith()).addHP(-5, true);
                     getActionQueue("arms").queueAction(new ChangeAnimationAction("arms", "casting", true, true));
                     getLocation().lookAt(ece.getWith().getLocation());
+                    getSoundEmitter("bite").play();
+                }
+            })
+            .on(HumanoidDeathEvent.class.toString(), new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    HumanoidDeathEvent hde = (HumanoidDeathEvent)e;
+                    if (hde.getHumanoid().equals(that)) {
+                        getSoundEmitter("idle").setActive(false);
+                        //getSoundEmitter("death").play();
+                    }
+                }
+            })
+            .on(HumanoidDamageEvent.class.toString(), new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    HumanoidDamageEvent hde = (HumanoidDamageEvent)e;
+                    if (hde.getHumanoid().equals(that)) {
+                        getSoundEmitter("idle").stop();
+                        getSoundEmitter("pain").play();
+                    }
                 }
             })
         );

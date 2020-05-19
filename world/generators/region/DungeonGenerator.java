@@ -1,12 +1,13 @@
 package world.generators.region;
 
+import gui.sound.SoundManager;
 import misc.MiscMath;
+import org.newdawn.slick.Sound;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.EmptyChunkGenerator;
 import world.generators.chunk.interiors.dungeons.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class DungeonGenerator extends RegionGenerator {
@@ -29,6 +30,11 @@ public class DungeonGenerator extends RegionGenerator {
     public ChunkGenerator getChunkGenerator(int cx, int cy, int size) {
         if (map == null) generateDungeon((int)MiscMath.clamp(size, 6, Integer.MAX_VALUE));
         return map[cx][cy];
+    }
+
+    @Override
+    public Sound getBackgroundAmbience() {
+        return SoundManager.DUNGEON_AMBIENCE;
     }
 
     private void generateDungeon(int size) {

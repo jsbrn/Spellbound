@@ -6,6 +6,7 @@ import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
+import gui.sound.SoundManager;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.World;
@@ -148,6 +149,7 @@ public class Journal extends Modal {
     public void onShow() {
         World.setPaused(true);
         refresh();
+        SoundManager.playSound(SoundManager.PAGE_TURN);
     }
 
     @Override

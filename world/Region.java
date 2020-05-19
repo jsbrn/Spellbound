@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Sound;
 import world.entities.Entity;
 import world.entities.magic.MagicSource;
 import world.events.EventDispatcher;
@@ -35,6 +36,8 @@ public class Region {
     private ArrayList<Portal> portals;
     private ArrayList<Entity> entities;
 
+    private Sound backgroundAmbience;
+
     private long time;
     private RegionGenerator generator;
 
@@ -45,6 +48,8 @@ public class Region {
         this.size = size;
 
         this.time = 0;
+
+        this.backgroundAmbience = generator.getBackgroundAmbience();
 
         magic_sources = new ArrayList<>();
         entities = new ArrayList<>();
@@ -76,6 +81,10 @@ public class Region {
                 }
             }
         }
+    }
+
+    public Sound getBackgroundAmbience() {
+        return backgroundAmbience;
     }
 
     public long getCurrentTime() { return time; }

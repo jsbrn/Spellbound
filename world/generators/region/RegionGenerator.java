@@ -1,5 +1,6 @@
 package world.generators.region;
 
+import org.newdawn.slick.Sound;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.Random;
@@ -24,5 +25,7 @@ public abstract class RegionGenerator {
     public final Random rng() { return rng; }
 
     public abstract ChunkGenerator getChunkGenerator(int cx, int cy, int region_size);
+
+    public abstract Sound getBackgroundAmbience();
 
 }

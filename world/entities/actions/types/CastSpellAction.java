@@ -1,8 +1,12 @@
 package world.entities.actions.types;
 
+import gui.sound.SoundManager;
+import misc.MiscMath;
 import world.entities.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.entities.actions.Action;
+import world.events.EventDispatcher;
+import world.events.event.CastFailedEvent;
 
 public class CastSpellAction extends Action {
 
@@ -22,6 +26,9 @@ public class CastSpellAction extends Action {
             if (parent.getMana() >= selected.getManaCost()) {
                 parent.getSpellbook().cast(wx, wy);
                 parent.addMana(-selected.getManaCost());
+                SoundManager.playSound(SoundManager.MAGIC_CAST, (float) MiscMath.random(0.7, 1.0), getParent().getLocation());
+            } else {
+                EventDispatcher.invoke(new CastFailedEvent((HumanoidEntity)getParent(), selected));
             }
         }
     }

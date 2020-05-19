@@ -2,9 +2,11 @@ package gui.elements;
 
 import gui.GUIAnchor;
 import gui.GUIElement;
+import gui.sound.SoundManager;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Sound;
 
 public abstract class Button extends GUIElement {
 
@@ -48,6 +50,7 @@ public abstract class Button extends GUIElement {
     @Override
     public final boolean onMouseRelease(int ogx, int ogy, int button) {
         if (mouseIntersects() && !disabled) {
+            SoundManager.playSound(SoundManager.CLICK);
             onClick(button);
             return true;
         }

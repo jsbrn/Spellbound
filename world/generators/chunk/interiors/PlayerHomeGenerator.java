@@ -1,5 +1,6 @@
 package world.generators.chunk.interiors;
 
+import gui.sound.SoundManager;
 import org.newdawn.slick.Color;
 import world.Chunk;
 import world.Portal;
@@ -44,7 +45,7 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
     @Override
     public Portal getPortal() {
-        Portal door = new Portal("door", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true, World.getRegion("world"), "door");
+        Portal door = new Portal("door", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true, World.getRegion("world"), "door", SoundManager.DOOR_OPEN);
         return door;
     }
 

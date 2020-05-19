@@ -13,7 +13,7 @@ public class Camera {
     private static Entity target;
 
     public static double[] getLocation() {
-        return manualMode ? world_coords : target.getLocation().getCoordinates();
+        return manualMode || target == null ? world_coords : target.getLocation().getCoordinates();
     }
 
     public static float[] getOnscreenCoordinates(double wx, double wy, double scale) {

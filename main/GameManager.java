@@ -2,11 +2,11 @@ package main;
 
 import assets.Assets;
 import assets.definitions.Definitions;
+import gui.sound.SoundManager;
 import gui.states.GameScreen;
 import gui.states.GameState;
 import gui.states.MainMenuScreen;
 import misc.*;
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -59,9 +59,12 @@ public class GameManager extends StateBasedGame {
             });
             //Window.toggleFullScreen();
             Window.WINDOW_INSTANCE.start();
+
         } catch (SlickException e) {
 
         }
+
+        SoundManager.cleanup();
 
     }
 
@@ -90,6 +93,7 @@ public class GameManager extends StateBasedGame {
 
         Assets.load();
         Definitions.load();
+        SoundManager.load("/home/jeremy/Documents/Git/Spellbound/src/assets/sounds");
 
         //load "menu" state on startup
         this.enterState(GameState.MAIN_MENU);

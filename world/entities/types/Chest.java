@@ -2,11 +2,12 @@ package world.entities.types;
 
 import assets.SpellFactory;
 import gui.menus.PopupMenu;
+import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
-import misc.MiscMath;
 import org.json.simple.JSONObject;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Sound;
 import world.entities.Entity;
 import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.animations.Animation;
@@ -17,6 +18,7 @@ import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityActivatedEvent;
+import world.sounds.SoundEmitter;
 
 import java.util.Random;
 
@@ -35,6 +37,11 @@ public class Chest extends Entity {
         this.locked = locked;
         this.lootType = lootType;
         this.filledChance = filledChance;
+
+        this.addSoundEmitter("locked", new SoundEmitter(new Sound[]{SoundManager.LOCKED}, this));
+        this.addSoundEmitter("loot_found", new SoundEmitter(new Sound[]{SoundManager.FOUND_LOOT}, this));
+        this.addSoundEmitter("special_loot_found", new SoundEmitter(new Sound[]{SoundManager.DISCOVERY}, this));
+        this.addSoundEmitter("opened", new SoundEmitter(new Sound[]{SoundManager.DOOR_OPEN}, this));
 
         this.getMover().setCollidable(true);
         this.addAnimation("default", "closed", new Animation((locked ? "locked_" : "") + "chest.png", 1, 1, 16, true, false));
@@ -60,8 +67,11 @@ public class Chest extends Entity {
                                                 eae.getEntity().getLocation(),
                                                 "Locked",
                                                 Color.gray, 2, 500, -0.5f, false);
+                                        getSoundEmitter("locked").play();
                                         return;
                                     }
+
+                                    getSoundEmitter("opened").play();
 
                                     that.getAnimationLayer("default").setBaseAnimation("opened");
                                     that.getActionQueue().queueAction(new ChangeAnimationAction("default", "opening", false, true));
@@ -89,6 +99,7 @@ public class Chest extends Entity {
                                         GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "Empty", Color.gray, 2, 500, -0.5f, false);
                                     } else {
                                         GameManager.getGameState(GameState.GAME_SCREEN).getGUI().floatText(eae.getEntity().getLocation(), "+"+amount+" "+type, Color.yellow, 2, 750, -0.5f, false);
+                                        getSoundEmitter("loot_found").play();
                                     }
 
                                     if (lootType == ARTIFACT_LOOT) {
@@ -98,6 +109,7 @@ public class Chest extends Entity {
                                                 "icons/artifact.png",
                                                 Color.white
                                         ));
+                                        getSoundEmitter("special_loot_found").play();
                                     } else if (lootType == TOME_LOOT) {
                                         String newTechnique = SpellFactory.discoverRandomTechnique(human.getSpellbook(), lootMultiplier);
                                         if (newTechnique != null) {
@@ -109,6 +121,7 @@ public class Chest extends Entity {
                                                     "icons/techniques/"+newTechnique+".png",
                                                     Color.darkGray
                                             ));
+                                            getSoundEmitter("special_loot_found").play();
                                         }
                                     }
 

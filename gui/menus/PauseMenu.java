@@ -5,6 +5,7 @@ import gui.GUIAnchor;
 import gui.elements.Button;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
+import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
 import org.newdawn.slick.Color;
@@ -29,6 +30,7 @@ public class PauseMenu extends Modal {
             public void onClick(int button) {
                 World.save();
                 GameManager.switchTo(GameState.MAIN_MENU);
+                SoundManager.stop();
                 EventDispatcher.unregisterAll();
             }
         }, 16, 0, GUIAnchor.CENTER);
@@ -43,10 +45,12 @@ public class PauseMenu extends Modal {
     @Override
     public void onShow() {
         World.setPaused(true);
+        SoundManager.stop();
     }
 
     @Override
     public void onHide() {
         World.setPaused(false);
+        SoundManager.resume();
     }
 }

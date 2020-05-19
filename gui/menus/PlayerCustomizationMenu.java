@@ -42,7 +42,6 @@ public class PlayerCustomizationMenu extends Modal {
                 return super.onKeyUp(key);
             }
         };
-        nameField.setText(rng.nextInt(10000000)+"");
 
         seedField = new TextBox(64, 8) {
             @Override
@@ -50,6 +49,7 @@ public class PlayerCustomizationMenu extends Modal {
                 return super.onKeyUp(key);
             }
         };
+        seedField.setText(rng.nextInt(10000000)+"");
         nameField.setText("Player");
         createButton = new Button("Play!", 24, 8, null, true) {
             @Override
@@ -96,8 +96,6 @@ public class PlayerCustomizationMenu extends Modal {
                 if (characterRotation < 0) characterRotation = 7;
             }
         }, -43, 42, GUIAnchor.TOP_RIGHT);
-
-        addChild(new TextLabel("Preview", 4, Color.darkGray, false, false), 39, 16, GUIAnchor.TOP_MIDDLE);
 
         addChild(new Button("Randomize Hair Style", 48, 8, null, true) {
             @Override

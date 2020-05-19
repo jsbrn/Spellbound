@@ -1,25 +1,25 @@
 package world.entities.types.humanoids;
 
 import assets.SpellFactory;
+import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
 import misc.MiscMath;
 import misc.Window;
-import org.json.simple.JSONObject;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Sound;
 import world.Camera;
 import world.Chunk;
 import world.entities.actions.ActionGroup;
 import world.entities.actions.types.ActivateAction;
 import world.entities.actions.types.CastSpellAction;
 import world.entities.actions.types.ChangeAnimationAction;
-import world.entities.magic.Spell;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.*;
+import world.sounds.SoundEmitter;
 
 public class Player extends HumanoidEntity {
 
@@ -34,6 +34,8 @@ public class Player extends HumanoidEntity {
         this.setAllegiance("player");
         this.getMover().setIndependent(true);
         this.getMover().setLookTowardsTarget(false);
+
+        addSoundEmitter("footsteps", new SoundEmitter(250, 0, 0.1f, new Sound[]{SoundManager.FOOTSTEP}, this));
 
         this.setMaxMana(100);
         this.setMana(100);
@@ -117,6 +119,7 @@ public class Player extends HumanoidEntity {
 
         double targetX = getMover().findMoveTarget(dx, 0, Chunk.CHUNK_SIZE)[0];
         double targetY = getMover().findMoveTarget(0, dy, Chunk.CHUNK_SIZE)[1];
+
         if (getActionQueue().isEmpty()) {
 
             double[] mouse_wc = Camera.getWorldCoordinates(
@@ -131,6 +134,7 @@ public class Player extends HumanoidEntity {
             getMover().setSpeed(4);
             getMover().setIndependent(true);
             if ((dx != 0 || dy != 0) && allowUserMovement) {
+                getSoundEmitter("footsteps").setActive(true);
                 getAnimationLayer("arms").setBaseAnimation("walking");
                 getAnimationLayer("legs").setBaseAnimation("walking");
                 getMover().setTarget(targetX, targetY);
@@ -138,10 +142,13 @@ public class Player extends HumanoidEntity {
                 if (getActionQueue("arms").isEmpty() && !GameManager.getGameState(GameState.GAME_SCREEN).getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL))
                     getLocation().setLookDirection((int)MiscMath.angleBetween(0, 0, dx, dy));
             } else {
+                getSoundEmitter("footsteps").setActive(false);
                 getAnimationLayer("arms").setBaseAnimation("default");
                 getAnimationLayer("legs").setBaseAnimation("default");
                 getMover().stop();
             }
+        } else {
+            getSoundEmitter("footsteps").setActive(false);
         }
 
     }

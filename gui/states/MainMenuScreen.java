@@ -6,6 +6,7 @@ import gui.GUIAnchor;
 import gui.elements.*;
 import gui.menus.PlayerCustomizationMenu;
 import gui.menus.PopupMenu;
+import gui.sound.SoundManager;
 import main.GameManager;
 import org.newdawn.slick.*;
 import world.Chunk;
@@ -41,6 +42,7 @@ public class MainMenuScreen extends GameState {
                 "icons/tome.png",
                 Color.white));
         GameManager.switchTo(GameState.GAME_SCREEN);
+        SoundManager.registerEvents();
     }
 
     @Override
@@ -67,6 +69,7 @@ public class MainMenuScreen extends GameState {
             public void onClick(int button) {
                 File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
                 if (!f.exists()) {
+                    World.init(null);
                     gui.stackModal(new PlayerCustomizationMenu());
                 } else {
                     World.init(null);
@@ -90,6 +93,19 @@ public class MainMenuScreen extends GameState {
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Demo", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);
         gui.addElement(deleteSave, -2, -2, GUIAnchor.BOTTOM_RIGHT);
+
+        gui.addElement(new Button("Visit the website", 48, 8, null, true) {
+            @Override
+            public void onClick(int button) {
+                String url_open ="https://computerology.itch.io/spellbound";
+                try {
+                    java.awt.Desktop.getDesktop().browse(java.net.URI.create(url_open));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 2, -2, GUIAnchor.BOTTOM_LEFT);
+
     }
 
     @Override

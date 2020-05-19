@@ -18,7 +18,6 @@ public class Bandit extends HumanoidEntity {
         super();
         this.level = level;
         this.setAllegiance("bandits");
-        this.setSerializable(true);
         this.rng = new Random();
 
         getSpellbook().addSpell(SpellFactory.createSpell(SpellFactory.DAMAGE, level));

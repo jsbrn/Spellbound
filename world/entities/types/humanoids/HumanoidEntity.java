@@ -9,6 +9,7 @@ import world.entities.Entity;
 import world.entities.animations.Animation;
 import world.entities.magic.Spellbook;
 import world.events.EventDispatcher;
+import world.events.event.HumanoidDamageEvent;
 import world.events.event.HumanoidDeathEvent;
 
 import java.util.ArrayList;
@@ -172,6 +173,9 @@ public class HumanoidEntity extends Entity {
                     diff > 0 ? Color.green : Color.red,
                     4,
                     500, 0, true);
+            if (diff < 0) {
+                EventDispatcher.invoke(new HumanoidDamageEvent(this, (int)amount));
+            }
         }
         if (!isDead && hp == 0) {
             EventDispatcher.invoke(new HumanoidDeathEvent(this));

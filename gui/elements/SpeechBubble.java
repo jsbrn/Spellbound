@@ -4,6 +4,7 @@ import assets.Assets;
 import assets.definitions.DialogueDefinition;
 import gui.GUIAnchor;
 import gui.GUIElement;
+import gui.sound.SoundManager;
 import misc.Window;
 import org.newdawn.slick.*;
 import world.Chunk;
@@ -35,6 +36,7 @@ public class SpeechBubble extends GUIElement {
     public void setSpeaker(Entity speaker) {
         this.speaker = speaker;
         this.title.setText(speaker.getName());
+        SoundManager.playSound(SoundManager.PAGE_TURN);
     }
 
     public void setDialogue(DialogueDefinition dialogue) {

@@ -3,21 +3,18 @@ package gui.menus;
 import assets.Assets;
 import gui.GUIAnchor;
 import gui.elements.*;
+import gui.sound.SoundManager;
 import gui.states.GameScreen;
 import gui.states.GameState;
 import main.GameManager;
 import misc.Location;
 import misc.MiscMath;
-import misc.Window;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import world.Camera;
 import world.World;
 import world.entities.Entity;
 import world.entities.types.Chest;
-import world.entities.types.humanoids.npcs.Collector;
-
-import java.util.Random;
 
 public class CheatCodeMenu extends Modal {
 
@@ -82,6 +79,10 @@ public class CheatCodeMenu extends Modal {
         }
         if (code.equals("gui")) {
             ((GameScreen)GameManager.getGameState(GameState.GAME_SCREEN)).toggleHUD();
+        }
+        if (code.matches("ps \\d+")) {
+            int xDist = Integer.parseInt(code.replace("ps ", ""));
+            SoundManager.playSound(SoundManager.SPIKED, 1.0f, new Location(World.getRegion(), Camera.getLocation()[0] + xDist, Camera.getLocation()[1]));
         }
     }
 
