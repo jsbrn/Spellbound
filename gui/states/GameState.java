@@ -11,7 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public abstract class GameState extends BasicGameState {
 
-    public static final int GAME_SCREEN = 0, MAIN_MENU = 1;
+    public static final int GAME_SCREEN = 0, MAIN_MENU = 1, LOADING_SCREEN = 2;
 
     private String background;
     private Input input;

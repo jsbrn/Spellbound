@@ -5,8 +5,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
-import world.Region;
 
 import java.awt.*;
 import java.io.*;
@@ -16,7 +16,8 @@ public class Assets {
 
     public static Image TILE_SPRITESHEET, PARTICLE;
 
-    public static String ROOT_DIRECTORY = System.getProperty("user.home")+"/.spellbound";
+    public static String ROOT_DIRECTORY = System.getProperty("user.home")+"/.spellbound",
+            ASSETS_DIRECTORY = ROOT_DIRECTORY+"/assets";
 
     private static HashMap<Float, TrueTypeFont> fonts;
     private static HashMap<String, Image> images;
@@ -58,6 +59,18 @@ public class Assets {
             images.put(image, instance);
             return instance;
         } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Sound loadSound(String fileName) {
+        new File(ASSETS_DIRECTORY).mkdirs();
+        File sound = new File(ASSETS_DIRECTORY +"/sounds/"+fileName);
+        try {
+            FileInputStream in = new FileInputStream(sound);
+            return new Sound(new BufferedInputStream(in), ASSETS_DIRECTORY +"/"+fileName);
+        } catch (FileNotFoundException | SlickException e) {
             e.printStackTrace();
         }
         return null;

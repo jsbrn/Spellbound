@@ -1,12 +1,13 @@
 package main;
 
 import assets.Assets;
-import assets.definitions.Definitions;
 import gui.sound.SoundManager;
 import gui.states.GameScreen;
 import gui.states.GameState;
+import gui.states.LoadingScreen;
 import gui.states.MainMenuScreen;
 import misc.*;
+import net.lingala.zip4j.ZipFile;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -28,6 +29,7 @@ public class GameManager extends StateBasedGame {
         //add states
         addState(new GameScreen());
         addState(new MainMenuScreen());
+        addState(new LoadingScreen());
 
         instance = this;
 
@@ -35,8 +37,8 @@ public class GameManager extends StateBasedGame {
 
     public static void main(String args[]) throws IOException {
 
-        File root = new File(Assets.ROOT_DIRECTORY+"/world");
-        if (!root.exists()) root.mkdirs();
+        new File(Assets.ROOT_DIRECTORY+"/world").mkdirs();
+        new File(Assets.ASSETS_DIRECTORY+"/sounds/").mkdirs();
 
         //initialize the window
         try {
@@ -91,12 +93,8 @@ public class GameManager extends StateBasedGame {
         getState(GameState.GAME_SCREEN).init(gc, this);
         getState(GameState.MAIN_MENU).init(gc, this);
 
-        Assets.load();
-        Definitions.load();
-        SoundManager.load("/home/jeremy/Documents/Git/Spellbound/src/assets/sounds");
-
         //load "menu" state on startup
-        this.enterState(GameState.MAIN_MENU);
+        this.enterState(GameState.LOADING_SCREEN);
     }
 
 }

@@ -1,5 +1,6 @@
 package gui.sound;
 
+import assets.Assets;
 import misc.Location;
 import misc.MiscMath;
 import org.lwjgl.openal.AL;
@@ -27,34 +28,30 @@ public class SoundManager {
     private static Sound backgroundAmbience;
 
     public static void load(String root) {
-        try {
-            CLICK = new Sound(root+"/click.wav");
-            DEATH = new Sound(root+"/death.wav");
-            SPIKED = new Sound(root+"/spiked.wav");
-            DISCOVERY = new Sound(root+"/discovery.wav");
-            PAGE_TURN = new Sound(root+"/page_turn.wav");
-            DOOR_OPEN = new Sound(root+"/door_open.wav");
-            FOREST_AMBIENCE = new Sound(root+"/forest_ambience.wav");
-            DUNGEON_AMBIENCE = new Sound(root+"/dungeon_ambience.wav");
-            WOOD_STOVE = new Sound(root+"/wood_stove.wav");
-            FOUND_LOOT = new Sound(root+"/found_loot.wav");
-            FAILED_CAST = new Sound(root+"/failed_cast.wav");
-            LOCKED = new Sound(root+"/locked.wav");
-            ZOMBIE_IDLE_1 = new Sound(root+"/zombie_idle_1.wav");
-            ZOMBIE_IDLE_2 = new Sound(root+"/zombie_idle_2.wav");
-            ZOMBIE_DEATH = new Sound(root+"/zombie_death.wav");
-            ZOMBIE_PAIN = new Sound(root+"/zombie_pain.wav");
-            ZOMBIE_BITE = new Sound(root+"/zombie_bite.wav");
-            MAGIC_CAST = new Sound(root+"/cast1.wav");
-            MAGIC_POSITIVE = new Sound(root+"/effects_increase.wav");
-            MAGIC_DASH = new Sound(root+"/magic_dash.wav");
-            IMPACT_1 = new Sound(root+"/impact1.wav");
-            IMPACT_2 = new Sound(root+"/impact2.wav");
-            IMPACT_3 = new Sound(root+"/impact3.wav");
-            FOOTSTEP = new Sound(root+"/footstep.wav");
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+        CLICK = Assets.loadSound("click.wav");
+        DEATH = Assets.loadSound("death.wav");
+        SPIKED = Assets.loadSound("spiked.wav");
+        DISCOVERY = Assets.loadSound("discovery.wav");
+        PAGE_TURN = Assets.loadSound("page_turn.wav");
+        DOOR_OPEN = Assets.loadSound("door_open.wav");
+        FOREST_AMBIENCE = Assets.loadSound("forest_ambience.wav");
+        DUNGEON_AMBIENCE = Assets.loadSound("dungeon_ambience.wav");
+        WOOD_STOVE = Assets.loadSound("wood_stove.wav");
+        FOUND_LOOT = Assets.loadSound("found_loot.wav");
+        FAILED_CAST = Assets.loadSound("failed_cast.wav");
+        LOCKED = Assets.loadSound("locked.wav");
+        ZOMBIE_IDLE_1 = Assets.loadSound("zombie_idle_1.wav");
+        ZOMBIE_IDLE_2 = Assets.loadSound("zombie_idle_2.wav");
+        ZOMBIE_DEATH = Assets.loadSound("zombie_death.wav");
+        ZOMBIE_PAIN = Assets.loadSound("zombie_pain.wav");
+        ZOMBIE_BITE = Assets.loadSound("zombie_bite.wav");
+        MAGIC_CAST = Assets.loadSound("cast1.wav");
+        MAGIC_POSITIVE = Assets.loadSound("effects_increase.wav");
+        MAGIC_DASH = Assets.loadSound("magic_dash.wav");
+        IMPACT_1 = Assets.loadSound("impact1.wav");
+        IMPACT_2 = Assets.loadSound("impact2.wav");
+        IMPACT_3 = Assets.loadSound("impact3.wav");
+        FOOTSTEP = Assets.loadSound("footstep.wav");
     }
 
     public static void registerEvents() {
