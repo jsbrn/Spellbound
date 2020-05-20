@@ -13,3 +13,4 @@ You can find Magic Techniques to enhance your Spellcrafting deep inside the dung
 When spells run out of energy, they stop affecting their targets and eventually fade away.
 The brighter and more colorful a spell is, the more Dyes are required to craft it.
 If you're running low on Mana often, try visiting the Wishing Well.
+Stuck? Your save file is backed up before each session. Open the saves folder from the main menu.

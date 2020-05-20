@@ -59,7 +59,8 @@ public class GameManager extends StateBasedGame {
                     "assets/gui/icons/favicon/icon_112x112.png",
                     "assets/gui/icons/favicon/icon_128x128.png"
             });
-            //Window.toggleFullScreen();
+            if (!(args.length > 0 && args[0].equals("nofs")))
+                Window.toggleFullScreen();
             Window.WINDOW_INSTANCE.start();
 
         } catch (SlickException e) {
@@ -80,7 +81,7 @@ public class GameManager extends StateBasedGame {
             instance.getContainer().setMouseCursor(
                     Assets.getImage(mouseCursor)
                             .getFlippedCopy(false, false)
-                            .getScaledCopy(Window.getScale()), 0, 0);
+                            .getScaledCopy(4), 0, 0);
         } catch (SlickException e) {
             e.printStackTrace();
         }

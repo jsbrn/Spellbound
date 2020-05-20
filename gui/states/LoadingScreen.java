@@ -43,9 +43,7 @@ public class LoadingScreen extends GameState {
                     while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                         fileOutputStream.write(dataBuffer, 0, bytesRead);
                         bytesDownloaded += 1024;
-                        progress.setText((bytesDownloaded/1024/1024)+"/"+(downloadSize/1024/1024)+" MB");
                     }
-                    if (temp.length() > 0)
                     new ZipFile(Assets.ASSETS_DIRECTORY+"/sounds/temp.zip").extractAll(Assets.ASSETS_DIRECTORY+"/sounds/");
                     temp.delete();
                     finishedDownload = true;
@@ -87,6 +85,7 @@ public class LoadingScreen extends GameState {
         if (new File(Assets.ASSETS_DIRECTORY+"/sounds/").listFiles().length == 0) {
             downloadSounds();
         } else {
+            finishedDownload = true;
             loadSoundsThread.start();
             loadAssets();
         }
@@ -96,6 +95,8 @@ public class LoadingScreen extends GameState {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         if (finishedDownload && !downloadThread.isAlive()) loadAssets();
         //if (downloadFailed) GameManager.switchTo(GameState.MAIN_MENU);
+        progress.setText((bytesDownloaded/1024/1024)+"/"+(downloadSize/1024/1024)+" MB");
+        if (finishedDownload) progress.hide();
     }
 
     @Override
@@ -105,7 +106,7 @@ public class LoadingScreen extends GameState {
 
     @Override
     public void addGUIElements(GUI gui) {
-        title = new TextLabel("Downloading assets...", 5, Color.white, false, false);
+        title = new TextLabel("Connecting to asset server...", 5, Color.white, false, false);
         gui.addElement(title, 0, 0, GUIAnchor.CENTER);
         progress = new TextLabel("", 4, Color.white, false, false);
         gui.addElement(progress, 0, 8, GUIAnchor.CENTER);
@@ -114,6 +115,7 @@ public class LoadingScreen extends GameState {
     private void downloadSounds() {
         try {
             downloadSize = getFileSize("https://spellbound.openode.io/files/classic/sounds.zip");
+            title.setText("Downloading assets...");
             downloadThread.start();
         } catch (IOException e) {
             e.printStackTrace();

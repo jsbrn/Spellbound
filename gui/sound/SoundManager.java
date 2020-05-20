@@ -21,6 +21,8 @@ import java.util.concurrent.ConcurrentMap;
 
 public class SoundManager {
 
+    private static float BASE_VOLUME_MULTIPLIER = 0.2f;
+
     public static int IDLE = 0, COMBAT = 1;
 
     public static Sound CLICK, DEATH, DOOR_OPEN, SPIKED, DISCOVERY,
@@ -168,13 +170,13 @@ public class SoundManager {
     private static void changeMusic(Sound sound) {
         if (currentSong != null && currentSong.playing()) currentSong.stop();
         currentSong = sound;
-        sound.playAt(1.0f, 0.6f, 0, 0, 0);
+        sound.playAt(1.0f, 0.6f * BASE_VOLUME_MULTIPLIER, 0, 0, 0);
     }
 
     public static void setBackground(Sound s) {
         if (backgroundAmbience != null) backgroundAmbience.stop();
         backgroundAmbience = s;
-        if (backgroundAmbience != null) backgroundAmbience.loop(1.0f, 0.7f);
+        if (backgroundAmbience != null) backgroundAmbience.loop(1.0f, 0.7f * BASE_VOLUME_MULTIPLIER);
     }
 
     private static void switchContext(int c, boolean stopMusic) {
@@ -188,7 +190,7 @@ public class SoundManager {
     }
 
     public static void resumeAmbience() {
-        if (backgroundAmbience != null && !backgroundAmbience.playing()) backgroundAmbience.loop(1.0f, 0.5f);
+        if (backgroundAmbience != null && !backgroundAmbience.playing()) backgroundAmbience.loop(1.0f, 0.5f * BASE_VOLUME_MULTIPLIER);
     }
 
     public static void stopMusic() {
@@ -196,17 +198,18 @@ public class SoundManager {
     }
 
     public static void playSound(Sound s) {
-        if (s != null) s.play();
+        if (s != null) s.playAt(1.0f, BASE_VOLUME_MULTIPLIER, 0, 0, 0);
     }
 
     public static void playSound(Sound s, float volumeMultiplier, Location location) {
         if (s == null) return;
         if (!location.getRegion().equals(World.getLocalPlayer().getLocation().getRegion())) return;
+        System.out.println("Playing sound "+s);
         double xDist = location.getCoordinates()[0] - Camera.getLocation()[0];
         double yDist = location.getCoordinates()[1] - Camera.getLocation()[1];
         double dist = location.distanceTo(Camera.getLocation()[0], Camera.getLocation()[1]);
         float audioX = (int)(xDist / 6) * 0.05f;
-        s.playAt((float)MiscMath.random(0.8, 1.2), volumeMultiplier * (1 - (float)MiscMath.clamp((dist / 4) / 24, 0, 1)), audioX, (float)yDist / 6, 0);
+        s.playAt((float)MiscMath.random(0.8, 1.2), BASE_VOLUME_MULTIPLIER * volumeMultiplier * (1 - (float)MiscMath.clamp((dist / 4) / 24, 0, 1)), audioX, (float)yDist / 6, 0);
     }
 
 }
