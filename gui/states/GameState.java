@@ -17,6 +17,8 @@ public abstract class GameState extends BasicGameState {
     private Input input;
     private GUI gui;
 
+    private boolean initialized;
+
     public GameState() {
         gui = new GUI(this);
     }
@@ -27,10 +29,12 @@ public abstract class GameState extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
+        if (initialized) return;
         gc.setDefaultFont(Assets.getFont(14));
         input = gc.getInput();
         addGUIElements(gui);
         GameManager.setMouseCursor("assets/gui/cursors/default.png");
+        initialized = true;
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {

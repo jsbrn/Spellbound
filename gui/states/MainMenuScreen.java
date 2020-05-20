@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
 
 public class MainMenuScreen extends GameState {
 
@@ -47,6 +48,10 @@ public class MainMenuScreen extends GameState {
 
     @Override
     public void addGUIElements(GUI gui) {
+
+        String[] tips = Assets.read("tips.txt", true).split("\\n");
+        gui.addElement(new TextLabel("Tip of the Day", 6, Color.white, true, false), 0, 32, GUIAnchor.CENTER);
+        gui.addElement(new TextLabel(tips[new Random().nextInt(tips.length)], 5, 32*5, 8, Color.white, true, false), 0, 48, GUIAnchor.CENTER);
 
         Button deleteSave = new Button("Delete your save file", 48, 8, null, true) {
             @Override
