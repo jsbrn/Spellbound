@@ -406,9 +406,10 @@
       "I'll take your money, but you know you can craft your own spells, right?"
     ],
     "options": [
-      { "label": "Damage (-100GP)", "pointsTo": null },
-      { "label": "Healing (-50GP)", "pointsTo": null },
-      { "label": "Barrier (-25GP)", "pointsTo": null }
+      { "label": "Damage (-50GP)", "pointsTo": null },
+      { "label": "Healing (-25GP)", "pointsTo": null },
+      { "label": "Barrier (-75GP)", "pointsTo": null },
+      { "label": "Blast (-75GP)", "pointsTo": null }
     ]
   },
   {

@@ -51,7 +51,7 @@ public class MainMenuScreen extends GameState {
 
         String[] tips = Assets.read("tips.txt", true).split("\\n");
         gui.addElement(new TextLabel("Tip of the Day", 6, Color.white, true, false), 0, 32, GUIAnchor.CENTER);
-        gui.addElement(new TextLabel(tips[new Random().nextInt(tips.length)], 5, 32*5, 8, Color.white, true, false), 0, 48, GUIAnchor.CENTER);
+        gui.addElement(new TextLabel(tips[new Random().nextInt(tips.length)], 4, 32*5, 8, Color.white, true, false), 0, 48, GUIAnchor.CENTER);
 
         Button deleteSave = new Button("Delete your save file", 48, 8, null, true) {
             @Override

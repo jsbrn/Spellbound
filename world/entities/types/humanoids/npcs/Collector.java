@@ -23,8 +23,8 @@ import world.events.event.PlayerReplyEvent;
 public class Collector extends HumanoidEntity {
 
     private int deals;
-    private int[] spellPrices = new int[]{50, 50, 75};
-    private String[] spellTypes = new String[]{SpellFactory.DAMAGE, SpellFactory.HEALING, SpellFactory.BARRIER};
+    private int[] spellPrices = new int[]{50, 25, 75, 75};
+    private String[] spellTypes = new String[]{SpellFactory.DAMAGE, SpellFactory.HEALING, SpellFactory.BARRIER, SpellFactory.BLAST};
 
     public Collector() {
         setName("The Collector");
