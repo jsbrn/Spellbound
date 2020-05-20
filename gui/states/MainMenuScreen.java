@@ -4,14 +4,19 @@ import assets.Assets;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.*;
+import gui.elements.Button;
 import gui.menus.PlayerCustomizationMenu;
 import gui.menus.PopupMenu;
 import gui.sound.SoundManager;
 import main.GameManager;
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.newdawn.slick.*;
+import org.newdawn.slick.Color;
 import world.Chunk;
 import world.World;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,15 +58,11 @@ public class MainMenuScreen extends GameState {
         gui.addElement(new TextLabel("Tip of the Day", 6, Color.white, true, false), 0, 32, GUIAnchor.CENTER);
         gui.addElement(new TextLabel(tips[new Random().nextInt(tips.length)], 4, 32*5, 8, Color.white, true, false), 0, 48, GUIAnchor.CENTER);
 
-        Button deleteSave = new Button("Delete your save file", 48, 8, null, true) {
+        Button deleteSave = new Button("Open root directory", 52, 8, null, true) {
             @Override
             public void onClick(int button) {
                 try {
-                    Files.walk(Paths.get(Assets.ROOT_DIRECTORY+"/world/"))
-                            .map(Path::toFile)
-                            .sorted((o1, o2) -> -o1.compareTo(o2))
-                            .forEach(File::delete);
-                    setEnabled(false);
+                    Desktop.getDesktop().open(new File(Assets.ROOT_DIRECTORY));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -78,6 +79,13 @@ public class MainMenuScreen extends GameState {
                     gui.stackModal(new PlayerCustomizationMenu());
                 } else {
                     World.init(null);
+                    //make a backup before loading a save
+                    try {
+                        new File(Assets.ROOT_DIRECTORY+"/backups/").mkdirs();
+                        new ZipFile(Assets.ROOT_DIRECTORY+"/backups/backup_"+System.currentTimeMillis()+".zip").addFolder(new File(Assets.ROOT_DIRECTORY+"/world/"));
+                    } catch (ZipException e) {
+                        e.printStackTrace();
+                    }
                     World.load();
                     startGame();
                 }

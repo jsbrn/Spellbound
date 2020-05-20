@@ -9,7 +9,6 @@ import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Input;
 import world.World;
 import world.events.EventDispatcher;
 
@@ -30,8 +29,9 @@ public class PauseMenu extends Modal {
             public void onClick(int button) {
                 World.save();
                 GameManager.switchTo(GameState.MAIN_MENU);
-                SoundManager.stop();
+                SoundManager.stopAmbience();
                 EventDispatcher.unregisterAll();
+                SoundManager.stopMusic();
             }
         }, 16, 0, GUIAnchor.CENTER);
 
@@ -45,12 +45,12 @@ public class PauseMenu extends Modal {
     @Override
     public void onShow() {
         World.setPaused(true);
-        SoundManager.stop();
+        SoundManager.stopAmbience();
     }
 
     @Override
     public void onHide() {
         World.setPaused(false);
-        SoundManager.resume();
+        SoundManager.resumeAmbience();
     }
 }

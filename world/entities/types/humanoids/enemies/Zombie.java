@@ -35,10 +35,10 @@ public class Zombie extends HumanoidEntity {
         getAnimationLayer("shirt").setBaseAnimation("dirty");
         getAnimationLayer("hair").setColor(Color.black);
 
-        addSoundEmitter("idle", new SoundEmitter(5000, 1000, 1.0f, new Sound[]{SoundManager.ZOMBIE_IDLE_1, SoundManager.ZOMBIE_IDLE_2}, this));
-        addSoundEmitter("death", new SoundEmitter(new Sound[]{SoundManager.ZOMBIE_DEATH}, this));
-        addSoundEmitter("pain", new SoundEmitter(new Sound[]{SoundManager.ZOMBIE_PAIN}, this));
-        addSoundEmitter("bite", new SoundEmitter(new Sound[]{SoundManager.ZOMBIE_BITE}, this));
+        addSoundEmitter("idle", new SoundEmitter(5000, 7000, 0.4f, new Sound[]{SoundManager.ZOMBIE_IDLE_1, SoundManager.ZOMBIE_IDLE_2}, this));
+        addSoundEmitter("death", new SoundEmitter(1.0f, new Sound[]{SoundManager.ZOMBIE_DEATH}, this));
+        addSoundEmitter("pain", new SoundEmitter(1.0f, new Sound[]{SoundManager.ZOMBIE_PAIN}, this));
+        addSoundEmitter("bite", new SoundEmitter(1.0f, new Sound[]{SoundManager.ZOMBIE_BITE}, this));
 
         setAllegiance("undead");
         Zombie that = this;

@@ -22,7 +22,7 @@ public class SpikeTrap extends Entity {
         setIsTile(true);
         setRadius(0.25f);
         getMover().setDScore(1000);
-        addSoundEmitter("attack", new SoundEmitter(new Sound[]{SoundManager.SPIKED}, this));
+        addSoundEmitter("attack", new SoundEmitter(1.0f, new Sound[]{SoundManager.SPIKED}, this));
         addAnimation("default", "idle", new Animation("spike_trap.png", 1, 1, 16, false, false));
         addAnimation("default", "open", new Animation("spike_trap_open.png", 8, 3, 16, false, false));
         addAnimation("default", "close", new Animation("spike_trap_close.png", 8, 3, 16, false, false));

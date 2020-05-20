@@ -38,10 +38,9 @@ public class Chest extends Entity {
         this.lootType = lootType;
         this.filledChance = filledChance;
 
-        this.addSoundEmitter("locked", new SoundEmitter(new Sound[]{SoundManager.LOCKED}, this));
-        this.addSoundEmitter("loot_found", new SoundEmitter(new Sound[]{SoundManager.FOUND_LOOT}, this));
-        this.addSoundEmitter("special_loot_found", new SoundEmitter(new Sound[]{SoundManager.DISCOVERY}, this));
-        this.addSoundEmitter("opened", new SoundEmitter(new Sound[]{SoundManager.DOOR_OPEN}, this));
+        this.addSoundEmitter("locked", new SoundEmitter(1.0f, new Sound[]{SoundManager.LOCKED}, this));
+        this.addSoundEmitter("loot_found", new SoundEmitter(1.0f, new Sound[]{SoundManager.FOUND_LOOT}, this));
+        this.addSoundEmitter("opened", new SoundEmitter(1.0f, new Sound[]{SoundManager.DOOR_OPEN}, this));
 
         this.getMover().setCollidable(true);
         this.addAnimation("default", "closed", new Animation((locked ? "locked_" : "") + "chest.png", 1, 1, 16, true, false));
@@ -109,7 +108,7 @@ public class Chest extends Entity {
                                                 "icons/artifact.png",
                                                 Color.white
                                         ));
-                                        getSoundEmitter("special_loot_found").play();
+                                        SoundManager.playSound(SoundManager.DISCOVERY);
                                     } else if (lootType == TOME_LOOT) {
                                         String newTechnique = SpellFactory.discoverRandomTechnique(human.getSpellbook(), lootMultiplier);
                                         if (newTechnique != null) {
@@ -121,7 +120,7 @@ public class Chest extends Entity {
                                                     "icons/techniques/"+newTechnique+".png",
                                                     Color.darkGray
                                             ));
-                                            getSoundEmitter("special_loot_found").play();
+                                            SoundManager.playSound(SoundManager.DISCOVERY);
                                         }
                                     }
 

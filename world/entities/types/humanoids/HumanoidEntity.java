@@ -123,7 +123,7 @@ public class HumanoidEntity extends Entity {
     public void update() {
         if (isDead()) return;
         super.update();
-        addMana(MiscMath.getConstant(max_mana, 20));
+        addMana(MiscMath.getConstant(max_mana, 10));
     }
 
     public String getAllegiance() { return allegiance; }

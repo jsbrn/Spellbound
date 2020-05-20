@@ -22,8 +22,8 @@ public class SoundEmitter {
 
     private Random rng;
 
-    public SoundEmitter(Sound[] sounds, Entity parent) {
-        this(0, 0, 1.0f, sounds, parent);
+    public SoundEmitter(float volumeMultiplier, Sound[] sounds, Entity parent) {
+        this(0, 0, volumeMultiplier, sounds, parent);
         this.isActive = false;
     }
 
@@ -42,7 +42,7 @@ public class SoundEmitter {
         if (!isActive) return;
         if (parent.getLocation().getRegion().getCurrentTime() > lastEmit + timing + variance) {
             play();
-            variance = rng.nextInt(1 + (maxVariance * 2)) - maxVariance;
+            variance = rng.nextInt(1 + maxVariance);
             lastEmit = parent.getLocation().getRegion().getCurrentTime();
         }
     }

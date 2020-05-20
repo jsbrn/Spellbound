@@ -42,6 +42,7 @@ public class GameScreen extends GameState {
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        super.update(gc, sbg, delta);
         MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
         World.update();
 
@@ -99,7 +100,7 @@ public class GameScreen extends GameState {
             }
         };
         spellbookButton.setTooltipText("Journal (TAB)");
-        gui.addElement(spellbookButton, 2, 82, GUIAnchor.TOP_LEFT);
+        gui.addElement(spellbookButton, 4, 82, GUIAnchor.TOP_LEFT);
 
         MiniMap miniMap = new MiniMap();
         gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);

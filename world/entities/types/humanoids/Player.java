@@ -54,7 +54,8 @@ public class Player extends HumanoidEntity {
                         ActionGroup actions = new ActionGroup();
                         if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0
                             && that.getActionQueue().isEmpty()) {
-                            getLocation().lookAt(mce.getX(), mce.getY());
+                            //HACK
+                            if (getLocation() != null) getLocation().lookAt(mce.getX(), mce.getY());
                             actions.add(new CastSpellAction(mce.getX(), mce.getY()));
                             actions.add(new ChangeAnimationAction("arms", "casting", true, true));
                             getSpellbook().getParent().getActionQueue("arms").queueActions(actions);

@@ -16,7 +16,7 @@ public class Assets {
 
     public static Image TILE_SPRITESHEET, PARTICLE;
 
-    public static String ROOT_DIRECTORY = System.getProperty("user.home")+"/.spellbound",
+    public static String ROOT_DIRECTORY = System.getProperty("user.home")+"/.sbclassic",
             ASSETS_DIRECTORY = ROOT_DIRECTORY+"/assets";
 
     private static HashMap<Float, TrueTypeFont> fonts;
@@ -68,8 +68,8 @@ public class Assets {
         new File(ASSETS_DIRECTORY).mkdirs();
         File sound = new File(ASSETS_DIRECTORY +"/sounds/"+fileName);
         try {
-            FileInputStream in = new FileInputStream(sound);
-            return new Sound(new BufferedInputStream(in), ASSETS_DIRECTORY +"/"+fileName);
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(sound));
+            return new Sound(in, fileName);
         } catch (FileNotFoundException | SlickException e) {
             e.printStackTrace();
         }

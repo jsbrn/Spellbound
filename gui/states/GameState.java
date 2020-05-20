@@ -2,6 +2,7 @@ package gui.states;
 
 import assets.Assets;
 import gui.GUI;
+import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
 import org.lwjgl.opengl.Display;
@@ -46,7 +47,7 @@ public abstract class GameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-
+        SoundManager.update();
     }
 
     public final GUI getGUI() { return gui; }

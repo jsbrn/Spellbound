@@ -17,48 +17,85 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LoadingScreen extends GameState {
 
-    private Thread loadSoundsThread;
-    private int bytesDownloaded;
-    private TextLabel progress;
+    private Thread downloadThread, loadSoundsThread;
+    private long bytesDownloaded, downloadSize;
+    private boolean finishedDownload;
+    private TextLabel title, progress;
 
     public LoadingScreen() {
-        this.loadSoundsThread = new Thread() {
+        this.downloadThread = new Thread() {
             @Override
             public void run() {
                 bytesDownloaded = 0;
                 try (BufferedInputStream in = new BufferedInputStream(new URL("https://spellbound.openode.io/files/classic/sounds.zip").openStream());
                      FileOutputStream fileOutputStream = new FileOutputStream(Assets.ASSETS_DIRECTORY +"/sounds/temp.zip")) {
+
+                    File temp = new File(Assets.ASSETS_DIRECTORY+"/sounds/temp.zip");
+                    temp.deleteOnExit();
+
                     byte dataBuffer[] = new byte[1024];
                     int bytesRead;
                     while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                         fileOutputStream.write(dataBuffer, 0, bytesRead);
                         bytesDownloaded += 1024;
-                        progress.setText((bytesDownloaded/1024/1024)+" MB");
+                        progress.setText((bytesDownloaded/1024/1024)+"/"+(downloadSize/1024/1024)+" MB");
                     }
+                    if (temp.length() > 0)
                     new ZipFile(Assets.ASSETS_DIRECTORY+"/sounds/temp.zip").extractAll(Assets.ASSETS_DIRECTORY+"/sounds/");
-                    new File(Assets.ASSETS_DIRECTORY+"/sounds/temp.zip").delete();
-                    finish();
+                    temp.delete();
+                    finishedDownload = true;
+                    loadSoundsThread.start();
                 } catch (IOException e) {
                     // handle exception
                 }
             }
         };
+        this.loadSoundsThread = new Thread() {
+            @Override
+            public void run() {
+                progress.setText("");
+                SoundManager.load("");
+                GameManager.switchTo(GameState.MAIN_MENU);
+            }
+        };
+    }
+
+    private long getFileSize(String fileUrl) throws IOException {
+
+        URL oracle = new URL(fileUrl);
+
+        HttpURLConnection yc = (HttpURLConnection) oracle.openConnection();
+
+        long fileSize = 0;
+        try {
+            // retrieve file size from Content-Length header field
+            fileSize = Long.parseLong(yc.getHeaderField("Content-Length"));
+        } catch (NumberFormatException nfe) {
+        }
+
+        return fileSize;
     }
 
     @Override
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         super.init(gc, game);
-        Assets.load();
-        Definitions.load();
         if (new File(Assets.ASSETS_DIRECTORY+"/sounds/").listFiles().length == 0) {
-            loadSoundsThread.start();
+            downloadSounds();
         } else {
-            finish();
+            loadSoundsThread.start();
+            loadAssets();
         }
+    }
+
+    @Override
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        if (finishedDownload && !downloadThread.isAlive()) loadAssets();
+        //if (downloadFailed) GameManager.switchTo(GameState.MAIN_MENU);
     }
 
     @Override
@@ -68,14 +105,25 @@ public class LoadingScreen extends GameState {
 
     @Override
     public void addGUIElements(GUI gui) {
-        gui.addElement(new TextLabel("Downloading assets...", 5, Color.white, false, false), 0, 0, GUIAnchor.CENTER);
+        title = new TextLabel("Downloading assets...", 5, Color.white, false, false);
+        gui.addElement(title, 0, 0, GUIAnchor.CENTER);
         progress = new TextLabel("", 4, Color.white, false, false);
         gui.addElement(progress, 0, 8, GUIAnchor.CENTER);
     }
 
-    private void finish() {
-        SoundManager.load("");
-        GameManager.switchTo(GameState.MAIN_MENU);
+    private void downloadSounds() {
+        try {
+            downloadSize = getFileSize("https://spellbound.openode.io/files/classic/sounds.zip");
+            downloadThread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadAssets() {
+        title.setText("Preparing assets...");
+        Assets.load();
+        Definitions.load();
     }
 
     @Override
