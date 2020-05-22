@@ -28,7 +28,7 @@ public class PauseMenu extends Modal {
             @Override
             public void onClick(int button) {
                 World.save();
-                GameManager.switchTo(GameState.MAIN_MENU);
+                GameManager.switchTo(GameState.MAIN_MENU, true);
                 SoundManager.stopAmbience();
                 EventDispatcher.unregisterAll();
                 SoundManager.stopMusic();

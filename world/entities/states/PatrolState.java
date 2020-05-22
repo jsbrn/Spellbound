@@ -24,7 +24,7 @@ public class PatrolState extends IdleState {
         }).collect(Collectors.toList());
 
         if (nearby.isEmpty()) return;
-        getParent().enterState(new AttackState(nearby.get(0), 1, 8, 8));
+        getParent().enterState(new AttackState(nearby.get(0), 1, 8, 4));
     }
 
 }

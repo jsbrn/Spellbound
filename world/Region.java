@@ -141,7 +141,7 @@ public class Region {
     public List<Entity> getEntities(double wx, double wy, double radius) {
         ArrayList<Entity> entities = getEntities(
                 (int)(wx - radius), (int)(wy - radius),
-                (int)(radius + 2), (int)(radius + 2));
+                (int)((radius * 2) + 1), (int)((radius * 2) + 2));
         return entities.stream().filter(e -> MiscMath.circlesIntersect(
                 e.getLocation().getCoordinates()[0],
                 e.getLocation().getCoordinates()[1],

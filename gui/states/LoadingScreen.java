@@ -58,7 +58,7 @@ public class LoadingScreen extends GameState {
             public void run() {
                 progress.setText("");
                 SoundManager.load("");
-                GameManager.switchTo(GameState.MAIN_MENU);
+                GameManager.switchTo(GameState.MAIN_MENU, true);
             }
         };
     }

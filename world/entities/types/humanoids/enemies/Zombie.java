@@ -121,7 +121,7 @@ public class Zombie extends HumanoidEntity {
             }
             if (canSee(target) < 0.25 || getLocation().distanceTo(target.getLocation()) > Chunk.CHUNK_SIZE * 2 || target.isDead()) {
                 target = null;
-                enterState(new PatrolState(6));
+                enterState(new PatrolState(5));
             }
 
         }

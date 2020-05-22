@@ -13,6 +13,11 @@ import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.state.transition.BlobbyTransition;
+import org.newdawn.slick.state.transition.EmptyTransition;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.SelectTransition;
+import sun.invoke.empty.Empty;
 import world.Chunk;
 import world.World;
 
@@ -47,7 +52,7 @@ public class MainMenuScreen extends GameState {
                         "Follow the itch.io devlog to stay up-to-date.",
                 "icons/tome.png",
                 Color.white));
-        GameManager.switchTo(GameState.GAME_SCREEN);
+        GameManager.switchTo(GameState.GAME_SCREEN, true);
         SoundManager.registerEvents();
     }
 
@@ -92,8 +97,10 @@ public class MainMenuScreen extends GameState {
                 deleteSave.setEnabled(true);
             }
         };
+
         playButton.setTooltipText("Play the game!");
-        gui.addElement(playButton, -(16*3)/2, 0, GUIAnchor.CENTER);
+        gui.addElement(playButton, -(24*3)/2, 0, GUIAnchor.CENTER);
+
         Button quit = new Button(null, 24, 24, "icons/quit.png", true) {
             @Override
             public void onClick(int button) {
@@ -101,7 +108,14 @@ public class MainMenuScreen extends GameState {
             }
         };
         quit.setTooltipText("Quit");
-        gui.addElement(quit, (16*3)/2, 0, GUIAnchor.CENTER);
+        gui.addElement(quit, (24*3)/2, 0, GUIAnchor.CENTER);
+
+        gui.addElement(new Button(null, 24, 24, "icons/settings.png", true) {
+            @Override
+            public void onClick(int button) {
+                GameManager.switchTo(GameState.SETTINGS_SCREEN, false);
+            }
+        }, 0, 0, GUIAnchor.CENTER);
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Demo", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);

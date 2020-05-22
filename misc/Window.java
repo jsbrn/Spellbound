@@ -1,6 +1,7 @@
 package misc;
 
 import assets.Assets;
+import assets.Settings;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -14,6 +15,8 @@ import world.Chunk;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Window {
@@ -26,18 +29,33 @@ public class Window {
     private static int last_width = 0, last_height = 0;
 
     public static void toggleFullScreen() throws SlickException {
-        if (Display.isFullscreen()) {
-            Window.WINDOW_INSTANCE.setDisplayMode(last_width, last_height, false);
+        if (WINDOW_INSTANCE.isFullscreen()) {
+            WINDOW_INSTANCE.setFullscreen(false);
+            WINDOW_INSTANCE.setDisplayMode((int)(getScreenWidth() * 0.75), (int)(getScreenHeight() * 0.75), false);
         } else {
+            DisplayMode fs = Window.getAllDisplayModes().get(Settings.getInt("resolution"));
+            WINDOW_INSTANCE.setDisplayMode(fs.getWidth(), fs.getHeight(), false);
             try {
-                last_width = Window.getWidth();
-                last_height = Window.getHeight();
-                Window.WINDOW_INSTANCE.setDisplayMode(Window.getScreenWidth(), Window.getScreenHeight(), false);
-                Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+                Display.setDisplayModeAndFullscreen(fs);
             } catch (LWJGLException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static List<DisplayMode> getAllDisplayModes() {
+        List<DisplayMode> modes = null;
+        try {
+            DisplayMode desktop = Display.getDesktopDisplayMode();
+            modes = Arrays.stream(Display.getAvailableDisplayModes())
+                    .filter(m -> m.getFrequency() == desktop.getFrequency() && m.getBitsPerPixel() == desktop.getBitsPerPixel() && m.isFullscreenCapable())
+                    .sorted(Comparator.comparingInt(DisplayMode::getWidth))
+                    .collect(Collectors.toList());
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+        }
+        modes.add(0, Display.getDesktopDisplayMode());
+        return modes;
     }
 
     public static boolean wasResized() {
