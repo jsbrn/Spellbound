@@ -26,7 +26,7 @@ public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
     @Override
     public Entity getEntity(int x, int y) {
         if (!isWithinWalls(x, y)) return null;
-        return rng().nextInt(12) == 0 ? new Bandit(difficultyMultiplier) : null;
+        return rng().nextInt(20) == 0 ? new Bandit(difficultyMultiplier) : null;
     }
 
     @Override

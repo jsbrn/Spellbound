@@ -24,13 +24,15 @@ public class GameManager extends StateBasedGame {
     private static GameManager instance;
     private static String mouseCursor;
 
+    private static boolean loadMusic;
+
     public GameManager(String gameTitle) {
 
         super(gameTitle); //set window title to "gameTitle" string
         //add states
         addState(new GameScreen());
         addState(new MainMenuScreen());
-        addState(new LoadingScreen(false));
+        addState(new LoadingScreen(loadMusic));
         addState(new SettingsScreen());
 
         instance = this;
@@ -38,6 +40,8 @@ public class GameManager extends StateBasedGame {
     }
 
     public static void main(String args[]) throws IOException {
+
+        loadMusic = args.length <= 0 || Boolean.parseBoolean(args[0]);
 
         new File(Assets.ROOT_DIRECTORY+"/world").mkdirs();
         new File(Assets.ASSETS_DIRECTORY+"/sounds/").mkdirs();
