@@ -23,8 +23,9 @@ public class SpellcraftingMenu extends Modal {
     private HashMap<String, Button> buttons;
     private TextBox nameField;
     private TextLabel crystalCost, dyesCost, manaCost, volatility;
+    private IconLabel icon;
     private ColorChooser colorChooser;
-    private IconChooser iconChooser;
+    private Picker iconChooser;
     private Button createButton, leftButton, rightButton;
 
     private Spell spell;
@@ -35,6 +36,7 @@ public class SpellcraftingMenu extends Modal {
         this.buttons = new HashMap<>();
         this.categories = new ArrayList<>();
         this.spell = new Spell();
+        this.icon = new IconLabel("icons/spells/0.png");
 
         nameField = new TextBox(64, 8) {
             @Override
@@ -56,7 +58,7 @@ public class SpellcraftingMenu extends Modal {
             @Override
             public void onClick(int button) {
                 spell.setColor(colorChooser.getColor());
-                spell.setIconIndex(iconChooser.getIndex());
+                spell.setIconIndex(iconChooser.getValue());
                 spell.setName(nameField.getText());
                 target.getSpellbook().addSpell(spell);
                 target.addCrystals(-spell.getCrystalCost());
@@ -69,13 +71,21 @@ public class SpellcraftingMenu extends Modal {
 
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
 
-        iconChooser = new IconChooser("assets/gui/icons/spells", 15, 2);
+        iconChooser = new Picker(0, 14, 1, null) {
+            @Override
+            public void onValueChange() {
+                icon.setImage(Assets.getImage("assets/gui/icons/spells/"+this.getValue()+".png"));
+                spell.setIconIndex(getValue());
+            }
+        };
+        iconChooser.addChild(icon, 0, -16, GUIAnchor.TOP_MIDDLE);
+        iconChooser.addChild(new TextLabel("Icon", 5, Color.white, true, false), 0, -25, GUIAnchor.TOP_LEFT);
         colorChooser = new ColorChooser(16, 8, 4) {
             @Override
             public boolean onMousePressed(int ogx, int ogy, int button) {
                 boolean clicked = super.onMousePressed(ogx, ogy, button);
                 if (clicked) {
-                    spell.setColor(getColor()); iconChooser.setColor(getColor());
+                    spell.setColor(getColor()); icon.setFilter(getColor());
                     refresh();
                 }
                 return clicked;
@@ -83,7 +93,7 @@ public class SpellcraftingMenu extends Modal {
         };
 
         addChild(colorChooser, 8, 24, GUIAnchor.TOP_LEFT);
-        addChild(iconChooser, 42, 24, GUIAnchor.TOP_LEFT);
+        addChild(iconChooser, 44, 48, GUIAnchor.TOP_LEFT);
 
         addChild(new IconLabel("icons/crystal.png"), 8, -20, GUIAnchor.BOTTOM_LEFT);
         addChild(new IconLabel("icons/dyes.png"), 28, -20, GUIAnchor.BOTTOM_LEFT);
@@ -282,8 +292,8 @@ public class SpellcraftingMenu extends Modal {
     private void refresh() {
         refreshRequirements();
         this.nameField.setText(spell.getName());
-        this.iconChooser.setColor(spell.getColor());
-        this.iconChooser.setIndex(spell.getIconIndex());
+        this.icon.setFilter(spell.getColor());
+        this.iconChooser.setValue(spell.getIconIndex());
         this.colorChooser.setColor(spell.getColor());
         refreshTechniquesPanel();
     }

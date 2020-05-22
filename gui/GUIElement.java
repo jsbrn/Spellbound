@@ -36,7 +36,7 @@ public abstract class GUIElement {
             case TOP_RIGHT: return new double[]{ p_coords[0] + p_dims[0] - dims[0] + offset[0], p_coords[1] + offset[1]};
             case LEFT_MIDDLE: return new double[]{ p_coords[0] + offset[0], p_coords[1] + ((double)p_dims[1]/2) - ((double)dims[1]/2) + offset[1] };
             case CENTER: return new double[]{ p_coords[0] + ((double)p_dims[0]/2f) - ((double)dims[0] / 2f) + offset[0], p_coords[1] + ((double)p_dims[1]/2f) - ((double)dims[1]/2f) + offset[1] };
-            case RIGHT_MIDDLE: return new double[]{ p_coords[0] - dims[0] + offset[0], p_coords[1] + ((double)p_dims[1]/2) - ((double)dims[1]/2) + offset[1] };
+            case RIGHT_MIDDLE: return new double[]{ p_coords[0] + p_dims[0] - dims[0] + offset[0], p_coords[1] + ((double)p_dims[1]/2) - ((double)dims[1]/2) + offset[1] };
             case BOTTOM_LEFT: return new double[]{ p_coords[0] + offset[0], p_coords[1] + p_dims[1] - dims[1] + offset[1] };
             case BOTTOM_MIDDLE: return new double[]{ p_coords[0] + ((double)p_dims[0]/2f) - ((double)dims[0]/2) + offset[0], p_coords[1] + p_dims[1] + offset[1] - dims[1] };
             case BOTTOM_RIGHT: return new double[]{ p_coords[0] + p_dims[0] - dims[0] + offset[0], p_coords[1] + p_dims[1] + offset[1] - dims[1] };

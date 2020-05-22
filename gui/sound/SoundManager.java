@@ -40,18 +40,20 @@ public class SoundManager {
     private static long lastContextSwitch, lastMusicTime;
     private static int context;
 
-    public static void load(String root) {
+    public static void load(boolean loadMusic) {
 
-        MUSIC_IDLE_1 = Assets.loadSound("music/ActThree.ogg");
-        MUSIC_IDLE_2 = Assets.loadSound("music/Azimuth.ogg");
-        MUSIC_IDLE_3 = Assets.loadSound("music/Azimuth.ogg");
-        MUSIC_IDLE_4 = Assets.loadSound("music/TheGreatUnknown.ogg");
-        MUSIC_IDLE_5 = Assets.loadSound("music/Transcend.ogg");
-        MUSIC_COMBAT_1 = Assets.loadSound("music/HighTension.ogg");
-        MUSIC_COMBAT_2 = Assets.loadSound("music/IntenseSuspense.ogg");
-        MUSIC_COMBAT_3 = Assets.loadSound("music/ModernCombat.ogg");
-        MUSIC_COMBAT_4 = Assets.loadSound("music/NightRunner.ogg");
-        MUSIC_COMBAT_5 = Assets.loadSound("music/SuspenseAction.ogg");
+        if (loadMusic) {
+            MUSIC_IDLE_1 = Assets.loadSound("music/ActThree.ogg");
+            MUSIC_IDLE_2 = Assets.loadSound("music/Azimuth.ogg");
+            MUSIC_IDLE_3 = Assets.loadSound("music/Azimuth.ogg");
+            MUSIC_IDLE_4 = Assets.loadSound("music/TheGreatUnknown.ogg");
+            MUSIC_IDLE_5 = Assets.loadSound("music/Transcend.ogg");
+            MUSIC_COMBAT_1 = Assets.loadSound("music/HighTension.ogg");
+            MUSIC_COMBAT_2 = Assets.loadSound("music/IntenseSuspense.ogg");
+            MUSIC_COMBAT_3 = Assets.loadSound("music/ModernCombat.ogg");
+            MUSIC_COMBAT_4 = Assets.loadSound("music/NightRunner.ogg");
+            MUSIC_COMBAT_5 = Assets.loadSound("music/SuspenseAction.ogg");
+        }
 
         CLICK = Assets.loadSound("click.aif");
         DEATH = Assets.loadSound("death.ogg");
@@ -170,7 +172,7 @@ public class SoundManager {
     private static void changeMusic(Sound sound) {
         if (currentSong != null && currentSong.playing()) currentSong.stop();
         currentSong = sound;
-        sound.playAt(1.0f, 0.6f * BASE_VOLUME_MULTIPLIER, 0, 0, 0);
+        if (sound != null) sound.playAt(1.0f, 0.6f * BASE_VOLUME_MULTIPLIER, 0, 0, 0);
     }
 
     public static void setBackground(Sound s) {

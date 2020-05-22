@@ -5,65 +5,60 @@ import gui.GUIAnchor;
 import gui.GUIElement;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 
-public class IconChooser extends GUIElement {
+public class Picker extends GUIElement {
 
-    private String folder;
-    private int index, scale;
-
-    private Image image;
-    private Color color;
+    private int value;
 
     private Button left, right;
-    private IconLabel iconLabel;
+    private TextLabel label;
 
-    public IconChooser(String folder, int iconCount, int scale) {
-        this.scale = scale;
-        this.folder = folder;
+    private String[] labels;
+
+    public Picker(int min, int max, int interval, String labels[]) {
         this.left = new Button(null, 8, 8, "icons/arrow_left.png", true) {
             @Override
             public void onClick(int button) {
-                index = index == 0 ? iconCount - 1 : index - 1;
+                value -= interval;
+                if (value < min) value = max;
+                onValueChange();
                 refresh();
             }
         };
         this.right = new Button(null, 8, 8, "icons/arrow_right.png", true) {
             @Override
             public void onClick(int button) {
-                index = index == iconCount - 1 ? 0 : index + 1;
+                value += interval;
+                if (value > max) value = min;
+                onValueChange();
                 refresh();
             }
         };
-        this.iconLabel = new IconLabel();
-        addChild(iconLabel, 0, 0, GUIAnchor.TOP_LEFT);
-        addChild(left, 0, 0, GUIAnchor.BOTTOM_LEFT);
-        addChild(right, 0, 0, GUIAnchor.BOTTOM_RIGHT);
+        this.label = new TextLabel("", 5, Color.white, true, false);
+        addChild(label, 0, 0, GUIAnchor.CENTER);
+        addChild(left, 0, 0, GUIAnchor.LEFT_MIDDLE);
+        addChild(right, 0, 0, GUIAnchor.RIGHT_MIDDLE);
         refresh();
     }
+
+    public void onValueChange() {}
 
     public void refresh() {
-        image = Assets.getImage(folder+"/"+index+".png").getScaledCopy(scale);
-        this.iconLabel.setImage(image);
-        this.iconLabel.setFilter(color);
+        if (labels != null) label.setText(labels[value]);
     }
 
-    public int getIndex() {
-        return index;
+    public int getValue() {
+        return value;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-        refresh();
+    public void setValue(int value) {
+        if (this.value != value) onValueChange();
+        this.value = value;
     }
 
     @Override
     public int[] getDimensions() {
-        return new int[]{image.getWidth(), image.getHeight() + 2 + left.getDimensions()[1]};
+        return new int[]{Math.max(label.getDimensions()[0], 8) + 20, left.getDimensions()[1]};
     }
 
     @Override

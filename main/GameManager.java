@@ -30,7 +30,7 @@ public class GameManager extends StateBasedGame {
         //add states
         addState(new GameScreen());
         addState(new MainMenuScreen());
-        addState(new LoadingScreen());
+        addState(new LoadingScreen(false));
         addState(new SettingsScreen());
 
         instance = this;

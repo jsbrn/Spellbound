@@ -110,12 +110,14 @@ public class MainMenuScreen extends GameState {
         quit.setTooltipText("Quit");
         gui.addElement(quit, (24*3)/2, 0, GUIAnchor.CENTER);
 
-        gui.addElement(new Button(null, 24, 24, "icons/settings.png", true) {
+        Button settings = new Button(null, 24, 24, "icons/settings.png", true) {
             @Override
             public void onClick(int button) {
                 GameManager.switchTo(GameState.SETTINGS_SCREEN, false);
             }
-        }, 0, 0, GUIAnchor.CENTER);
+        };
+        settings.setTooltipText("Change settings");
+        gui.addElement(settings, 0, 0, GUIAnchor.CENTER);
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Demo", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);

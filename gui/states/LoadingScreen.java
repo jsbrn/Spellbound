@@ -27,7 +27,7 @@ public class LoadingScreen extends GameState {
     private boolean finishedDownload;
     private TextLabel title, progress;
 
-    public LoadingScreen() {
+    public LoadingScreen(boolean loadMusic) {
         this.downloadThread = new Thread() {
             @Override
             public void run() {
@@ -57,7 +57,7 @@ public class LoadingScreen extends GameState {
             @Override
             public void run() {
                 progress.setText("");
-                SoundManager.load("");
+                SoundManager.load(loadMusic);
                 GameManager.switchTo(GameState.MAIN_MENU, true);
             }
         };
