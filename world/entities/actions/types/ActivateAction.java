@@ -1,5 +1,6 @@
 package world.entities.actions.types;
 
+import assets.Settings;
 import gui.sound.SoundManager;
 import misc.Location;
 import misc.MiscMath;
@@ -47,7 +48,7 @@ public class ActivateAction extends Action {
                 @Override
                 public void onFinish() {
                     super.onFinish();
-                    World.save();
+                    if (Settings.getBoolean("autosave")) World.save();
                 }
             });
             EventDispatcher.invoke(new EntityChangeRegionEvent(destination.getDestination(), origin.getDestination(), parent));

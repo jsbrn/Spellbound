@@ -9,6 +9,7 @@ import gui.menus.PlayerCustomizationMenu;
 import gui.menus.PopupMenu;
 import gui.sound.SoundManager;
 import main.GameManager;
+import misc.Window;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.newdawn.slick.*;
@@ -66,6 +67,7 @@ public class MainMenuScreen extends GameState {
         Button deleteSave = new Button("Open root directory", 52, 8, null, true) {
             @Override
             public void onClick(int button) {
+                Window.setFullscreen(false);
                 try {
                     Desktop.getDesktop().open(new File(Assets.ROOT_DIRECTORY));
                 } catch (IOException e) {
@@ -126,6 +128,7 @@ public class MainMenuScreen extends GameState {
         gui.addElement(new Button("Visit the website", 48, 8, null, true) {
             @Override
             public void onClick(int button) {
+                Window.setFullscreen(false);
                 String url_open ="https://computerology.itch.io/spellbound";
                 try {
                     java.awt.Desktop.getDesktop().browse(java.net.URI.create(url_open));

@@ -64,7 +64,7 @@ public class GameManager extends StateBasedGame {
                     "assets/gui/icons/favicon/icon_112x112.png",
                     "assets/gui/icons/favicon/icon_128x128.png"
             });
-            Window.toggleFullScreen();
+            if (Settings.getBoolean("fullscreen")) Window.toggleFullScreen();
             Window.WINDOW_INSTANCE.start();
 
         } catch (SlickException e) {

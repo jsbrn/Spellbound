@@ -64,11 +64,7 @@ public abstract class GameState extends BasicGameState {
         if (key == getInput().KEY_F2) Window.takeScreenshot();
 
         if (key == getInput().KEY_F11) {
-            try {
-                Window.toggleFullScreen();
-            } catch (SlickException e) {
-                e.printStackTrace();
-            }
+            Window.toggleFullScreen();
         }
 
         getGUI().onKeyUp(key);

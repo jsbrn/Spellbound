@@ -13,9 +13,9 @@ public class Settings {
     private static void init() {
         settings = new JSONObject();
         settings.put("resolution", 0);
-        settings.put("fps", 60);
-        settings.put("vsync", false);
-        settings.put("auto_save", true);
+        settings.put("vsync", true);
+        settings.put("autosave", true);
+        settings.put("fullscreen", false);
     }
 
     public static void load() {
@@ -42,6 +42,10 @@ public class Settings {
 
     public static int getInt(String key) {
         return Integer.parseInt(settings.get(key)+"");
+    }
+
+    public static boolean getBoolean(String key) {
+        return Boolean.parseBoolean(settings.get(key)+"");
     }
 
 }

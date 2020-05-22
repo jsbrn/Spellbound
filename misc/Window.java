@@ -28,19 +28,23 @@ public class Window {
 
     private static int last_width = 0, last_height = 0;
 
-    public static void toggleFullScreen() throws SlickException {
-        if (WINDOW_INSTANCE.isFullscreen()) {
-            WINDOW_INSTANCE.setFullscreen(false);
-            WINDOW_INSTANCE.setDisplayMode((int)(getScreenWidth() * 0.75), (int)(getScreenHeight() * 0.75), false);
-        } else {
-            DisplayMode fs = Window.getAllDisplayModes().get(Settings.getInt("resolution"));
-            WINDOW_INSTANCE.setDisplayMode(fs.getWidth(), fs.getHeight(), false);
-            try {
+    public static void toggleFullScreen() {
+        try {
+            if (WINDOW_INSTANCE.isFullscreen()) {
+                WINDOW_INSTANCE.setFullscreen(false);
+                WINDOW_INSTANCE.setDisplayMode((int) (getScreenWidth() * 0.75), (int) (getScreenHeight() * 0.75), false);
+            } else {
+                DisplayMode fs = Window.getAllDisplayModes().get(Settings.getInt("resolution"));
+                WINDOW_INSTANCE.setDisplayMode(fs.getWidth(), fs.getHeight(), false);
                 Display.setDisplayModeAndFullscreen(fs);
-            } catch (LWJGLException e) {
-                e.printStackTrace();
             }
+        } catch (SlickException | LWJGLException e) {
+            e.printStackTrace();
         }
+    }
+
+    public static void setFullscreen(boolean fs) {
+        if (fs != Window.isFullScreen()) toggleFullScreen();
     }
 
     public static List<DisplayMode> getAllDisplayModes() {

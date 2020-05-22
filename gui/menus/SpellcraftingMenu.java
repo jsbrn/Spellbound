@@ -71,7 +71,7 @@ public class SpellcraftingMenu extends Modal {
 
         addChild(nameField, 8, 12, GUIAnchor.TOP_LEFT);
 
-        iconChooser = new Picker(0, 14, 1, null) {
+        iconChooser = new Picker(0, 14, 1, 8, null) {
             @Override
             public void onValueChange() {
                 icon.setImage(Assets.getImage("assets/gui/icons/spells/"+this.getValue()+".png"));
