@@ -74,8 +74,8 @@ public class SpellcraftingMenu extends Modal {
         iconChooser = new Picker(0, 14, 1, 8, null) {
             @Override
             public void onValueChange() {
-                icon.setImage(Assets.getImage("assets/gui/icons/spells/"+this.getValue()+".png"));
                 spell.setIconIndex(getValue());
+                refresh();
             }
         };
         iconChooser.addChild(icon, 0, -16, GUIAnchor.TOP_MIDDLE);
@@ -269,6 +269,7 @@ public class SpellcraftingMenu extends Modal {
 
     @Override
     public void onShow() {
+
         nameField.grabFocus();
     }
 
@@ -294,6 +295,7 @@ public class SpellcraftingMenu extends Modal {
         this.nameField.setText(spell.getName());
         this.icon.setFilter(spell.getColor());
         this.iconChooser.setValue(spell.getIconIndex());
+        icon.setImage(Assets.getImage("assets/gui/icons/spells/"+iconChooser.getValue()+".png"));
         this.colorChooser.setColor(spell.getColor());
         refreshTechniquesPanel();
     }

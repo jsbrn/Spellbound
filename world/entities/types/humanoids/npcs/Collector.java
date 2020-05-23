@@ -142,7 +142,7 @@ public class Collector extends HumanoidEntity {
                             return;
                         } else {
                             exitState();
-                            pre.getPlayer().getSpellbook().addSpell(SpellFactory.createSpell(spellTypes[pre.getOption()], (int)MiscMath.random(1, 2)));
+                            pre.getPlayer().getSpellbook().addSpell(SpellFactory.createSpell(spellTypes[pre.getOption()], (int)MiscMath.random(2, 3)));
                             getActionQueue().queueAction(new SpeakAction("Hope it serves you well."));
                         }
                     }

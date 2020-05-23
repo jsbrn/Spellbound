@@ -296,16 +296,7 @@
       "Not if you want that amulet back. I'd start by exploring the dungeons nearby. The farther you travel, the more dangerous they get."
     ],
     "options": [
-      { "label": "Thanks for the tip.", "pointsTo": "collector_6"}
-    ]
-  },
-  {
-    "id": "collector_6",
-    "texts": [
-      "One more thing. You'll probably need a Healing spell. Take this one, on the house. But the next one will cost ya."
-    ],
-    "options": [
-      { "label": "(Accept healing spell)", "pointsTo": "collector_7"}
+      { "label": "Thanks for the tip.", "pointsTo": "collector_7"}
     ]
   },
   {

@@ -1,4 +1,5 @@
 Zombies are much more powerful in groups. Once they grab you, it's hard to break free.
+If a zombie has grabbed you, fire a damage spell repeatedly until you get an opening.
 Press CTRL + Backspace to clear text fields.
 Stuck? Try talking to people you've met. They might have the answer.
 Want to stay in the loop? Check the website for the latest news and updates.

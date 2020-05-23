@@ -16,7 +16,7 @@ public class ForestGenerator extends OpenFieldGenerator {
 
     @Override
     public byte getTop(int x, int y) {
-        if (rng().nextFloat() > 1 - density) return Tiles.TREE;
+        if (rng().nextFloat() <= density) return Tiles.TREE;
         return super.getTop(x, y);
     }
 

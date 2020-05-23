@@ -40,7 +40,8 @@ public class Player extends HumanoidEntity {
         this.setMaxMana(100);
         this.setMana(100);
 
-        getSpellbook().addSpell(SpellFactory.createSpell(SpellFactory.DAMAGE, 3));
+        getSpellbook().addSpell(SpellFactory.createSpell(SpellFactory.DAMAGE, 2));
+        getSpellbook().addSpell(SpellFactory.createSpell(SpellFactory.HEALING, 1));
 
         this.getAnimationLayer("head").setColor(SKIN_COLORS[0]);
 

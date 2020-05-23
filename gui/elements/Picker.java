@@ -44,7 +44,7 @@ public class Picker extends GUIElement {
 
     public void onValueChange() {}
 
-    public void refresh() {
+    private void refresh() {
         if (labels != null) label.setText(labels[value]);
     }
 
