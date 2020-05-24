@@ -24,7 +24,7 @@ import world.sounds.SoundEmitter;
 public class Player extends HumanoidEntity {
 
     private double[] moveTarget;
-    private boolean allowUserMovement, godMode;
+    private boolean allowUserMovement, godMode, isCasting;
 
     public Player() {
 
@@ -50,17 +50,15 @@ public class Player extends HumanoidEntity {
                 .on(MousePressedEvent.class.toString(), new EventHandler() {
                     @Override
                     public void handle(Event e) {
-                        if (isDead() || !getActionQueue("arms").isEmpty()) return;
                         MousePressedEvent mce = (MousePressedEvent)e;
-                        ActionGroup actions = new ActionGroup();
-                        if (getSpellbook().getParent().getMana() >= 1 && mce.getButton() == 0
-                            && that.getActionQueue().isEmpty()) {
-                            //HACK
-                            if (getLocation() != null) getLocation().lookAt(mce.getX(), mce.getY());
-                            actions.add(new CastSpellAction(mce.getX(), mce.getY()));
-                            actions.add(new ChangeAnimationAction("arms", "casting", true, true));
-                            getSpellbook().getParent().getActionQueue("arms").queueActions(actions);
-                        }
+                        if (mce.getButton() == 0) isCasting = true;
+                    }
+                })
+                .on(MouseReleaseEvent.class.toString(), new EventHandler() {
+                    @Override
+                    public void handle(Event e) {
+                        MouseReleaseEvent mce = (MouseReleaseEvent)e;
+                        if (mce.getButton() == 0) isCasting = false;
                     }
                 })
                 .on(KeyDownEvent.class.toString(), new EventHandler() {
@@ -133,6 +131,8 @@ public class Player extends HumanoidEntity {
                         getLocation().getCoordinates()[1],
                         mouse_wc[0], mouse_wc[1]));
 
+            if (isCasting) cast(mouse_wc[0], mouse_wc[1]);
+
             getMover().setSpeed(4);
             getMover().setIndependent(true);
             if ((dx != 0 || dy != 0) && allowUserMovement) {
@@ -160,6 +160,19 @@ public class Player extends HumanoidEntity {
         this.addGold(1000, true);
         this.addCrystals(1000);
         this.addDyes(1000);
+    }
+
+    private void cast(double wx, double wy) {
+        if (isDead() || !getActionQueue("arms").isEmpty()) return;
+        ActionGroup actions = new ActionGroup();
+        if (getSpellbook().getParent().getMana() >= 1
+                && getActionQueue().isEmpty()) {
+            //HACK
+            if (getLocation() != null) getLocation().lookAt(wx, wy);
+            actions.add(new CastSpellAction(wx, wy));
+            actions.add(new ChangeAnimationAction("arms", "casting", true, true));
+            getSpellbook().getParent().getActionQueue("arms").queueActions(actions);
+        }
     }
 
 }
