@@ -1,0 +1,17 @@
+Zombies are much more powerful in groups. Once they grab you, it's hard to break free.
+If a zombie has grabbed you, fire a damage spell repeatedly until you get an opening.
+Press CTRL + Backspace to clear text fields.
+Stuck? Try talking to people you've met. They might have the answer.
+Want to stay in the loop? Check the website for the latest news and updates.
+Hold CTRL to strafe when in combat.
+Going through doors triggers an auto-save.
+If you're lucky enough to find them, Keys can be used to unlock Locked Chests.
+Each category in the Spellcrafting menu has a specific purpose. For example, Movement controls where the spell will gravitate towards and how.
+Each category in the Spellcrafting menu has a specific purpose. For example, Effects apply modifiers to the selected properties on the target.
+Each category in the Spellcrafting menu has a specific purpose. For example, Triggers will invoke the chosen Effects on the target.
+Each category in the Spellcrafting menu has a specific purpose. For example, Physical properties will change how the spell reacts to the environment around it.
+You can find Magic Techniques to enhance your Spellcrafting deep inside the dungeons. Be careful!
+When spells run out of energy, they stop affecting their targets and eventually fade away.
+The brighter and more colorful a spell is, the more Dyes are required to craft it.
+If you're running low on Mana often, try visiting the Wishing Well.
+Stuck? Your save file is backed up before each session. Open the saves folder from the main menu.
