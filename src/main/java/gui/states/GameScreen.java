@@ -9,11 +9,11 @@ import gui.menus.PopupMenu;
 import gui.menus.SpellcraftingMenu;
 import misc.MiscMath;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.GameContainer;
+import com.github.mathiewz.slick.Input;
+import com.github.mathiewz.slick.SlickException;
+import com.github.mathiewz.slick.state.StateBasedGame;
 import world.Camera;
 import world.World;
 import world.events.Event;

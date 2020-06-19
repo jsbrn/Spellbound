@@ -10,7 +10,7 @@ import gui.elements.TextLabel;
 import main.GameManager;
 import misc.Window;
 import org.lwjgl.opengl.DisplayMode;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 
 import java.util.List;
 import java.util.stream.Collectors;

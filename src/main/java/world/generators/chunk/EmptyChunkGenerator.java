@@ -1,6 +1,6 @@
 package world.generators.chunk;
 
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.Portal;
 import world.Tiles;
 import world.entities.Entity;

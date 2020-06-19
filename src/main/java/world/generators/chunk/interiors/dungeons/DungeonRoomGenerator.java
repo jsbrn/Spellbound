@@ -1,7 +1,7 @@
 package world.generators.chunk.interiors.dungeons;
 
 import misc.MiscMath;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.Chunk;
 import world.Portal;
 import world.Tiles;

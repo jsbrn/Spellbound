@@ -5,8 +5,8 @@ import gui.GUIElement;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
 import world.Camera;
 import world.Chunk;
 

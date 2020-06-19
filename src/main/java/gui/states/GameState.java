@@ -6,9 +6,9 @@ import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
 import org.lwjgl.opengl.Display;
-import org.newdawn.slick.*;
-import org.newdawn.slick.state.BasicGameState;
-import org.newdawn.slick.state.StateBasedGame;
+import com.github.mathiewz.slick.*;
+import com.github.mathiewz.slick.state.BasicGameState;
+import com.github.mathiewz.slick.state.StateBasedGame;
 
 public abstract class GameState extends BasicGameState {
 
@@ -41,7 +41,6 @@ public abstract class GameState extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         if (background != null) g.drawImage(Assets.getImage(background, Image.FILTER_LINEAR).getScaledCopy(Window.getWidth(), Window.getHeight()), 0, 0);
         getGUI().draw(g);
-        onResize(Window.getWidth(), Window.getHeight());
         if (Window.wasResized()) onResize(Display.getWidth(), Display.getHeight());
     }
 
@@ -92,12 +91,13 @@ public abstract class GameState extends BasicGameState {
     }
 
     public void onResize(int width, int height) {
-        try {
-            if (Window.WINDOW_INSTANCE.isFullscreen()) return;
-            Window.WINDOW_INSTANCE.setDisplayMode(width, height, false);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+        System.out.println(width+", "+height);
+//        try {
+//            if (Window.WINDOW_INSTANCE.isFullscreen()) return;
+//            Window.WINDOW_INSTANCE.setDisplayMode(width, height, false);
+//        } catch (SlickException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public abstract void onEnter();

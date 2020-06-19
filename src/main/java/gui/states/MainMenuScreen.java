@@ -13,7 +13,7 @@ import misc.Window;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.World;
 
 import java.awt.*;

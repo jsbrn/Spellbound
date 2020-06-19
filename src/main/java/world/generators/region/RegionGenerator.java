@@ -1,6 +1,6 @@
 package world.generators.region;
 
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Sound;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.Random;

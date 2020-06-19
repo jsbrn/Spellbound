@@ -6,7 +6,7 @@ import gui.states.GameState;
 import main.GameManager;
 import misc.MiscMath;
 import org.json.simple.JSONObject;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.World;
 import world.entities.actions.types.SpeakAction;
 import world.entities.states.TalkingToState;

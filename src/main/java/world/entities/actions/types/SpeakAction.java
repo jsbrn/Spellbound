@@ -2,7 +2,7 @@ package world.entities.actions.types;
 
 import gui.states.GameState;
 import main.GameManager;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.World;
 import world.entities.actions.Action;
 

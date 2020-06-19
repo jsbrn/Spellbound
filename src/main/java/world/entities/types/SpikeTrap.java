@@ -1,7 +1,7 @@
 package world.entities.types;
 
 import gui.sound.SoundManager;
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Sound;
 import world.entities.Entity;
 import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.actions.types.KnockbackAction;

@@ -2,7 +2,7 @@ package gui.elements;
 
 import gui.GUIElement;
 import misc.MiscMath;
-import org.newdawn.slick.*;
+import com.github.mathiewz.slick.*;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.particles.ParticleSource;
 

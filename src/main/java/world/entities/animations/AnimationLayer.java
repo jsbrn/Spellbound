@@ -1,6 +1,6 @@
 package world.entities.animations;
 
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 
 import java.util.HashMap;
 import java.util.Stack;

@@ -3,9 +3,9 @@ package gui.elements;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import misc.Window;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Input;
 
 public class TextBox extends GUIElement {
 

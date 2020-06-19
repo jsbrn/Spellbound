@@ -6,7 +6,7 @@ import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.World;
 
 public class PopupMenu extends Modal {

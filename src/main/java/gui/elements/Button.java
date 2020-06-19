@@ -3,10 +3,10 @@ package gui.elements;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.sound.SoundManager;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Image;
+import com.github.mathiewz.slick.Sound;
 
 public abstract class Button extends GUIElement {
 

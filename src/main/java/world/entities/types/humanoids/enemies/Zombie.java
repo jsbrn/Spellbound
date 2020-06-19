@@ -2,8 +2,8 @@ package world.entities.types.humanoids.enemies;
 
 import gui.sound.SoundManager;
 import misc.MiscMath;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Sound;
 import world.Chunk;
 import world.entities.actions.types.ChangeAnimationAction;
 import world.entities.actions.types.KnockbackAction;

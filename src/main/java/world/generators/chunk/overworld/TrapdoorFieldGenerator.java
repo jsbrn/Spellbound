@@ -1,7 +1,7 @@
 package world.generators.chunk.overworld;
 
 import gui.sound.SoundManager;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.*;
 import world.entities.Entity;
 import world.entities.types.humanoids.npcs.Civilian;

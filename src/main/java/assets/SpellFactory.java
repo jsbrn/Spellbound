@@ -1,7 +1,7 @@
 package assets;
 
 import misc.MiscMath;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.entities.magic.Spell;
 import world.entities.magic.Spellbook;
 import world.entities.magic.techniques.Techniques;

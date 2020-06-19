@@ -3,9 +3,9 @@ package gui.elements;
 import assets.Assets;
 import gui.GUIElement;
 import misc.Window;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.TrueTypeFont;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.TrueTypeFont;
 
 import java.util.ArrayList;
 

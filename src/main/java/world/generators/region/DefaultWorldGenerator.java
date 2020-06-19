@@ -2,7 +2,7 @@ package world.generators.region;
 
 import gui.sound.SoundManager;
 import misc.MiscMath;
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Sound;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.overworld.*;
 

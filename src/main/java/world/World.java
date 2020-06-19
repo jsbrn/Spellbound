@@ -6,7 +6,7 @@ import misc.MiscMath;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.newdawn.slick.Graphics;
+import com.github.mathiewz.slick.Graphics;
 import world.entities.types.humanoids.Player;
 import world.generators.region.DefaultWorldGenerator;
 

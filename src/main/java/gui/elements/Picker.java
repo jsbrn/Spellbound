@@ -2,8 +2,8 @@ package gui.elements;
 
 import gui.GUIAnchor;
 import gui.GUIElement;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
 
 public class Picker extends GUIElement {
 

@@ -4,7 +4,7 @@ import assets.Assets;
 import misc.Location;
 import misc.MiscMath;
 import org.lwjgl.openal.AL;
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Sound;
 import world.Camera;
 import world.World;
 import world.events.Event;

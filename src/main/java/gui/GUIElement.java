@@ -3,7 +3,7 @@ package gui;
 import assets.Assets;
 import misc.MiscMath;
 import misc.Window;
-import org.newdawn.slick.*;
+import com.github.mathiewz.slick.*;
 
 import java.util.ArrayList;
 
@@ -176,7 +176,7 @@ public abstract class GUIElement {
                 drawBuffered(buffer.getGraphics(),
                         mouseIntersects(),
                         getGUI().getParent().getInput().isMouseButtonDown(0));
-                buffer.drawEmbedded(coordinates[0], coordinates[1], (dimensions[0] * Window.getScale()), (dimensions[1] * Window.getScale()));
+                g.drawImage(buffer.getScaledCopy(Window.getScale()), coordinates[0], coordinates[1]);
             }
         } catch (SlickException e) {
             e.printStackTrace();

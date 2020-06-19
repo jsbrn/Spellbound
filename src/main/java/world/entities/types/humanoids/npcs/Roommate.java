@@ -3,7 +3,7 @@ package world.entities.types.humanoids.npcs;
 import gui.menus.PopupMenu;
 import gui.states.GameState;
 import main.GameManager;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.World;
 import world.entities.Entity;
 import world.entities.actions.types.SpeakAction;

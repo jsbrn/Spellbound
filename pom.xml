@@ -10,9 +10,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slick2d</groupId>
-            <artifactId>slick2d-core</artifactId>
-            <version>1.0.2</version>
+            <groupId>com.github.mathiewz.slick</groupId>
+            <artifactId>modernized-slick</artifactId>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>

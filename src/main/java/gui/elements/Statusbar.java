@@ -4,7 +4,7 @@ import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.states.GameState;
 import main.GameManager;
-import org.newdawn.slick.*;
+import com.github.mathiewz.slick.*;
 import world.World;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.events.EventDispatcher;

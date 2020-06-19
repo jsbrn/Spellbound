@@ -3,7 +3,7 @@ package world.entities.magic;
 import assets.definitions.Definitions;
 import misc.Location;
 import misc.MiscMath;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.Tiles;
 import world.entities.Entity;
 import world.entities.magic.techniques.Technique;

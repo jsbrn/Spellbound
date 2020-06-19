@@ -1,6 +1,6 @@
 package world;
 
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Sound;
 
 public class Portal {
 

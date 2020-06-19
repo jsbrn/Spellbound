@@ -4,7 +4,7 @@ import assets.Assets;
 import gui.GUIAnchor;
 import gui.elements.*;
 import misc.MiscMath;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.entities.magic.Spell;
 import world.entities.magic.techniques.Technique;
 import world.entities.magic.techniques.Techniques;

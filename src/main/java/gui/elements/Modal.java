@@ -2,7 +2,7 @@ package gui.elements;
 
 import assets.Assets;
 import gui.GUIElement;
-import org.newdawn.slick.*;
+import com.github.mathiewz.slick.*;
 
 public class Modal extends GUIElement {
 

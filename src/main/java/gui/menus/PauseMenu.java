@@ -8,7 +8,7 @@ import gui.elements.TextLabel;
 import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.World;
 import world.events.EventDispatcher;
 

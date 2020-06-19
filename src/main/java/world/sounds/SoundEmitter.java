@@ -1,7 +1,7 @@
 package world.sounds;
 
 import gui.sound.SoundManager;
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Sound;
 import world.entities.Entity;
 
 import java.util.ArrayList;

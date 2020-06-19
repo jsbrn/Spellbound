@@ -6,7 +6,7 @@ import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.sound.SoundManager;
 import misc.Window;
-import org.newdawn.slick.*;
+import com.github.mathiewz.slick.*;
 import world.Chunk;
 import world.World;
 import world.entities.Entity;

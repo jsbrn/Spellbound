@@ -5,12 +5,13 @@ import assets.Settings;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.imageout.ImageOut;
+import com.github.mathiewz.slick.AppGameContainer;
+import com.github.mathiewz.slick.Image;
+import com.github.mathiewz.slick.SlickException;
+import com.github.mathiewz.slick.imageout.ImageOut;
 import world.Chunk;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;

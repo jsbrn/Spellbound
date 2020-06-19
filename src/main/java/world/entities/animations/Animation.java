@@ -1,8 +1,8 @@
 package world.entities.animations;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Image;
+import com.github.mathiewz.slick.SlickException;
 import world.World;
 
 import java.io.Serializable;

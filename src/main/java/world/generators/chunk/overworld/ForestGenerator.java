@@ -1,6 +1,6 @@
 package world.generators.chunk.overworld;
 
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.Tiles;
 
 import java.util.Random;

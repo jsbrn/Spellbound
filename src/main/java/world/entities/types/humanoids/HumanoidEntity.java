@@ -4,7 +4,7 @@ import gui.states.GameState;
 import main.GameManager;
 import misc.MiscMath;
 import org.json.simple.JSONObject;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.entities.Entity;
 import world.entities.animations.Animation;
 import world.entities.magic.Spellbook;

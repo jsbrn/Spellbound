@@ -1,7 +1,7 @@
 package world.generators.chunk.overworld;
 
 import misc.MiscMath;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.Chunk;
 import world.Tiles;
 import world.entities.Entity;

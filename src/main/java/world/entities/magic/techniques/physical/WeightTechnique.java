@@ -2,7 +2,7 @@ package world.entities.magic.techniques.physical;
 
 import gui.sound.SoundManager;
 import misc.MiscMath;
-import org.newdawn.slick.Sound;
+import com.github.mathiewz.slick.Sound;
 import world.entities.actions.types.KnockbackAction;
 import world.entities.magic.MagicSource;
 import world.entities.magic.techniques.Technique;

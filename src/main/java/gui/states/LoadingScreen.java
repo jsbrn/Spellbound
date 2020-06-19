@@ -8,10 +8,10 @@ import gui.elements.TextLabel;
 import gui.sound.SoundManager;
 import main.GameManager;
 import net.lingala.zip4j.ZipFile;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.GameContainer;
+import com.github.mathiewz.slick.SlickException;
+import com.github.mathiewz.slick.state.StateBasedGame;
 
 import java.io.BufferedInputStream;
 import java.io.File;

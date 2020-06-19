@@ -2,7 +2,7 @@ package world.entities.types.humanoids.enemies;
 
 import assets.SpellFactory;
 import org.json.simple.JSONObject;
-import org.newdawn.slick.Color;
+import com.github.mathiewz.slick.Color;
 import world.entities.states.PatrolState;
 import world.entities.types.humanoids.HumanoidEntity;
 

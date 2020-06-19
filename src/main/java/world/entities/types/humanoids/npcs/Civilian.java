@@ -2,8 +2,8 @@ package world.entities.types.humanoids.npcs;
 
 import gui.elements.SpeechBubble;
 import gui.states.GameScreen;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Game;
 import world.World;
 import world.entities.Entity;
 import world.entities.states.IdleState;
