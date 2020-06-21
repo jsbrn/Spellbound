@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Sound;
 import world.entities.Entity;
-import world.entities.magic.MagicSource;
+import world.magic.MagicSource;
 import world.events.EventDispatcher;
 import world.events.EventListener;
 import world.events.event.EntityMovedEvent;

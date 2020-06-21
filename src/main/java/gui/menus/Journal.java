@@ -10,7 +10,7 @@ import gui.sound.SoundManager;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Input;
 import world.World;
-import world.entities.magic.Spell;
+import world.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;

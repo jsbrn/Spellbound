@@ -1,6 +1,5 @@
 package gui.menus;
 
-import assets.Assets;
 import gui.GUIAnchor;
 import gui.elements.*;
 import gui.states.MainMenuScreen;
@@ -9,7 +8,7 @@ import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import world.Chunk;
 import world.World;
-import world.entities.magic.Spell;
+import world.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.entities.types.humanoids.Player;
 

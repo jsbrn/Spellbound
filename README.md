@@ -2,8 +2,6 @@
 
 [Download the most recent public build from itch.io](https://computerology.itch.io/spellbound)
 
-*As a student of magic, you have the unique ability to create spells of your own design, using techniques taught to you by the Headmaster Wizard, who oversees the day-to-day operations of the Arcane University. Eventually he begins to take a keen interest in your talents, and one day decides to teach you a special spell to help him run a very special errand.*
-
 ### Overview
 
 In Spellbound, you learn and discover techniques, which can be combined to create custom spells using a dynamic particle and magic system. Each technique affects a specific property or behavior of the spell. For example, a basic fireball spell might be created by combining the Propulsion, Collision and Ignition techniques. That is, the spell propels itself towards a target, then collides with and ignites it in a burst of flame. Chain two or more spells together to create powerful combinations, or merge them to cast two simultaneously.
@@ -34,7 +32,7 @@ This should be enough to get you up and running.
 
 ###### Launch Notes
 
-* The root directory (`{ROOT_DIRECTORY}`), where save files, settings and audio assets are kept, is referenced as `Assets.ROOT_DIRECTORY` and defaults to `{USER_HOME}/.sbclassic/`.
+* The root directory (referred to in this documentation as `{ROOT_DIRECTORY}`) is the folder where save files, settings and audio assets are kept. It is referenced in the `Assets` class and defaults to `{USER_HOME}/.sbclassic/`.
 
 * The game takes one optional argument on launch which is a boolean indicating whether or not music is to be loaded.
 This saves a good chunk of time if you aren't touching the music manager at all. It defaults to `true`.
@@ -42,8 +40,12 @@ This saves a good chunk of time if you aren't touching the music manager at all.
 * If the `{ROOT_DIRECTORY}/assets/sounds` is empty, the game will download and unpack the assets from a server automatically. 
 If the folder has any contents, the downloading will be skipped and the game will attempt to load the required sounds. 
 
+###### Packaging
+
+I don't have Maven configured to do automatic packaging. But you should be able to find an option in your preferred IDE to bundle all the dependencies into a single jar file, or add them to the classpath and link separately.
+
 ###### Contribution Guidelines
 
 1. Please fork `dev`, not `master`. `dev` is where the bleeding edge changes are made, and it's where you should pull request to when the time comes.
 2. If you see a bug or want to suggest a feature, open an issue.
-3. If you want to start contributing, check the Issues tab to see if there's anything you might want to tackle.
+3. If you want to start contributing, check the Projects and Issues tabs to see if there's anything you might want to tackle.

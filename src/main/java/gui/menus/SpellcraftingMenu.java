@@ -5,9 +5,9 @@ import gui.GUIAnchor;
 import gui.elements.*;
 import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
-import world.entities.magic.Spell;
-import world.entities.magic.techniques.Technique;
-import world.entities.magic.techniques.Techniques;
+import world.magic.Spell;
+import world.magic.techniques.Technique;
+import world.magic.techniques.Techniques;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 import com.github.mathiewz.slick.Color;
 import world.entities.Entity;
 import world.entities.animations.Animation;
-import world.entities.magic.Spellbook;
+import world.magic.Spellbook;
 import world.events.EventDispatcher;
 import world.events.event.HumanoidDamageEvent;
 import world.events.event.HumanoidDeathEvent;

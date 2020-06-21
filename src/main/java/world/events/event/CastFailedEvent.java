@@ -1,7 +1,6 @@
 package world.events.event;
 
-import world.entities.magic.MagicSource;
-import world.entities.magic.Spell;
+import world.magic.Spell;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.events.Event;
 

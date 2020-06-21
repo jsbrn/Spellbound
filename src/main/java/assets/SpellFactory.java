@@ -2,9 +2,9 @@ package assets;
 
 import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
-import world.entities.magic.Spell;
-import world.entities.magic.Spellbook;
-import world.entities.magic.techniques.Techniques;
+import world.magic.Spell;
+import world.magic.Spellbook;
+import world.magic.techniques.Techniques;
 
 import java.util.Arrays;
 import java.util.Random;

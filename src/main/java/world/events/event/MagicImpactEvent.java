@@ -1,7 +1,7 @@
 package world.events.event;
 
 import world.entities.Entity;
-import world.entities.magic.MagicSource;
+import world.magic.MagicSource;
 import world.events.Event;
 
 public class MagicImpactEvent extends Event {

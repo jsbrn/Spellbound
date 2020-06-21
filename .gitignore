@@ -27,3 +27,6 @@ hs_err_pid*
 
 #intellij config
 .idea/
+
+#target folder
+target/

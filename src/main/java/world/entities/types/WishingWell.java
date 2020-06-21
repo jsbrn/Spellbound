@@ -1,11 +1,10 @@
 package world.entities.types;
 
 import gui.sound.SoundManager;
-import com.github.mathiewz.slick.Sound;
 import world.entities.Entity;
-import world.entities.actions.types.SpeakAction;
+import world.entities.ai.actions.types.SpeakAction;
 import world.entities.animations.Animation;
-import world.entities.states.TalkingToState;
+import world.entities.ai.states.TalkingToState;
 import world.entities.types.humanoids.Player;
 import world.events.Event;
 import world.events.EventDispatcher;
@@ -13,7 +12,6 @@ import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityActivatedEvent;
 import world.events.event.PlayerReplyEvent;
-import world.sounds.SoundEmitter;
 
 public class WishingWell extends Entity {
 

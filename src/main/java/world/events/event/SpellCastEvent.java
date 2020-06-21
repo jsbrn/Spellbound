@@ -1,8 +1,7 @@
 package world.events.event;
 
-import gui.elements.SpeechBubble;
-import world.entities.magic.MagicSource;
-import world.entities.magic.Spell;
+import world.magic.MagicSource;
+import world.magic.Spell;
 import world.events.Event;
 
 public class SpellCastEvent extends Event {

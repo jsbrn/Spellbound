@@ -3,7 +3,7 @@ package world.entities.types.humanoids.enemies;
 import assets.SpellFactory;
 import org.json.simple.JSONObject;
 import com.github.mathiewz.slick.Color;
-import world.entities.states.PatrolState;
+import world.entities.ai.states.PatrolState;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.Random;

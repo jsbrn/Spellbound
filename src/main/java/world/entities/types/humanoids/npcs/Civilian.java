@@ -1,14 +1,8 @@
 package world.entities.types.humanoids.npcs;
 
-import gui.elements.SpeechBubble;
-import gui.states.GameScreen;
-import com.github.mathiewz.slick.Color;
-import com.github.mathiewz.slick.Game;
-import world.World;
 import world.entities.Entity;
-import world.entities.states.IdleState;
-import world.entities.states.PatrolState;
-import world.entities.states.TalkingToState;
+import world.entities.ai.states.IdleState;
+import world.entities.ai.states.TalkingToState;
 import world.entities.types.humanoids.HumanoidEntity;
 import world.entities.types.humanoids.Player;
 import world.events.Event;
@@ -16,9 +10,6 @@ import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.EntityActivatedEvent;
-import world.events.event.EntityChangeRegionEvent;
-import world.events.event.NPCSpeakEvent;
-import world.events.event.PlayerReplyEvent;
 
 import java.util.Random;
 
