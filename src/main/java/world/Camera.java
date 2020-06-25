@@ -1,9 +1,7 @@
 package world;
 
-import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import world.entities.Entity;
 
 public class Camera {
 

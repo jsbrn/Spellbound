@@ -2,7 +2,6 @@ package world.entities.ai.actions.types;
 
 import misc.MiscMath;
 import world.Tiles;
-import world.entities.Entity;
 import world.entities.ai.actions.Action;
 import world.entities.types.humanoids.HumanoidEntity;
 

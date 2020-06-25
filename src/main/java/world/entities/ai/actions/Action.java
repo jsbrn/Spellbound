@@ -1,7 +1,5 @@
 package world.entities.ai.actions;
 
-import world.entities.Entity;
-
 public abstract class Action {
 
     private boolean started, finished;

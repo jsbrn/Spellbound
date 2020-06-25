@@ -1,6 +1,5 @@
 package world.events.event;
 
-import world.entities.Entity;
 import world.magic.MagicSource;
 import world.events.Event;
 

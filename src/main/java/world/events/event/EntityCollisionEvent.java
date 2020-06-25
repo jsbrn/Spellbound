@@ -1,6 +1,5 @@
 package world.events.event;
 
-import world.entities.Entity;
 import world.events.Event;
 
 public class EntityCollisionEvent extends Event {

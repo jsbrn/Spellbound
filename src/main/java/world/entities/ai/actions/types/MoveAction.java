@@ -1,7 +1,6 @@
 package world.entities.ai.actions.types;
 
 import world.Tiles;
-import world.entities.Entity;
 import world.entities.ai.actions.Action;
 
 public class MoveAction extends Action {

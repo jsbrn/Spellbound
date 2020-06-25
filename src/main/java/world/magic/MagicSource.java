@@ -4,7 +4,6 @@ import misc.Location;
 import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
 import world.Tiles;
-import world.entities.Entity;
 import world.magic.techniques.Technique;
 import world.magic.techniques.Techniques;
 import world.magic.techniques.effects.EffectTechnique;

@@ -2,7 +2,6 @@ package world.sounds;
 
 import gui.sound.SoundManager;
 import com.github.mathiewz.slick.Sound;
-import world.entities.Entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package world.entities;
+package world.entities.systems;
 
 import world.Tiles;
 import misc.Location;
@@ -11,7 +11,7 @@ import world.events.event.EntityMovedEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Mover {
+public class MovementSystem {
 
     private Entity parent;
     private boolean collidable, lookAtTarget;
@@ -21,7 +21,7 @@ public class Mover {
 
     private LinkedList<Location> path;
 
-    public Mover() {
+    public MovementSystem() {
         this.DScore = 0;
         this.speed = 4; //tiles per second
         this.ignoreCollision = false;

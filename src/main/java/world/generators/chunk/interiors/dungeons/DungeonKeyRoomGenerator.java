@@ -2,7 +2,6 @@ package world.generators.chunk.interiors.dungeons;
 
 import world.Chunk;
 import world.Portal;
-import world.entities.Entity;
 import world.entities.types.Chest;
 import world.entities.types.humanoids.enemies.Bandit;
 

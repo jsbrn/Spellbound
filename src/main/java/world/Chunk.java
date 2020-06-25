@@ -6,7 +6,6 @@ import misc.MiscMath;
 import misc.Window;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
-import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.ArrayList;

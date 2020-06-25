@@ -1,7 +1,5 @@
 package world.events;
 
-import world.entities.Entity;
-
 import java.util.HashMap;
 
 public class EventListener {

@@ -4,7 +4,6 @@ import gui.sound.SoundManager;
 import world.Region;
 import world.Portal;
 import world.World;
-import world.entities.Entity;
 import world.entities.types.humanoids.npcs.Collector;
 import world.generators.region.PlayerHomeRegionGenerator;
 

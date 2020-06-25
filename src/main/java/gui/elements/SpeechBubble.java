@@ -9,7 +9,6 @@ import misc.Window;
 import com.github.mathiewz.slick.*;
 import world.Chunk;
 import world.World;
-import world.entities.Entity;
 import world.events.EventDispatcher;
 import world.events.event.PlayerReplyEvent;
 

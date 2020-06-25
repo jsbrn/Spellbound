@@ -5,7 +5,6 @@ import com.github.mathiewz.slick.Color;
 import world.Chunk;
 import world.Portal;
 import world.Tiles;
-import world.entities.Entity;
 import world.entities.types.Chest;
 import world.entities.types.SpikeTrap;
 import world.entities.types.humanoids.enemies.Bandit;

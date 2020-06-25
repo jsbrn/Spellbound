@@ -2,7 +2,6 @@ package world.entities.ai.states;
 
 import misc.Location;
 import misc.MiscMath;
-import world.entities.Entity;
 import world.entities.ai.actions.types.MoveAction;
 import world.entities.ai.actions.types.ChangeAnimationAction;
 import world.events.Event;

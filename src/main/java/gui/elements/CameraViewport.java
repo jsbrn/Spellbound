@@ -12,7 +12,6 @@ import com.github.mathiewz.slick.Input;
 import world.Camera;
 import world.Chunk;
 import world.World;
-import world.entities.Entity;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;

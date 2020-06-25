@@ -1,6 +1,5 @@
 package world.entities.ai.actions.types;
 
-import world.entities.Entity;
 import world.entities.ai.actions.Action;
 import world.entities.animations.Animation;
 import world.entities.animations.AnimationLayer;

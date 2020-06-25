@@ -1,7 +1,6 @@
 package world.entities.ai.states;
 
 import misc.MiscMath;
-import world.entities.Entity;
 import world.entities.ai.actions.ActionGroup;
 import world.entities.ai.actions.types.CastSpellAction;
 import world.entities.ai.actions.types.MoveAction;

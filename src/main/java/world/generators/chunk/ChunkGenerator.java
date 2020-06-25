@@ -3,7 +3,6 @@ package world.generators.chunk;
 import com.github.mathiewz.slick.Color;
 import world.Chunk;
 import world.Portal;
-import world.entities.Entity;
 
 import java.util.Random;
 

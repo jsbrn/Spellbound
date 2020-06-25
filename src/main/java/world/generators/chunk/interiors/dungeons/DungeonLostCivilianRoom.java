@@ -1,6 +1,5 @@
 package world.generators.chunk.interiors.dungeons;
 
-import world.entities.Entity;
 import world.entities.types.humanoids.npcs.LostCivilian;
 
 public class DungeonLostCivilianRoom extends DungeonLivingQuartersGenerator {

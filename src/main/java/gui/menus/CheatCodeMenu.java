@@ -13,7 +13,6 @@ import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Input;
 import world.Camera;
 import world.World;
-import world.entities.Entity;
 import world.entities.types.Chest;
 
 public class CheatCodeMenu extends Modal {

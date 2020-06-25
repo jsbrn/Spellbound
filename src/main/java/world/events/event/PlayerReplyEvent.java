@@ -1,7 +1,6 @@
 package world.events.event;
 
 import assets.definitions.DialogueDefinition;
-import world.entities.Entity;
 import world.entities.types.humanoids.Player;
 import world.events.Event;
 

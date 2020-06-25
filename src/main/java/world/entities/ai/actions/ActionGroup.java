@@ -1,7 +1,5 @@
 package world.entities.ai.actions;
 
-import world.entities.Entity;
-
 import java.util.ArrayList;
 
 public final class ActionGroup {

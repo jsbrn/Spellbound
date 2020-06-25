@@ -1,7 +1,6 @@
 package world.magic.techniques.movement;
 
 import misc.MiscMath;
-import world.entities.Entity;
 import world.magic.MagicSource;
 import world.magic.techniques.Technique;
 

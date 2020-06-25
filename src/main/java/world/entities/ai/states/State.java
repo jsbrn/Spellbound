@@ -1,7 +1,5 @@
 package world.entities.ai.states;
 
-import world.entities.Entity;
-
 public abstract class State {
 
     private Entity parent;

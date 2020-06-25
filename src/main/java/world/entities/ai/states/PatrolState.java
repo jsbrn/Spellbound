@@ -1,6 +1,5 @@
 package world.entities.ai.states;
 
-import world.entities.Entity;
 import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.List;

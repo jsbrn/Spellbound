@@ -5,7 +5,6 @@ import world.Chunk;
 import world.Portal;
 import world.Tiles;
 import world.World;
-import world.entities.Entity;
 
 public class DungeonEntranceGenerator extends DungeonRoomGenerator {
 

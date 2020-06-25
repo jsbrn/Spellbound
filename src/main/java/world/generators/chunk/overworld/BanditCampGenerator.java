@@ -4,7 +4,6 @@ import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
 import world.Chunk;
 import world.Tiles;
-import world.entities.Entity;
 import world.entities.types.Chest;
 import world.entities.types.humanoids.enemies.Bandit;
 

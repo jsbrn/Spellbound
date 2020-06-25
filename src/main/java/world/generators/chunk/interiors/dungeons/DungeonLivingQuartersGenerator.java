@@ -2,7 +2,6 @@ package world.generators.chunk.interiors.dungeons;
 
 import com.github.mathiewz.slick.Color;
 import world.Tiles;
-import world.entities.Entity;
 import world.entities.types.humanoids.enemies.Bandit;
 
 public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {

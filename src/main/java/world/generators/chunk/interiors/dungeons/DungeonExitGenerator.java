@@ -1,7 +1,6 @@
 package world.generators.chunk.interiors.dungeons;
 
 import world.Chunk;
-import world.entities.Entity;
 import world.entities.types.Chest;
 
 public class DungeonExitGenerator extends DungeonEntranceGenerator {

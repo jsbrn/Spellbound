@@ -1,7 +1,6 @@
 package world.generators.chunk.overworld;
 
 import world.Chunk;
-import world.entities.Entity;
 import world.entities.types.WishingWell;
 
 public class WishingWellFieldGenerator extends OpenFieldGenerator {

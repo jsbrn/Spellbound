@@ -3,7 +3,6 @@ package world.generators.chunk.overworld;
 import com.github.mathiewz.slick.Color;
 import world.Portal;
 import world.Tiles;
-import world.entities.Entity;
 import world.generators.chunk.ChunkGenerator;
 
 public class OpenFieldGenerator extends ChunkGenerator {

@@ -3,7 +3,6 @@ package world.generators.chunk;
 import com.github.mathiewz.slick.Color;
 import world.Portal;
 import world.Tiles;
-import world.entities.Entity;
 
 public class EmptyChunkGenerator extends ChunkGenerator {
 

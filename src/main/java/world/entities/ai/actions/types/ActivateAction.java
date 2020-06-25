@@ -6,7 +6,6 @@ import misc.Location;
 import misc.MiscMath;
 import world.Portal;
 import world.World;
-import world.entities.Entity;
 import world.entities.ai.actions.Action;
 import world.events.EventDispatcher;
 import world.events.event.EntityActivatedEvent;

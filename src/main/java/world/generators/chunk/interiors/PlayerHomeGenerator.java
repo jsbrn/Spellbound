@@ -6,7 +6,6 @@ import world.Chunk;
 import world.Portal;
 import world.Tiles;
 import world.World;
-import world.entities.Entity;
 import world.entities.types.humanoids.npcs.Roommate;
 
 public class PlayerHomeGenerator extends InteriorRoomGenerator {

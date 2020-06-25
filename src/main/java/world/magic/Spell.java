@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Image;
 import world.World;
-import world.entities.Entity;
 import world.magic.techniques.Technique;
 import world.magic.techniques.Techniques;
 import world.events.EventDispatcher;
