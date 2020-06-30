@@ -13,7 +13,6 @@ import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Input;
 import world.Camera;
 import world.World;
-import world.entities.types.Chest;
 
 public class CheatCodeMenu extends Modal {
 
@@ -45,19 +44,16 @@ public class CheatCodeMenu extends Modal {
     private void checkCode() {
         String code = input.getText();
         if (code.equals("6mdm")) {
-            World.getLocalPlayer().activateGodMode();
+            //World.getLocalPlayer().activateGodMode();
         }
         if (code.equals("speedrun")) {
-            World.getLocalPlayer().addArtifacts(5);
+            //World.getLocalPlayer().addArtifacts(5);
         }
         if (code.equals("slomo")) {
             World.setTimeMultiplier(0.5f);
         }
-        if (code.equals("freelunch")) {
-            spawnChest();
-        }
         if (code.equals("magicman")) {
-            World.getLocalPlayer().getSpellbook().discoverAllTechniques();
+            //World.getLocalPlayer().getSpellbook().discoverAllTechniques();
         }
         if (code.equals("xray")) {
             for (int i = 0; i < World.getRegion().getSize(); i++)
@@ -65,13 +61,7 @@ public class CheatCodeMenu extends Modal {
                 World.getRegion().getChunk(i, j).setDiscovered(true);
         }
         if (code.equals("lockpick")) {
-            World.getLocalPlayer().addKeys(10);
-        }
-        if (code.equals("freecam")) {
-            Camera.setManualMode(true);
-        }
-        if (code.equals("fixedcam")) {
-            Camera.setManualMode(false);
+            //World.getLocalPlayer().addKeys(10);
         }
         if (code.equals("cinematic")) {
             Camera.setSpeed(5);
@@ -79,22 +69,6 @@ public class CheatCodeMenu extends Modal {
         if (code.equals("gui")) {
             ((GameScreen)GameManager.getGameState(GameState.GAME_SCREEN)).toggleHUD();
         }
-        if (code.matches("ps \\d+")) {
-            int xDist = Integer.parseInt(code.replace("ps ", ""));
-            SoundManager.playSound(SoundManager.SPIKED, 1.0f, new Location(World.getRegion(), Camera.getLocation()[0] + xDist, Camera.getLocation()[1]));
-        }
-    }
-
-    private void spawnChest() {
-        double[] playerCoords = World.getLocalPlayer().getLocation().getCoordinates();
-        Entity lootChest = new Chest(2.0f, false, Chest.RANDOM_LOOT, 1.0f);
-        Location player = World.getLocalPlayer().getLocation();
-        lootChest.moveTo(new Location(
-                player.getRegion(),
-                playerCoords[0] + 1,
-                playerCoords[1],
-                (int) MiscMath.random(0, 360)));
-
     }
 
     @Override

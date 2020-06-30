@@ -7,7 +7,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import com.github.mathiewz.slick.Graphics;
-import world.entities.types.humanoids.Player;
+import world.entities.Entities;
+import world.entities.components.LocationComponent;
 import world.generators.region.DefaultWorldGenerator;
 
 import java.io.File;
@@ -20,31 +21,25 @@ public class World {
 
     private static HashMap<String, Region> regions;
     private static ArrayList<Portal> portals;
-    private static Player player;
+
+    private static Integer localPlayerID;
 
     private static long time;
     private static int seed;
     private static double timeMultiplier;
     private static boolean paused;
 
-    public static void init(Player p) {
+    public static void init() {
         time = 0;
         timeMultiplier = 1;
         regions = new HashMap<>();
         portals = new ArrayList<>();
-        player = p == null ? new Player() : p;
     }
 
     public static void generate(int seed) {
         World.seed = seed;
         addRegion(new Region("world", 24, new DefaultWorldGenerator(seed)));
         getRegion("world").plan();
-    }
-
-    public static void spawnPlayer(int x, int y, int lookDirection, String region_name) {
-        player.moveTo(new Location(getRegion(region_name), x + 0.5, y + 0.5, lookDirection));
-        player.getLocation().setLookDirection(180);
-        Camera.setTarget(player);
     }
 
     public static int getSeed() {
@@ -57,8 +52,11 @@ public class World {
     }
 
     public static Region getRegion(String name) { return regions.get(name); }
-    public static Region getRegion() { return player.getLocation().getRegion(); }
-    public static Player getLocalPlayer() { return player; }
+    public static Region getRegion() {
+        Location localLocation = ((LocationComponent)Entities.getComponent(LocationComponent.class, localPlayerID)).getLocation();
+        return localLocation.getRegion();
+    }
+    public static Integer getLocalPlayer() { return localPlayerID; }
 
     public static void update() {
         if (paused) return;
@@ -66,9 +64,6 @@ public class World {
         getRegion().update();
     }
 
-    public static boolean exists() {
-        return player != null;
-    }
     public static boolean isPaused() { return paused; }
     public static void setPaused(boolean p) {
         paused = p;
@@ -92,7 +87,7 @@ public class World {
     private static JSONObject serialize() {
         JSONObject world = new JSONObject();
         world.put("seed", seed);
-        world.put("player", getLocalPlayer().serialize());
+        world.put("player", Entities.serializeEntity(localPlayerID));
         return world;
     }
 
@@ -104,9 +99,16 @@ public class World {
             seed = new Long((long)world.get("seed")).intValue();
             generate(seed);
             JSONObject jsonPlayer = (JSONObject)world.get("player");
-            spawnPlayer((int)(double)jsonPlayer.get("x"), (int)(double)jsonPlayer.get("y"), (int)(long)jsonPlayer.get("rotation"), (String)jsonPlayer.get("region"));
-            getLocalPlayer().deserialize(jsonPlayer);
-            getLocalPlayer().getLocation().getRegion().plan();
+            localPlayerID = Entities.createEntity(jsonPlayer);
+            LocationComponent locC = (LocationComponent)Entities.getComponent(LocationComponent.class, localPlayerID);
+            locC.setLocation(
+                    new Location(
+                            getRegion((String)jsonPlayer.get("region")),
+                            (int)(double)jsonPlayer.get("x"),
+                            (int)(double)jsonPlayer.get("y"),
+                            (int)(long)jsonPlayer.get("rotation")));
+            Camera.setTargetEntity(localPlayerID);
+            getRegion().plan();
             for (Region r: regions.values()) { r.loadSavedChunks(); }
         } catch (IOException e) {
             e.printStackTrace();

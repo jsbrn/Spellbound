@@ -3,6 +3,7 @@ package gui.elements;
 import assets.Assets;
 import gui.GUIElement;
 import gui.menus.CheatCodeMenu;
+import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.lwjgl.input.Mouse;
@@ -12,6 +13,8 @@ import com.github.mathiewz.slick.Input;
 import world.Camera;
 import world.Chunk;
 import world.World;
+import world.entities.Entities;
+import world.entities.components.LocationComponent;
 import world.events.EventDispatcher;
 import world.events.event.KeyDownEvent;
 import world.events.event.KeyUpEvent;
@@ -78,21 +81,17 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public void drawOver(Graphics g) {
-        if (World.exists()) {
-            World.draw(Window.getScale(), g);
-        }
+        Camera.getLocation().getRegion().draw(Window.getScale(), g);
     }
 
     @Override
     protected void drawDebug(Graphics g) {
         super.drawDebug(g);
 
-        if (!World.exists()) return;
-
         double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Window.getHeight() - Mouse.getY(), Window.getScale());
         float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());
         float[] origin_osc = Camera.getOnscreenCoordinates(0, 0, Window.getScale());
-        ArrayList<Entity> entities = World.getRegion().getEntities((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
+        ArrayList<Integer> entities = World.getRegion().getEntities((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
         float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0], (int)mouse_wc[1], Window.getScale());
 
         World.getRegion().drawDebug(Window.getScale(), g);
@@ -103,12 +102,14 @@ public class CameraViewport extends GUIElement {
         g.drawRect(osc[0], osc[1], 1 * Window.getScale() * Chunk.TILE_SIZE, 1 * Window.getScale() * Chunk.TILE_SIZE);
         for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
 
+        Location localPlayerLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, World.getLocalPlayer())).getLocation();
+
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
                 "Entity count: "+World.getRegion().getEntities().size(),
                 "Region: "+World.getRegion().getName(),
-                "Coordinates: "+MiscMath.round(World.getLocalPlayer().getLocation().getCoordinates()[0], 0.25)
-                        +", "+MiscMath.round(World.getLocalPlayer().getLocation().getCoordinates()[1], 0.25)
+                "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
+                        +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)
         };
 
         g.setColor(Color.white);

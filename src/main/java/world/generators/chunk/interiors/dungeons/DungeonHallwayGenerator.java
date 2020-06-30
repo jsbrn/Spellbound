@@ -2,9 +2,6 @@ package world.generators.chunk.interiors.dungeons;
 
 import com.github.mathiewz.slick.Color;
 import world.Tiles;
-import world.entities.types.Chest;
-import world.entities.types.SpikeTrap;
-import world.entities.types.humanoids.enemies.Bandit;
 
 public class DungeonHallwayGenerator extends DungeonRoomGenerator {
 
@@ -27,14 +24,6 @@ public class DungeonHallwayGenerator extends DungeonRoomGenerator {
             if (x == getMaximum()) return Tiles.STONE_WALL_EAST;
         }
         return original;
-    }
-
-    @Override
-    public Entity getEntity(int x, int y) {
-        if (isWithinWalls(x, y) && rng().nextInt(8) == 0) {
-            return rng().nextInt(3) == 0 ? new Bandit(1) : (rng().nextBoolean() ? new SpikeTrap() : new Chest(0.3f, false, rng().nextInt(3), 0.7f));
-        }
-        return null;
     }
 
     @Override

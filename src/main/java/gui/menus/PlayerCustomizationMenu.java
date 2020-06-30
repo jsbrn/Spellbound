@@ -1,22 +1,21 @@
 package gui.menus;
 
+import assets.Assets;
 import gui.GUIAnchor;
 import gui.elements.*;
 import gui.states.MainMenuScreen;
 import misc.Window;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
+import org.json.simple.JSONObject;
 import world.Chunk;
 import world.World;
 import world.magic.Spell;
-import world.entities.types.humanoids.HumanoidEntity;
-import world.entities.types.humanoids.Player;
 
 import java.util.Random;
 
 public class PlayerCustomizationMenu extends Modal {
 
-    private Player creation;
     private TextBox nameField, seedField;
     private Button createButton;
 
@@ -26,7 +25,6 @@ public class PlayerCustomizationMenu extends Modal {
 
     public PlayerCustomizationMenu() {
         super("gui/spellcasting.png");
-        this.creation = new Player();
 
         rng = new Random();
 
@@ -50,11 +48,10 @@ public class PlayerCustomizationMenu extends Modal {
             public void onClick(int button) {
                 String seed = seedField.getText().replaceAll("[^\\d]", "");
                 nameField.releaseFocus();
-                creation.setName(nameField.getText());
+                //creation.setName(nameField.getText());
                 getGUI().popModal();
-                World.init(creation);
+                World.init();
                 World.generate(Integer.parseInt(seed.isEmpty() ? "0" : seed));
-                World.spawnPlayer(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, 180, "player_home");
                 World.save();
                 ((MainMenuScreen)getGUI().getParent()).startGame();
             }
@@ -91,43 +88,6 @@ public class PlayerCustomizationMenu extends Modal {
             }
         }, -43, 42, GUIAnchor.TOP_RIGHT);
 
-        addChild(new Button("Randomize Hair Style", 48, 8, null, true) {
-            @Override
-            public void onClick(int button) {
-                creation.getAnimationLayer("hair").setBaseAnimation(HumanoidEntity.HAIR_STYLES[rng.nextInt(HumanoidEntity.HAIR_STYLES.length)]);
-            }
-        }, 39, 56, GUIAnchor.TOP_MIDDLE);
-
-        addChild(new Button("Randomize Hair Color", 48, 8, null, true) {
-            @Override
-            public void onClick(int button) {
-                creation.getAnimationLayer("hair").setColor(HumanoidEntity.HAIR_COLORS[rng.nextInt(HumanoidEntity.HAIR_COLORS.length)]);
-            }
-        }, 39, 64, GUIAnchor.TOP_MIDDLE);
-
-        addChild(new Button("Randomize Skin Color", 48, 8, null, true) {
-            @Override
-            public void onClick(int button) {
-                creation.getAnimationLayer("head").setColor(HumanoidEntity.SKIN_COLORS[rng.nextInt(HumanoidEntity.SKIN_COLORS.length)]);
-            }
-        }, 39, 72, GUIAnchor.TOP_MIDDLE);
-
-        addChild(new Button("Randomize Torso Color", 48, 8, null, true) {
-            @Override
-            public void onClick(int button) {
-                Color random = new Color(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255));
-                creation.getAnimationLayer("torso").setColor(random);
-                creation.getAnimationLayer("shirt").setColor(random);
-            }
-        }, 39, 80, GUIAnchor.TOP_MIDDLE);
-
-        addChild(new Button("Randomize Shirt Style", 48, 8, null, true) {
-            @Override
-            public void onClick(int button) {
-                creation.getAnimationLayer("shirt").setBaseAnimation(HumanoidEntity.SHIRT_STYLES[rng.nextInt(HumanoidEntity.SHIRT_STYLES.length)]);
-            }
-        }, 39, 88, GUIAnchor.TOP_MIDDLE);
-
     }
 
     @Override
@@ -153,10 +113,4 @@ public class PlayerCustomizationMenu extends Modal {
 
     }
 
-    @Override
-    public void drawOver(Graphics g) {
-        if (creation == null) return;
-        float[] osc = getOnscreenCoordinates();
-        creation.draw(osc[0] + (getDimensions()[0]*0.7f * Window.getScale()), osc[1] + (32 * Window.getScale()), Window.getScale(), characterRotation);
-    }
 }

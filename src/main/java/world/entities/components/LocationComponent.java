@@ -15,11 +15,6 @@ public class LocationComponent extends Component {
     }
 
     @Override
-    public String getID() {
-        return "location";
-    }
-
-    @Override
     public JSONObject serialize() {
         return null;
     }
@@ -34,10 +29,14 @@ public class LocationComponent extends Component {
 
     @Override
     public Component deserialize(JSONObject object) {
-        LocationComponent component = new LocationComponent();
         Region region = World.getRegion((String)object.get("region"));
-        component.location = new Location(region, (double)object.get("x"), (double)object.get("y"));
-        return component;
+        location = new Location(region, (double)object.get("x"), (double)object.get("y"));
+        return this;
+    }
+
+    @Override
+    public String getID() {
+        return "location";
     }
 
 }

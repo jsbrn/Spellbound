@@ -4,19 +4,19 @@ import world.events.Event;
 
 public class EntityCollisionEvent extends Event {
 
-    private Entity entity, with;
+    private Integer Integer, with;
 
-    public EntityCollisionEvent(Entity entity, Entity by) {
-        this.entity = entity;
+    public EntityCollisionEvent(Integer Integer, Integer by) {
+        this.Integer = Integer;
         this.with = by;
     }
 
-    public Entity getWith() {
+    public Integer getWith() {
         return with;
     }
 
-    public Entity getEntity() {
-        return entity;
+    public Integer getEntity() {
+        return Integer;
     }
 
 }

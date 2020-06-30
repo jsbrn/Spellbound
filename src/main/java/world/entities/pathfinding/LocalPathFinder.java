@@ -130,10 +130,11 @@ class Node {
     public double getDScore() {
         byte[] tile = region.getTile(coordinates[0], coordinates[1]);
         if (Tiles.collides(tile[0]) || Tiles.collides(tile[1]) || tile[0] == Tiles.AIR || isOutOfBounds()) return Integer.MAX_VALUE;
-        ArrayList<Entity> entities = region.getEntities(coordinates[0], coordinates[1], 1, 1);
-        int solidEntities = 0;
-        for (Entity e: entities) { if (e.getMover().isCollidable()) return Integer.MAX_VALUE; else solidEntities += Math.max(1, e.getMover().getDScore()); }
-        return solidEntities + (int)(1 / (Tiles.getSpeedMultiplier(tile[0]) * Tiles.getSpeedMultiplier(tile[1])));
+        return 0;
+        //ArrayList<Entity> entities = region.getEntities(coordinates[0], coordinates[1], 1, 1);
+        //int solidEntities = 0;
+        //for (Entity e: entities) { if (e.getMover().isCollidable()) return Integer.MAX_VALUE; else solidEntities += Math.max(1, e.getMover().getDScore()); }
+        //return solidEntities + (int)(1 / (Tiles.getSpeedMultiplier(tile[0]) * Tiles.getSpeedMultiplier(tile[1])));
     }
 
     public int getFinalGScore() { return (int)(G * getDScore()) + (parent != null ? parent.getGScore() : 0); }

@@ -6,6 +6,9 @@ import misc.MiscMath;
 import misc.Window;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
+import world.entities.Entities;
+import world.entities.components.LocationComponent;
+import world.entities.systems.RenderSystem;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.ArrayList;
@@ -37,13 +40,13 @@ public class Chunk {
         base = generator.getTiles(false);
         top = generator.getTiles(true);
 
-        for (int j = 0; j < CHUNK_SIZE; j++) {
-            for (int i = 0; i < CHUNK_SIZE; i++) {
-                int wx = (coordinates[0] * Chunk.CHUNK_SIZE) + i, wy = (coordinates[1] * Chunk.CHUNK_SIZE) + j;
-                Entity e = generator.getEntity(i, j);
-                if (e != null && spawnEntities) e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
-            }
-        }
+//        for (int j = 0; j < CHUNK_SIZE; j++) {
+//            for (int i = 0; i < CHUNK_SIZE; i++) {
+//                int wx = (coordinates[0] * Chunk.CHUNK_SIZE) + i, wy = (coordinates[1] * Chunk.CHUNK_SIZE) + j;
+//                Integer e = generator.getEntity(i, j);
+//                if (e != null && spawnEntities) e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
+//            }
+//        }
 
         generated = true;
 
@@ -63,9 +66,9 @@ public class Chunk {
 
     public void update() {
         discovered = true;
-        ArrayList<Entity> entities = region
+        ArrayList<Integer> entities = region
                 .getEntities((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
-        for (int i = entities.size() - 1; i >= 0; i--) entities.get(i).update();
+        //for (int i = entities.size() - 1; i >= 0; i--) entities.get(i).update();
     }
 
     public void set(int x, int y, byte base, byte top) {
@@ -110,7 +113,7 @@ public class Chunk {
 
     public void drawTop(float osx, float osy, float scale) {
         Color translucent = new Color(1f, 1f, 1f, 0.5f);
-        Location player_location = World.getLocalPlayer().getLocation();
+        Location player_location = ((LocationComponent) Entities.getComponent(LocationComponent.class, World.getLocalPlayer())).getLocation();
         double[] playerLocalCoords = player_location.getLocalCoordinates();
         int[] playerChunkCoords = player_location.getChunkCoordinates();
 
@@ -141,20 +144,8 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                ArrayList<Entity> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
-                int pass = 0;
-                for (int p = 0; p < 2; p++) {
-                    int finalP = p;
-                    for (Entity e : entities.stream().filter(e -> finalP == 0 ? e.isTile() : !e.isTile()).collect(Collectors.toList())) {
-                        float[] eosc = Camera.getOnscreenCoordinates(e.getLocation().getCoordinates()[0], e.getLocation().getCoordinates()[1], scale);
-                        int padding = (int) (4 * Chunk.TILE_SIZE * scale);
-                        if (MiscMath.pointIntersectsRect(
-                                eosc[0], eosc[1],
-                                -padding, -padding,
-                                Window.getWidth() + (2 * padding), Window.getHeight() + (2 * padding)))
-                            e.draw(eosc[0], eosc[1], scale);
-                    }
-                }
+                ArrayList<Integer> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
+                //for (Integer entityID: entities) RenderSystem.draw(entityID, null);
 
             }
         }
@@ -163,7 +154,7 @@ public class Chunk {
     }
 
     public void drawDebug(float osx, float osy, float scale, Graphics g) {
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
+        /*for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
                 g.setLineWidth(j == 0 && i == 0 ? 3 : 1);
                 g.setColor(Color.white);
@@ -176,7 +167,7 @@ public class Chunk {
             }
         }
         g.setColor(Color.white);
-        g.setLineWidth(1);
+        g.setLineWidth(1);*/
     }
 
     public String debug() {

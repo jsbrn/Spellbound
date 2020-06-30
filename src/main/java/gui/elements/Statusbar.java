@@ -6,7 +6,8 @@ import gui.states.GameState;
 import main.GameManager;
 import com.github.mathiewz.slick.*;
 import world.World;
-import world.entities.types.humanoids.HumanoidEntity;
+import world.entities.Entities;
+import world.entities.components.HealthComponent;
 import world.events.EventDispatcher;
 import world.events.event.HumanoidRespawnEvent;
 
@@ -14,14 +15,15 @@ public class Statusbar extends GUIElement {
 
     private Color healthColor, manaColor, staminaColor;
     private Image image;
-    private HumanoidEntity target;
+
+    private HealthComponent healthComponent;
 
     private TextLabel healthLabel, manaLabel, staminaLabel;
 
     private IconLabel amuletIndicator;
 
-    public Statusbar(HumanoidEntity target) {
-        this.target = target;
+    public Statusbar(Integer target) {
+        this.healthComponent = (HealthComponent) Entities.getComponent(HealthComponent.class, target);
         healthLabel = new TextLabel("-", 4, Color.white, true, false);
         manaLabel = new TextLabel("-", 4, Color.white, true, false);
         this.addChild(healthLabel, 5, 5, GUIAnchor.TOP_MIDDLE);
@@ -68,28 +70,28 @@ public class Statusbar extends GUIElement {
 
     @Override
     public boolean onKeyUp(int key) {
-        if (key == Input.KEY_R && World.getLocalPlayer().isDead()) {
-            World.init(null);
-            World.load();
-            GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
-            EventDispatcher.invoke(new HumanoidRespawnEvent(World.getLocalPlayer()));
-            return true;
-        }
+//        if (key == Input.KEY_R && World.getLocalPlayer().isDead()) {
+//            World.init(null);
+//            World.load();
+//            GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
+//            EventDispatcher.invoke(new HumanoidRespawnEvent(World.getLocalPlayer()));
+//            return true;
+//        }
         return false;
     }
 
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
-        healthLabel.setText(target.getHP() < 1 ? "!!!" : (int)target.getHP()+"/"+(int)target.getMaxHP());
-        manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxMana());
+        healthLabel.setText(healthComponent.getValue() < 1 ? "!!!" : (int)healthComponent.getValue()+"/"+(int)healthComponent.getMax());
+        //manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxMana());
 
-        if (target.hasAmulet()) amuletIndicator.show(); else amuletIndicator.hide();
+        //if (target.hasAmulet()) amuletIndicator.show(); else amuletIndicator.hide();
 
         b.drawImage(image, 0, 0);
         b.setColor(healthColor);
-        b.fillRect(16, 6, (int)(32 * (target.getHP() / target.getMaxHP())), 3);
+        b.fillRect(16, 6, (int)(32 * (healthComponent.getValue() / healthComponent.getMax())), 3);
         b.setColor(manaColor);
-        b.fillRect(16, 13, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
+        //b.fillRect(16, 13, (int)(32 * (target.getMana() / target.getMaxMana())), 3);
     }
 
 }

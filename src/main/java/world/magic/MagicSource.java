@@ -4,10 +4,10 @@ import misc.Location;
 import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
 import world.Tiles;
+import world.entities.Entities;
+import world.entities.components.LocationComponent;
 import world.magic.techniques.Technique;
 import world.magic.techniques.Techniques;
-import world.magic.techniques.effects.EffectTechnique;
-import world.entities.types.humanoids.HumanoidEntity;
 import world.events.EventDispatcher;
 import world.events.event.MagicDepletedEvent;
 import world.events.event.MagicImpactEvent;
@@ -19,18 +19,18 @@ import java.util.stream.Collectors;
 
 public class MagicSource {
 
-    private Entity caster, target;
+    private Integer caster, target;
     private ArrayList<Technique> techniques;
     private ParticleSource body;
     private double[] castCoordinates, moveTarget;
     private double moveSpeed, torque, energy;
     private MagicSource next;
 
-    private List<Entity> lastColliding;
+    private List<Integer> lastColliding;
     private boolean lastLocationSolid;
 
-    public MagicSource(double x, double y, Entity caster, ArrayList<Technique> techniques, Color color) {
-        this.lastColliding = new ArrayList<Entity>();
+    public MagicSource(double x, double y, Integer caster, ArrayList<Technique> techniques, Color color) {
+        this.lastColliding = new ArrayList<Integer>();
         this.castCoordinates = new double[]{x, y};
         this.energy = 0.5;
         this.moveSpeed = 3;
@@ -39,24 +39,23 @@ public class MagicSource {
         this.techniques = techniques;
         this.body = new ParticleSource();
         this.body.setColor(color);
-        this.body.setLocation(new Location(caster.getLocation()));
-        double[] offset = MiscMath.getRotatedOffset(0, -0.6, MiscMath.angleBetween(caster.getLocation().getCoordinates()[0], caster.getLocation().getCoordinates()[1], x, y));
+        Location casterLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, caster)).getLocation();
+        this.body.setLocation(new Location(casterLocation));
+        double[] offset = MiscMath.getRotatedOffset(0, -0.6, MiscMath.angleBetween(casterLocation.getCoordinates()[0], casterLocation.getCoordinates()[1], x, y));
         this.moveTarget = new double[]{body.getLocation().getCoordinates()[0] + offset[0], body.getLocation().getCoordinates()[1] + offset[1]};
-        List<Entity> found = caster.getLocation().getRegion().getEntities((int)x-1, (int)y-1, 3, 3).stream().filter(e -> !e.equals(caster)).collect(Collectors.toList());
-        this.target = found.isEmpty() ? null : found.get(0);
+        List<Integer> foundEntities = casterLocation.getRegion().getEntities((int)x-1, (int)y-1, 3, 3).stream().filter(e -> !e.equals(caster)).collect(Collectors.toList());
+        this.target = foundEntities.isEmpty() ? null : foundEntities.get(0);
         for (Technique t: techniques) t.applyTo(this);
     }
 
     public void update() {
 
         //invoke collision events
-        List<Entity> colliding = getCollidingEntities();
+        List<Integer> colliding = getCollidingEntities();
         colliding.stream()
                 .filter(e -> !e.equals(caster) && !lastColliding.contains(e))
                 .forEach(e -> {
-                    if (e.isTile()) return;
-                    if ((e instanceof HumanoidEntity && affects(e)))
-                        EventDispatcher.invoke(new MagicImpactEvent(this, e));
+                    EventDispatcher.invoke(new MagicImpactEvent(this, e));
                 });
         lastColliding = colliding;
         byte[] currentTile = getBody().getLocation().getRegion().getTile(
@@ -113,27 +112,23 @@ public class MagicSource {
     }
 
     public void affectOnce() {
-        for (Technique t: techniques)
-            if (t instanceof EffectTechnique)
-                ((EffectTechnique) t).affectOnce(this);
+//        for (Technique t: techniques)
+//            if (t instanceof EffectTechnique)
+//                ((EffectTechnique) t).affectOnce(this);
     }
 
     public void affectContinuous() {
-        for (Technique t: techniques)
-            if (t instanceof EffectTechnique)
-                ((EffectTechnique) t).affectContinuous(this);
+//        for (Technique t: techniques)
+//            if (t instanceof EffectTechnique)
+//                ((EffectTechnique) t).affectContinuous(this);
     }
 
-    public boolean affects(Entity e) {
-        if (!(e instanceof HumanoidEntity)) return false;
-        HumanoidEntity he = (HumanoidEntity)e;
-        return (this.hasTechnique("affect_self") && he.equals(this.getCaster())) ||
-                (this.hasTechnique("affect_allies") && he.isAlliedTo((HumanoidEntity)this.getCaster())) ||
-                (this.hasTechnique("affect_enemies") && !he.isAlliedTo((HumanoidEntity)this.getCaster()));
+    public boolean affects(Integer e) {
+        return true;
     }
 
-    public List<Entity> getCollidingEntities() {
-        List<Entity> inner = body.getLocation().getRegion().getEntities(
+    public List<Integer> getCollidingEntities() {
+        List<Integer> inner = body.getLocation().getRegion().getEntities(
                 body.getLocation().getCoordinates()[0],
                 body.getLocation().getCoordinates()[1],
                 body.getReachRadius()
@@ -168,10 +163,10 @@ public class MagicSource {
     public void setMoveSpeed(double t) { moveSpeed = MiscMath.clamp(t, 0, Integer.MAX_VALUE); }
     public void addMoveSpeed(double t) { setMoveSpeed(moveSpeed + t); }
 
-    public Entity getCaster() { return caster; }
+    public Integer getCaster() { return caster; }
     public double[] getCastCoordinates() { return castCoordinates; }
-    public void setTarget(Entity target) { this.target = target; }
-    public Entity getTarget() { return target; }
+    public void setTarget(Integer target) { this.target = target; }
+    public Integer getTarget() { return target; }
 
     public void addDirection(double angle) { body.addDirection(angle);}
     public void setDirection(double angle) { body.setDirection(angle); }

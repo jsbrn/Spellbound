@@ -27,11 +27,6 @@ public class OpenFieldGenerator extends ChunkGenerator {
     }
 
     @Override
-    public Entity getEntity(int x, int y) {
-        return null;
-    }
-
-    @Override
     public Color getColor() {
         return Color.green;
     }

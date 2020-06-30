@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class Window {
 
     //the name of the window
-    public static final String WINDOW_TITLE = "Spellbound (Demo)";
+    public static final String WINDOW_TITLE = "Spellbound (A0001)";
     //create a window object
     public static AppGameContainer WINDOW_INSTANCE;
 

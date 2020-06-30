@@ -201,14 +201,14 @@ public class SoundManager {
     }
 
     public static void playSound(Sound s, float volumeMultiplier, Location location) {
-        if (s == null) return;
+        /*if (s == null) return;
         if (!location.getRegion().equals(World.getLocalPlayer().getLocation().getRegion())) return;
         System.out.println("Playing sound "+s);
         double xDist = location.getCoordinates()[0] - Camera.getLocation()[0];
         double yDist = location.getCoordinates()[1] - Camera.getLocation()[1];
         double dist = location.distanceTo(Camera.getLocation()[0], Camera.getLocation()[1]);
         float audioX = (int)(xDist / 6) * 0.05f;
-        s.playAt((float)MiscMath.random(0.8, 1.2), BASE_VOLUME_MULTIPLIER * volumeMultiplier * (1 - (float)MiscMath.clamp((dist / 4) / 24, 0, 1)), audioX, (float)yDist / 6, 0);
+        s.playAt((float)MiscMath.random(0.8, 1.2), BASE_VOLUME_MULTIPLIER * volumeMultiplier * (1 - (float)MiscMath.clamp((dist / 4) / 24, 0, 1)), audioX, (float)yDist / 6, 0);*/
     }
 
 }

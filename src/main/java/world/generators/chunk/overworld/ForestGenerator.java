@@ -3,8 +3,6 @@ package world.generators.chunk.overworld;
 import com.github.mathiewz.slick.Color;
 import world.Tiles;
 
-import java.util.Random;
-
 public class ForestGenerator extends OpenFieldGenerator {
     
     private float density;

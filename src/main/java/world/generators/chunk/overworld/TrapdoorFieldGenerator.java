@@ -1,9 +1,8 @@
 package world.generators.chunk.overworld;
 
-import gui.sound.SoundManager;
 import com.github.mathiewz.slick.Color;
+import gui.sound.SoundManager;
 import world.*;
-import world.entities.types.humanoids.npcs.Civilian;
 import world.generators.region.DungeonGenerator;
 
 public class TrapdoorFieldGenerator extends OpenFieldGenerator {
@@ -30,12 +29,6 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
         Region dungeon = World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(1 + (difficulty), 16, World.getSeed() + getChunkX() + getChunkY())));
         Portal trapdoor = new Portal("trapdoor", entrance_x, entrance_y, 0, 1, false, dungeon, "ladder", SoundManager.DOOR_OPEN);
         return trapdoor;
-    }
-
-    @Override
-    public Entity getEntity(int x, int y) {
-        if (civilian && x == entrance_x - 2 && y == entrance_y) return new Civilian();
-        return null;
     }
 
     @Override

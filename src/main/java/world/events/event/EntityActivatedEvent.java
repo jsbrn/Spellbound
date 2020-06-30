@@ -4,19 +4,19 @@ import world.events.Event;
 
 public class EntityActivatedEvent extends Event {
 
-    private Entity entity, by;
+    private Integer Integer, by;
 
-    public EntityActivatedEvent(Entity entity, Entity by) {
-        this.entity = entity;
+    public EntityActivatedEvent(Integer Integer, Integer by) {
+        this.Integer = Integer;
         this.by = by;
     }
 
-    public Entity getActivatedBy() {
+    public Integer getActivatedBy() {
         return by;
     }
 
-    public Entity getEntity() {
-        return entity;
+    public Integer getEntity() {
+        return Integer;
     }
 
 }

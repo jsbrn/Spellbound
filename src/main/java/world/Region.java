@@ -1,6 +1,7 @@
 package world;
 
 import assets.Assets;
+import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.json.simple.JSONArray;
@@ -9,6 +10,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Sound;
+import world.entities.Entities;
+import world.entities.components.HitboxComponent;
+import world.entities.components.LocationComponent;
 import world.magic.MagicSource;
 import world.events.EventDispatcher;
 import world.events.EventListener;
@@ -32,7 +36,7 @@ public class Region {
 
     private ArrayList<MagicSource> magic_sources;
     private ArrayList<Portal> portals;
-    private ArrayList<Entity> entities;
+    private ArrayList<Integer> entities;
 
     private Sound backgroundAmbience;
 
@@ -87,25 +91,26 @@ public class Region {
 
     public long getCurrentTime() { return time; }
 
-    public void addEntity(Entity e) {
-        double lindex = e.getLocation().getGlobalIndex();
+    public void addEntity(Integer e) {
+        double lindex = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation().getGlobalIndex();
         int index = getEntityIndex(lindex, 0, entities.size());
         entities.add(index, e);
     }
 
-    public void removeEntity(Entity e) {
+    public void removeEntity(Integer e) {
         entities.remove(e);
     }
 
-    public Entity getEntity(double wx, double wy) {
-        ArrayList<Entity> found = getEntities((int)(wx - 2), (int)(wy - 2), 4, 4);
+    public Integer getEntity(double wx, double wy) {
+        ArrayList<Integer> found = getEntities((int)(wx - 2), (int)(wy - 2), 4, 4);
         for (int i = found.size() - 1; i >= 0; i--) {
-            Entity e = found.get(i);
+            Integer e = found.get(i);
+            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation();
             if (MiscMath.pointIntersectsRect(
                     wx,
                     wy,
-                    e.getLocation().getCoordinates()[0] - 0.5,
-                    e.getLocation().getCoordinates()[1] - 0.5,
+                    location.getCoordinates()[0] - 0.5,
+                    location.getCoordinates()[1] - 0.5,
                     1,
                     1
                 )) {
@@ -115,17 +120,18 @@ public class Region {
         return null;
     }
 
-    public ArrayList<Entity> getEntities(int wx, int wy, int width, int height) {
-        ArrayList<Entity> subsection = new ArrayList<>();
+    public ArrayList<Integer> getEntities(int wx, int wy, int width, int height) {
+        ArrayList<Integer> subsection = new ArrayList<>();
         double minloc = MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize());
         double maxloc = MiscMath.getIndex(wx + width, wy + height, Chunk.CHUNK_SIZE * getSize());
         int[] indices = getEntityIndices(minloc, maxloc);
         for (int i = indices[0]; i < indices[1]; i++) {
-            Entity e = entities.get(i);
+            Integer e = entities.get(i);
+            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation();
             if (subsection.contains(e)) continue;
             boolean intersects = MiscMath.pointIntersectsRect(
-                    e.getLocation().getCoordinates()[0],
-                    e.getLocation().getCoordinates()[1],
+                    location.getCoordinates()[0],
+                    location.getCoordinates()[1],
                     wx,
                     wy,
                     width,
@@ -136,17 +142,21 @@ public class Region {
         return subsection;
     }
 
-    public List<Entity> getEntities(double wx, double wy, double radius) {
-        ArrayList<Entity> entities = getEntities(
+    public List<Integer> getEntities(double wx, double wy, double radius) {
+        ArrayList<Integer> entities = getEntities(
                 (int)(wx - radius), (int)(wy - radius),
                 (int)((radius * 2) + 1), (int)((radius * 2) + 2));
-        return entities.stream().filter(e -> MiscMath.circlesIntersect(
-                e.getLocation().getCoordinates()[0],
-                e.getLocation().getCoordinates()[1],
-                e.getRadius(),
+        return entities.stream().filter(e -> {
+            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation();
+            HitboxComponent hitbox = (HitboxComponent)Entities.getComponent(HitboxComponent.class, e);
+            return MiscMath.circlesIntersect(
+                location.getCoordinates()[0],
+                location.getCoordinates()[1],
+                hitbox.getRadius(),
                 wx,
                 wy,
-                radius)).collect(Collectors.toList());
+                radius);
+        }).collect(Collectors.toList());
     }
 
     public int[] getEntityIndices(double min_location, double max_location) {
@@ -156,16 +166,17 @@ public class Region {
         };
     }
 
-    public ArrayList<Entity> getEntities() { return entities; }
+    public ArrayList<Integer> getEntities() { return entities; }
 
     private int getEntityIndex(double location, int min, int max) {
 
         if (entities.isEmpty()) return 0;
 
         int half = min + ((max-min) / 2);
-        double minloc = entities.get(min).getLocation().getGlobalIndex();
-        double maxloc = entities.get(max-1).getLocation().getGlobalIndex();
-        double halfloc = entities.get(half).getLocation().getGlobalIndex();
+
+        double minloc = ((LocationComponent)Entities.getComponent(LocationComponent.class, entities.get(min))).getLocation().getGlobalIndex();
+        double maxloc = ((LocationComponent)Entities.getComponent(LocationComponent.class, entities.get(max - 1))).getLocation().getGlobalIndex();
+        double halfloc = ((LocationComponent)Entities.getComponent(LocationComponent.class, entities.get(half))).getLocation().getGlobalIndex();
 
         if (location >= maxloc) return max;
         if (location <= minloc) return min;
@@ -281,7 +292,7 @@ public class Region {
         }
 
         int radius = 1;
-        int[] pchcoords = World.getLocalPlayer().getLocation().getChunkCoordinates();
+        int[] pchcoords = Camera.getLocation().getChunkCoordinates();
         for (int j = -radius; j <= radius; j++) {
             for (int i = -radius; i <= radius; i++) {
                 int cx = pchcoords[0] + i;
@@ -294,7 +305,7 @@ public class Region {
     }
 
     public void draw(float scale, Graphics g) {
-        int[] pchcoords = World.getLocalPlayer().getLocation().getChunkCoordinates();
+        int[] pchcoords = Camera.getLocation().getChunkCoordinates();
         float[] oscoords = Camera.getOnscreenCoordinates(0, 0, scale);
 
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
@@ -322,12 +333,7 @@ public class Region {
     }
 
     public void drawDebug(float scale, Graphics g) {
-        for (int i = 0; i < entities.size(); i++) {
-            Entity e = entities.get(i);
-            e.drawDebug(scale, g);
-        }
         for (MagicSource magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
-
     }
 
     public int getSize() { return size; }
@@ -338,7 +344,7 @@ public class Region {
         jsonEntities.addAll(
                 getEntities(cx * Chunk.CHUNK_SIZE, cy * Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE)
                 .stream()
-                .map(e -> e.serialize()).collect(Collectors.toList())
+                .map(Entities::serializeEntity).collect(Collectors.toList())
         );
         chunk.put("entities", jsonEntities);
         chunk.put("discovered", chunks[cx][cy].wasDiscovered());
@@ -378,9 +384,7 @@ public class Region {
                     .stream()
                     .forEach(json -> {
                         JSONObject jsonObject = (JSONObject)json;
-                        Entity e = Entity.create(jsonObject);
-                        if (e == null) return;
-                        //e.moveTo(new Location(this, (double)jsonObject.get("x"), (double)jsonObject.get("y")));
+                        Entities.createEntity(jsonObject);
                     });
         } catch (ParseException e) {
             e.printStackTrace();

@@ -6,12 +6,12 @@ import world.events.Event;
 public class EntityChangeRegionEvent extends Event {
 
     private Region from, to;
-    private Entity entity;
+    private Integer Integer;
 
-    public EntityChangeRegionEvent(Region from, Region to, Entity e) {
+    public EntityChangeRegionEvent(Region from, Region to, Integer e) {
         this.from = from;
         this.to = to;
-        this.entity = e;
+        this.Integer = e;
     }
 
     public Region getFrom() {
@@ -22,7 +22,7 @@ public class EntityChangeRegionEvent extends Event {
         return to;
     }
 
-    public Entity getEntity() {
-        return entity;
+    public Integer getEntity() {
+        return Integer;
     }
 }

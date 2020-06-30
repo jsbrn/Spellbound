@@ -1,10 +1,9 @@
 package world.generators.chunk.overworld;
 
 import gui.sound.SoundManager;
-import world.Region;
 import world.Portal;
+import world.Region;
 import world.World;
-import world.entities.types.humanoids.npcs.Collector;
 import world.generators.region.PlayerHomeRegionGenerator;
 
 public class BackyardGenerator extends OpenFieldGenerator {
@@ -27,11 +26,6 @@ public class BackyardGenerator extends OpenFieldGenerator {
                     World.addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator(World.getSeed()))), "door", SoundManager.DOOR_OPEN);
         door.setCoordinates(6, 5);
         return door;
-    }
-
-    @Override
-    public Entity getEntity(int x, int y) {
-        return x == 8 && y == 8 ? new Collector() : null;
     }
 
     @Override

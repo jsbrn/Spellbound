@@ -5,17 +5,18 @@ import gui.GUIAnchor;
 import gui.elements.*;
 import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
+import world.entities.Entities;
+import world.entities.components.SpellbookComponent;
 import world.magic.Spell;
 import world.magic.techniques.Technique;
 import world.magic.techniques.Techniques;
-import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SpellcraftingMenu extends Modal {
 
-    private HumanoidEntity target;
+    private SpellbookComponent spellbook;
     private ArrayList<String> categories;
     private int currentCategory;
     private TextLabel categoryLabel;
@@ -30,9 +31,9 @@ public class SpellcraftingMenu extends Modal {
 
     private Spell spell;
 
-    public SpellcraftingMenu(HumanoidEntity target) {
+    public SpellcraftingMenu(Integer target) {
         super("gui/spellcasting.png");
-        this.target = target;
+        this.spellbook = (SpellbookComponent) Entities.getComponent(SpellbookComponent.class, target);
         this.buttons = new HashMap<>();
         this.categories = new ArrayList<>();
         this.spell = new Spell();
@@ -60,8 +61,8 @@ public class SpellcraftingMenu extends Modal {
                 spell.setColor(colorChooser.getColor());
                 spell.setIconIndex(iconChooser.getValue());
                 spell.setName(nameField.getText());
-                target.getSpellbook().addSpell(spell);
-                target.addCrystals(-spell.getCrystalCost());
+                //target.getSpellbook().addSpell(spell);
+                //.addCrystals(-spell.getCrystalCost());
                 nameField.releaseFocus();
                 getGUI().popModal();
             }
@@ -195,8 +196,8 @@ public class SpellcraftingMenu extends Modal {
                         removeChild(warningLabel);
 
                     if (!mouseIntersects()) return false;
-                    techniqueName.setText(target.getSpellbook().hasTechnique(technique) ? Techniques.getName(technique) : "Unknown Technique");
-                    techniqueDescription.setText(target.getSpellbook().hasTechnique(technique) ? Techniques.getDescription(technique) : "???");
+                    techniqueName.setText(spellbook.hasTechnique(technique) ? Techniques.getName(technique) : "Unknown Technique");
+                    techniqueDescription.setText(spellbook.hasTechnique(technique) ? Techniques.getDescription(technique) : "???");
                     ArrayList<String> conflicts = spell.getConflicts(technique);
                     String conflictNames = "";
                     for (int i = 0; i < conflicts.size(); i++)
@@ -226,15 +227,15 @@ public class SpellcraftingMenu extends Modal {
                 b.show();
                 b.setOffset(((p % 5) * 18), 19 + 8 + ((p / 5) * 19));
                 b.setToggled(spell.hasTechnique(technique));
-                b.setEnabled(Technique.createFrom(technique) != null && target.getSpellbook().hasTechnique(technique));
-                b.setIcon(target.getSpellbook().hasTechnique(technique) ? Assets.getImage("gui/icons/techniques/" +technique+".png") : Assets.getImage("gui/icons/question_mark.png"));
+                b.setEnabled(Technique.createFrom(technique) != null && spellbook.hasTechnique(technique));
+                b.setIcon(spellbook.hasTechnique(technique) ? Assets.getImage("gui/icons/techniques/" +technique+".png") : Assets.getImage("gui/icons/question_mark.png"));
                 p++;
             }
         }
     }
 
     private void refreshRequirements() {
-        boolean notEnoughCrystals = spell.getCrystalCost() > target.getCrystalCount();
+        /*boolean notEnoughCrystals = spell.getCrystalCost() > target.getCrystalCount();
         boolean notEnoughDyes = spell.getDyeCost() > target.getDyeCount();
         boolean notEnoughMaxMana = spell.getManaCost() > target.getMaxMana();
         boolean noName = nameField.getText().trim().isEmpty();
@@ -256,7 +257,7 @@ public class SpellcraftingMenu extends Modal {
         if (noName) createButton.setTooltipText("Give your spell a name.");
         if (notEnoughMaxMana) createButton.setTooltipText("You need more Mana to cast this!");
         if (notEnoughDyes) createButton.setTooltipText("You need more Dyes!");
-        if (notEnoughCrystals) createButton.setTooltipText("You need more Crystals!");
+        if (notEnoughCrystals) createButton.setTooltipText("You need more Crystals!");*/
     }
 
     @Override

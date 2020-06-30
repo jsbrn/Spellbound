@@ -2,7 +2,6 @@ package world.generators.chunk.interiors.dungeons;
 
 import com.github.mathiewz.slick.Color;
 import world.Tiles;
-import world.entities.types.humanoids.enemies.Bandit;
 
 public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
 
@@ -20,12 +19,6 @@ public class DungeonLivingQuartersGenerator extends DungeonRoomGenerator {
         return rng().nextInt(8) == 0
                 ? (byte)((rng().nextBoolean() ? Tiles.EMPTY_BOTTLES : Tiles.CHAIR))
                 : original;
-    }
-
-    @Override
-    public Entity getEntity(int x, int y) {
-        if (!isWithinWalls(x, y)) return null;
-        return rng().nextInt(20) == 0 ? new Bandit(difficultyMultiplier) : null;
     }
 
     @Override

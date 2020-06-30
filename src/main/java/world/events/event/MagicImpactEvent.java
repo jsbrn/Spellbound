@@ -1,14 +1,14 @@
 package world.events.event;
 
-import world.magic.MagicSource;
 import world.events.Event;
+import world.magic.MagicSource;
 
 public class MagicImpactEvent extends Event {
 
     private MagicSource magicSource;
-    private Entity impacted;
+    private Integer impacted;
 
-    public MagicImpactEvent(MagicSource source, Entity e) {
+    public MagicImpactEvent(MagicSource source, Integer e) {
         this.magicSource = source;
         this.impacted = e;
     }
@@ -19,6 +19,6 @@ public class MagicImpactEvent extends Event {
         return magicSource;
     }
 
-    public Entity getEntity() { return impacted; }
+    public Integer getEntity() { return impacted; }
 
 }

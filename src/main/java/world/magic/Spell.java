@@ -72,8 +72,8 @@ public class Spell {
         return loaded;
     }
 
-    public void cast(double wx, double wy, Entity caster) {
-        MagicSource cast = new MagicSource(wx, wy, caster, loadTechniques(), color);
+    public void cast(double wx, double wy, Integer casterID) {
+        MagicSource cast = new MagicSource(wx, wy, casterID, loadTechniques(), color);
         World.getRegion().addMagicSource(cast);
         EventDispatcher.invoke(new SpellCastEvent(this, cast));
     }

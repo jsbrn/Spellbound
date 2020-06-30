@@ -1,7 +1,7 @@
 package world.events.event;
 
-import world.magic.MagicSource;
 import world.events.Event;
+import world.magic.MagicSource;
 
 public class MagicDepletedEvent extends Event {
 

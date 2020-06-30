@@ -1,5 +1,8 @@
 package world.magic.techniques.movement;
 
+import misc.Location;
+import world.entities.Entities;
+import world.entities.components.LocationComponent;
 import world.magic.MagicSource;
 
 public class AuraTechnique extends PropelTechnique {
@@ -11,9 +14,10 @@ public class AuraTechnique extends PropelTechnique {
 
     @Override
     public void update(MagicSource source) {
+        Location sourceLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, source.getCaster())).getLocation();
         source.setMoveTarget(
-                source.getCaster().getLocation().getCoordinates()[0],
-                source.getCaster().getLocation().getCoordinates()[1]);
+                sourceLocation.getCoordinates()[0],
+                sourceLocation.getCoordinates()[1]);
     }
 
 }

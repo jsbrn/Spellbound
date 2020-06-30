@@ -1,27 +1,26 @@
 package world.events.event;
 
 import assets.definitions.DialogueDefinition;
-import world.entities.types.humanoids.Player;
 import world.events.Event;
 
 public class PlayerReplyEvent extends Event {
 
-    private Player player;
-    private Entity npc;
+    private Integer player;
+    private Integer npc;
     private DialogueDefinition dialogue;
     private int option;
 
-    public PlayerReplyEvent(Entity npc, Player player, DialogueDefinition dialogue, int option) {
+    public PlayerReplyEvent(Integer npc, Integer player, DialogueDefinition dialogue, int option) {
         this.npc = npc;
         this.player = player;
         this.dialogue = dialogue;
         this.option = option;
     }
 
-    public Entity getNPC() {
+    public Integer getNPC() {
         return npc;
     }
-    public Player getPlayer() { return player; }
+    public Integer getPlayer() { return player; }
 
     public DialogueDefinition getDialogue() {
         return dialogue;

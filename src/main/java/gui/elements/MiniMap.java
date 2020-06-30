@@ -28,7 +28,7 @@ public class MiniMap extends GUIElement {
     }
 
     private Region getRegion() {
-        return region == null ? World.getLocalPlayer().getLocation().getRegion() : region;
+        return region == null ? World.getRegion() : region;
     }
 
     private Image getBuffer() {
@@ -104,9 +104,9 @@ public class MiniMap extends GUIElement {
 
     @Override
     public void drawOver(Graphics g) {
-        super.drawOver(g);
+        /*super.drawOver(g);
         Region current = getRegion();
-        int[] player_cc = World.getLocalPlayer().getLocation().getChunkCoordinates();
+        int[] player_cc = World.getRegion().getChunkCoordinates();
         for (int x = 0; x < current.getSize(); x++) {
             for (int y = 0; y < current.getSize(); y++) {
                 ChunkGenerator generator = current.getChunkGenerator(x, y);
@@ -130,7 +130,7 @@ public class MiniMap extends GUIElement {
                 getOnscreenCoordinates()[0] + (Window.getScale()*2) + ((float)percentage[0] * size * Window.getScale()),
                 getOnscreenCoordinates()[1] + (Window.getScale()*2) + ((float)percentage[1] * size * Window.getScale()), 1);
 
-
+        */
     }
 
 }

@@ -3,7 +3,7 @@ package assets;
 import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
 import world.magic.Spell;
-import world.magic.Spellbook;
+import world.entities.components.SpellbookComponent;
 import world.magic.techniques.Techniques;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class SpellFactory {
         return null;
     }
 
-    public static String discoverRandomTechnique(Spellbook spellbook, float maxRarity) {
+    public static String discoverRandomTechnique(SpellbookComponent spellbook, float maxRarity) {
         String[] techniques = Techniques.getAll();
         return Arrays.asList(techniques).stream()
                 .sorted((t1, t2) -> rng.nextInt(techniques.length))

@@ -1,30 +1,24 @@
-package world.magic;
+package world.entities.components;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import world.magic.Spell;
 import world.magic.techniques.Techniques;
-import world.entities.types.humanoids.HumanoidEntity;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class Spellbook {
+public class SpellbookComponent extends Component {
 
     private ArrayList<Spell> spells;
     private ArrayList<String> discovered_techniques;
     private int selected;
-    private HumanoidEntity parent;
 
-    public Spellbook(HumanoidEntity parent) {
+    public SpellbookComponent() {
         this.spells = new ArrayList<>();
         this.discovered_techniques = new ArrayList<>();
         discoverTechnique("");
-        this.parent = parent;
         for (String t: Techniques.getAll()) if (Techniques.isDefault(t)) discoverTechnique(t);
-    }
-
-    public void cast(double wx, double wy) {
-        getSelectedSpell().cast(wx, wy, parent);
     }
 
     public Spell getSpell(int index) { return index >= 0 && index < spells.size() ? this.spells.get(index) : null; }
@@ -39,8 +33,10 @@ public class Spellbook {
     public void discoverAllTechniques() { discovered_techniques.clear(); for (String t: Techniques.getAll()) discoverTechnique(t); }
     public boolean hasTechnique(String technique) { return technique != null && this.discovered_techniques.contains(technique); }
 
-    public void setParent(HumanoidEntity parent) { this.parent = parent; }
-    public HumanoidEntity getParent() { return parent; }
+    @Override
+    protected void registerEvents() {
+
+    }
 
     public JSONObject serialize() {
         JSONObject serialized = new JSONObject();
@@ -53,7 +49,7 @@ public class Spellbook {
         return serialized;
     }
 
-    public void deserialize(JSONObject json) {
+    public Component deserialize(JSONObject json) {
         spells.clear();
         discovered_techniques.clear();
         JSONArray discovered = (JSONArray)json.get("discovered_techniques");
@@ -64,6 +60,12 @@ public class Spellbook {
             spell.deserialize((JSONObject)js);
             addSpell(spell);
         });
+        return this;
+    }
+
+    @Override
+    public String getID() {
+        return "spellbook";
     }
 
 }

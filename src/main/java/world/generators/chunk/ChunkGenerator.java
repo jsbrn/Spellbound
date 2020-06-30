@@ -43,7 +43,6 @@ public abstract class ChunkGenerator {
     public abstract byte getBase(int x, int y);
     public abstract byte getTop(int x, int y);
     public abstract Portal getPortal();
-    public abstract Entity getEntity(int x, int y);
 
     public abstract Color getColor();
     public abstract String getIcon();

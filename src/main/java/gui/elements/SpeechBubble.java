@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class SpeechBubble extends GUIElement {
 
-    private Entity speaker;
+    private Integer speaker;
     private DialogueDefinition dialogue;
     private Image background;
     private TextLabel contents;
@@ -32,9 +32,9 @@ public class SpeechBubble extends GUIElement {
         this.background = Assets.getImage("gui/dialogue.png");
     }
 
-    public void setSpeaker(Entity speaker) {
+    public void setSpeaker(Integer speaker) {
         this.speaker = speaker;
-        this.title.setText(speaker.getName());
+        this.title.setText("(not implemented)");
         SoundManager.playSound(SoundManager.PAGE_TURN);
     }
 
@@ -104,10 +104,10 @@ public class SpeechBubble extends GUIElement {
     @Override
     public void drawOver(Graphics g) {
         super.drawOver(g);
-        if (speaker == null) return;
-        speaker.draw(
-                (float)(getCoordinates()[0] + Chunk.TILE_SIZE) * Window.getScale(),
-                (float)(getCoordinates()[1] + Chunk.TILE_SIZE) * Window.getScale(),
-                Window.getScale(), 3);
+//        if (speaker == null) return;
+//        speaker.draw(
+//                (float)(getCoordinates()[0] + Chunk.TILE_SIZE) * Window.getScale(),
+//                (float)(getCoordinates()[1] + Chunk.TILE_SIZE) * Window.getScale(),
+//                Window.getScale(), 3);
     }
 }

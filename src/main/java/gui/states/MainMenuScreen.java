@@ -73,10 +73,10 @@ public class MainMenuScreen extends GameState {
             public void onClick(int button) {
                 File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
                 if (!f.exists()) {
-                    World.init(null);
+                    World.init();
                     gui.stackModal(new PlayerCustomizationMenu());
                 } else {
-                    World.init(null);
+                    World.init();
                     //make a backup before loading a save
                     try {
                         new File(Assets.ROOT_DIRECTORY+"/backups/").mkdirs();
@@ -114,7 +114,7 @@ public class MainMenuScreen extends GameState {
         gui.addElement(settings, 0, 0, GUIAnchor.CENTER);
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
-        gui.addElement(new TextLabel("Demo", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);
+        gui.addElement(new TextLabel("Alpha Candidate", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);
         gui.addElement(deleteSave, -2, -2, GUIAnchor.BOTTOM_RIGHT);
 
         gui.addElement(new Button("Visit the website", 48, 8, null, true) {

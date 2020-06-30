@@ -1,8 +1,8 @@
 package world.events.event;
 
+import world.events.Event;
 import world.magic.MagicSource;
 import world.magic.Spell;
-import world.events.Event;
 
 public class SpellCastEvent extends Event {
 

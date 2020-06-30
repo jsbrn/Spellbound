@@ -1,17 +1,16 @@
 package world.events.event;
 
-import world.entities.types.humanoids.HumanoidEntity;
 import world.events.Event;
 
 public class HumanoidDeathEvent extends Event {
 
-    private HumanoidEntity humanoid;
+    private Integer humanoid;
 
-    public HumanoidDeathEvent(HumanoidEntity humanoidEntity) {
+    public HumanoidDeathEvent(Integer humanoidEntity) {
         this.humanoid = humanoidEntity;
     }
 
-    public HumanoidEntity getHumanoid() {
+    public Integer getHumanoid() {
         return humanoid;
     }
 

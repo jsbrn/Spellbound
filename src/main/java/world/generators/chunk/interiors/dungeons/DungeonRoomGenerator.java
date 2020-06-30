@@ -1,13 +1,8 @@
 package world.generators.chunk.interiors.dungeons;
 
-import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
-import world.Chunk;
 import world.Portal;
 import world.Tiles;
-import world.entities.types.Chest;
-import world.entities.types.SpikeTrap;
-import world.entities.types.humanoids.enemies.Bandit;
 import world.generators.chunk.interiors.InteriorRoomGenerator;
 
 public class DungeonRoomGenerator extends InteriorRoomGenerator {
@@ -33,21 +28,6 @@ public class DungeonRoomGenerator extends InteriorRoomGenerator {
 
     @Override
     public Portal getPortal() {
-        return null;
-    }
-
-    @Override
-    public Entity getEntity(int x, int y) {
-        if (isWithinWalls(x, y)
-                && rng().nextFloat() < 0.15) {
-            return rng().nextInt(20) == 0 ? new Bandit(1) : new SpikeTrap();
-        }
-        if (isWithinWalls(x, y)
-                && spawnLoot && rng().nextFloat() < MiscMath.distance(Chunk.CHUNK_SIZE/2, Chunk.CHUNK_SIZE/2, x, y) / 100
-                && chestCount < 3) {
-            chestCount++;
-            return new Chest(lootMultiplier * 2 / 10f, false, rng().nextInt(3), 0.75f);
-        }
         return null;
     }
 

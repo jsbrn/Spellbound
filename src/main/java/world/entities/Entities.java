@@ -5,13 +5,31 @@ import world.entities.components.Component;
 import world.entities.components.LocationComponent;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Entities {
 
+    private static int lastEntityId = 0;
     private static HashMap<Class, HashMap<Integer, Component>> COMPONENT_MAPS = new HashMap<>();
 
-    public static void addEntity(JSONObject object) {
+    public static int createEntity(JSONObject object) {
+        int newId = lastEntityId + 1;
         //deserialize the components from the json and add them to the lists
+        for (Object key: object.keySet()) {
+            Component component = Component.create((String)key, (JSONObject)object.get(key));
+            addComponent(component, lastEntityId);
+        }
+        lastEntityId = newId;
+        return newId;
+    }
+
+    public static JSONObject serializeEntity(int entityID) {
+        JSONObject entity = new JSONObject();
+        for (HashMap<Integer, Component> componentMap: COMPONENT_MAPS.values()) {
+            Component c = componentMap.get(entityID);
+            entity.put(c.getID(), c);
+        }
+        return entity;
     }
 
     public static void removeEntity(int entityID) {
@@ -19,8 +37,9 @@ public class Entities {
     }
 
     public static Component getComponent(Class componentClass, int entityID) {
-        return COMPONENT_MAPS.get(componentClass).get(entityID);
-
+        HashMap listOfComponents = COMPONENT_MAPS.get(componentClass);
+        if (listOfComponents == null) return null;
+        return (Component)listOfComponents.get(entityID);
     }
 
     private static void addComponent(Component component, int entityID) {

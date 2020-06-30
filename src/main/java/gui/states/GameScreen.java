@@ -46,15 +46,6 @@ public class GameScreen extends GameState {
         MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
         World.update();
 
-        if (Camera.isManualMode()) {
-            int dx = 0, dy = 0;
-            if (gc.getInput().isKeyDown(Input.KEY_LEFT)) dx = -1;
-            if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) dx = 1;
-            if (gc.getInput().isKeyDown(Input.KEY_UP)) dy = -1;
-            if (gc.getInput().isKeyDown(Input.KEY_DOWN)) dy = 1;
-            Camera.move(dx, dy);
-        }
-
     }
 
     public void toggleHUD() {

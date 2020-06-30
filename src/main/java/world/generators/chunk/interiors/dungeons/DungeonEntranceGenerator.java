@@ -26,11 +26,6 @@ public class DungeonEntranceGenerator extends DungeonRoomGenerator {
     }
 
     @Override
-    public Entity getEntity(int x, int y) {
-        return null;
-    }
-
-    @Override
     public String getIcon() {
         return "gui/icons/minimap/door.png";
     }

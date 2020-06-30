@@ -1,12 +1,11 @@
 package world.generators.chunk.interiors;
 
-import gui.sound.SoundManager;
 import com.github.mathiewz.slick.Color;
+import gui.sound.SoundManager;
 import world.Chunk;
 import world.Portal;
 import world.Tiles;
 import world.World;
-import world.entities.types.humanoids.npcs.Roommate;
 
 public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
@@ -46,11 +45,6 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
     public Portal getPortal() {
         Portal door = new Portal("door", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true, World.getRegion("world"), "door", SoundManager.DOOR_OPEN);
         return door;
-    }
-
-    @Override
-    public Entity getEntity(int x, int y) {
-        return x == 5 && y == 5 ? new Roommate() : null;
     }
 
     @Override

@@ -4,18 +4,18 @@ import world.events.Event;
 
 public class ConversationStartedEvent extends Event {
 
-    private Entity npc, player;
+    private Integer npc, player;
 
-    public ConversationStartedEvent(Entity npc, Entity player) {
+    public ConversationStartedEvent(Integer npc, Integer player) {
         this.npc = npc;
         this.player = player;
     }
 
-    public Entity getNPC() {
+    public Integer getNPC() {
         return npc;
     }
 
-    public Entity getPlayer() {
+    public Integer getPlayer() {
         return player;
     }
 

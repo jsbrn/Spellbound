@@ -4,12 +4,12 @@ import world.events.Event;
 
 public class EntityMovedEvent extends Event {
 
-    private Entity entity;
+    private Integer Integer;
 
-    public EntityMovedEvent(Entity e) {
-        this.entity = e;
+    public EntityMovedEvent(Integer e) {
+        this.Integer = e;
     }
 
-    public Entity getEntity() { return entity; }
+    public Integer getEntity() { return Integer; }
 
 }
