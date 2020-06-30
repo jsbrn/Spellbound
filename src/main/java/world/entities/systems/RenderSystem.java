@@ -14,9 +14,9 @@ public class RenderSystem {
         HitboxComponent hitbox = (HitboxComponent) Entities.getComponent(HitboxComponent.class, entityID);
         LocationComponent location = (LocationComponent) Entities.getComponent(LocationComponent.class, entityID);
         float[] osc = Camera.getOnscreenCoordinates(
-                location.getLocation().getCoordinates()[0] + 0.5 - hitbox.getRadius(),
-                location.getLocation().getCoordinates()[1] + 0.5 - hitbox.getRadius(), Window.getScale());
-        float renderWidth = 1;
+                location.getLocation().getCoordinates()[0] - hitbox.getRadius(),
+                location.getLocation().getCoordinates()[1] - hitbox.getRadius(), Window.getScale());
+        float renderWidth = 1; //TODO: separate entity dimensions from hitbox
         float renderHeight = 1;
         Assets.getImage("gui/cursor.png").draw(
                 osc[0], osc[1],

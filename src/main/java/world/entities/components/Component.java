@@ -23,6 +23,7 @@ public abstract class Component {
         if (id.equals("hitbox")) return new HitboxComponent().deserialize(defaults);
         if (id.equals("spellbook")) return new SpellbookComponent().deserialize(defaults);
         if (id.equals("health")) return new HealthComponent().deserialize(defaults);
+        if (id.equals("velocity")) return new VelocityComponent().deserialize(defaults);
         return null;
     }
 

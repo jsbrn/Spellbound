@@ -4,6 +4,7 @@
     "y": 0.0,
     "region": "player_home"
   },
+  "velocity": {},
   "hitbox": {
     "radius": 0.5
   },
@@ -12,7 +13,7 @@
     "max": 100.0
   },
   "spellbook": {
-    "discovered_techniques": [],
+    "discovered_techniques": ["movement_caster"],
     "spells": []
   }
 }

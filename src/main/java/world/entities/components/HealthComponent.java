@@ -21,8 +21,8 @@ public class HealthComponent extends Component {
 
     @Override
     public Component deserialize(JSONObject object) {
-        value = (double)object.get("value");
-        max = (double)object.get("max");
+        value = (double)object.getOrDefault("value", 100);
+        max = (double)object.getOrDefault("max", 100);
         return this;
     }
 
