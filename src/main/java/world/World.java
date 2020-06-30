@@ -29,7 +29,7 @@ public class World {
     private static double timeMultiplier;
     private static boolean paused;
 
-    public static void init(boolean spawnPlayer) {
+    public static void init() {
         time = 0;
         timeMultiplier = 1;
         regions = new HashMap<>();

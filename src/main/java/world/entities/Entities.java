@@ -3,12 +3,13 @@ package world.entities;
 import org.json.simple.JSONObject;
 import world.entities.components.Component;
 
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Entities {
 
     private static int lastEntityId = 0;
-    private static HashMap<Class, HashMap<Integer, Component>> COMPONENT_MAPS = new HashMap<>();
+    private static HashMap<Class, LinkedHashMap<Integer, Component>> COMPONENT_MAPS = new HashMap<>();
 
     public static int createEntity(JSONObject object) {
         int newId = lastEntityId + 1;
@@ -23,7 +24,7 @@ public class Entities {
 
     public static JSONObject serializeEntity(int entityID) {
         JSONObject entity = new JSONObject();
-        for (HashMap<Integer, Component> componentMap: COMPONENT_MAPS.values()) {
+        for (LinkedHashMap<Integer, Component> componentMap: COMPONENT_MAPS.values()) {
             Component c = componentMap.get(entityID);
             entity.put(c.getID(), c);
         }
@@ -35,18 +36,34 @@ public class Entities {
     }
 
     public static Component getComponent(Class componentClass, int entityID) {
-        HashMap listOfComponents = COMPONENT_MAPS.get(componentClass);
+        LinkedHashMap listOfComponents = COMPONENT_MAPS.get(componentClass);
         if (listOfComponents == null) return null;
         return (Component)listOfComponents.get(entityID);
     }
 
+    public static Set<Integer> getEntitiesWith(Class... componentClasses) {
+        HashSet allEntityIDs = new HashSet(COMPONENT_MAPS.values().stream()
+                .map(lhm -> new ArrayList(lhm.keySet()))
+                .reduce(new ArrayList(), (total, current) -> {
+                    total.addAll(current);
+                    return total;
+                }));
+        for (Class componentClass: componentClasses) {
+            if (COMPONENT_MAPS.get(componentClass) == null) return new HashSet<>();
+            Set<Integer> entityIDs = COMPONENT_MAPS.get(componentClass).keySet();
+            allEntityIDs.retainAll(entityIDs);
+        }
+        return allEntityIDs;
+    }
+
     private static void addComponent(Component component, int entityID) {
-        COMPONENT_MAPS.computeIfAbsent(component.getClass(), k -> new HashMap<>());
+        COMPONENT_MAPS.computeIfAbsent(component.getClass(), k -> new LinkedHashMap<>());
         COMPONENT_MAPS.get(component.getClass()).put(entityID, component);
     }
 
-    private static void removeComponent(Class componentClass, int entityID) {
+    public static void removeComponent(Class componentClass, int entityID) {
         HashMap<Integer, Component> componentList = COMPONENT_MAPS.get(componentClass);
+        if (componentList == null) return;
         componentList.remove(entityID);
     }
 

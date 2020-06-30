@@ -1,7 +1,5 @@
-package world.entities.pathfinding;
+package misc;
 
-import misc.Location;
-import misc.MiscMath;
 import world.Chunk;
 import world.Region;
 import world.Tiles;

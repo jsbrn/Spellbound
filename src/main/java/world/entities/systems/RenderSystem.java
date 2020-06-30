@@ -8,7 +8,12 @@ import world.entities.Entities;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 
-public class RenderSystem {
+public class RenderSystem implements System {
+
+    @Override
+    public void update() {
+
+    }
 
     public static void drawEntity(int entityID, float scale) {
         HitboxComponent hitbox = (HitboxComponent) Entities.getComponent(HitboxComponent.class, entityID);
