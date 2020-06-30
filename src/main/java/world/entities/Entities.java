@@ -2,10 +2,8 @@ package world.entities;
 
 import org.json.simple.JSONObject;
 import world.entities.components.Component;
-import world.entities.components.LocationComponent;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Entities {
 
@@ -17,7 +15,7 @@ public class Entities {
         //deserialize the components from the json and add them to the lists
         for (Object key: object.keySet()) {
             Component component = Component.create((String)key, (JSONObject)object.get(key));
-            addComponent(component, lastEntityId);
+            addComponent(component, newId);
         }
         lastEntityId = newId;
         return newId;

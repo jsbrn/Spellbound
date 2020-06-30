@@ -2,21 +2,17 @@ package main;
 
 import assets.Assets;
 import assets.Settings;
-import com.github.mathiewz.slick.TrueTypeFont;
-import gui.sound.SoundManager;
-import gui.states.*;
-import misc.*;
-import misc.Window;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import com.github.mathiewz.slick.AppGameContainer;
 import com.github.mathiewz.slick.GameContainer;
 import com.github.mathiewz.slick.SlickException;
 import com.github.mathiewz.slick.state.StateBasedGame;
 import com.github.mathiewz.slick.state.transition.FadeInTransition;
 import com.github.mathiewz.slick.state.transition.FadeOutTransition;
+import gui.sound.SoundManager;
+import gui.states.*;
+import misc.Window;
+import org.lwjgl.opengl.DisplayMode;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -58,7 +54,6 @@ public class GameManager extends StateBasedGame {
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
             Window.WINDOW_INSTANCE.setVSync(true);
             Window.WINDOW_INSTANCE.setShowFPS(false);
-            Display.setResizable(true);
             Window.WINDOW_INSTANCE.setUpdateOnlyWhenVisible(false);
             Window.WINDOW_INSTANCE.setIcons(new String[]{
                     "gui/icons/favicon/icon_16x16.png",

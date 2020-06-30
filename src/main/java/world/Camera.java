@@ -9,10 +9,9 @@ import world.entities.components.LocationComponent;
 public class Camera {
 
     private static int speed = 10, targetEntity;
-    private static Location location;
 
     public static Location getLocation() {
-        return location;
+        return ((LocationComponent)Entities.getComponent(LocationComponent.class, targetEntity)).getLocation();
     }
 
     public static float[] getOnscreenCoordinates(double wx, double wy, double scale) {
@@ -28,12 +27,12 @@ public class Camera {
     }
 
     public static void move(int dx, int dy) {
-        double[] world_coords = location.getCoordinates();
+        double[] world_coords = getLocation().getCoordinates();
         setTarget(world_coords[0] + MiscMath.getConstant(speed * dx, 1), world_coords[1] + MiscMath.getConstant(dy * speed, 1));
     }
 
     public static void setTarget(double wx, double wy) {
-        location.setCoordinates(wx, wy);
+        getLocation().setCoordinates(wx, wy);
     }
 
     public static void setSpeed(int speed) {

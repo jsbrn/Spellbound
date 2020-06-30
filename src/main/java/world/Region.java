@@ -1,6 +1,8 @@
 package world;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Sound;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -8,17 +10,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import com.github.mathiewz.slick.Graphics;
-import com.github.mathiewz.slick.Sound;
 import world.entities.Entities;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
-import world.magic.MagicSource;
 import world.events.EventDispatcher;
 import world.events.EventListener;
 import world.events.event.EntityMovedEvent;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.region.RegionGenerator;
+import world.magic.MagicSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,33 +91,15 @@ public class Region {
 
     public long getCurrentTime() { return time; }
 
-    public void addEntity(Integer e) {
+    public int addEntity(Integer e) {
         double lindex = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation().getGlobalIndex();
         int index = getEntityIndex(lindex, 0, entities.size());
         entities.add(index, e);
+        return index;
     }
 
-    public void removeEntity(Integer e) {
-        entities.remove(e);
-    }
-
-    public Integer getEntity(double wx, double wy) {
-        ArrayList<Integer> found = getEntities((int)(wx - 2), (int)(wy - 2), 4, 4);
-        for (int i = found.size() - 1; i >= 0; i--) {
-            Integer e = found.get(i);
-            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation();
-            if (MiscMath.pointIntersectsRect(
-                    wx,
-                    wy,
-                    location.getCoordinates()[0] - 0.5,
-                    location.getCoordinates()[1] - 0.5,
-                    1,
-                    1
-                )) {
-                return e;
-            }
-        }
-        return null;
+    public boolean removeEntity(Integer e) {
+        return entities.remove(e);
     }
 
     public ArrayList<Integer> getEntities(int wx, int wy, int width, int height) {
@@ -126,9 +108,9 @@ public class Region {
         double maxloc = MiscMath.getIndex(wx + width, wy + height, Chunk.CHUNK_SIZE * getSize());
         int[] indices = getEntityIndices(minloc, maxloc);
         for (int i = indices[0]; i < indices[1]; i++) {
-            Integer e = entities.get(i);
-            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation();
-            if (subsection.contains(e)) continue;
+            Integer entity = entities.get(i);
+            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, entity)).getLocation();
+            if (subsection.contains(entity)) continue;
             boolean intersects = MiscMath.pointIntersectsRect(
                     location.getCoordinates()[0],
                     location.getCoordinates()[1],
@@ -137,7 +119,7 @@ public class Region {
                     width,
                     height
             );
-            if (intersects) subsection.add(e);
+            if (intersects) subsection.add(entity);
         }
         return subsection;
     }

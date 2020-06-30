@@ -1,13 +1,12 @@
 package gui.menus;
 
-import assets.Assets;
-import gui.GUIAnchor;
-import gui.elements.*;
-import gui.states.MainMenuScreen;
-import misc.Window;
 import com.github.mathiewz.slick.Color;
-import com.github.mathiewz.slick.Graphics;
-import org.json.simple.JSONObject;
+import gui.GUIAnchor;
+import gui.elements.Button;
+import gui.elements.Modal;
+import gui.elements.TextBox;
+import gui.elements.TextLabel;
+import gui.states.MainMenuScreen;
 import world.Chunk;
 import world.World;
 import world.magic.Spell;
@@ -50,8 +49,9 @@ public class PlayerCustomizationMenu extends Modal {
                 nameField.releaseFocus();
                 //creation.setName(nameField.getText());
                 getGUI().popModal();
-                World.init();
+                World.init(false);
                 World.generate(Integer.parseInt(seed.isEmpty() ? "0" : seed));
+                World.spawnPlayer(Chunk.CHUNK_SIZE / 2, Chunk.CHUNK_SIZE / 2, World.getRegion("player_home"));
                 World.save();
                 ((MainMenuScreen)getGUI().getParent()).startGame();
             }

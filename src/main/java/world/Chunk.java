@@ -1,18 +1,15 @@
 package world;
 
 import assets.Assets;
-import misc.Location;
-import misc.MiscMath;
-import misc.Window;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
+import misc.Location;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
 import world.entities.systems.RenderSystem;
 import world.generators.chunk.ChunkGenerator;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class Chunk {
 
@@ -145,7 +142,7 @@ public class Chunk {
                 Assets.TILE_SPRITESHEET.endUse();
 
                 ArrayList<Integer> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
-                //for (Integer entityID: entities) RenderSystem.draw(entityID, null);
+                for (Integer entityID: entities) RenderSystem.drawEntity(entityID, scale);
 
             }
         }
@@ -154,20 +151,20 @@ public class Chunk {
     }
 
     public void drawDebug(float osx, float osy, float scale, Graphics g) {
-        /*for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
+        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
                 g.setLineWidth(j == 0 && i == 0 ? 3 : 1);
                 g.setColor(Color.white);
                 g.drawLine(osx + (i * TILE_SIZE * scale), osy, osx + (i * TILE_SIZE * scale), osy + (CHUNK_SIZE * scale * TILE_SIZE));
                 g.drawLine(osx, osy + (j * TILE_SIZE * scale), osx + (CHUNK_SIZE * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale));
-                g.setColor(new Color(0, 0, 0, 1-(float)World.getLocalPlayer().canSee(
-                        (coordinates[0] * Chunk.CHUNK_SIZE) + i,
-                        (coordinates[1] * Chunk.CHUNK_SIZE) + j)));
-                g.fillRect(osx + (i * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale);
+                //g.setColor(new Color(0, 0, 0, 1-(float)World.getLocalPlayer().canSee(
+                //        (coordinates[0] * Chunk.CHUNK_SIZE) + i,
+                //        (coordinates[1] * Chunk.CHUNK_SIZE) + j)));
+                //g.fillRect(osx + (i * TILE_SIZE * scale), osy + (j * TILE_SIZE * scale), TILE_SIZE * scale, TILE_SIZE * scale);
             }
         }
         g.setColor(Color.white);
-        g.setLineWidth(1);*/
+        g.setLineWidth(1);
     }
 
     public String debug() {

@@ -1,19 +1,18 @@
 package gui.states;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Color;
 import gui.GUI;
 import gui.GUIAnchor;
-import gui.elements.*;
 import gui.elements.Button;
+import gui.elements.IconLabel;
+import gui.elements.TextLabel;
 import gui.menus.PlayerCustomizationMenu;
 import gui.menus.PopupMenu;
 import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
-import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
-import com.github.mathiewz.slick.Color;
+import world.Camera;
 import world.World;
 
 import java.awt.*;
@@ -44,6 +43,7 @@ public class MainMenuScreen extends GameState {
                         "Follow the itch.io devlog to stay up-to-date.",
                 "icons/tome.png",
                 Color.white));
+        Camera.setTargetEntity(World.getLocalPlayer());
         GameManager.switchTo(GameState.GAME_SCREEN, true);
         SoundManager.registerEvents();
     }
@@ -55,7 +55,7 @@ public class MainMenuScreen extends GameState {
         gui.addElement(new TextLabel("Tip of the Day", 6, Color.white, true, false), 0, 32, GUIAnchor.CENTER);
         gui.addElement(new TextLabel(tips[new Random().nextInt(tips.length)], 4, 32*5, 8, Color.white, true, false), 0, 48, GUIAnchor.CENTER);
 
-        Button deleteSave = new Button("Open root directory", 52, 8, null, true) {
+        Button openRoot = new Button("Open root directory", 52, 8, null, true) {
             @Override
             public void onClick(int button) {
                 Window.setFullscreen(false);
@@ -72,23 +72,22 @@ public class MainMenuScreen extends GameState {
             @Override
             public void onClick(int button) {
                 File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
-                if (!f.exists()) {
-                    World.init();
+                //if (!f.exists()) {
                     gui.stackModal(new PlayerCustomizationMenu());
-                } else {
-                    World.init();
-                    //make a backup before loading a save
-                    try {
-                        new File(Assets.ROOT_DIRECTORY+"/backups/").mkdirs();
-                        new ZipFile(Assets.ROOT_DIRECTORY+"/backups/backup_"+System.currentTimeMillis()+".zip")
-                                .addFolder(new File(Assets.ROOT_DIRECTORY+"/world/"), new ZipParameters());
-                    } catch (ZipException e) {
-                        e.printStackTrace();
-                    }
-                    World.load();
-                    startGame();
-                }
-                deleteSave.setEnabled(true);
+//                //} else {
+//                    World.init();
+//                    //make a backup before loading a save
+//                    try {
+//                        new File(Assets.ROOT_DIRECTORY+"/backups/").mkdirs();
+//                        new ZipFile(Assets.ROOT_DIRECTORY+"/backups/backup_"+System.currentTimeMillis()+".zip")
+//                                .addFolder(new File(Assets.ROOT_DIRECTORY+"/world/"), new ZipParameters());
+//                    } catch (ZipException e) {
+//                        e.printStackTrace();
+//                    }
+//                    World.load();
+//                    startGame();
+//                //}
+                openRoot.setEnabled(true);
             }
         };
 
@@ -115,7 +114,8 @@ public class MainMenuScreen extends GameState {
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Alpha Candidate", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);
-        gui.addElement(deleteSave, -2, -2, GUIAnchor.BOTTOM_RIGHT);
+        gui.addElement(new TextLabel("AC0000", 3, Color.white, true, false), -2, 2, GUIAnchor.TOP_RIGHT);
+        gui.addElement(openRoot, -2, -2, GUIAnchor.BOTTOM_RIGHT);
 
         gui.addElement(new Button("Visit the website", 48, 8, null, true) {
             @Override

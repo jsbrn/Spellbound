@@ -2,16 +2,15 @@ package misc;
 
 import assets.Assets;
 import assets.Settings;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import com.github.mathiewz.slick.AppGameContainer;
 import com.github.mathiewz.slick.Image;
 import com.github.mathiewz.slick.SlickException;
 import com.github.mathiewz.slick.imageout.ImageOut;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import world.Chunk;
 
-import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -22,11 +21,9 @@ import java.util.stream.Collectors;
 public class Window {
 
     //the name of the window
-    public static final String WINDOW_TITLE = "Spellbound (A0001)";
+    public static final String WINDOW_TITLE = "Spellbound - Alpha Candidate";
     //create a window object
     public static AppGameContainer WINDOW_INSTANCE;
-
-    private static int last_width = 0, last_height = 0;
 
     public static void toggleFullScreen() {
         try {

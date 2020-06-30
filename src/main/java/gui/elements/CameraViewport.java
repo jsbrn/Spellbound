@@ -1,15 +1,15 @@
 package gui.elements;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Input;
 import gui.GUIElement;
 import gui.menus.CheatCodeMenu;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import org.lwjgl.input.Mouse;
-import com.github.mathiewz.slick.Color;
-import com.github.mathiewz.slick.Graphics;
-import com.github.mathiewz.slick.Input;
 import world.Camera;
 import world.Chunk;
 import world.World;
@@ -100,7 +100,7 @@ public class CameraViewport extends GUIElement {
 
         g.setColor(Color.black);
         g.drawRect(osc[0], osc[1], 1 * Window.getScale() * Chunk.TILE_SIZE, 1 * Window.getScale() * Chunk.TILE_SIZE);
-        for (int i = 0; i < entities.size(); i++) g.drawString(entities.get(i).getClass().getSimpleName(), osc[0], osc[1] + (i * 20));
+        for (int i = 0; i < entities.size(); i++) g.drawString("Entity #"+entities.get(i), osc[0], osc[1] + (i * 20));
 
         Location localPlayerLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, World.getLocalPlayer())).getLocation();
 

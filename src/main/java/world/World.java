@@ -1,12 +1,12 @@
 package world;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Graphics;
 import misc.Location;
 import misc.MiscMath;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import com.github.mathiewz.slick.Graphics;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
 import world.generators.region.DefaultWorldGenerator;
@@ -29,7 +29,7 @@ public class World {
     private static double timeMultiplier;
     private static boolean paused;
 
-    public static void init() {
+    public static void init(boolean spawnPlayer) {
         time = 0;
         timeMultiplier = 1;
         regions = new HashMap<>();
@@ -40,6 +40,13 @@ public class World {
         World.seed = seed;
         addRegion(new Region("world", 24, new DefaultWorldGenerator(seed)));
         getRegion("world").plan();
+    }
+
+    public static void spawnPlayer(double wx, double wy, Region region) {
+        localPlayerID = Entities.createEntity(Assets.json("definitions/entities/player.json", true));
+        ((LocationComponent)Entities.getComponent(LocationComponent.class, localPlayerID))
+                .setLocation(new Location(region, wx, wy));
+        region.addEntity(localPlayerID);
     }
 
     public static int getSeed() {
