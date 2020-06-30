@@ -1,11 +1,9 @@
 package gui.sound;
 
 import assets.Assets;
-import misc.Location;
-import misc.MiscMath;
-import org.lwjgl.openal.AL;
 import com.github.mathiewz.slick.Sound;
-import world.Camera;
+import misc.Location;
+import org.lwjgl.openal.AL;
 import world.World;
 import world.events.Event;
 import world.events.EventDispatcher;

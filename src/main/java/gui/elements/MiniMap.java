@@ -1,17 +1,13 @@
 package gui.elements;
 
 import assets.Assets;
-import gui.GUIElement;
-import misc.MiscMath;
-import misc.Window;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Image;
 import com.github.mathiewz.slick.SlickException;
-import world.Chunk;
+import gui.GUIElement;
 import world.Region;
 import world.World;
-import world.generators.chunk.ChunkGenerator;
 
 public class MiniMap extends GUIElement {
 

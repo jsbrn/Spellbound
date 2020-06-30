@@ -2,16 +2,16 @@ package gui.states;
 
 import assets.Assets;
 import assets.definitions.Definitions;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.GameContainer;
+import com.github.mathiewz.slick.SlickException;
+import com.github.mathiewz.slick.state.StateBasedGame;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.TextLabel;
 import gui.sound.SoundManager;
 import main.GameManager;
 import net.lingala.zip4j.ZipFile;
-import com.github.mathiewz.slick.Color;
-import com.github.mathiewz.slick.GameContainer;
-import com.github.mathiewz.slick.SlickException;
-import com.github.mathiewz.slick.state.StateBasedGame;
 
 import java.io.BufferedInputStream;
 import java.io.File;

@@ -1,6 +1,7 @@
 package gui.states;
 
 import assets.Settings;
+import com.github.mathiewz.slick.Color;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.Button;
@@ -10,7 +11,6 @@ import gui.elements.TextLabel;
 import main.GameManager;
 import misc.Window;
 import org.lwjgl.opengl.DisplayMode;
-import com.github.mathiewz.slick.Color;
 
 import java.util.List;
 import java.util.stream.Collectors;

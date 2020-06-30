@@ -1,7 +1,7 @@
 package world.sounds;
 
-import gui.sound.SoundManager;
 import com.github.mathiewz.slick.Sound;
+import gui.sound.SoundManager;
 import misc.Location;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;

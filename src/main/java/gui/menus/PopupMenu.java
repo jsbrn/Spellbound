@@ -1,12 +1,12 @@
 package gui.menus;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Color;
 import gui.GUIAnchor;
 import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
-import com.github.mathiewz.slick.Color;
 import world.World;
 
 public class PopupMenu extends Modal {

@@ -1,15 +1,14 @@
 package world.magic.techniques.physical;
 
-import gui.sound.SoundManager;
-import misc.MiscMath;
 import com.github.mathiewz.slick.Sound;
-import world.magic.MagicSource;
-import world.magic.techniques.Technique;
+import gui.sound.SoundManager;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.MagicImpactEvent;
+import world.magic.MagicSource;
+import world.magic.techniques.Technique;
 
 public class WeightTechnique extends Technique {
 

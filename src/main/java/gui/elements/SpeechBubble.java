@@ -2,11 +2,13 @@ package gui.elements;
 
 import assets.Assets;
 import assets.definitions.DialogueDefinition;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Image;
+import com.github.mathiewz.slick.Input;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.sound.SoundManager;
-import misc.Window;
-import com.github.mathiewz.slick.*;
 import world.Chunk;
 import world.World;
 import world.events.EventDispatcher;

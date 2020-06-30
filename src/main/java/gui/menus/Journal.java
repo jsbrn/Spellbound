@@ -1,14 +1,14 @@
 package gui.menus;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Input;
 import gui.GUIAnchor;
 import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
 import gui.sound.SoundManager;
-import com.github.mathiewz.slick.Color;
-import com.github.mathiewz.slick.Input;
 import world.World;
 import world.entities.Entities;
 import world.entities.components.SpellbookComponent;

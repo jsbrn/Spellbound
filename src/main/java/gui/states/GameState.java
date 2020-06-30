@@ -1,14 +1,14 @@
 package gui.states;
 
 import assets.Assets;
+import com.github.mathiewz.slick.*;
+import com.github.mathiewz.slick.state.BasicGameState;
+import com.github.mathiewz.slick.state.StateBasedGame;
 import gui.GUI;
 import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
 import org.lwjgl.opengl.Display;
-import com.github.mathiewz.slick.*;
-import com.github.mathiewz.slick.state.BasicGameState;
-import com.github.mathiewz.slick.state.StateBasedGame;
 
 public abstract class GameState extends BasicGameState {
 

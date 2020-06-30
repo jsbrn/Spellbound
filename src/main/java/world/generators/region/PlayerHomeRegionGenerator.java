@@ -1,7 +1,7 @@
 package world.generators.region;
 
-import gui.sound.SoundManager;
 import com.github.mathiewz.slick.Sound;
+import gui.sound.SoundManager;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.interiors.PlayerHomeGenerator;
 

@@ -1,15 +1,15 @@
 package world.magic;
 
 import assets.Assets;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Image;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import world.World;
-import world.magic.techniques.Technique;
-import world.magic.techniques.Techniques;
 import world.events.EventDispatcher;
 import world.events.event.SpellCastEvent;
+import world.magic.techniques.Technique;
+import world.magic.techniques.Techniques;
 
 import java.util.ArrayList;
 import java.util.HashMap;

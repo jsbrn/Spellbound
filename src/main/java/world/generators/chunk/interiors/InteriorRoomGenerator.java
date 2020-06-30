@@ -4,8 +4,6 @@ import world.Chunk;
 import world.Tiles;
 import world.generators.chunk.ChunkGenerator;
 
-import java.util.Random;
-
 public abstract class InteriorRoomGenerator extends ChunkGenerator {
 
     private int min = 2, max = Chunk.CHUNK_SIZE - 3;

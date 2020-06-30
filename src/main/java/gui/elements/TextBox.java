@@ -1,11 +1,11 @@
 package gui.elements;
 
-import gui.GUIAnchor;
-import gui.GUIElement;
-import misc.Window;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Input;
+import gui.GUIAnchor;
+import gui.GUIElement;
+import misc.Window;
 
 public class TextBox extends GUIElement {
 

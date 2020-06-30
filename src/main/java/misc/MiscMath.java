@@ -1,8 +1,6 @@
 package misc;
 
-import org.lwjgl.opengl.Display;
 import world.Chunk;
-import world.World;
 
 import java.util.Random;
 

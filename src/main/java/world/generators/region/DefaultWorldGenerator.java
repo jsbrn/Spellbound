@@ -1,12 +1,10 @@
 package world.generators.region;
 
+import com.github.mathiewz.slick.Sound;
 import gui.sound.SoundManager;
 import misc.MiscMath;
-import com.github.mathiewz.slick.Sound;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.overworld.*;
-
-import java.util.Random;
 
 public class DefaultWorldGenerator extends RegionGenerator {
 

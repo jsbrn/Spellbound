@@ -1,12 +1,12 @@
 package assets;
 
 import com.github.mathiewz.slick.Image;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import com.github.mathiewz.slick.SlickException;
 import com.github.mathiewz.slick.Sound;
 import com.github.mathiewz.slick.TrueTypeFont;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.awt.*;
 import java.io.*;

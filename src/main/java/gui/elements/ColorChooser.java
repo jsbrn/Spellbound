@@ -1,10 +1,9 @@
 package gui.elements;
 
-import gui.GUIAnchor;
-import gui.GUIElement;
-import misc.MiscMath;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
+import gui.GUIElement;
+import misc.MiscMath;
 
 public class ColorChooser extends GUIElement {
 

@@ -1,15 +1,13 @@
 package gui.elements;
 
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Image;
+import com.github.mathiewz.slick.SlickException;
 import gui.GUIAnchor;
 import gui.GUIElement;
-import gui.states.GameState;
-import main.GameManager;
-import com.github.mathiewz.slick.*;
-import world.World;
 import world.entities.Entities;
 import world.entities.components.HealthComponent;
-import world.events.EventDispatcher;
-import world.events.event.HumanoidRespawnEvent;
 
 public class Statusbar extends GUIElement {
 

@@ -1,15 +1,14 @@
 package world.particles;
 
 import assets.Assets;
-import assets.definitions.Definitions;
-import world.Tiles;
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import com.github.mathiewz.slick.Color;
-import com.github.mathiewz.slick.Graphics;
 import world.Camera;
 import world.Chunk;
+import world.Tiles;
 import world.World;
 
 import java.util.ArrayList;

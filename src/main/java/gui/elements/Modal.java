@@ -1,8 +1,10 @@
 package gui.elements;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Image;
+import com.github.mathiewz.slick.Input;
 import gui.GUIElement;
-import com.github.mathiewz.slick.*;
 
 public class Modal extends GUIElement {
 

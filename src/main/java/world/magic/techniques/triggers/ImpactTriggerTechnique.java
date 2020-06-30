@@ -1,12 +1,12 @@
 package world.magic.techniques.triggers;
 
-import world.magic.MagicSource;
-import world.magic.techniques.Technique;
 import world.events.Event;
 import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 import world.events.event.MagicImpactEvent;
+import world.magic.MagicSource;
+import world.magic.techniques.Technique;
 
 public class ImpactTriggerTechnique extends Technique {
 

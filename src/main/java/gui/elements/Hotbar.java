@@ -1,8 +1,11 @@
 package gui.elements;
 
+import com.github.mathiewz.slick.Graphics;
+import com.github.mathiewz.slick.Image;
+import com.github.mathiewz.slick.Input;
+import com.github.mathiewz.slick.SlickException;
 import gui.GUIElement;
 import misc.MiscMath;
-import com.github.mathiewz.slick.*;
 import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
 import world.particles.ParticleSource;

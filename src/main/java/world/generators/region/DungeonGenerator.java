@@ -1,8 +1,8 @@
 package world.generators.region;
 
+import com.github.mathiewz.slick.Sound;
 import gui.sound.SoundManager;
 import misc.MiscMath;
-import com.github.mathiewz.slick.Sound;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.chunk.EmptyChunkGenerator;
 import world.generators.chunk.interiors.dungeons.*;

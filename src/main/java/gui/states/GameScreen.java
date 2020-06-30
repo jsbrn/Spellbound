@@ -1,20 +1,17 @@
 package gui.states;
 
-import gui.GUI;
-import gui.GUIAnchor;
-import gui.elements.*;
-import gui.menus.Journal;
-import gui.menus.PauseMenu;
-import gui.menus.PopupMenu;
-import gui.menus.SpellcraftingMenu;
-import misc.MiscMath;
-
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.GameContainer;
 import com.github.mathiewz.slick.Input;
 import com.github.mathiewz.slick.SlickException;
 import com.github.mathiewz.slick.state.StateBasedGame;
-import world.Camera;
+import gui.GUI;
+import gui.GUIAnchor;
+import gui.elements.*;
+import gui.menus.Journal;
+import gui.menus.PauseMenu;
+import gui.menus.SpellcraftingMenu;
+import misc.MiscMath;
 import world.World;
 import world.events.Event;
 import world.events.EventDispatcher;

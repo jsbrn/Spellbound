@@ -1,12 +1,11 @@
 package gui.elements;
 
-import gui.GUIAnchor;
-import gui.GUIElement;
-import gui.sound.SoundManager;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Image;
-import com.github.mathiewz.slick.Sound;
+import gui.GUIAnchor;
+import gui.GUIElement;
+import gui.sound.SoundManager;
 
 public abstract class Button extends GUIElement {
 

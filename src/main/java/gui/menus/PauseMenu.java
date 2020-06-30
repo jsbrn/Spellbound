@@ -1,6 +1,7 @@
 package gui.menus;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Color;
 import gui.GUIAnchor;
 import gui.elements.Button;
 import gui.elements.Modal;
@@ -8,7 +9,6 @@ import gui.elements.TextLabel;
 import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
-import com.github.mathiewz.slick.Color;
 import world.World;
 import world.events.EventDispatcher;
 

@@ -1,11 +1,11 @@
 package gui.elements;
 
 import assets.Assets;
-import gui.GUIElement;
-import misc.Window;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.TrueTypeFont;
+import gui.GUIElement;
+import misc.Window;
 
 import java.util.ArrayList;
 

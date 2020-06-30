@@ -1,10 +1,10 @@
 package gui.menus;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Color;
 import gui.GUIAnchor;
 import gui.elements.*;
 import misc.MiscMath;
-import com.github.mathiewz.slick.Color;
 import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
 import world.magic.Spell;

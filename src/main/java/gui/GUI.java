@@ -1,23 +1,16 @@
 package gui;
 
+import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Graphics;
 import gui.elements.Modal;
 import gui.elements.PositionalTextLabel;
-import gui.elements.SpeechBubble;
 import gui.elements.TextLabel;
 import gui.states.GameState;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import com.github.mathiewz.slick.Color;
-import com.github.mathiewz.slick.Graphics;
 import world.World;
-import world.events.Event;
-import world.events.EventDispatcher;
-import world.events.EventHandler;
-import world.events.EventListener;
-import world.events.event.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Stack;
 

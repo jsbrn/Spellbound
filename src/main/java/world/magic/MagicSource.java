@@ -1,16 +1,16 @@
 package world.magic;
 
+import com.github.mathiewz.slick.Color;
 import misc.Location;
 import misc.MiscMath;
-import com.github.mathiewz.slick.Color;
 import world.Tiles;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
-import world.magic.techniques.Technique;
-import world.magic.techniques.Techniques;
 import world.events.EventDispatcher;
 import world.events.event.MagicDepletedEvent;
 import world.events.event.MagicImpactEvent;
+import world.magic.techniques.Technique;
+import world.magic.techniques.Techniques;
 import world.particles.ParticleSource;
 
 import java.util.ArrayList;

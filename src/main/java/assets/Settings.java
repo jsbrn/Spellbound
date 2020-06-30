@@ -1,6 +1,5 @@
 package assets;
 
-import assets.Assets;
 import org.json.simple.JSONObject;
 
 import java.nio.file.Files;
