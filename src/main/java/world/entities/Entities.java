@@ -4,7 +4,6 @@ import org.json.simple.JSONObject;
 import world.entities.components.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Entities {
 
@@ -65,6 +64,10 @@ public class Entities {
         HashMap<Integer, Component> componentList = COMPONENT_MAPS.get(componentClass);
         if (componentList == null) return;
         componentList.remove(entityID);
+    }
+
+    public static void removeAll() {
+        COMPONENT_MAPS.clear();
     }
 
 }

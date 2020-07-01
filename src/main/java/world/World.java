@@ -9,6 +9,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
+import world.entities.systems.MovementSystem;
 import world.generators.region.DefaultWorldGenerator;
 
 import java.io.File;
@@ -69,6 +70,7 @@ public class World {
         if (paused) return;
         time += MiscMath.getConstant(1000, 1 / timeMultiplier);
         getRegion().update();
+        MovementSystem.update();
     }
 
     public static boolean isPaused() { return paused; }

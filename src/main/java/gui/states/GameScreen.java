@@ -126,7 +126,7 @@ public class GameScreen extends GameState {
         spellbook.hide();
         spellcasting.hide();
 
-        gui.addElement(new TextLabel("Spellbound Demo Build", 4, Color.white, true, false), 0, 2, GUIAnchor.TOP_MIDDLE);
+        gui.addElement(new TextLabel("Spellbound Alpha Build", 4, Color.white, true, false), 0, 2, GUIAnchor.TOP_MIDDLE);
 
         SpeechBubble speechBubble = new SpeechBubble();
         gui.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);

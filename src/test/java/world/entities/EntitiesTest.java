@@ -7,45 +7,55 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import world.World;
 import world.entities.components.Component;
+import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 import world.entities.components.VelocityComponent;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EntitiesTest {
 
     @BeforeAll
-    static void createWorld() {
+    public void setup() {
+        System.out.println("Creating world...");
         World.init();
         World.generate(0);
+        Entities.removeAll();
+    }
+
+    @AfterAll
+    public void tearDown() {
+        System.out.println("Removing all entities...");
+        Entities.removeAll();
     }
 
     @Test
     @Order(1)
-    void createsEntity() {
+    public void createsEntity() {
         Integer newID = Entities.createEntity(Assets.json("definitions/entities/player.json", true));
         assertEquals(1, newID);
     }
 
     @Test
     @Order(2)
-    void entityExists() {
+    public void entityExists() {
         Component c = Entities.getComponent(LocationComponent.class, 1);
         assertNotNull(c);
     }
 
     @Test
     @Order(3)
-    void getAllEntitiesWorks() {
-        Integer newID = Entities.createEntity(Assets.json("definitions/entities/player.json", true));
-        assertEquals(2, newID);
+    public void getAllEntitiesWorks() {
+        Entities.createEntity(Assets.json("definitions/entities/player.json", true));
         assertEquals(2, Entities.getEntitiesWith(LocationComponent.class).size());
         assertEquals(2, Entities.getEntitiesWith(VelocityComponent.class).size());
         assertEquals(2, Entities.getEntitiesWith(LocationComponent.class, VelocityComponent.class).size());
+        assertEquals(2, Entities.getEntitiesWith(LocationComponent.class, VelocityComponent.class, HitboxComponent.class).size());
     }
 
     @Test
     @Order(4)
-    void nonSymmetricalGetAllEntitiesWorks() {
+    public void nonSymmetricalGetAllEntitiesWorks() {
         Entities.removeComponent(VelocityComponent.class, 2);
         assertEquals(2, Entities.getEntitiesWith(LocationComponent.class).size());
         assertEquals(1, Entities.getEntitiesWith(VelocityComponent.class).size());
@@ -54,10 +64,11 @@ class EntitiesTest {
 
     @Test
     @Order(5)
-    void entityRemoves() {
+    public void entityRemoves() {
         Entities.removeEntity(1);
         assertNull(Entities.getComponent(LocationComponent.class, 1));
         assertNull(Entities.getComponent(VelocityComponent.class, 1));
+        assertNotNull(Entities.getComponent(LocationComponent.class, 2));
     }
 
 }

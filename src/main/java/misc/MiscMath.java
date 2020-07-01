@@ -18,9 +18,7 @@ public class MiscMath {
      * @return The amount to add per frame.
      */
     public static double getConstant(double amount_to_add, double per_x_seconds) {
-        if (per_x_seconds == 0) {
-            return 0;
-        }
+        if (per_x_seconds == 0) return 0;
         double time_in_mills = per_x_seconds * 1000;
         double add_per_frame = amount_to_add / time_in_mills;
         add_per_frame *= DELTA_TIME;

@@ -1,5 +1,7 @@
-package misc;
+package misc.pathfinding;
 
+import misc.Location;
+import misc.MiscMath;
 import world.Chunk;
 import world.Region;
 import world.Tiles;
@@ -144,7 +146,7 @@ class Node {
     public void setParent(Node parent) { this.parent = parent; }
 
     public Region getRegion() { return region; }
-    public int getLocationIndex() { return (int)MiscMath.getIndex(coordinates[0], coordinates[1],Chunk.CHUNK_SIZE * region.getSize()); }
+    public int getLocationIndex() { return (int) MiscMath.getIndex(coordinates[0], coordinates[1],Chunk.CHUNK_SIZE * region.getSize()); }
 
     public String toString() { return "Node(X="+getX()+", Y = "+getY()+", G = "+G+", H = "+H+",F = "+getFScore()+")"; }
 
