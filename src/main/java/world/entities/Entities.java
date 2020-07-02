@@ -1,9 +1,11 @@
 package world.entities;
 
 import org.json.simple.JSONObject;
+import world.Region;
 import world.entities.components.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Entities {
 
@@ -41,18 +43,19 @@ public class Entities {
     }
 
     public static Set<Integer> getEntitiesWith(Class... componentClasses) {
-        HashSet allEntityIDs = new HashSet(COMPONENT_MAPS.values().stream()
-                .map(lhm -> new ArrayList(lhm.keySet()))
-                .reduce(new ArrayList(), (total, current) -> {
+        return getEntitiesWith(COMPONENT_MAPS.values().stream()
+                .map(lhm -> new ArrayList<Integer>(lhm.keySet()))
+                .reduce(new ArrayList<Integer>(), (total, current) -> {
                     total.addAll(current);
                     return total;
-                }));
-        for (Class componentClass: componentClasses) {
-            if (COMPONENT_MAPS.get(componentClass) == null) return new HashSet<>();
-            Set<Integer> entityIDs = COMPONENT_MAPS.get(componentClass).keySet();
-            allEntityIDs.retainAll(entityIDs);
-        }
-        return allEntityIDs;
+                }), componentClasses);
+    }
+
+    public static Set<Integer> getEntitiesWith(ArrayList<Integer> from, Class... componentClasses) {
+        HashSet<Integer> entities = new HashSet<Integer>(from);
+        return entities.stream()
+                .filter(e -> COMPONENT_MAPS.values().stream().allMatch(lhm -> lhm.containsKey(e)))
+                .collect(Collectors.toSet());
     }
 
     private static void addComponent(Component component, int entityID) {

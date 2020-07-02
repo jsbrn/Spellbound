@@ -71,4 +71,12 @@ class EntitiesTest {
         assertNotNull(Entities.getComponent(LocationComponent.class, 2));
     }
 
+    @Test
+    @Order(6)
+    public void isRegionSpecific() {
+        World.getRegion("player_home").addEntity(2);
+        assertEquals(1, Entities.getEntitiesWith(World.getRegion("player_home").getEntities(), LocationComponent.class).size());
+        assertEquals(0, Entities.getEntitiesWith(World.getRegion("world").getEntities(), LocationComponent.class).size());
+    }
+
 }

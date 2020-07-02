@@ -1,6 +1,7 @@
 package world.entities.systems;
 
 import misc.MiscMath;
+import world.World;
 import world.entities.Entities;
 import world.entities.components.Component;
 import world.entities.components.HitboxComponent;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class MovementSystem {
 
     public static void update() {
-        Set<Integer> entities = Entities.getEntitiesWith(LocationComponent.class, VelocityComponent.class, HitboxComponent.class);
+        Set<Integer> entities = Entities.getEntitiesWith(World.getRegion("player_home").getEntities(), LocationComponent.class, VelocityComponent.class, HitboxComponent.class);
         for (Integer entity: entities) {
             VelocityComponent vc = (VelocityComponent)Entities.getComponent(VelocityComponent.class, entity);
             LocationComponent lc = (LocationComponent)Entities.getComponent(LocationComponent.class, entity);
