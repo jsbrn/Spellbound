@@ -1,30 +1,45 @@
 package world.entities.components;
 
 import org.json.simple.JSONObject;
+import world.events.EventDispatcher;
 import world.events.EventHandler;
 import world.events.EventListener;
 
 public abstract class Component {
 
+    private Integer parent;
     private EventListener eventListener;
 
-    protected abstract void registerEvents();
+    protected abstract void registerEventHandlers();
 
-    protected EventListener on(String eventClass, EventHandler handler) {
-        return eventListener.on(eventClass, handler);
+    public EventListener getEventListener() {
+        return eventListener;
+    }
+
+    protected final void on(Class eventClass, EventHandler handler) {
+        eventListener.on(eventClass, handler);
     }
 
     public abstract JSONObject serialize();
     public abstract Component deserialize(JSONObject object);
     public abstract String getID();
 
-    public static final Component create(String id, JSONObject defaults) {
-        if (id.equals("location")) return new LocationComponent().deserialize(defaults);
-        if (id.equals("hitbox")) return new HitboxComponent().deserialize(defaults);
-        if (id.equals("spellbook")) return new SpellbookComponent().deserialize(defaults);
-        if (id.equals("health")) return new HealthComponent().deserialize(defaults);
-        if (id.equals("velocity")) return new VelocityComponent().deserialize(defaults);
-        return null;
+    public Integer getParent() { return parent; }
+    public void setParent(Integer entity) { parent = entity; }
+
+    public static Component create(String id, JSONObject defaults) {
+        Component c = null;
+        if (id.equals("location")) c = new LocationComponent().deserialize(defaults);
+        if (id.equals("hitbox")) c = new HitboxComponent().deserialize(defaults);
+        if (id.equals("spellbook")) c = new SpellbookComponent().deserialize(defaults);
+        if (id.equals("health")) c = new HealthComponent().deserialize(defaults);
+        if (id.equals("velocity")) c = new VelocityComponent().deserialize(defaults);
+
+        if (c != null) {
+            c.eventListener = new EventListener();
+            c.registerEventHandlers();
+        }
+        return c;
     }
 
 }

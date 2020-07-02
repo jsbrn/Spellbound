@@ -13,7 +13,7 @@ public class DepletionTriggerTechnique extends Technique {
     @Override
     public void applyTo(MagicSource cast) {
         EventDispatcher.register(new EventListener()
-            .on(MagicDepletedEvent.class.toString(), new EventHandler() {
+            .on(MagicDepletedEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
                     MagicDepletedEvent mde = (MagicDepletedEvent)e;

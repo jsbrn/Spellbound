@@ -78,7 +78,7 @@ public class SoundManager {
 
     public static void registerEvents() {
         listener = new EventListener()
-                .on(HumanoidDeathEvent.class.toString(), new EventHandler() {
+                .on(HumanoidDeathEvent.class, new EventHandler() {
                     @Override
                     public void handle(Event e) {
                         HumanoidDeathEvent hde = (HumanoidDeathEvent)e;
@@ -88,7 +88,7 @@ public class SoundManager {
                         }
                     }
                 })
-                .on(HumanoidDamageEvent.class.toString(), new EventHandler() {
+                .on(HumanoidDamageEvent.class, new EventHandler() {
                     @Override
                     public void handle(Event e) {
                         HumanoidDamageEvent hde = (HumanoidDamageEvent)e;
@@ -98,7 +98,7 @@ public class SoundManager {
                         }
                     }
                 })
-                .on(EntityChangeRegionEvent.class.toString(), new EventHandler() {
+                .on(EntityChangeRegionEvent.class, new EventHandler() {
                     @Override
                     public void handle(Event e) {
                         EntityChangeRegionEvent ecre = (EntityChangeRegionEvent)e;
@@ -107,7 +107,7 @@ public class SoundManager {
                         }
                     }
                 })
-                .on(CastFailedEvent.class.toString(), new EventHandler() {
+                .on(CastFailedEvent.class, new EventHandler() {
                     @Override
                     public void handle(Event e) {
                         CastFailedEvent ecre = (CastFailedEvent)e;

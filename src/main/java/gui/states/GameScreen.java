@@ -101,7 +101,7 @@ public class GameScreen extends GameState {
         };
 
         EventDispatcher.register(new EventListener()
-            .on(HumanoidDeathEvent.class.toString(), new EventHandler() {
+            .on(HumanoidDeathEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
                     HumanoidDeathEvent hde = (HumanoidDeathEvent)e;
@@ -109,7 +109,7 @@ public class GameScreen extends GameState {
                         deathMessage.show();
                 }
             })
-            .on(HumanoidRespawnEvent.class.toString(), new EventHandler() {
+            .on(HumanoidRespawnEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
                     HumanoidRespawnEvent hde = (HumanoidRespawnEvent)e;
@@ -132,7 +132,7 @@ public class GameScreen extends GameState {
         gui.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
         speechBubble.hide();
         EventDispatcher.register(new EventListener()
-                .on(NPCSpeakEvent.class.toString(), new EventHandler() {
+                .on(NPCSpeakEvent.class, new EventHandler() {
                     @Override
                     public void handle(Event e) {
                         NPCSpeakEvent cse = (NPCSpeakEvent)e;
@@ -143,7 +143,7 @@ public class GameScreen extends GameState {
                         }
                     }
                 })
-                .on(ConversationEndedEvent.class.toString(), new EventHandler() {
+                .on(ConversationEndedEvent.class, new EventHandler() {
                     @Override
                     public void handle(Event e) {
                         ConversationEndedEvent cse = (ConversationEndedEvent)e;

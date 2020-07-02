@@ -3,6 +3,7 @@ package world.entities;
 import org.json.simple.JSONObject;
 import world.Region;
 import world.entities.components.Component;
+import world.events.EventDispatcher;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,15 +62,19 @@ public class Entities {
     private static void addComponent(Component component, int entityID) {
         COMPONENT_MAPS.computeIfAbsent(component.getClass(), k -> new LinkedHashMap<>());
         COMPONENT_MAPS.get(component.getClass()).put(entityID, component);
+        component.setParent(entityID);
+        EventDispatcher.register(component.getEventListener());
     }
 
     public static void removeComponent(Class componentClass, int entityID) {
         HashMap<Integer, Component> componentList = COMPONENT_MAPS.get(componentClass);
         if (componentList == null) return;
-        componentList.remove(entityID);
+        Component removed = componentList.remove(entityID);
+        if (removed != null) EventDispatcher.unregister(removed.getEventListener());
     }
 
     public static void removeAll() {
+        COMPONENT_MAPS.values().forEach(lhm -> lhm.values().forEach(c -> EventDispatcher.unregister(c.getEventListener())));
         COMPONENT_MAPS.clear();
     }
 

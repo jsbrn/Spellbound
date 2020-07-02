@@ -10,7 +10,7 @@ public class LocationComponent extends Component {
     private Location location;
 
     @Override
-    protected void registerEvents() {
+    protected void registerEventHandlers() {
 
     }
 

@@ -7,7 +7,7 @@ public class HealthComponent extends Component {
     private double value, max;
 
     @Override
-    protected void registerEvents() {
+    protected void registerEventHandlers() {
 
     }
 

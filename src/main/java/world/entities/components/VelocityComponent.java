@@ -14,7 +14,7 @@ public class VelocityComponent extends Component {
     private LinkedList<Force> forces;
 
     @Override
-    protected void registerEvents() {
+    protected void registerEventHandlers() {
 
     }
 

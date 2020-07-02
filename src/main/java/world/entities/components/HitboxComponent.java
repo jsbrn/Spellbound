@@ -7,7 +7,7 @@ public class HitboxComponent extends Component {
     private double radius;
 
     @Override
-    protected void registerEvents() {
+    protected void registerEventHandlers() {
 
     }
 

@@ -57,7 +57,7 @@ public class Region {
         entities = new ArrayList<>();
         portals = new ArrayList<>();
 
-        EventDispatcher.register(new EventListener().on(EntityMovedEvent.class.toString(), e -> {
+        EventDispatcher.register(new EventListener().on(EntityMovedEvent.class, e -> {
             EntityMovedEvent event = (EntityMovedEvent) e;
             if (entities.contains(event.getEntity())) {
                 removeEntity(event.getEntity());

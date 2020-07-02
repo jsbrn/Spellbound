@@ -34,7 +34,7 @@ public class SpellbookComponent extends Component {
     public boolean hasTechnique(String technique) { return technique != null && this.discovered_techniques.contains(technique); }
 
     @Override
-    protected void registerEvents() {
+    protected void registerEventHandlers() {
 
     }
 
