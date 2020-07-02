@@ -12,6 +12,7 @@ import gui.menus.PopupMenu;
 import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
+import server.MPServer;
 import world.Camera;
 import world.World;
 
@@ -87,6 +88,7 @@ public class MainMenuScreen extends GameState {
 //                    World.load();
 //                    startGame();
 //                //}
+                MPServer.testServerFunctionality();
                 openRoot.setEnabled(true);
             }
         };
