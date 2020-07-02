@@ -42,7 +42,7 @@ If the folder has any contents, the downloading will be skipped and the game wil
 
 ###### Packaging
 
-I don't have Maven configured to do automatic packaging. But you should be able to find an option in your preferred IDE to bundle all the dependencies into a single jar file, or add them to the classpath and link separately.
+Run `mvn package` to generate a jar file with all the dependencies and natives bundled within it, located in `/target`.
 
 ###### Contribution Guidelines
 
