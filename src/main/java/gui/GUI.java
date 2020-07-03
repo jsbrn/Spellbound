@@ -28,7 +28,8 @@ public class GUI {
         this.elements = new ArrayList<>();
         this.modals = new Stack<>();
         this.lastMousePosition = new int[]{0, 0};
-        this.tooltip = new TextLabel("", 4,96, Integer.MAX_VALUE, Color.white, false, true);
+        this.tooltip = new TextLabel("", 4,96, Integer.MAX_VALUE, Color.white, Color.white, false, true);
+        this.tooltip.setGUI(this);
     }
 
     public String getToolTipText() {

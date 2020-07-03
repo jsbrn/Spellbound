@@ -1,14 +1,14 @@
 package assets;
 
+import com.github.mathiewz.slick.*;
 import com.github.mathiewz.slick.Image;
-import com.github.mathiewz.slick.SlickException;
-import com.github.mathiewz.slick.Sound;
-import com.github.mathiewz.slick.TrueTypeFont;
+import main.GameManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.awt.*;
+import java.awt.Font;
 import java.io.*;
 import java.util.HashMap;
 
@@ -83,7 +83,7 @@ public class Assets {
         try {
             awtFont = Font.createFont(Font.PLAIN, Assets.class.getResourceAsStream("/fonts/font.ttf"))
                     .deriveFont(size)
-                    .deriveFont(Font.TRUETYPE_FONT);
+                    .deriveFont(Font.PLAIN);
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {

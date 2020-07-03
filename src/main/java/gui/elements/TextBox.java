@@ -18,7 +18,7 @@ public class TextBox extends GUIElement {
         this.dims = new int[]{w, h};
         this.text = "";
         this.focused = false;
-        this.label = new TextLabel("", h-3, w-2, 1, Color.black, false, false);
+        this.label = new TextLabel("", h-3, w-2, 1, Color.black, Color.black, false, false);
         addChild(label, 1, 1, GUIAnchor.TOP_LEFT);
     }
 

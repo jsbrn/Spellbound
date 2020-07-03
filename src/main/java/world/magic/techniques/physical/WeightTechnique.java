@@ -2,11 +2,11 @@ package world.magic.techniques.physical;
 
 import com.github.mathiewz.slick.Sound;
 import gui.sound.SoundManager;
-import world.events.Event;
-import world.events.EventDispatcher;
-import world.events.EventHandler;
-import world.events.EventListener;
-import world.events.event.MagicImpactEvent;
+import events.Event;
+import events.EventDispatcher;
+import events.EventHandler;
+import events.EventListener;
+import events.event.MagicImpactEvent;
 import world.magic.MagicSource;
 import world.magic.techniques.Technique;
 

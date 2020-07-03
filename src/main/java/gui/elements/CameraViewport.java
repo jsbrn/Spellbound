@@ -15,11 +15,11 @@ import world.Chunk;
 import world.World;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
-import world.events.EventDispatcher;
-import world.events.event.KeyDownEvent;
-import world.events.event.KeyUpEvent;
-import world.events.event.MousePressedEvent;
-import world.events.event.MouseReleaseEvent;
+import events.EventDispatcher;
+import events.event.KeyDownEvent;
+import events.event.KeyUpEvent;
+import events.event.MousePressedEvent;
+import events.event.MouseReleaseEvent;
 
 import java.util.ArrayList;
 

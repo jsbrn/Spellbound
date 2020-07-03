@@ -1,4 +1,4 @@
-package world.events;
+package events;
 
 import java.util.HashMap;
 
@@ -21,4 +21,8 @@ public class EventListener {
         }
     }
 
+}
+
+enum EventListenerContext {
+    SERVER, LOCAL
 }

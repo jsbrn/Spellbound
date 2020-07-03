@@ -1,12 +1,12 @@
-package world.events.event;
+package events.event;
 
-import world.events.Event;
+import events.Event;
 
-public class ConversationStartedEvent extends Event {
+public class ConversationEndedEvent extends Event {
 
     private Integer npc, player;
 
-    public ConversationStartedEvent(Integer npc, Integer player) {
+    public ConversationEndedEvent(Integer npc, Integer player) {
         this.npc = npc;
         this.player = player;
     }

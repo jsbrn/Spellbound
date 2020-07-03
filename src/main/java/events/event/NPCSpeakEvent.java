@@ -1,7 +1,7 @@
-package world.events.event;
+package events.event;
 
 import assets.definitions.DialogueDefinition;
-import world.events.Event;
+import events.Event;
 
 public class NPCSpeakEvent extends Event {
 

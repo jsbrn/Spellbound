@@ -12,7 +12,7 @@ import gui.menus.PopupMenu;
 import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
-import server.MPServer;
+import server.Host;
 import world.Camera;
 import world.World;
 
@@ -54,17 +54,18 @@ public class MainMenuScreen extends GameState {
 
         String[] tips = Assets.read("tips.txt", true).split("\\n");
         gui.addElement(new TextLabel("Tip of the Day", 6, Color.white, true, false), 0, 32, GUIAnchor.CENTER);
-        gui.addElement(new TextLabel(tips[new Random().nextInt(tips.length)], 4, 32*5, 8, Color.white, true, false), 0, 48, GUIAnchor.CENTER);
+        gui.addElement(new TextLabel(tips[new Random().nextInt(tips.length)], 4, 32*5, 8, Color.white, Color.white, true, false), 0, 48, GUIAnchor.CENTER);
 
-        Button openRoot = new Button("Open root directory", 52, 8, null, true) {
+        TextLabel openRoot = new TextLabel("Open root directory", 3, Color.white, Color.yellow, true, false) {
             @Override
-            public void onClick(int button) {
+            public boolean onClick(int button) {
                 Window.setFullscreen(false);
                 try {
                     Desktop.getDesktop().open(new File(Assets.ROOT_DIRECTORY));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                return true;
             }
 
         };
@@ -88,8 +89,7 @@ public class MainMenuScreen extends GameState {
 //                    World.load();
 //                    startGame();
 //                //}
-                MPServer.testServerFunctionality();
-                openRoot.setEnabled(true);
+                Host.testServerFunctionality();
             }
         };
 
@@ -116,12 +116,12 @@ public class MainMenuScreen extends GameState {
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Alpha Candidate", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);
-        gui.addElement(new TextLabel("AC0000", 3, Color.white, true, false), -2, 2, GUIAnchor.TOP_RIGHT);
-        gui.addElement(openRoot, -2, -2, GUIAnchor.BOTTOM_RIGHT);
+        gui.addElement(new TextLabel("0.0.0-alpha", 3, Color.lightGray, Color.lightGray, true, false), -2, 2, GUIAnchor.TOP_RIGHT);
+        gui.addElement(openRoot, -2, 6, GUIAnchor.TOP_RIGHT);
 
-        gui.addElement(new Button("Visit the website", 48, 8, null, true) {
+        gui.addElement(new TextLabel("Visit the website", 3, Color.white, Color.yellow, true, false) {
             @Override
-            public void onClick(int button) {
+            public boolean onClick(int button) {
                 Window.setFullscreen(false);
                 String url_open ="https://computerology.itch.io/spellbound";
                 try {
@@ -129,8 +129,9 @@ public class MainMenuScreen extends GameState {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                return true;
             }
-        }, 2, -2, GUIAnchor.BOTTOM_LEFT);
+        }, -2, 10, GUIAnchor.TOP_RIGHT);
 
     }
 

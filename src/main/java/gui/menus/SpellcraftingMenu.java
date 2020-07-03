@@ -49,12 +49,12 @@ public class SpellcraftingMenu extends Modal {
         crystalCost = new TextLabel("0", 8, Color.white, true, false);
         dyesCost = new TextLabel("0", 8, Color.white, true, false);
         manaCost = new TextLabel("0", 8, Color.white, true, false);
-        volatility = new TextLabel("", 4, Color.yellow, true, false);
+        volatility = new TextLabel("", 4, Color.yellow, Color.white, true, false);
         volatility.hide(); // temporary (spell volatility will be introduced later)
-        categoryLabel = new TextLabel("...", 4, Color.gray, false, false);
-        techniqueName = new TextLabel("-", 5, Color.black, false, false);
-        techniqueDescription = new TextLabel("", 4, 100, 3, Color.gray, false, false);
-        techniqueConflicts = new TextLabel("", 4, 100, 3, Color.red, false, false);
+        categoryLabel = new TextLabel("...", 4, Color.gray, Color.white, false, false);
+        techniqueName = new TextLabel("-", 5, Color.black, Color.white, false, false);
+        techniqueDescription = new TextLabel("", 4, 100, 3, Color.gray, Color.white, false, false);
+        techniqueConflicts = new TextLabel("", 4, 100, 3, Color.red, Color.white, false, false);
         createButton = new Button("Create!", 24, 8, null, true) {
             @Override
             public void onClick(int button) {
@@ -145,8 +145,8 @@ public class SpellcraftingMenu extends Modal {
         for (int i = 0; i < techniques.length; i++) {
             String technique = techniques[i];
             Button chooseButton = new Button(null, 16, 16, "icons/techniques/"+technique+".png", true) {
-                private TextLabel levelLabel = new TextLabel("", 4, Color.yellow, true, false);
-                private TextLabel warningLabel = new TextLabel("!", 6, Color.red, true, false);
+                private TextLabel levelLabel = new TextLabel("", 4, Color.yellow, Color.white, true, false);
+                private TextLabel warningLabel = new TextLabel("!", 6, Color.red, Color.white, true, false);
                 @Override
                 public void onClick(int button) {
                     if (button == 0) {

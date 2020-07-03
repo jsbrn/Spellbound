@@ -10,7 +10,7 @@ import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
 import world.World;
-import world.events.EventDispatcher;
+import events.EventDispatcher;
 
 public class PauseMenu extends Modal {
 

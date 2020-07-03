@@ -1,4 +1,4 @@
-package world.events;
+package events;
 
 public class Event {
 

@@ -1,6 +1,6 @@
-package world.events.event;
+package events.event;
 
-import world.events.Event;
+import events.Event;
 
 public class KeyUpEvent extends Event {
 

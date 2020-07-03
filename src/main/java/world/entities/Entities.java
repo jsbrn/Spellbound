@@ -1,9 +1,8 @@
 package world.entities;
 
 import org.json.simple.JSONObject;
-import world.Region;
 import world.entities.components.Component;
-import world.events.EventDispatcher;
+import events.EventDispatcher;
 
 import java.util.*;
 import java.util.stream.Collectors;

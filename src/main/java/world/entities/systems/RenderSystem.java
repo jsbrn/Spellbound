@@ -17,8 +17,8 @@ public class RenderSystem {
                 location.getLocation().getCoordinates()[0] - hitbox.getRadius(),
                 location.getLocation().getCoordinates()[1] - hitbox.getRadius(), Window.getScale());
         float renderWidth = 1; //TODO: separate entity dimensions from hitbox
-        float renderHeight = 1;
-        Assets.getImage("gui/cursor.png").draw(
+        float renderHeight = 2;
+        Assets.getImage("character_test.png").draw(
                 osc[0], osc[1],
                 renderWidth * Chunk.TILE_SIZE * scale,
                 renderHeight * Chunk.TILE_SIZE * scale);

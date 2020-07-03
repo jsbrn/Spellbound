@@ -1,6 +1,6 @@
-package world.events.event;
+package events.event;
 
-import world.events.Event;
+import events.Event;
 import world.magic.MagicSource;
 
 public class MagicImpactEvent extends Event {

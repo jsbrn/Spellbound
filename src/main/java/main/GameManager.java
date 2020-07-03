@@ -12,6 +12,7 @@ import gui.sound.SoundManager;
 import gui.states.*;
 import misc.Window;
 import org.lwjgl.opengl.DisplayMode;
+import server.Host;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,8 @@ public class GameManager extends StateBasedGame {
 
     private static GameManager instance;
     private static String mouseCursor;
+
+    private static Host host;
 
     private static boolean loadMusic;
 
@@ -100,6 +103,8 @@ public class GameManager extends StateBasedGame {
         getState(GameState.GAME_SCREEN).init(gc, this);
         getState(GameState.MAIN_MENU).init(gc, this);
         getState(GameState.SETTINGS_SCREEN).init(gc, this);
+
+        gc.setDefaultFont(Assets.getFont(14));
 
         //load "menu" state on startup
         this.enterState(GameState.LOADING_SCREEN);

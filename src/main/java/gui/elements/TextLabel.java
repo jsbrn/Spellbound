@@ -5,24 +5,30 @@ import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.TrueTypeFont;
 import gui.GUIElement;
+import gui.sound.SoundManager;
 import misc.Window;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class TextLabel extends GUIElement {
 
     private String text;
-    private Color color, backgroundColor;
+    private Color color, backgroundColor, hoverColor;
     private boolean shadow, background;
     private int maxWidth, maxLines, actualWidth;
     private float lineHeight;
     private ArrayList<String> lines;
 
     public TextLabel(String text, int lineHeight, Color color, boolean shadow, boolean background) {
-        this(text, lineHeight, Integer.MAX_VALUE, 16, color, shadow, background);
+        this(text, lineHeight, color, color, shadow, background);
     }
 
-    public TextLabel(String text, int lineHeight, int maxWidth, int maxLines, Color color, boolean shadow, boolean background) {
+    public TextLabel(String text, int lineHeight, Color color, Color hoverColor, boolean shadow, boolean background) {
+        this(text, lineHeight, Integer.MAX_VALUE, 16, color, hoverColor, shadow, background);
+    }
+
+    public TextLabel(String text, int lineHeight, int maxWidth, int maxLines, Color color, Color hoverColor, boolean shadow, boolean background) {
         this.text = text;
         this.color = color;
         this.maxWidth = maxWidth;
@@ -31,6 +37,7 @@ public class TextLabel extends GUIElement {
         this.shadow = shadow;
         this.background = background;
         this.backgroundColor = new Color(0, 0, 0, 0.75f);
+        this.hoverColor = hoverColor;
         this.setBuffered(false);
     }
 
@@ -108,6 +115,19 @@ public class TextLabel extends GUIElement {
 
     @Override
     public boolean onMouseRelease(int ogx, int ogy, int button) {
+        if (mouseIntersects()) {
+            if (onClick(button))
+                SoundManager.playSound(SoundManager.CLICK);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onClick(int button) {
+        if (getParent() != null && getParent() instanceof Button) {
+            ((Button) getParent()).onClick(button);
+            return true;
+        }
         return false;
     }
 
@@ -140,15 +160,16 @@ public class TextLabel extends GUIElement {
     @Override
     public void drawOver(Graphics g) {
         float[] coords = getOnscreenCoordinates();
+        Color c = mouseIntersects() ? hoverColor: color;
         g.setFont(Assets.getFont(lineHeight * Window.getScale()));
         for (int i = 0; i < getLines().size(); i++) {
             float x = (coords[0] + (background ? 1 : 0)) - Window.getScale();
             float y = coords[1] + (i * lineHeight * Window.getScale());
             if (shadow) {
-                g.setColor(color.darker().darker());
+                g.setColor(c.darker().darker());
                 g.drawString(getLines().get(i), (int)x + 1, (int)y + 1);
             }
-            g.setColor(color);
+            g.setColor(c);
             g.drawString(getLines().get(i), (int)x, (int)y);
         }
     }

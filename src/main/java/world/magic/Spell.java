@@ -6,8 +6,8 @@ import com.github.mathiewz.slick.Image;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import world.World;
-import world.events.EventDispatcher;
-import world.events.event.SpellCastEvent;
+import events.EventDispatcher;
+import events.event.SpellCastEvent;
 import world.magic.techniques.Technique;
 import world.magic.techniques.Techniques;
 

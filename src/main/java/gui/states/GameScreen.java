@@ -13,14 +13,14 @@ import gui.menus.PauseMenu;
 import gui.menus.SpellcraftingMenu;
 import misc.MiscMath;
 import world.World;
-import world.events.Event;
-import world.events.EventDispatcher;
-import world.events.EventHandler;
-import world.events.EventListener;
-import world.events.event.ConversationEndedEvent;
-import world.events.event.HumanoidDeathEvent;
-import world.events.event.HumanoidRespawnEvent;
-import world.events.event.NPCSpeakEvent;
+import events.Event;
+import events.EventDispatcher;
+import events.EventHandler;
+import events.EventListener;
+import events.event.ConversationEndedEvent;
+import events.event.HumanoidDeathEvent;
+import events.event.HumanoidRespawnEvent;
+import events.event.NPCSpeakEvent;
 
 
 public class GameScreen extends GameState {
