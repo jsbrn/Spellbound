@@ -1,6 +1,7 @@
 package world.generators.chunk.interiors.dungeons;
 
 import gui.sound.SoundManager;
+import network.MPServer;
 import world.Chunk;
 import world.Portal;
 import world.Tiles;
@@ -21,7 +22,8 @@ public class DungeonEntranceGenerator extends DungeonRoomGenerator {
 
     @Override
     public Portal getPortal() {
-        Portal ladder = new Portal("ladder", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true, World.getRegion("world"), "trapdoor", SoundManager.DOOR_OPEN);
+        Portal ladder = new Portal("ladder", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true,
+                MPServer.getWorld().getRegion("world"), "trapdoor", SoundManager.DOOR_OPEN);
         return ladder;
     }
 

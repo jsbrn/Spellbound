@@ -1,6 +1,6 @@
-package events.event;
+package world.events.event;
 
-import events.Event;
+import world.events.Event;
 
 public class EntityActivatedEvent extends Event {
 

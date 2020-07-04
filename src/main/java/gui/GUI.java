@@ -132,12 +132,11 @@ public class GUI {
     }
 
     public void floatText(Location location, String text, Color color, int speed, int lifespan, double offset, boolean randomXDirection) {
-        if (location.getRegion().equals(World.getRegion()))
-            addElement(
-                    new PositionalTextLabel(location, text, color, randomXDirection ? MiscMath.random(-45, 45) : 0, speed, lifespan, offset),
-                    -Integer.MAX_VALUE,
-                    -Integer.MAX_VALUE,
-                    GUIAnchor.TOP_LEFT);
+        addElement(
+                new PositionalTextLabel(location, text, color, randomXDirection ? MiscMath.random(-45, 45) : 0, speed, lifespan, offset),
+                -Integer.MAX_VALUE,
+                -Integer.MAX_VALUE,
+                GUIAnchor.TOP_LEFT);
     }
 
     public boolean isInDebugMode() { return debugMode; }

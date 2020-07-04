@@ -12,7 +12,7 @@ import gui.sound.SoundManager;
 import gui.states.*;
 import misc.Window;
 import org.lwjgl.opengl.DisplayMode;
-import server.Host;
+import network.MPServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class GameManager extends StateBasedGame {
     private static GameManager instance;
     private static String mouseCursor;
 
-    private static Host host;
+    private static MPServer host;
 
     private static boolean loadMusic;
 

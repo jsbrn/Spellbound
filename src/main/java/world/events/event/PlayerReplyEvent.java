@@ -1,7 +1,7 @@
-package events.event;
+package world.events.event;
 
 import assets.definitions.DialogueDefinition;
-import events.Event;
+import world.events.Event;
 
 public class PlayerReplyEvent extends Event {
 

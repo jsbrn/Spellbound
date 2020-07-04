@@ -12,14 +12,6 @@ import misc.Window;
 import org.lwjgl.input.Mouse;
 import world.Camera;
 import world.Chunk;
-import world.World;
-import world.entities.Entities;
-import world.entities.components.LocationComponent;
-import events.EventDispatcher;
-import events.event.KeyDownEvent;
-import events.event.KeyUpEvent;
-import events.event.MousePressedEvent;
-import events.event.MouseReleaseEvent;
 
 import java.util.ArrayList;
 
@@ -38,14 +30,16 @@ public class CameraViewport extends GUIElement {
     @Override
     public boolean onMouseRelease(int ogx, int ogy, int button) {
         double[] wc = Camera.getWorldCoordinates(ogx * Window.getScale(), ogy * Window.getScale(), Window.getScale());
-        EventDispatcher.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
+        //EventManager.invoke(new MouseReleaseEvent(wc[0], wc[1], button));
+        //TODO: send packet instead
         return true;
     }
 
     @Override
     public boolean onMousePressed(int ogx, int ogy, int button) {
         double[] wc = Camera.getWorldCoordinates(ogx * Window.getScale(), ogy * Window.getScale(), Window.getScale());
-        EventDispatcher.invoke(new MousePressedEvent(wc[0], wc[1], button));
+        //EventManager.invoke(new MousePressedEvent(wc[0], wc[1], button));
+        //TODO: send packet instead
         return true;
     }
 
@@ -56,7 +50,8 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public boolean onKeyDown(int key) {
-        EventDispatcher.invoke(new KeyDownEvent(key));
+        //EventManager.invoke(new KeyDownEvent(key));
+        //TODO: send packet instead
         return true;
     }
 
@@ -64,7 +59,8 @@ public class CameraViewport extends GUIElement {
     public boolean onKeyUp(int key) {
         if (key == Input.KEY_F3) getGUI().toggleDebugMode();
         if (key == Input.KEY_F12) getGUI().stackModal(new CheatCodeMenu());
-        EventDispatcher.invoke(new KeyUpEvent(key));
+        //Host.getEventManager().invoke(new KeyUpEvent(key));
+        //TODO: send key packet to server from client, don't trigger an event
         return true;
     }
 
@@ -91,10 +87,10 @@ public class CameraViewport extends GUIElement {
         double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Window.getHeight() - Mouse.getY(), Window.getScale());
         float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());
         float[] origin_osc = Camera.getOnscreenCoordinates(0, 0, Window.getScale());
-        ArrayList<Integer> entities = World.getRegion().getEntities((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
+        ArrayList<Integer> entities = Camera.getLocation().getRegion().getEntityIDs((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
         float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0], (int)mouse_wc[1], Window.getScale());
 
-        World.getRegion().drawDebug(Window.getScale(), g);
+        Camera.getLocation().getRegion().drawDebug(Window.getScale(), g);
 
         g.setFont(Assets.getFont(14));
 
@@ -102,12 +98,12 @@ public class CameraViewport extends GUIElement {
         g.drawRect(osc[0], osc[1], 1 * Window.getScale() * Chunk.TILE_SIZE, 1 * Window.getScale() * Chunk.TILE_SIZE);
         for (int i = 0; i < entities.size(); i++) g.drawString("Entity #"+entities.get(i), osc[0], osc[1] + (i * 20));
 
-        Location localPlayerLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, World.getLocalPlayer())).getLocation();
+        Location localPlayerLocation = Camera.getLocation();
 
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
-                "Entity count: "+World.getRegion().getEntities().size(),
-                "Region: "+World.getRegion().getName(),
+                "Entity count: "+Camera.getLocation().getRegion().getEntityIDs().size(),
+                "Region: "+Camera.getLocation().getRegion().getName(),
                 "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
                         +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)
         };

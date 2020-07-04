@@ -3,15 +3,21 @@ package world;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
+import network.MPClient;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
 
 public class Camera {
 
-    private static int speed = 10, targetEntity;
+    private static int speed = 10;
+    private static Integer targetEntity;
 
     public static Location getLocation() {
-        return ((LocationComponent)Entities.getComponent(LocationComponent.class, targetEntity)).getLocation();
+        return ((LocationComponent) MPClient.getWorld().getEntities().getComponent(LocationComponent.class, targetEntity)).getLocation();
+    }
+
+    public static Integer getTargetEntity() {
+        return targetEntity;
     }
 
     public static float[] getOnscreenCoordinates(double wx, double wy, double scale) {

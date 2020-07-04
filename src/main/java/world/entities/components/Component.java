@@ -1,8 +1,8 @@
 package world.entities.components;
 
 import org.json.simple.JSONObject;
-import events.EventHandler;
-import events.EventListener;
+import world.events.EventHandler;
+import world.events.EventListener;
 
 public abstract class Component {
 

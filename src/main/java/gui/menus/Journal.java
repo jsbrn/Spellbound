@@ -9,6 +9,7 @@ import gui.elements.IconLabel;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
 import gui.sound.SoundManager;
+import network.MPClient;
 import world.World;
 import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
@@ -26,7 +27,7 @@ public class Journal extends Modal {
 
     public Journal(Integer target, SpellcraftingMenu spellcraftingMenu) {
         super("gui/spellbook_bg.png");
-        this.spellbook = (SpellbookComponent) Entities.getComponent(SpellbookComponent.class, target);
+        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, target);
         this.selectedSpell = -1;
         this.spellButtons = new ArrayList<>();
         addChild(new TextLabel("Inventory", 5, Color.black, false, false), 12, 4, GUIAnchor.TOP_LEFT);
@@ -132,13 +133,8 @@ public class Journal extends Modal {
 
     @Override
     public void onShow() {
-        World.setPaused(true);
         refresh();
         SoundManager.playSound(SoundManager.PAGE_TURN);
     }
 
-    @Override
-    public void onHide() {
-        World.setPaused(false);
-    }
 }

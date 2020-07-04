@@ -10,7 +10,7 @@ import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
 import world.World;
-import events.EventDispatcher;
+import world.events.EventManager;
 
 public class PauseMenu extends Modal {
 
@@ -27,10 +27,11 @@ public class PauseMenu extends Modal {
         addChild(new Button(null, 24, 24, "icons/save.png", true) {
             @Override
             public void onClick(int button) {
-                World.save();
+                //TODO: reimplement world saving / event cleanup
+                //World.save();
                 GameManager.switchTo(GameState.MAIN_MENU, true);
                 SoundManager.stopAmbience();
-                EventDispatcher.unregisterAll();
+                //EventManager.unregisterAll();
                 SoundManager.stopMusic();
             }
         }, 16, 0, GUIAnchor.CENTER);
@@ -44,13 +45,11 @@ public class PauseMenu extends Modal {
 
     @Override
     public void onShow() {
-        World.setPaused(true);
         SoundManager.stopAmbience();
     }
 
     @Override
     public void onHide() {
-        World.setPaused(false);
         SoundManager.resumeAmbience();
     }
 }

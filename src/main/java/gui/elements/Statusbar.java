@@ -6,6 +6,7 @@ import com.github.mathiewz.slick.Image;
 import com.github.mathiewz.slick.SlickException;
 import gui.GUIAnchor;
 import gui.GUIElement;
+import network.MPClient;
 import world.entities.Entities;
 import world.entities.components.HealthComponent;
 
@@ -21,7 +22,7 @@ public class Statusbar extends GUIElement {
     private IconLabel amuletIndicator;
 
     public Statusbar(Integer target) {
-        this.healthComponent = (HealthComponent) Entities.getComponent(HealthComponent.class, target);
+        this.healthComponent = (HealthComponent) MPClient.getWorld().getEntities().getComponent(HealthComponent.class, target);
         healthLabel = new TextLabel("-", 4, Color.white, true, false);
         manaLabel = new TextLabel("-", 4, Color.white, true, false);
         this.addChild(healthLabel, 5, 5, GUIAnchor.TOP_MIDDLE);

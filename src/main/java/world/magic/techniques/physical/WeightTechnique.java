@@ -2,11 +2,11 @@ package world.magic.techniques.physical;
 
 import com.github.mathiewz.slick.Sound;
 import gui.sound.SoundManager;
-import events.Event;
-import events.EventDispatcher;
-import events.EventHandler;
-import events.EventListener;
-import events.event.MagicImpactEvent;
+import network.MPServer;
+import world.events.Event;
+import world.events.EventHandler;
+import world.events.EventListener;
+import world.events.event.MagicImpactEvent;
 import world.magic.MagicSource;
 import world.magic.techniques.Technique;
 
@@ -14,7 +14,7 @@ public class WeightTechnique extends Technique {
 
     @Override
     public void applyTo(MagicSource cast) {
-        EventDispatcher.register(new EventListener()
+        MPServer.getEventManager().register(new EventListener()
             .on(MagicImpactEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {

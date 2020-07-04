@@ -33,13 +33,4 @@ public class PopupMenu extends Modal {
         return true;
     }
 
-    @Override
-    public void onShow() {
-        World.setPaused(true);
-    }
-
-    @Override
-    public void onHide() {
-        World.setPaused(false);
-    }
 }

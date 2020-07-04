@@ -4,15 +4,16 @@ import assets.Assets;
 import misc.Window;
 import world.Camera;
 import world.Chunk;
+import world.World;
 import world.entities.Entities;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 
 public class RenderSystem {
 
-    public static void drawEntity(int entityID, float scale) {
-        HitboxComponent hitbox = (HitboxComponent) Entities.getComponent(HitboxComponent.class, entityID);
-        LocationComponent location = (LocationComponent) Entities.getComponent(LocationComponent.class, entityID);
+    public static void drawEntity(Entities entities, int entityID, float scale) {
+        HitboxComponent hitbox = (HitboxComponent) entities.getComponent(HitboxComponent.class, entityID);
+        LocationComponent location = (LocationComponent) entities.getComponent(LocationComponent.class, entityID);
         float[] osc = Camera.getOnscreenCoordinates(
                 location.getLocation().getCoordinates()[0] - hitbox.getRadius(),
                 location.getLocation().getCoordinates()[1] - hitbox.getRadius(), Window.getScale());

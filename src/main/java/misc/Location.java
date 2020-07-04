@@ -5,47 +5,44 @@ import world.Region;
 
 public class Location {
 
-    private Region region;
+    private String regionName;
     private double[] coordinates;
     private int lookDirection;
 
     public Location(Location location) {
-        this(location.region, location.coordinates[0], location.coordinates[1]);
+        this(location.regionName, location.coordinates[0], location.coordinates[1]);
         this.lookDirection = location.lookDirection;
     }
 
-    public Location(Region region, double wx, double wy) {
-        this(region, (int)(wx / Chunk.CHUNK_SIZE), (int)(wy / Chunk.CHUNK_SIZE), wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
+    public Location(String regionName, double wx, double wy) {
+        this(regionName, (int)(wx / Chunk.CHUNK_SIZE), (int)(wy / Chunk.CHUNK_SIZE), wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
     }
 
-    public Location(Region region, double wx, double wy, int lookDirection) {
-        this(region, wx, wy);
+    public Location(String regionName, double wx, double wy, int lookDirection) {
+        this(regionName, wx, wy);
         this.lookDirection = lookDirection;
     }
 
-    public Location(Region region, int cx, int cy, double tx, double ty) {
-        this.region = region;
+    public Location(String regionName, int cx, int cy, double tx, double ty) {
+        this.regionName = regionName;
         this.coordinates = new double[]{(cx * Chunk.CHUNK_SIZE) + tx, (cy * Chunk.CHUNK_SIZE) + ty};
         this.lookDirection = 180;
     }
 
-    public Region getRegion() {
-        return region;
+    public String getRegionName() {
+        return regionName;
     }
+
     public double[] getCoordinates() {
         return coordinates;
     }
     public int[] getChunkCoordinates() { return new int[]{(int)(coordinates[0] / Chunk.CHUNK_SIZE), (int)(coordinates[1] / Chunk.CHUNK_SIZE)}; }
     public double[] getLocalCoordinates() { return new double[]{coordinates[0] % Chunk.CHUNK_SIZE, coordinates[1] % Chunk.CHUNK_SIZE}; }
-    public Chunk getChunk() {
-        return region.getChunk(getChunkCoordinates()[0], getChunkCoordinates()[1]);
-    }
     public double getGlobalIndex() { return MiscMath.getIndex(coordinates[0], coordinates[1], region.getSize() * Chunk.CHUNK_SIZE); }
 
     public double distanceTo(Location location) {
         return distanceTo(location.coordinates[0], location.coordinates[1]);
     }
-
     public double distanceTo(double wx, double wy) {
         return MiscMath.distance(coordinates[0], coordinates[1], wx, wy);
     }
@@ -69,7 +66,7 @@ public class Location {
     public void setLookDirection(int degrees) { this.lookDirection = degrees % 360; }
 
     public String toString() {
-        return region.getName()+"@["+coordinates[0]+", "+coordinates[1]+"] " +
+        return regionName+"@["+coordinates[0]+", "+coordinates[1]+"] " +
                 "("+getLocalCoordinates()[0]+", "+getLocalCoordinates()[1]+") " +
                 "("+getGlobalIndex()+")";
     }

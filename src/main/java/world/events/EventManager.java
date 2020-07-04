@@ -1,8 +1,8 @@
-package events;
+package world.events;
 
 import java.util.ArrayList;
 
-public class EventDispatcher {
+public class EventManager {
 
     private ArrayList<EventListener> listeners;
 

@@ -5,6 +5,7 @@ import com.github.mathiewz.slick.Color;
 import gui.GUIAnchor;
 import gui.elements.*;
 import misc.MiscMath;
+import network.MPClient;
 import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
 import world.magic.Spell;
@@ -33,7 +34,7 @@ public class SpellcraftingMenu extends Modal {
 
     public SpellcraftingMenu(Integer target) {
         super("gui/spellcasting.png");
-        this.spellbook = (SpellbookComponent) Entities.getComponent(SpellbookComponent.class, target);
+        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, target);
         this.buttons = new HashMap<>();
         this.categories = new ArrayList<>();
         this.spell = new Spell();

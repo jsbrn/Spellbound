@@ -9,10 +9,11 @@ import com.github.mathiewz.slick.Input;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.sound.SoundManager;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import world.Chunk;
 import world.World;
-import events.EventDispatcher;
-import events.event.PlayerReplyEvent;
+import world.events.EventManager;
+import world.events.event.PlayerReplyEvent;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ public class SpeechBubble extends GUIElement {
             Button option = new Button(dialogue.getOptionText(optionId), getDimensions()[0], 6, null, true) {
                 @Override
                 public void onClick(int button) {
-                    EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, optionId));
+                    throw new NotImplementedException();
                 }
             };
             addChild(option, 0, -(dialogue.getOptionCount() - 1 - o) * 7, GUIAnchor.BOTTOM_MIDDLE);
@@ -92,10 +93,7 @@ public class SpeechBubble extends GUIElement {
 
     @Override
     public boolean onKeyUp(int key) {
-        if (key == Input.KEY_ESCAPE || key == Input.KEY_TAB) {
-            EventDispatcher.invoke(new PlayerReplyEvent(speaker, World.getLocalPlayer(), dialogue, -1));
-        }
-        return true;
+        throw new NotImplementedException();
     }
 
     @Override

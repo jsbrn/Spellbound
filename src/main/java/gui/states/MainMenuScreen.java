@@ -12,7 +12,7 @@ import gui.menus.PopupMenu;
 import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
-import server.Host;
+import network.MPServer;
 import world.Camera;
 import world.World;
 
@@ -34,19 +34,7 @@ public class MainMenuScreen extends GameState {
 
     public void startGame() {
         GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
-        World.setPaused(true);
-        GameManager.getGameState(GameState.GAME_SCREEN).getGUI().stackModal(new PopupMenu(
-                "Please Note",
-                "",
-                "This is a very simple demo of the core mechanics (the spell crafting and dungeon crawling). " +
-                        "It is NOT the final game. There will be bugs. " +
-                        "I'll be releasing the Alpha version of the game soon. " +
-                        "Follow the itch.io devlog to stay up-to-date.",
-                "icons/tome.png",
-                Color.white));
-        Camera.setTargetEntity(World.getLocalPlayer());
         GameManager.switchTo(GameState.GAME_SCREEN, true);
-        SoundManager.registerEvents();
     }
 
     @Override
@@ -89,7 +77,7 @@ public class MainMenuScreen extends GameState {
 //                    World.load();
 //                    startGame();
 //                //}
-                Host.testServerFunctionality();
+                MPServer.testServerFunctionality();
             }
         };
 

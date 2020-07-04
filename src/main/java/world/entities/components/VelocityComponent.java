@@ -44,26 +44,26 @@ public class VelocityComponent extends Component {
                     (double)f.get("direction"),
                     (double)f.get("magnitude"),
                     (double)f.getOrDefault("deceleration", 0.0),
-                    (long)f.getOrDefault("start_time", World.getCurrentTime())));
+                    (long)f.get("start_time")));
         }
         return this;
     }
 
-    public void addForce(double direction, double magnitude, double deceleration) {
-        forces.add(new Force(direction, magnitude, deceleration));
+    public void addForce(double direction, double magnitude, double deceleration, long startTime) {
+        forces.add(new Force(direction, magnitude, deceleration, startTime));
     }
 
     /**
      * Get the direction on both axes in terms of tiles per second.
      * @return
      */
-    public double[] getVector() {
+    public double[] calculateVector(long currentTime) {
         double[] dir = new double[2];
         for (int i = forces.size() - 1; i > -1; i--) {
             Force f = forces.get(i);
-            dir[0] += f.getMagnitude() * f.getDirection()[0];
-            dir[1] += f.getMagnitude() * f.getDirection()[1];
-            if (f.getMagnitude() == 0) forces.remove(i);
+            dir[0] += f.getMagnitude(currentTime) * f.getDirection()[0];
+            dir[1] += f.getMagnitude(currentTime) * f.getDirection()[1];
+            if (f.getMagnitude(currentTime) == 0) forces.remove(i);
         }
         return dir;
     }
@@ -81,10 +81,6 @@ class Force {
     private double[] direction;
     private long startTime;
 
-    public Force(double direction, double magnitude, double deceleration) {
-        this(direction, magnitude, deceleration, World.getCurrentTime());
-    }
-
     public Force(double direction, double magnitude, double deceleration, long startTime) {
         this.magnitude = magnitude;
         this.direction = MiscMath.getRotatedOffset(0, -1, direction);
@@ -96,8 +92,8 @@ class Force {
         return magnitude;
     }
 
-    public double getMagnitude() {
-        double elapsedSeconds = (World.getCurrentTime() - startTime) / 1000f;
+    public double getMagnitude(long currentTime) {
+        double elapsedSeconds = (currentTime - startTime) / 1000f;
         return MiscMath.clamp(magnitude - (deceleration * elapsedSeconds),0, Double.MAX_VALUE);
     }
 

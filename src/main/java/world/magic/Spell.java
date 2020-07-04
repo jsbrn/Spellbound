@@ -3,11 +3,15 @@ package world.magic;
 import assets.Assets;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Image;
+import network.MPClient;
+import network.MPServer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import world.Region;
 import world.World;
-import events.EventDispatcher;
-import events.event.SpellCastEvent;
+import world.entities.components.LocationComponent;
+import world.events.EventManager;
+import world.events.event.SpellCastEvent;
 import world.magic.techniques.Technique;
 import world.magic.techniques.Techniques;
 
@@ -74,8 +78,9 @@ public class Spell {
 
     public void cast(double wx, double wy, Integer casterID) {
         MagicSource cast = new MagicSource(wx, wy, casterID, loadTechniques(), color);
-        World.getRegion().addMagicSource(cast);
-        EventDispatcher.invoke(new SpellCastEvent(this, cast));
+        Region region = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, casterID)).getLocation().getRegion();
+        region.addMagicSource(cast);
+        MPServer.getEventManager().invoke(new SpellCastEvent(this, cast));
     }
 
     public void addLevel(String technique) {

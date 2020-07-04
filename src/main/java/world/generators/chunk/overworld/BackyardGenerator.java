@@ -1,6 +1,7 @@
 package world.generators.chunk.overworld;
 
 import gui.sound.SoundManager;
+import network.MPServer;
 import world.Portal;
 import world.Region;
 import world.World;
@@ -23,7 +24,8 @@ public class BackyardGenerator extends OpenFieldGenerator {
     @Override
     public Portal getPortal() {
         Portal door = new Portal("door", 6, 5, 0, 1, true,
-                    World.addRegion(new Region("player_home", 1, new PlayerHomeRegionGenerator(World.getSeed()))), "door", SoundManager.DOOR_OPEN);
+                    MPServer.getWorld().addRegion(new Region("player_home", 1,
+                            new PlayerHomeRegionGenerator(MPServer.getWorld().getSeed()))), "door", SoundManager.DOOR_OPEN);
         door.setCoordinates(6, 5);
         return door;
     }

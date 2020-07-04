@@ -6,6 +6,7 @@ import com.github.mathiewz.slick.Input;
 import com.github.mathiewz.slick.SlickException;
 import gui.GUIElement;
 import misc.MiscMath;
+import network.MPClient;
 import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
 import world.particles.ParticleSource;
@@ -19,7 +20,7 @@ public class Hotbar extends GUIElement {
     private ParticleSource[] previews;
 
     public Hotbar(Integer target) {
-        this.spellbook = (SpellbookComponent)Entities.getComponent(SpellbookComponent.class, target);
+        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, target);
         this.previews = new ParticleSource[3];
         try {
             this.image = new Image("gui/hotbar.png", false, Image.FILTER_NEAREST);

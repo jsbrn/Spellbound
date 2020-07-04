@@ -5,14 +5,14 @@ import com.github.mathiewz.slick.Sound;
 import misc.Location;
 import org.lwjgl.openal.AL;
 import world.World;
-import events.Event;
-import events.EventDispatcher;
-import events.EventHandler;
-import events.EventListener;
-import events.event.CastFailedEvent;
-import events.event.EntityChangeRegionEvent;
-import events.event.HumanoidDamageEvent;
-import events.event.HumanoidDeathEvent;
+import world.events.Event;
+import world.events.EventManager;
+import world.events.EventHandler;
+import world.events.EventListener;
+import world.events.event.CastFailedEvent;
+import world.events.event.EntityChangeRegionEvent;
+import world.events.event.HumanoidDamageEvent;
+import world.events.event.HumanoidDeathEvent;
 
 public class SoundManager {
 
@@ -74,50 +74,6 @@ public class SoundManager {
         IMPACT_2 = Assets.loadSound("impact2.ogg");
         IMPACT_3 = Assets.loadSound("impact3.ogg");
         FOOTSTEP = Assets.loadSound("footstep.ogg");
-    }
-
-    public static void registerEvents() {
-        listener = new EventListener()
-                .on(HumanoidDeathEvent.class, new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        HumanoidDeathEvent hde = (HumanoidDeathEvent)e;
-                        if (hde.getHumanoid().equals(World.getLocalPlayer())) {
-                            playSound(DEATH);
-                            switchContext(IDLE, true);
-                        }
-                    }
-                })
-                .on(HumanoidDamageEvent.class, new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        HumanoidDamageEvent hde = (HumanoidDamageEvent)e;
-                        if (hde.getHumanoid().equals(World.getLocalPlayer())) {
-                            if (context == IDLE) stopMusic();
-                            switchContext(COMBAT, false);
-                        }
-                    }
-                })
-                .on(EntityChangeRegionEvent.class, new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        EntityChangeRegionEvent ecre = (EntityChangeRegionEvent)e;
-                        if (ecre.getEntity().equals(World.getLocalPlayer())) {
-                            setBackground(ecre.getTo().getBackgroundAmbience());
-                        }
-                    }
-                })
-                .on(CastFailedEvent.class, new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        CastFailedEvent ecre = (CastFailedEvent)e;
-                        if (ecre.getCaster().equals(World.getLocalPlayer())) {
-                            playSound(FAILED_CAST);
-                        }
-                    }
-                });;
-
-        EventDispatcher.register(listener);
     }
 
     public static void update() {

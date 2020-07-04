@@ -37,7 +37,7 @@ This should be enough to get you up and running.
 * The game takes one optional argument on launch which is a boolean indicating whether or not music is to be loaded.
 This saves a good chunk of time if you aren't touching the music manager at all. It defaults to `true`.
 
-* If the `{ROOT_DIRECTORY}/assets/sounds` is empty, the game will download and unpack the assets from a server automatically. 
+* If the `{ROOT_DIRECTORY}/assets/sounds` is empty, the game will download and unpack the assets from a network automatically. 
 If the folder has any contents, the downloading will be skipped and the game will attempt to load the required sounds. 
 
 ###### Packaging

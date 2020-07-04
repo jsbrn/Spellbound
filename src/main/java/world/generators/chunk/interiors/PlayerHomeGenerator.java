@@ -2,6 +2,7 @@ package world.generators.chunk.interiors;
 
 import com.github.mathiewz.slick.Color;
 import gui.sound.SoundManager;
+import network.MPServer;
 import world.Chunk;
 import world.Portal;
 import world.Tiles;
@@ -43,7 +44,7 @@ public class PlayerHomeGenerator extends InteriorRoomGenerator {
 
     @Override
     public Portal getPortal() {
-        Portal door = new Portal("door", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true, World.getRegion("world"), "door", SoundManager.DOOR_OPEN);
+        Portal door = new Portal("door", Chunk.CHUNK_SIZE/2, getMinimum(), 0, 2, true, MPServer.getWorld().getRegion("world"), "door", SoundManager.DOOR_OPEN);
         return door;
     }
 

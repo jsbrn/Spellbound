@@ -1,6 +1,4 @@
-package events;
-
-import events.EventHandler;
+package world.events;
 
 public abstract class LocalEventHandler implements EventHandler {
 

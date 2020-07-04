@@ -1,7 +1,7 @@
-package events.event;
+package world.events.event;
 
 import world.Region;
-import events.Event;
+import world.events.Event;
 
 public class EntityChangeRegionEvent extends Event {
 

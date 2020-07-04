@@ -1,4 +1,4 @@
-package events;
+package world.events;
 
 public interface EventHandler {
 

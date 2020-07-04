@@ -43,26 +43,6 @@ public class CheatCodeMenu extends Modal {
 
     private void checkCode() {
         String code = input.getText();
-        if (code.equals("6mdm")) {
-            //World.getLocalPlayer().activateGodMode();
-        }
-        if (code.equals("speedrun")) {
-            //World.getLocalPlayer().addArtifacts(5);
-        }
-        if (code.equals("slomo")) {
-            World.setTimeMultiplier(0.5f);
-        }
-        if (code.equals("magicman")) {
-            //World.getLocalPlayer().getSpellbook().discoverAllTechniques();
-        }
-        if (code.equals("xray")) {
-            for (int i = 0; i < World.getRegion().getSize(); i++)
-                for (int j = 0; j < World.getRegion().getSize(); j++)
-                World.getRegion().getChunk(i, j).setDiscovered(true);
-        }
-        if (code.equals("lockpick")) {
-            //World.getLocalPlayer().addKeys(10);
-        }
         if (code.equals("cinematic")) {
             Camera.setSpeed(5);
         }
@@ -79,12 +59,10 @@ public class CheatCodeMenu extends Modal {
     @Override
     public void onShow() {
         input.grabFocus();
-        World.setPaused(true);
     }
 
     @Override
     public void onHide() {
         input.releaseFocus();
-        World.setPaused(false);
     }
 }

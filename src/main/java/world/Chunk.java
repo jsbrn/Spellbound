@@ -4,8 +4,7 @@ import assets.Assets;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import misc.Location;
-import world.entities.Entities;
-import world.entities.components.LocationComponent;
+import network.MPClient;
 import world.entities.systems.RenderSystem;
 import world.generators.chunk.ChunkGenerator;
 
@@ -64,7 +63,7 @@ public class Chunk {
     public void update() {
         discovered = true;
         ArrayList<Integer> entities = region
-                .getEntities((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
+                .getEntityIDs((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
         //for (int i = entities.size() - 1; i >= 0; i--) entities.get(i).update();
     }
 
@@ -110,7 +109,7 @@ public class Chunk {
 
     public void drawTop(float osx, float osy, float scale) {
         Color translucent = new Color(1f, 1f, 1f, 0.5f);
-        Location player_location = ((LocationComponent) Entities.getComponent(LocationComponent.class, World.getLocalPlayer())).getLocation();
+        Location player_location = Camera.getLocation();
         double[] playerLocalCoords = player_location.getLocalCoordinates();
         int[] playerChunkCoords = player_location.getChunkCoordinates();
 
@@ -141,8 +140,8 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                ArrayList<Integer> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
-                for (Integer entityID: entities) RenderSystem.drawEntity(entityID, scale);
+                ArrayList<Integer> entities = region.getEntityIDs((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
+                for (Integer entityID: entities) RenderSystem.drawEntity(MPClient.getWorld().getEntities(), entityID, scale);
 
             }
         }

@@ -13,9 +13,6 @@ import org.json.simple.parser.ParseException;
 import world.entities.Entities;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
-import events.EventDispatcher;
-import events.EventListener;
-import events.event.EntityMovedEvent;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.region.RegionGenerator;
 import world.magic.MagicSource;
@@ -28,6 +25,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Region {
+
+    private World world;
 
     private String name;
     private Chunk[][] chunks;
@@ -57,14 +56,10 @@ public class Region {
         entities = new ArrayList<>();
         portals = new ArrayList<>();
 
-        EventDispatcher.register(new EventListener().on(EntityMovedEvent.class, e -> {
-            EntityMovedEvent event = (EntityMovedEvent) e;
-            if (entities.contains(event.getEntity())) {
-                removeEntity(event.getEntity());
-                addEntity(event.getEntity());
-            }
-        }));
+    }
 
+    public void setWorld(World w) {
+        this.world = w;
     }
 
     public void plan() {
@@ -92,7 +87,7 @@ public class Region {
     public long getCurrentTime() { return time; }
 
     public int addEntity(Integer e) {
-        double lindex = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation().getGlobalIndex();
+        double lindex = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation().getGlobalIndex();
         int index = getEntityIndex(lindex, 0, entities.size());
         entities.add(index, e);
         return index;
@@ -102,14 +97,14 @@ public class Region {
         return entities.remove(e);
     }
 
-    public ArrayList<Integer> getEntities(int wx, int wy, int width, int height) {
+    public ArrayList<Integer> getEntityIDs(int wx, int wy, int width, int height) {
         ArrayList<Integer> subsection = new ArrayList<>();
         double minloc = MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize());
         double maxloc = MiscMath.getIndex(wx + width, wy + height, Chunk.CHUNK_SIZE * getSize());
         int[] indices = getEntityIndices(minloc, maxloc);
         for (int i = indices[0]; i < indices[1]; i++) {
             Integer entity = entities.get(i);
-            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, entity)).getLocation();
+            Location location = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entity)).getLocation();
             if (subsection.contains(entity)) continue;
             boolean intersects = MiscMath.pointIntersectsRect(
                     location.getCoordinates()[0],
@@ -124,13 +119,13 @@ public class Region {
         return subsection;
     }
 
-    public List<Integer> getEntities(double wx, double wy, double radius) {
-        ArrayList<Integer> entities = getEntities(
+    public List<Integer> getEntityIDs(double wx, double wy, double radius) {
+        ArrayList<Integer> entities = getEntityIDs(
                 (int)(wx - radius), (int)(wy - radius),
                 (int)((radius * 2) + 1), (int)((radius * 2) + 2));
         return entities.stream().filter(e -> {
-            Location location = ((LocationComponent)Entities.getComponent(LocationComponent.class, e)).getLocation();
-            HitboxComponent hitbox = (HitboxComponent)Entities.getComponent(HitboxComponent.class, e);
+            Location location = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation();
+            HitboxComponent hitbox = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, e);
             return MiscMath.circlesIntersect(
                 location.getCoordinates()[0],
                 location.getCoordinates()[1],
@@ -148,7 +143,7 @@ public class Region {
         };
     }
 
-    public ArrayList<Integer> getEntities() { return entities; }
+    public ArrayList<Integer> getEntityIDs() { return entities; }
 
     private int getEntityIndex(double location, int min, int max) {
 
@@ -156,9 +151,9 @@ public class Region {
 
         int half = min + ((max-min) / 2);
 
-        double minloc = ((LocationComponent)Entities.getComponent(LocationComponent.class, entities.get(min))).getLocation().getGlobalIndex();
-        double maxloc = ((LocationComponent)Entities.getComponent(LocationComponent.class, entities.get(max - 1))).getLocation().getGlobalIndex();
-        double halfloc = ((LocationComponent)Entities.getComponent(LocationComponent.class, entities.get(half))).getLocation().getGlobalIndex();
+        double minloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(min))).getLocation().getGlobalIndex();
+        double maxloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(max - 1))).getLocation().getGlobalIndex();
+        double halfloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(half))).getLocation().getGlobalIndex();
 
         if (location >= maxloc) return max;
         if (location <= minloc) return min;
@@ -265,7 +260,7 @@ public class Region {
 
     public void update() {
 
-        time += MiscMath.getConstant(1000, 1 / World.getTimeMultiplier());
+        time += MiscMath.getConstant(1000, 1);
 
         for (int i = magic_sources.size() - 1; i >= 0; i--) {
             MagicSource magicSource = magic_sources.get(i);
@@ -324,9 +319,9 @@ public class Region {
         JSONObject chunk = new JSONObject();
         JSONArray jsonEntities = new JSONArray();
         jsonEntities.addAll(
-                getEntities(cx * Chunk.CHUNK_SIZE, cy * Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE)
+                getEntityIDs(cx * Chunk.CHUNK_SIZE, cy * Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE)
                 .stream()
-                .map(Entities::serializeEntity).collect(Collectors.toList())
+                .map(world.getEntities()::serializeEntity).collect(Collectors.toList())
         );
         chunk.put("entities", jsonEntities);
         chunk.put("discovered", chunks[cx][cy].wasDiscovered());
@@ -366,7 +361,8 @@ public class Region {
                     .stream()
                     .forEach(json -> {
                         JSONObject jsonObject = (JSONObject)json;
-                        Entities.createEntity(jsonObject);
+                        //world.getEntities().createEntity(jsonObject);
+                        //TODO: reimplement loading entities from save file
                     });
         } catch (ParseException e) {
             e.printStackTrace();

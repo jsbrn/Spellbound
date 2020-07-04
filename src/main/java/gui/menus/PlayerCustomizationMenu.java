@@ -49,10 +49,11 @@ public class PlayerCustomizationMenu extends Modal {
                 nameField.releaseFocus();
                 //creation.setName(nameField.getText());
                 getGUI().popModal();
-                World.init();
-                World.generate(Integer.parseInt(seed.isEmpty() ? "0" : seed));
-                World.spawnPlayer(Chunk.CHUNK_SIZE / 2, Chunk.CHUNK_SIZE / 2, World.getRegion("player_home"));
-                World.save();
+                //TODO: initialize server and connect to it (or something like that)
+//                World.init();
+//                World.generate(Integer.parseInt(seed.isEmpty() ? "0" : seed));
+//                World.spawnPlayer(Chunk.CHUNK_SIZE / 2, Chunk.CHUNK_SIZE / 2, World.getRegion("player_home"));
+//                World.save();
                 ((MainMenuScreen)getGUI().getParent()).startGame();
             }
         };

@@ -6,6 +6,7 @@ import com.github.mathiewz.slick.Graphics;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
+import network.MPClient;
 import world.Camera;
 import world.Chunk;
 import world.Tiles;
@@ -38,7 +39,7 @@ public class ParticleSource {
         this.particles = new ArrayList<>();
     }
 
-    public void update() {
+    public void interpolate() {
 
         if (!isOnScreen()) return;
 
@@ -84,7 +85,7 @@ public class ParticleSource {
 
             boolean behind_something = false;
             for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / Chunk.TILE_SIZE; t++) {
-                byte[] tile = World.getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
+                byte[] tile = Camera.getLocation().getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
                 if (pcoords[1] > (pcoords[1] + t - Tiles.getHeight(tile[1]))) {
                     if (Tiles.getTransparency(tile[1]) == 0) behind_something = true; else alpha = Tiles.getTransparency(tile[1]);
                     break;
@@ -222,7 +223,7 @@ class Particle {
     private Color color;
 
     public Particle(double velocity, double direction, int lifetime, double[] startPosition, double[] startOffset, Color color) {
-        this.emissionTime = World.getRegion().getCurrentTime();
+        this.emissionTime = MPClient.getWorld().getCurrentTime();
         this.startPosition = startPosition;
         this.startOffset = startOffset;
         this.velocity = velocity;
@@ -232,9 +233,9 @@ class Particle {
     }
 
     public Color getColor() { return color; }
-    public double percentComplete() { return (World.getRegion().getCurrentTime() - emissionTime) / (double)lifetime; }
-    public boolean isExpired() { return World.getRegion().getCurrentTime() - emissionTime > lifetime; }
-    public double getElapsedSeconds() { return (World.getRegion().getCurrentTime() - emissionTime) / 1000f; }
+    public double percentComplete() { return (MPClient.getWorld().getCurrentTime() - emissionTime) / (double)lifetime; }
+    public boolean isExpired() { return MPClient.getWorld().getCurrentTime() - emissionTime > lifetime; }
+    public double getElapsedSeconds() { return (MPClient.getWorld().getCurrentTime() - emissionTime) / 1000f; }
     public double[] getCoordinates() {
         return getRelativeCoordinates(startPosition);
     }

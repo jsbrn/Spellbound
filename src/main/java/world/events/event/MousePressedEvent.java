@@ -1,13 +1,13 @@
-package events.event;
+package world.events.event;
 
-import events.Event;
+import world.events.Event;
 
-public class MouseReleaseEvent extends Event {
+public class MousePressedEvent extends Event {
 
     private double x, y;
     private int button;
 
-    public MouseReleaseEvent(double tx, double ty, int button) {
+    public MousePressedEvent(double tx, double ty, int button) {
         this.x = tx;
         this.y = ty;
         this.button = button;

@@ -3,6 +3,7 @@ package world.sounds;
 import com.github.mathiewz.slick.Sound;
 import gui.sound.SoundManager;
 import misc.Location;
+import network.MPServer;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
 
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+//TODO: convert to component with appropriate system
 public class SoundEmitter {
 
     private Integer parent;
@@ -42,7 +44,7 @@ public class SoundEmitter {
 
     public void update() {
         if (!isActive) return;
-        Location sourceLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, parent)).getLocation();
+        Location sourceLocation = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, parent)).getLocation();
         if (sourceLocation.getRegion().getCurrentTime() > lastEmit + timing + variance) {
             play();
             variance = rng.nextInt(1 + maxVariance);
@@ -52,15 +54,16 @@ public class SoundEmitter {
 
     public void stop() {
         if (currentSound != null) currentSound.stop();
-        Location sourceLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, parent)).getLocation();
+        Location sourceLocation = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, parent)).getLocation();
         lastEmit = sourceLocation.getRegion().getCurrentTime();
     }
 
     public void play() {
         if (sounds.isEmpty()) return;
         Sound s = sounds.get(rng.nextInt(sounds.size()));
-        Location sourceLocation = ((LocationComponent) Entities.getComponent(LocationComponent.class, parent)).getLocation();
-        SoundManager.playSound(s, volumeMultiplier, sourceLocation);
+        Location sourceLocation = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, parent)).getLocation();
+        //SoundManager.playSound(s, volumeMultiplier, sourceLocation);
+        //TODO: send sound emit packet instead
         currentSound = s;
     }
 

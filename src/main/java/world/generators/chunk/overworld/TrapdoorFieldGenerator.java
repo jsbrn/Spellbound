@@ -2,6 +2,7 @@ package world.generators.chunk.overworld;
 
 import com.github.mathiewz.slick.Color;
 import gui.sound.SoundManager;
+import network.MPServer;
 import world.*;
 import world.generators.region.DungeonGenerator;
 
@@ -26,7 +27,8 @@ public class TrapdoorFieldGenerator extends OpenFieldGenerator {
     @Override
     public Portal getPortal() {
         String dungeon_name = "dungeon_"+ getChunkX()+"_"+ getChunkY();
-        Region dungeon = World.addRegion(new Region(dungeon_name, 16, new DungeonGenerator(1 + (difficulty), 16, World.getSeed() + getChunkX() + getChunkY())));
+        Region dungeon = MPServer.getWorld().addRegion(new Region(dungeon_name, 16, new DungeonGenerator(1 + (difficulty), 16,
+                MPServer.getWorld().getSeed() + getChunkX() + getChunkY())));
         Portal trapdoor = new Portal("trapdoor", entrance_x, entrance_y, 0, 1, false, dungeon, "ladder", SoundManager.DOOR_OPEN);
         return trapdoor;
     }

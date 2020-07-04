@@ -1,4 +1,4 @@
-package events;
+package world.events;
 
 import java.util.HashMap;
 

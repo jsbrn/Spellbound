@@ -12,15 +12,18 @@ import gui.menus.Journal;
 import gui.menus.PauseMenu;
 import gui.menus.SpellcraftingMenu;
 import misc.MiscMath;
+import network.MPClient;
+import network.MPServer;
+import world.Camera;
 import world.World;
-import events.Event;
-import events.EventDispatcher;
-import events.EventHandler;
-import events.EventListener;
-import events.event.ConversationEndedEvent;
-import events.event.HumanoidDeathEvent;
-import events.event.HumanoidRespawnEvent;
-import events.event.NPCSpeakEvent;
+import world.events.Event;
+import world.events.EventManager;
+import world.events.EventHandler;
+import world.events.EventListener;
+import world.events.event.ConversationEndedEvent;
+import world.events.event.HumanoidDeathEvent;
+import world.events.event.HumanoidRespawnEvent;
+import world.events.event.NPCSpeakEvent;
 
 
 public class GameScreen extends GameState {
@@ -40,9 +43,9 @@ public class GameScreen extends GameState {
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         super.update(gc, sbg, delta);
-        MiscMath.DELTA_TIME = (int)(delta * World.getTimeMultiplier());
-        World.update();
-
+        MiscMath.DELTA_TIME = delta;
+        MPServer.update();
+        MPClient.update();
     }
 
     public void toggleHUD() {
@@ -52,9 +55,9 @@ public class GameScreen extends GameState {
 
     @Override
     public void addGUIElements(GUI gui) {
-        if (World.getLocalPlayer() == null) return;
-        SpellcraftingMenu spellcasting = new SpellcraftingMenu(World.getLocalPlayer());
-        Journal spellbook = new Journal(World.getLocalPlayer(), spellcasting);
+        if (Camera.getTargetEntity() == null) return;
+        SpellcraftingMenu spellcasting = new SpellcraftingMenu(Camera.getTargetEntity());
+        Journal spellbook = new Journal(Camera.getTargetEntity(), spellcasting);
         PauseMenu pauseMenu = new PauseMenu();
         CameraViewport viewport = new CameraViewport() {
             @Override
@@ -69,8 +72,8 @@ public class GameScreen extends GameState {
 
 
         if (showHUD) gui.addElement(viewport, 0, 0, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Statusbar(World.getLocalPlayer()), 2, 2, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Hotbar(World.getLocalPlayer()), 2, 26, GUIAnchor.TOP_LEFT);
+        gui.addElement(new Statusbar(Camera.getTargetEntity()), 2, 2, GUIAnchor.TOP_LEFT);
+        gui.addElement(new Hotbar(Camera.getTargetEntity()), 2, 26, GUIAnchor.TOP_LEFT);
         gui.addElement(pauseMenu, 0,0, GUIAnchor.CENTER);
         pauseMenu.hide();
         Button spellbookButton = new Button(null, 16, 16, "spellbook.png", false) {
@@ -100,24 +103,6 @@ public class GameScreen extends GameState {
             }
         };
 
-        EventDispatcher.register(new EventListener()
-            .on(HumanoidDeathEvent.class, new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    HumanoidDeathEvent hde = (HumanoidDeathEvent)e;
-                    if (hde.getHumanoid().equals(World.getLocalPlayer()))
-                        deathMessage.show();
-                }
-            })
-            .on(HumanoidRespawnEvent.class, new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    HumanoidRespawnEvent hde = (HumanoidRespawnEvent)e;
-                    if (hde.getHumanoid().equals(World.getLocalPlayer()))
-                        deathMessage.hide();
-                }
-            })
-        );
         deathMessage.hide();
         gui.addElement(deathMessage, 0, 16, GUIAnchor.CENTER);
 
@@ -131,28 +116,6 @@ public class GameScreen extends GameState {
         SpeechBubble speechBubble = new SpeechBubble();
         gui.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
         speechBubble.hide();
-        EventDispatcher.register(new EventListener()
-                .on(NPCSpeakEvent.class, new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        NPCSpeakEvent cse = (NPCSpeakEvent)e;
-                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
-                            speechBubble.setSpeaker(cse.getNPC());
-                            speechBubble.setDialogue(cse.getDialogue());
-                            speechBubble.show();
-                        }
-                    }
-                })
-                .on(ConversationEndedEvent.class, new EventHandler() {
-                    @Override
-                    public void handle(Event e) {
-                        ConversationEndedEvent cse = (ConversationEndedEvent)e;
-                        if (cse.getPlayer().equals(World.getLocalPlayer())) {
-                            speechBubble.hide();
-                        }
-                    }
-                })
-        );
 
         if (!showHUD) gui.addElement(viewport, 0, 0, GUIAnchor.TOP_LEFT);
 
@@ -161,7 +124,6 @@ public class GameScreen extends GameState {
     @Override
     public void keyReleased(int key, char c) {
         super.keyReleased(key, c);
-        if (key == Input.KEY_F7) World.save();
     }
 
     @Override
