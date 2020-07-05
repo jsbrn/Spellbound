@@ -1,10 +1,13 @@
 package network;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
 import world.entities.systems.MovementSystem;
 import world.events.EventManager;
 import org.json.simple.JSONObject;
 import world.World;
+
+import java.io.IOException;
 
 public class MPServer {
 
@@ -13,10 +16,30 @@ public class MPServer {
     private static JSONObject serverSettings;
     private static EventManager eventManager;
 
-    public void init() {
+    public static void init() {
         eventManager = new EventManager();
+        serverSettings = new JSONObject();
         world = new World();
         server = new Server();
+    }
+
+    public static boolean launch(int seed) {
+        server.start();
+        try {
+            server.bind(6667);
+            world.generate(seed);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public static boolean close() {
+        server.close();
+        world = null;
+        return true;
     }
 
     public static EventManager getEventManager() {
@@ -29,20 +52,6 @@ public class MPServer {
 
     public static void update() {
         MovementSystem.update(world);
-    }
-
-    public static void testServerFunctionality() {
-//        server = new Server();
-//        server.start();
-//        Client c = new Client();
-//        try {
-//            server.bind(55505);
-//            c.start();
-//            c.connect(1000, "127.0.0.1", 55505);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println("Server started!!!");
     }
 
 }

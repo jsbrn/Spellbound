@@ -28,11 +28,6 @@ public class MainMenuScreen extends GameState {
         return GameState.MAIN_MENU;
     }
 
-    public void startGame() {
-        GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
-        GameManager.switchTo(GameState.GAME_SCREEN, true);
-    }
-
     @Override
     public void addGUIElements(GUI gui) {
 
@@ -73,7 +68,6 @@ public class MainMenuScreen extends GameState {
 //                    World.load();
 //                    startGame();
 //                //}
-                MPServer.testServerFunctionality();
             }
         };
 

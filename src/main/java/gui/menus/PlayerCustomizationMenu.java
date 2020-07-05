@@ -6,7 +6,11 @@ import gui.elements.Button;
 import gui.elements.Modal;
 import gui.elements.TextBox;
 import gui.elements.TextLabel;
+import gui.states.GameState;
 import gui.states.MainMenuScreen;
+import main.GameManager;
+import network.MPClient;
+import network.MPServer;
 import world.entities.components.magic.Spell;
 
 import java.util.Random;
@@ -43,16 +47,24 @@ public class PlayerCustomizationMenu extends Modal {
         createButton = new Button("Play!", 24, 8, null, true) {
             @Override
             public void onClick(int button) {
-                String seed = seedField.getText().replaceAll("[^\\d]", "");
+                int seed = Integer.parseInt(seedField.getText().replaceAll("[^\\d]", ""));
+                MPServer.init();
+                if (MPServer.launch(seed)) {
+                    MPClient.init();
+                    MPClient.join("127.0.0.1");
+                }
                 nameField.releaseFocus();
                 //creation.setName(nameField.getText());
-                getGUI().popModal();
+                //getGUI().popModal();
                 //TODO: initialize server and connect to it (or something like that)
 //                World.init();
 //                World.generate(Integer.parseInt(seed.isEmpty() ? "0" : seed));
 //                World.spawnPlayer(Chunk.CHUNK_SIZE / 2, Chunk.CHUNK_SIZE / 2, World.getRegion("player_home"));
 //                World.save();
-                ((MainMenuScreen)getGUI().getParent()).startGame();
+
+                //GameManager.getGameState(GameState.GAME_SCREEN).resetGUI();
+                //GameManager.switchTo(GameState.GAME_SCREEN, true);
+
             }
         };
 
