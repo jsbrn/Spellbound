@@ -1,7 +1,7 @@
-package world.generators.region;
+package world.generation.region;
 
 import com.github.mathiewz.slick.Sound;
-import world.generators.chunk.ChunkGenerator;
+import org.json.simple.JSONObject;
 
 import java.util.Random;
 
@@ -24,7 +24,11 @@ public abstract class RegionGenerator {
 
     public final Random rng() { return rng; }
 
-    public abstract ChunkGenerator getChunkGenerator(int cx, int cy, int region_size);
+    public abstract byte getBase(int wx, int wy);
+
+    public abstract byte getTop(int wx, int wy);
+
+    public abstract JSONObject getEntity(int wx, int wy);
 
     public abstract Sound getBackgroundAmbience();
 

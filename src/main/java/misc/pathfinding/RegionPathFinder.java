@@ -119,18 +119,12 @@ class Node {
     public int getX() { return coordinates[0]; }
     public int getY() { return coordinates[1]; }
 
-    private boolean isOutOfBounds() {
-        int max = region.getSize() * Chunk.CHUNK_SIZE;
-        return coordinates[0] < 0 || coordinates[1] < 0
-                || coordinates[0] > max || coordinates[1] > max;
-    }
-
     public void setGScore(int g) { this.G = g; }
     public void setHScore(int h) { this.H = h; }
 
     public double getDScore() {
         byte[] tile = region.getTile(coordinates[0], coordinates[1]);
-        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1]) || tile[0] == Tiles.AIR || isOutOfBounds()) return Integer.MAX_VALUE;
+        if (Tiles.collides(tile[0]) || Tiles.collides(tile[1]) || tile[0] == Tiles.AIR) return Integer.MAX_VALUE;
         return 0;
         //ArrayList<Entity> entities = region.getEntities(coordinates[0], coordinates[1], 1, 1);
         //int solidEntities = 0;
@@ -147,7 +141,7 @@ class Node {
     public void setParent(Node parent) { this.parent = parent; }
 
     public Region getRegion() { return region; }
-    public int getLocationIndex() { return (int) MiscMath.getIndex(coordinates[0], coordinates[1],Chunk.CHUNK_SIZE * region.getSize()); }
+    public int getLocationIndex() { return (int) MiscMath.getIndex(coordinates[0], coordinates[1], Integer.MAX_VALUE); }
 
     public String toString() { return "Node(X="+getX()+", Y = "+getY()+", G = "+G+", H = "+H+",F = "+getFScore()+")"; }
 

@@ -3,9 +3,10 @@ package network;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import network.handlers.ClientChunkPacketHandler;
+import network.handlers.client.ClientChunkPacketHandler;
 import network.packets.ChunkPacket;
 import world.World;
+import world.entities.systems.MovementSystem;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public class MPClient {
     }
 
     public static void update() {
-
+        MovementSystem.update(world);
     }
 
     public static World getWorld() {

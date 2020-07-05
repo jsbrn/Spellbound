@@ -93,9 +93,6 @@ public class GameScreen extends GameState {
         spellbookButton.setTooltipText("Journal (TAB)");
         gui.addElement(spellbookButton, 4, 82, GUIAnchor.TOP_LEFT);
 
-        MiniMap miniMap = new MiniMap();
-        gui.addElement(miniMap, -2, 2, GUIAnchor.TOP_RIGHT);
-
         TextLabel deathMessage = new TextLabel("Press R to continue", 4, Color.white, true, false){
             @Override
             public boolean onKeyUp(int key) {

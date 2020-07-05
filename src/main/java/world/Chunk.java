@@ -5,15 +5,16 @@ import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import misc.Location;
 import network.MPClient;
+import network.MPServer;
+import org.json.simple.JSONObject;
 import world.entities.systems.RenderSystem;
-import world.generators.chunk.ChunkGenerator;
 
 import java.util.ArrayList;
 
 public class Chunk {
 
     public static final int TILE_SIZE = 16;
-    public static final int CHUNK_SIZE = 13;
+    public static final int CHUNK_SIZE = 15;
 
     private Region region;
     private int[] coordinates;
@@ -21,50 +22,31 @@ public class Chunk {
     private byte[][] base;
     private byte[][] top;
 
-    private boolean generated, discovered;
-    private Color mapColor;
+    private boolean generated;
 
     public Chunk(int x, int y, Region region) {
         this.region = region;
         this.coordinates = new int[]{x, y};
-        this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
-        this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
     }
 
-    protected void generate(ChunkGenerator generator, boolean spawnEntities) {
-        mapColor = generator.getColor();
-        base = generator.getTiles(false);
-        top = generator.getTiles(true);
-
-//        for (int j = 0; j < CHUNK_SIZE; j++) {
-//            for (int i = 0; i < CHUNK_SIZE; i++) {
-//                int wx = (coordinates[0] * Chunk.CHUNK_SIZE) + i, wy = (coordinates[1] * Chunk.CHUNK_SIZE) + j;
-//                Integer e = generator.getEntity(i, j);
-//                if (e != null && spawnEntities) e.moveTo(new Location(region, wx + 0.5, wy + 0.5));
-//            }
-//        }
-
+    public void generate() {
+        if (generated) return;
+        for (int i = 0; i < base.length; i++) {
+            for (int j = 0; j < base[0].length; j++) {
+                int[] wc = new int[]{ (coordinates[0] * CHUNK_SIZE) + i, (coordinates[0] * CHUNK_SIZE) + j };
+                base[i][j] = region.getGenerator().getBase(wc[0], wc[1]);
+                top[i][j] = region.getGenerator().getTop(wc[0], wc[1]);
+                JSONObject entityDefinition = region.getGenerator().getEntity(wc[0], wc[1]);
+                if (entityDefinition == null) continue;
+                int newEntityID = MPServer.getWorld().getEntities().createEntity(entityDefinition);
+                region.addEntity(newEntityID);
+            }
+        }
         generated = true;
-
-    }
-
-    public void setDiscovered(boolean discovered) {
-        this.discovered = discovered;
-    }
-
-    public boolean wasDiscovered() {
-        return discovered;
     }
 
     public boolean isEmpty() {
         return !generated;
-    }
-
-    public void update() {
-        discovered = true;
-        ArrayList<Integer> entities = region
-                .getEntityIDs((coordinates[0] * CHUNK_SIZE), (coordinates[1] * CHUNK_SIZE), CHUNK_SIZE, CHUNK_SIZE);
-        //for (int i = entities.size() - 1; i >= 0; i--) entities.get(i).update();
     }
 
     public void set(int x, int y, byte base, byte top) {
@@ -80,9 +62,20 @@ public class Chunk {
 
     public int[] getCoordinates() { return coordinates; }
 
-    public Color getMapColor() {
-        return mapColor;
+    public int compareTo(int cx, int cy) {
+        if (this.coordinates[0] > cx) return 1;
+        if (this.coordinates[0] < cx) return -1;
+        if (this.coordinates[1] > cy) return 1;
+        if (this.coordinates[1] < cy) return -1;
+        return 0;
     }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public byte[][] getBase() { return base; }
+    public byte[][] getTop() { return top; }
 
     public void drawBase(float osx, float osy, float scale) {
         for (int j = 0; j < CHUNK_SIZE; j++) {

@@ -16,13 +16,9 @@ public class EventListener {
     }
 
     protected final void invoke(Event e) {
-        for (Class eventClass: eventHandlers.keySet()) {
+        for (Class eventClass : eventHandlers.keySet()) {
             if (eventClass.equals(e.getClass())) eventHandlers.get(eventClass).handle(e);
         }
     }
 
-}
-
-enum EventListenerContext {
-    SERVER, LOCAL
 }

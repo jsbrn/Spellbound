@@ -1,26 +1,14 @@
 package world;
 
-import assets.Assets;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Sound;
-import com.github.mathiewz.slick.geom.Polygon;
-import com.github.mathiewz.slick.geom.Shape;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
-import world.generators.chunk.ChunkGenerator;
-import world.generators.region.RegionGenerator;
-import world.entities.components.magic.MagicSourceComponent;
+import world.generation.region.RegionGenerator;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,11 +18,8 @@ public class Region {
     private World world;
 
     private String name;
-    private Chunk[][] chunks;
-    private ChunkGenerator[][] chunkGenerators;
-    private int size;
+    private ArrayList<Chunk> chunks;
 
-    private ArrayList<MagicSourceComponent> magic_sources;
     private ArrayList<Portal> portals;
     private ArrayList<Integer> entities;
 
@@ -43,48 +28,22 @@ public class Region {
     private long time;
     private RegionGenerator generator;
 
-    public Region(String name, int size, RegionGenerator generator) {
-
+    public Region(String name, RegionGenerator generator) {
         this.generator = generator;
         this.name = name;
-        this.size = size;
-
         this.time = 0;
-
         this.backgroundAmbience = generator.getBackgroundAmbience();
-
-        magic_sources = new ArrayList<>();
-        entities = new ArrayList<>();
-        portals = new ArrayList<>();
-
+        this.entities = new ArrayList<>();
+        this.portals = new ArrayList<>();
+        this.chunks = new ArrayList<>();
     }
 
     public void setWorld(World w) {
         this.world = w;
     }
-
-    public void plan() {
-        if (chunkGenerators != null) return;
-        chunks = new Chunk[size][size];
-        chunkGenerators = new ChunkGenerator[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                chunkGenerators[i][j] = generator.getChunkGenerator(i, j, size);
-                chunkGenerators[i][j].setChunkX(i);
-                chunkGenerators[i][j].setChunkY(j);
-                Portal p = chunkGenerators[i][j].getPortal();
-                if (p != null) {
-                    portals.add(p);
-                    p.setCoordinates(p.getCoordinates()[0] + (i * Chunk.CHUNK_SIZE),p.getCoordinates()[1] + (j * Chunk.CHUNK_SIZE));
-                }
-            }
-        }
-    }
-
     public Sound getBackgroundAmbience() {
         return backgroundAmbience;
     }
-
     public long getCurrentTime() { return time; }
 
     public int addEntity(Integer e) {
@@ -100,8 +59,8 @@ public class Region {
 
     public ArrayList<Integer> getEntityIDs(int wx, int wy, int width, int height) {
         ArrayList<Integer> subsection = new ArrayList<>();
-        double minloc = MiscMath.getIndex(wx, wy, Chunk.CHUNK_SIZE * getSize());
-        double maxloc = MiscMath.getIndex(wx + width, wy + height, Chunk.CHUNK_SIZE * getSize());
+        double minloc = MiscMath.getIndex(wx, wy, Integer.MAX_VALUE);
+        double maxloc = MiscMath.getIndex(wx + width, wy + height, Integer.MAX_VALUE);
         int[] indices = getEntityIndices(minloc, maxloc);
         for (int i = indices[0]; i < indices[1]; i++) {
             Integer entity = entities.get(i);
@@ -168,6 +127,124 @@ public class Region {
 
     }
 
+    /**
+     * Find the sector with the offset value specified.
+     *
+     * @param x The offset (from sectors) from the origin.
+     * @param y The offset (from sectors) from the origin.
+     * @return A Chunk instance, or null if not found.
+     */
+    public Chunk getChunk(int x, int y) {
+        Chunk s = getChunk(x, y, 0, chunks.size() - 1, chunks);
+        if (s == null) {
+            s = new Chunk(x, y, this);
+            addChunk(s);
+        }
+        return s;
+    }
+
+    /**
+     * Gets the sector at sector coords (x, y). Uses a binary search algorithm.
+     *
+     * @param x    Chunk coordinate.
+     * @param y    Chunk coordinate.
+     * @param l    The lower bound of the list to search (start with 0).
+     * @param u    The upper bound of the list to search (start with list.size - 1).
+     * @param list The list to search.
+     * @return A Chunk instance, or null if none found at (x, y).
+     */
+    private Chunk getChunk(int x, int y, int l, int u, ArrayList<Chunk> list) {
+        if (list.isEmpty()) return null;
+        //if the sector is beyond the first and last, return null
+        //if the sector is the first or last, return the first or last, respectively
+        if (list.get(0).compareTo(x, y) > 0 || list.get(list.size() - 1).compareTo(x, y) < 0) return null;
+        if (list.get(u).getCoordinates()[0] == x && list.get(u).getCoordinates()[1] == y) return list.get(u);
+        if (list.get(l).getCoordinates()[0] == x && list.get(l).getCoordinates()[1] == y) return list.get(l);
+
+        int lsize = (u + 1) - l;
+        int index = lsize / 2 + l;
+
+        if (lsize == 0) return null;
+
+        Chunk element = list.get(index);
+        int cmp = element.compareTo(x, y);
+
+        if (cmp == 0) return list.get(index);
+
+        int sub_bounds[] = new int[]{cmp > 0 ? l : index, cmp > 0 ? index : u};
+        if ((sub_bounds[1] + 1) - sub_bounds[0] <= 2) { //if sublist is two from length
+            if (cmp > 0) if (sub_bounds[0] > -1)
+                if (list.get(sub_bounds[0]).getCoordinates()[0] == x && list.get(sub_bounds[0]).getCoordinates()[1] == y)
+                    return list.get(sub_bounds[0]);
+            if (cmp < 0) if (sub_bounds[1] < list.size())
+                if (list.get(sub_bounds[1]).getCoordinates()[0] == x && list.get(sub_bounds[1]).getCoordinates()[1] == y)
+                    return list.get(sub_bounds[1]);
+            return null;
+        } else {
+            return getChunk(x, y, sub_bounds[0], sub_bounds[1], list);
+        }
+    }
+
+    /**
+     * Adds (and sorts) a sector to the list of sectors.
+     *
+     * @param s The sector to add.
+     * @return A boolean indicating the success of the operation.
+     */
+    public boolean addChunk(Chunk s) {
+        return addChunk(s, 0, chunks.size() - 1);
+    }
+
+    private boolean addChunk(Chunk s, int l, int u) {
+        int index = getPotentialChunkIndex(s.getCoordinates()[0], s.getCoordinates()[1], l, u);
+        if (index <= -1 || index > chunks.size()) {
+            return false;
+        }
+        chunks.add(index, s);
+
+        return true;
+    }
+
+    public RegionGenerator getGenerator() {
+        return generator;
+    }
+
+    /**
+     * Given a sector (x, y), determine the index it needs to enter the list at,
+     * to keep the list sorted. If the sector is found to already exist from the list,
+     * -1 is returned. Uses a binary search algorithm.
+     *
+     * @param l Lower bound of the search region (when calling first, use 0)
+     * @param u Upper bound of the search region (when calling first, use size()-1)
+     * @return An integer of the above specifications.
+     */
+    private int getPotentialChunkIndex(int x, int y, int l, int u) {
+        //if the bounds are the number, then return the bound
+
+        if (chunks.isEmpty()) return 0;
+        if (chunks.get(0).compareTo(x, y) > 0) return 0;
+        if (chunks.get(chunks.size() - 1).compareTo(x, y) < 0) return chunks.size();
+
+        int lsize = (u + 1) - l;
+        int index = lsize / 2 + l;
+
+        if (lsize == 0) return -1;
+
+        Chunk element = chunks.get(index);
+        int cmp = element.compareTo(x, y);
+
+        if (cmp == 0) return -1;
+
+        int sub_bounds[] = new int[]{cmp > 0 ? l : index, cmp > 0 ? index : u};
+        if ((sub_bounds[1] + 1) - sub_bounds[0] <= 2) { //if sublist is two from length
+            if (chunks.get(sub_bounds[0]).compareTo(x, y) < 0
+                    && chunks.get(sub_bounds[1]).compareTo(x, y) > 0) return sub_bounds[0] + 1;
+            return -1;
+        } else {
+            return getPotentialChunkIndex(x, y, sub_bounds[0], sub_bounds[1]);
+        }
+    }
+
     public void registerPortal(Portal portal) {
         portals.add(portal);
     }
@@ -202,35 +279,9 @@ public class Region {
         return current.get(wx % Chunk.CHUNK_SIZE, wy % Chunk.CHUNK_SIZE);
     }
 
-    public ChunkGenerator getChunkGenerator(int cx, int cy) {
-        if (cx < 0 || cx >= chunkGenerators.length || cy < 0 || cy >= chunkGenerators[0].length) return null;
-        return chunkGenerators[cx][cy];
-    }
-
-    public boolean doesChunkExist(int cx, int cy) {
-        if (chunks == null) return false;
-        if (cx < 0 || cx >= chunks.length || cy < 0 || cy >= chunks[0].length) return false;
-        return chunks[cx][cy] != null;
-    }
-
     public boolean isChunkDiscovered(int cx, int cy) {
-        if (!doesChunkExist(cx, cy)) return false;
-        return chunks[cx][cy].wasDiscovered();
-    }
-
-    public Chunk getChunk(int cx, int cy) {
-        if (chunkGenerators == null) plan();
-        if (cx < 0 || cx >= chunkGenerators.length || cy < 0 || cy >= chunkGenerators[0].length) return null;
-        if (chunks[cx][cy] == null) {
-            boolean savedToDisk = new File(Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk").exists();
-            if (!savedToDisk) {
-                chunks[cx][cy] = new Chunk(cx, cy, this);
-                chunks[cx][cy].generate(chunkGenerators[cx][cy], true);
-            } else {
-                loadChunkFromFile(cx, cy);
-            }
-        }
-        return chunks[cx][cy];
+        return true;
+        //TODO: implement per-player chunk discovery at some point
     }
 
     public Chunk[][] getAdjacentChunks(int cx, int cy) {
@@ -243,10 +294,6 @@ public class Region {
 
     public String getName() { return name; }
 
-    public void addMagicSource(MagicSourceComponent magicSource) {
-        magic_sources.add(magicSource);
-    }
-
     public void update() {
 
         time += MiscMath.getConstant(1000, 1);
@@ -258,7 +305,7 @@ public class Region {
                 int cx = pchcoords[0] + i;
                 int cy = pchcoords[1] + j;
                 Chunk adj = getChunk(cx, cy);
-                if (adj != null) adj.update();
+                //if (adj != null) adj.update();
             }
         }
 
@@ -291,62 +338,6 @@ public class Region {
 
     public void drawDebug(float scale, Graphics g) {
 
-    }
-
-    public int getSize() { return size; }
-
-    private void saveChunk(int cx, int cy) {
-        JSONObject chunk = new JSONObject();
-        JSONArray jsonEntities = new JSONArray();
-        jsonEntities.addAll(
-                getEntityIDs(cx * Chunk.CHUNK_SIZE, cy * Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE, Chunk.CHUNK_SIZE)
-                .stream()
-                .map(world.getEntities()::serializeEntity).collect(Collectors.toList())
-        );
-        chunk.put("entities", jsonEntities);
-        chunk.put("discovered", chunks[cx][cy].wasDiscovered());
-        try {
-            File regionFolder = new File(Assets.ROOT_DIRECTORY+"/world/"+name+"/");
-            regionFolder.mkdirs();
-            Files.write(new File(regionFolder.getAbsolutePath()+"/"+cx+"_"+cy+".chunk").toPath(), chunk.toJSONString().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveAllChunks() {
-        if (chunks == null) return;
-        for (int cx = 0; cx < chunks.length; cx++)
-            for (int cy = 0; cy < chunks[0].length; cy++)
-                if (chunks[cx][cy] != null) saveChunk(cx, cy);
-    }
-
-    public void loadSavedChunks() {
-        if (chunks == null) return;
-        for (int cx = 0; cx < chunks.length; cx++)
-            for (int cy = 0; cy < chunks[0].length; cy++)
-                loadChunkFromFile(cx, cy);
-    }
-
-    private void loadChunkFromFile(int cx, int cy) {
-        String url = Assets.ROOT_DIRECTORY+"/world/"+name+"/"+cx+"_"+cy+".chunk";
-        if (!new File(url).exists()) return;
-        chunks[cx][cy] = new Chunk(cx, cy, this);
-        chunks[cx][cy].generate(chunkGenerators[cx][cy], false);
-        try {
-            JSONObject chunk = (JSONObject)new JSONParser().parse(Assets.read(url, false));
-            chunks[cx][cy].setDiscovered((boolean)chunk.get("discovered"));
-            JSONArray jsonEntities = (JSONArray)chunk.get("entities");
-            jsonEntities
-                    .stream()
-                    .forEach(json -> {
-                        JSONObject jsonObject = (JSONObject)json;
-                        //world.getEntities().createEntity(jsonObject);
-                        //TODO: reimplement loading entities from save file
-                    });
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

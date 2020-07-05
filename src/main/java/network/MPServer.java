@@ -3,7 +3,9 @@ package network;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import misc.Location;
 import network.packets.ChunkPacket;
+import world.entities.Entities;
 import world.entities.systems.MovementSystem;
 import world.events.EventManager;
 import org.json.simple.JSONObject;
@@ -31,7 +33,7 @@ public class MPServer {
         server.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
-                connection.sendTCP(new ChunkPacket(new byte[2][2]));
+                super.connected(connection);
             }
 
             @Override
@@ -81,6 +83,12 @@ public class MPServer {
 
     private static void registerPacketHandlers() {
         packetHandlers = new HashMap<>();
+    }
+
+    public static int spawnEntity(JSONObject entity, Location location) {
+        int entityID = world.getEntities().createEntity(entity);
+        //TODO: register component listeners and invoke a spawn event
+        return entityID;
     }
 
 }
