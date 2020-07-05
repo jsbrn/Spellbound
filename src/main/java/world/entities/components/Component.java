@@ -1,6 +1,7 @@
 package world.entities.components;
 
 import org.json.simple.JSONObject;
+import world.entities.components.magic.MagicSourceComponent;
 import world.events.EventHandler;
 import world.events.EventListener;
 
@@ -33,6 +34,7 @@ public abstract class Component {
         if (id.equals("spellbook")) c = new SpellbookComponent().deserialize(defaults);
         if (id.equals("health")) c = new HealthComponent().deserialize(defaults);
         if (id.equals("velocity")) c = new VelocityComponent().deserialize(defaults);
+        if (id.equals("magic_source")) c = new MagicSourceComponent().deserialize(defaults);
 
         if (c != null) {
             c.eventListener = new EventListener();

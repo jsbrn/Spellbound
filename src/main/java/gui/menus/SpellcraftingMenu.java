@@ -6,11 +6,10 @@ import gui.GUIAnchor;
 import gui.elements.*;
 import misc.MiscMath;
 import network.MPClient;
-import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
-import world.magic.Spell;
-import world.magic.techniques.Technique;
-import world.magic.techniques.Techniques;
+import world.entities.components.magic.Spell;
+import world.entities.components.magic.techniques.Technique;
+import world.entities.components.magic.techniques.Techniques;
 
 import java.util.ArrayList;
 import java.util.HashMap;

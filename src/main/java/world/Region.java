@@ -10,12 +10,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import world.entities.Entities;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 import world.generators.chunk.ChunkGenerator;
 import world.generators.region.RegionGenerator;
-import world.magic.MagicSource;
+import world.entities.components.magic.MagicSourceComponent;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class Region {
     private ChunkGenerator[][] chunkGenerators;
     private int size;
 
-    private ArrayList<MagicSource> magic_sources;
+    private ArrayList<MagicSourceComponent> magic_sources;
     private ArrayList<Portal> portals;
     private ArrayList<Integer> entities;
 
@@ -167,8 +166,8 @@ public class Region {
 
     }
 
-    public List<MagicSource> getMagicSources(double wx, double wy, double radius) {
-        List<MagicSource> outer = magic_sources.stream().filter(ms -> {
+    public List<MagicSourceComponent> getMagicSources(double wx, double wy, double radius) {
+        List<MagicSourceComponent> outer = magic_sources.stream().filter(ms -> {
             double[] coords = ms.getBody().getLocation().getCoordinates();
             return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getDepthRadius() + ms.getBody().getReachRadius(), wx, wy, radius);
         }).collect(Collectors.toList()),
@@ -254,7 +253,7 @@ public class Region {
 
     public String getName() { return name; }
 
-    public void addMagicSource(MagicSource magicSource) {
+    public void addMagicSource(MagicSourceComponent magicSource) {
         magic_sources.add(magicSource);
     }
 
@@ -263,7 +262,7 @@ public class Region {
         time += MiscMath.getConstant(1000, 1);
 
         for (int i = magic_sources.size() - 1; i >= 0; i--) {
-            MagicSource magicSource = magic_sources.get(i);
+            MagicSourceComponent magicSource = magic_sources.get(i);
             magicSource.update();
             if (magicSource.getBody().isEmpty() && !magicSource.getBody().isSpawning()) magic_sources.remove(i);
         }
@@ -310,7 +309,7 @@ public class Region {
     }
 
     public void drawDebug(float scale, Graphics g) {
-        for (MagicSource magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
+        for (MagicSourceComponent magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
     }
 
     public int getSize() { return size; }

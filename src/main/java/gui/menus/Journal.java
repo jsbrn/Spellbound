@@ -10,10 +10,8 @@ import gui.elements.Modal;
 import gui.elements.TextLabel;
 import gui.sound.SoundManager;
 import network.MPClient;
-import world.World;
-import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
-import world.magic.Spell;
+import world.entities.components.magic.Spell;
 
 import java.util.ArrayList;
 

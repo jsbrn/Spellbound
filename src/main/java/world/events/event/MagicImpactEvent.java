@@ -1,21 +1,21 @@
 package world.events.event;
 
 import world.events.Event;
-import world.magic.MagicSource;
+import world.entities.components.magic.MagicSourceComponent;
 
 public class MagicImpactEvent extends Event {
 
-    private MagicSource magicSource;
+    private MagicSourceComponent magicSource;
     private Integer impacted;
 
-    public MagicImpactEvent(MagicSource source, Integer e) {
+    public MagicImpactEvent(MagicSourceComponent source, Integer e) {
         this.magicSource = source;
         this.impacted = e;
     }
 
     public boolean isEntityCollision() { return getEntity() != null; }
 
-    public MagicSource getMagicSource() {
+    public MagicSourceComponent getMagicSource() {
         return magicSource;
     }
 

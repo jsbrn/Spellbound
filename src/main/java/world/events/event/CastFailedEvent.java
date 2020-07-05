@@ -1,7 +1,7 @@
 package world.events.event;
 
 import world.events.Event;
-import world.magic.Spell;
+import world.entities.components.magic.Spell;
 
 public class CastFailedEvent extends Event {
 

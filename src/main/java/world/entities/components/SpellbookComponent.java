@@ -2,8 +2,8 @@ package world.entities.components;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import world.magic.Spell;
-import world.magic.techniques.Techniques;
+import world.entities.components.magic.Spell;
+import world.entities.components.magic.techniques.Techniques;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;

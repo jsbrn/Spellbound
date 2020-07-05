@@ -1,17 +1,17 @@
 package world.events.event;
 
 import world.events.Event;
-import world.magic.MagicSource;
+import world.entities.components.magic.MagicSourceComponent;
 
 public class MagicDepletedEvent extends Event {
 
-    private MagicSource magicSource;
+    private MagicSourceComponent magicSource;
 
-    public MagicDepletedEvent(MagicSource source) {
+    public MagicDepletedEvent(MagicSourceComponent source) {
         this.magicSource = source;
     }
 
-    public MagicSource getMagicSource() {
+    public MagicSourceComponent getMagicSource() {
         return magicSource;
     }
 }

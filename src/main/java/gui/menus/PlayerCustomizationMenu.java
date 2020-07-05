@@ -7,9 +7,7 @@ import gui.elements.Modal;
 import gui.elements.TextBox;
 import gui.elements.TextLabel;
 import gui.states.MainMenuScreen;
-import world.Chunk;
-import world.World;
-import world.magic.Spell;
+import world.entities.components.magic.Spell;
 
 import java.util.Random;
 

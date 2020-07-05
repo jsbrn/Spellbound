@@ -3,8 +3,8 @@ package assets;
 import com.github.mathiewz.slick.Color;
 import misc.MiscMath;
 import world.entities.components.SpellbookComponent;
-import world.magic.Spell;
-import world.magic.techniques.Techniques;
+import world.entities.components.magic.Spell;
+import world.entities.components.magic.techniques.Techniques;
 
 import java.util.Arrays;
 import java.util.Random;
