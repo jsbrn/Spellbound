@@ -9,6 +9,7 @@ import gui.menus.CheatCodeMenu;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
+import network.MPClient;
 import org.lwjgl.input.Mouse;
 import world.Camera;
 import world.Chunk;
@@ -77,7 +78,7 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public void drawOver(Graphics g) {
-        Camera.getLocation().getRegion().draw(Window.getScale(), g);
+        MPClient.getWorld().getRegion(Camera.getLocation()).draw(Window.getScale(), g);
     }
 
     @Override
@@ -87,10 +88,10 @@ public class CameraViewport extends GUIElement {
         double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Window.getHeight() - Mouse.getY(), Window.getScale());
         float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());
         float[] origin_osc = Camera.getOnscreenCoordinates(0, 0, Window.getScale());
-        ArrayList<Integer> entities = Camera.getLocation().getRegion().getEntityIDs((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
+        ArrayList<Integer> entities = MPClient.getWorld().getRegion(Camera.getLocation()).getEntityIDs((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
         float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0], (int)mouse_wc[1], Window.getScale());
 
-        Camera.getLocation().getRegion().drawDebug(Window.getScale(), g);
+        MPClient.getWorld().getRegion(Camera.getLocation()).drawDebug(Window.getScale(), g);
 
         g.setFont(Assets.getFont(14));
 
@@ -102,8 +103,8 @@ public class CameraViewport extends GUIElement {
 
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
-                "Entity count: "+Camera.getLocation().getRegion().getEntityIDs().size(),
-                "Region: "+Camera.getLocation().getRegion().getName(),
+                "Entity count: "+MPClient.getWorld().getRegion(Camera.getLocation()).getEntityIDs().size(),
+                "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
                 "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
                         +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)
         };

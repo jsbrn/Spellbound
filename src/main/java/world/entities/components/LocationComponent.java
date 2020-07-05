@@ -29,8 +29,7 @@ public class LocationComponent extends Component {
 
     @Override
     public Component deserialize(JSONObject object) {
-        Region region = World.getRegion();
-        location = new Location(region, (double)object.get("x"), (double)object.get("y"));
+        location = new Location((String)object.get("region"), (double)object.get("x"), (double)object.get("y"));
         return this;
     }
 

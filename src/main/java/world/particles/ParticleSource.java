@@ -85,7 +85,7 @@ public class ParticleSource {
 
             boolean behind_something = false;
             for (int t = 1; t < Assets.TILE_SPRITESHEET.getHeight() / Chunk.TILE_SIZE; t++) {
-                byte[] tile = Camera.getLocation().getRegion().getTile((int)pcoords[0], (int)pcoords[1] + t);
+                byte[] tile = MPClient.getWorld().getRegion(Camera.getLocation()).getTile((int)pcoords[0], (int)pcoords[1] + t);
                 if (pcoords[1] > (pcoords[1] + t - Tiles.getHeight(tile[1]))) {
                     if (Tiles.getTransparency(tile[1]) == 0) behind_something = true; else alpha = Tiles.getTransparency(tile[1]);
                     break;

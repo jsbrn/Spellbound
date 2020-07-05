@@ -4,6 +4,7 @@ import assets.Assets;
 import com.github.mathiewz.slick.Graphics;
 import misc.Location;
 import misc.MiscMath;
+import network.MPClient;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -55,6 +56,8 @@ public class World {
 
     public Region getRegion(String name) { return regions.get(name); }
 
+    public Region getRegion(Location location) { return getRegion(location.getRegionName()); }
+
     public void update() {
         time += MiscMath.getConstant(1000, 1);
     }
@@ -62,10 +65,10 @@ public class World {
     public long getCurrentTime() { return time; }
 
     public void draw(float scale, Graphics g) {
-        Camera.getLocation().getRegion().draw(scale, g);
+        MPClient.getWorld().getRegion(Camera.getLocation()).draw(scale, g);
     }
 
-    public void drawDebug(float scale, Graphics g) { Camera.getLocation().getRegion().drawDebug(scale, g); }
+    public void drawDebug(float scale, Graphics g) { MPClient.getWorld().getRegion(Camera.getLocation()).drawDebug(scale, g); }
 
     public void save() {
         JSONObject world = serialize();

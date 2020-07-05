@@ -2,6 +2,7 @@ package misc.pathfinding;
 
 import misc.Location;
 import misc.MiscMath;
+import network.MPServer;
 import world.Chunk;
 import world.Region;
 import world.Tiles;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class LocalPathFinder {
+public class RegionPathFinder {
 
     private static HashMap<Integer, Node> nodeCache;
     private static Node startNode, targetNode;
@@ -23,8 +24,8 @@ public class LocalPathFinder {
         open = new ArrayList<>();
         closed = new ArrayList<>();
 
-        startNode = getNode((int)start.getCoordinates()[0], (int)start.getCoordinates()[1], start.getRegion());
-        targetNode = getNode(targetX, targetY, start.getRegion());
+        startNode = getNode((int)start.getCoordinates()[0], (int)start.getCoordinates()[1], MPServer.getWorld().getRegion(start));
+        targetNode = getNode(targetX, targetY, MPServer.getWorld().getRegion(start));
         open.add(startNode);
 
         if (startNode.equals(targetNode) || targetNode.getDScore() == Integer.MAX_VALUE) return path;
@@ -53,7 +54,7 @@ public class LocalPathFinder {
 
         //build the path
         for (Node n = targetNode; n != null; n = n.getParent()) {
-            path.add(0, new Location(start.getRegion(), n.getX() + 0.5, n.getY() + 0.5));
+            path.add(0, new Location(start.getRegionName(), n.getX() + 0.5, n.getY() + 0.5));
         }
 
         return path;

@@ -6,6 +6,7 @@ import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Image;
 import com.github.mathiewz.slick.SlickException;
 import gui.GUIElement;
+import network.MPClient;
 import world.Camera;
 import world.Region;
 import world.World;
@@ -25,7 +26,7 @@ public class MiniMap extends GUIElement {
     }
 
     private Region getRegion() {
-        return region == null ? Camera.getLocation().getRegion() : region;
+        return region == null ? MPClient.getWorld().getRegion(Camera.getLocation()) : region;
     }
 
     private Image getBuffer() {

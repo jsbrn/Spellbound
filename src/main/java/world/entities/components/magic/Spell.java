@@ -73,13 +73,6 @@ public class Spell {
         return loaded;
     }
 
-    public void cast(double wx, double wy, Integer casterID) {
-        MagicSourceComponent cast = new MagicSourceComponent(wx, wy, casterID, loadTechniques(), color);
-        Region region = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, casterID)).getLocation().getRegion();
-        region.addMagicSource(cast);
-        MPServer.getEventManager().invoke(new SpellCastEvent(this, cast));
-    }
-
     public void addLevel(String technique) {
         setLevel(technique, getLevel(technique) + 1);
     }

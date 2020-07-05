@@ -1,23 +1,6 @@
 package world.entities.components.magic.techniques;
 
 import world.entities.components.magic.MagicSourceComponent;
-import world.entities.components.magic.techniques.affected.AffectedGroupTechnique;
-import world.entities.components.magic.techniques.arc.ArcNarrowTechnique;
-import world.entities.components.magic.techniques.arc.ArcSpreadTechnique;
-import world.entities.components.magic.techniques.emission.DensityTechnique;
-import world.entities.components.magic.techniques.emission.GravitateTechnique;
-import world.entities.components.magic.techniques.emission.RadiateTechnique;
-import world.entities.components.magic.techniques.movement.AuraTechnique;
-import world.entities.components.magic.techniques.movement.FollowTechnique;
-import world.entities.components.magic.techniques.movement.HoverTechnique;
-import world.entities.components.magic.techniques.movement.PropelTechnique;
-import world.entities.components.magic.techniques.physical.*;
-import world.entities.components.magic.techniques.radius.*;
-import world.entities.components.magic.techniques.rotation.*;
-import world.entities.components.magic.techniques.triggers.CastTriggerTechnique;
-import world.entities.components.magic.techniques.triggers.DepletionTriggerTechnique;
-import world.entities.components.magic.techniques.triggers.ImpactTriggerTechnique;
-import world.entities.components.magic.techniques.triggers.IntersectionTriggerTechnique;
 
 public abstract class Technique {
 
@@ -33,13 +16,13 @@ public abstract class Technique {
 
     public void setLevel(int new_level) { level = new_level; }
 
-    public abstract void
     public abstract void applyTo(MagicSourceComponent cast);
+    //TODO: figure out how to separate server/client Techniques functionality
     public abstract void update(MagicSourceComponent cast);
 
     public static Technique createFrom(String name) {
-        Technique creation;
-        switch(name) {
+        Technique creation = null;
+        /*switch(name) {
             case "affect_self": creation = new AffectedGroupTechnique(); break;
             case "affect_allies": creation = new AffectedGroupTechnique(); break;
             case "affect_enemies": creation = new AffectedGroupTechnique(); break;
@@ -73,16 +56,16 @@ public abstract class Technique {
             case "physical_torque": creation = new TorqueModifierTechnique(); break;
             case "physical_energy": creation = new EnergyModifierTechnique(); break;
             case "physical_speed": creation = new SpeedModifierTechnique(); break;
-//            case "effects_absorb": creation = new EffectAbsorbTechnique(); break;
-//            case "effects_increase": creation = new EffectIncreaseTechnique(); break;
-//            case "effects_decrease": creation = new EffectDecreaseTechnique(); break;
-//            case "effects_randomize": creation = new EffectRandomizeTechnique(); break;
-//            case "trait_hp": creation = new TraitSelectorTechnique(); break;
-//            case "trait_mana": creation = new TraitSelectorTechnique(); break;
-//            case "trait_x": creation = new TraitSelectorTechnique(); break;
-//            case "trait_y": creation = new TraitSelectorTechnique(); break;
+            case "effects_absorb": creation = new EffectAbsorbTechnique(); break;
+            case "effects_increase": creation = new EffectIncreaseTechnique(); break;
+            case "effects_decrease": creation = new EffectDecreaseTechnique(); break;
+            case "effects_randomize": creation = new EffectRandomizeTechnique(); break;
+            case "trait_hp": creation = new TraitSelectorTechnique(); break;
+            case "trait_mana": creation = new TraitSelectorTechnique(); break;
+            case "trait_x": creation = new TraitSelectorTechnique(); break;
+            case "trait_y": creation = new TraitSelectorTechnique(); break;
             default: creation = null;
-        }
+        }*/
         if (creation != null) creation.id = name;
         return creation;
     }

@@ -8,15 +8,11 @@ import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.TextLabel;
 import gui.menus.PlayerCustomizationMenu;
-import gui.menus.PopupMenu;
-import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
 import network.MPServer;
-import world.Camera;
-import world.World;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;

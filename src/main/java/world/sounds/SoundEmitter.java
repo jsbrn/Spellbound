@@ -3,7 +3,9 @@ package world.sounds;
 import com.github.mathiewz.slick.Sound;
 import gui.sound.SoundManager;
 import misc.Location;
+import network.MPClient;
 import network.MPServer;
+import world.Camera;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
 
@@ -45,17 +47,17 @@ public class SoundEmitter {
     public void update() {
         if (!isActive) return;
         Location sourceLocation = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, parent)).getLocation();
-        if (sourceLocation.getRegion().getCurrentTime() > lastEmit + timing + variance) {
+        if (MPClient.getWorld().getRegion(sourceLocation).getCurrentTime() > lastEmit + timing + variance) {
             play();
             variance = rng.nextInt(1 + maxVariance);
-            lastEmit = sourceLocation.getRegion().getCurrentTime();
+            lastEmit = MPClient.getWorld().getRegion(sourceLocation).getCurrentTime();
         }
     }
 
     public void stop() {
         if (currentSound != null) currentSound.stop();
         Location sourceLocation = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, parent)).getLocation();
-        lastEmit = sourceLocation.getRegion().getCurrentTime();
+        lastEmit = MPClient.getWorld().getRegion(sourceLocation).getCurrentTime();
     }
 
     public void play() {

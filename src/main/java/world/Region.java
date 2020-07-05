@@ -3,6 +3,8 @@ package world;
 import assets.Assets;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Sound;
+import com.github.mathiewz.slick.geom.Polygon;
+import com.github.mathiewz.slick.geom.Shape;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
@@ -86,7 +88,7 @@ public class Region {
     public long getCurrentTime() { return time; }
 
     public int addEntity(Integer e) {
-        double lindex = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation().getGlobalIndex();
+        double lindex = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation().getIndex(this);
         int index = getEntityIndex(lindex, 0, entities.size());
         entities.add(index, e);
         return index;
@@ -150,9 +152,9 @@ public class Region {
 
         int half = min + ((max-min) / 2);
 
-        double minloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(min))).getLocation().getGlobalIndex();
-        double maxloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(max - 1))).getLocation().getGlobalIndex();
-        double halfloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(half))).getLocation().getGlobalIndex();
+        double minloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(min))).getLocation().getIndex(this);
+        double maxloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(max - 1))).getLocation().getIndex(this);
+        double halfloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(half))).getLocation().getIndex(this);
 
         if (location >= maxloc) return max;
         if (location <= minloc) return min;
@@ -164,18 +166,6 @@ public class Region {
             return getEntityIndex(location, half, max);
         }
 
-    }
-
-    public List<MagicSourceComponent> getMagicSources(double wx, double wy, double radius) {
-        List<MagicSourceComponent> outer = magic_sources.stream().filter(ms -> {
-            double[] coords = ms.getBody().getLocation().getCoordinates();
-            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getDepthRadius() + ms.getBody().getReachRadius(), wx, wy, radius);
-        }).collect(Collectors.toList()),
-        inner = magic_sources.stream().filter(ms -> {
-            double[] coords = ms.getBody().getLocation().getCoordinates();
-            return MiscMath.circlesIntersect(coords[0], coords[1], ms.getBody().getReachRadius(), wx, wy, radius);
-        }).collect(Collectors.toList());;
-        return outer.stream().filter(ms -> !(inner.contains(ms) && !outer.contains(ms))).collect(Collectors.toList());
     }
 
     public void registerPortal(Portal portal) {
@@ -261,12 +251,6 @@ public class Region {
 
         time += MiscMath.getConstant(1000, 1);
 
-        for (int i = magic_sources.size() - 1; i >= 0; i--) {
-            MagicSourceComponent magicSource = magic_sources.get(i);
-            magicSource.update();
-            if (magicSource.getBody().isEmpty() && !magicSource.getBody().isSpawning()) magic_sources.remove(i);
-        }
-
         int radius = 1;
         int[] pchcoords = Camera.getLocation().getChunkCoordinates();
         for (int j = -radius; j <= radius; j++) {
@@ -303,13 +287,10 @@ public class Region {
                 }
             }
         }
-        Assets.PARTICLE.startUse();
-        for (int i = 0; i < magic_sources.size(); i++) magic_sources.get(i).draw(oscoords[0], oscoords[1], scale);
-        Assets.PARTICLE.endUse();
     }
 
     public void drawDebug(float scale, Graphics g) {
-        for (MagicSourceComponent magicSource: magic_sources) magicSource.getBody().drawDebug(0, 0, scale, g);
+
     }
 
     public int getSize() { return size; }
