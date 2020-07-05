@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import world.entities.components.Component;
 import world.events.EventManager;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,18 +60,23 @@ public class Entities {
                 .collect(Collectors.toSet());
     }
 
+    public ArrayList<Component> getComponents(Integer entityID) {
+        ArrayList<Component> components = new ArrayList<>();
+        for (HashMap<Integer, Component> componentMap: COMPONENT_MAPS.values())
+            if (componentMap.get(entityID) != null) components.add(componentMap.get(entityID));
+        return components;
+    }
+
     private void addComponent(Component component, int entityID) {
         COMPONENT_MAPS.computeIfAbsent(component.getClass(), k -> new LinkedHashMap<>());
         COMPONENT_MAPS.get(component.getClass()).put(entityID, component);
         component.setParent(entityID);
-        MPServer.getEventManager().register(component.getEventListener());
     }
 
     public void removeComponent(Class componentClass, int entityID) {
         HashMap<Integer, Component> componentList = COMPONENT_MAPS.get(componentClass);
         if (componentList == null) return;
         Component removed = componentList.remove(entityID);
-        if (removed != null) MPServer.getEventManager().unregister(removed.getEventListener());
     }
 
 }

@@ -5,12 +5,20 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
 import network.packets.ChunkPacket;
+import network.packets.EntitySpawnPacket;
 import world.entities.Entities;
+import world.entities.components.Component;
+import world.entities.components.LocationComponent;
 import world.entities.systems.MovementSystem;
+import world.events.Event;
+import world.events.EventHandler;
+import world.events.EventListener;
 import world.events.EventManager;
 import org.json.simple.JSONObject;
 import world.World;
+import world.events.event.EntitySpawnEvent;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -85,9 +93,30 @@ public class MPServer {
         packetHandlers = new HashMap<>();
     }
 
+    private static void registerEventHandlers() {
+        EventListener serverListener = new EventListener()
+            .on(EntitySpawnEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    EntitySpawnEvent ese = (EntitySpawnEvent)e;
+                    server.sendToAllTCP(new EntitySpawnPacket(world.getEntities().serializeEntity(ese.getEntityID())));
+                }
+            });
+        eventManager.register(serverListener);
+    }
+
+    /* SOME GLOBAL SERVER ACTIONS THAT NEED TO BE SEPARATED FROM THE CLIENT*/
+
     public static int spawnEntity(JSONObject entity, Location location) {
         int entityID = world.getEntities().createEntity(entity);
-        //TODO: register component listeners and invoke a spawn event
+        ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).setLocation(location);
+        world.getRegion(location.getRegionName()).addEntity(entityID);
+
+        for (Component component: world.getEntities().getComponents(entityID))
+            eventManager.register(component.getEventListener());
+
+        eventManager.invoke(new EntitySpawnEvent(entityID));
+
         return entityID;
     }
 
