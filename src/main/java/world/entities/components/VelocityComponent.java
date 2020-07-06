@@ -3,11 +3,8 @@ package world.entities.components;
 import misc.MiscMath;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import world.World;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map.*;
 
 public class VelocityComponent extends Component {
 
@@ -27,7 +24,6 @@ public class VelocityComponent extends Component {
             jsonForce.put("magnitude", f.getOriginalMagnitude());
             jsonForce.put("deceleration", f.getDeceleration());
             jsonForce.put("direction", f.getDirection());
-            jsonForce.put("start_time", f.getStartTime());
             listOfForces.add(jsonForce);
         }
         serialized.put("forces", listOfForces);
@@ -43,14 +39,13 @@ public class VelocityComponent extends Component {
             forces.add(new Force(
                     (double)f.get("direction"),
                     (double)f.get("magnitude"),
-                    (double)f.getOrDefault("deceleration", 0.0),
-                    (long)f.get("start_time")));
+                    (double)f.getOrDefault("deceleration", 0.0)));
         }
         return this;
     }
 
-    public void addForce(double direction, double magnitude, double deceleration, long startTime) {
-        forces.add(new Force(direction, magnitude, deceleration, startTime));
+    public void addForce(double direction, double magnitude, double deceleration) {
+        forces.add(new Force(direction, magnitude, deceleration));
     }
 
     /**
@@ -61,9 +56,10 @@ public class VelocityComponent extends Component {
         double[] dir = new double[2];
         for (int i = forces.size() - 1; i > -1; i--) {
             Force f = forces.get(i);
-            dir[0] += f.getMagnitude(currentTime) * f.getDirection()[0];
-            dir[1] += f.getMagnitude(currentTime) * f.getDirection()[1];
-            if (f.getMagnitude(currentTime) == 0) forces.remove(i);
+            f.updateMagnitude();
+            dir[0] += f.getMagnitude() * f.getDirections()[0];
+            dir[1] += f.getMagnitude() * f.getDirections()[1];
+            if (f.getMagnitude() == 0) forces.remove(i);
         }
         return dir;
     }
@@ -77,36 +73,39 @@ public class VelocityComponent extends Component {
 
 class Force {
 
-    private double magnitude, deceleration;
-    private double[] direction;
-    private long startTime;
+    private double direction, magnitude, deceleration;
+    private double[] directions;
 
-    public Force(double direction, double magnitude, double deceleration, long startTime) {
+    public Force(double direction, double magnitude, double deceleration) {
         this.magnitude = magnitude;
-        this.direction = MiscMath.getRotatedOffset(0, -1, direction);
+        this.direction = direction;
+        this.directions = MiscMath.getRotatedOffset(0, -1, direction);
         this.deceleration = deceleration;
-        this.startTime = startTime;
     }
 
     public double getOriginalMagnitude() {
         return magnitude;
     }
 
-    public double getMagnitude(long currentTime) {
-        double elapsedSeconds = (currentTime - startTime) / 1000f;
-        return MiscMath.clamp(magnitude - (deceleration * elapsedSeconds),0, Double.MAX_VALUE);
+    public double getMagnitude() {
+        return magnitude;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public void updateMagnitude() {
+        magnitude -= MiscMath.getConstant(deceleration, 1);
+        magnitude = MiscMath.clamp(magnitude, 0, Double.MAX_VALUE);
     }
 
     public double getDeceleration() {
         return deceleration;
     }
 
-    public double[] getDirection() {
+    public double getDirection() {
         return direction;
+    }
+
+    public double[] getDirections() {
+        return directions;
     }
 
 }

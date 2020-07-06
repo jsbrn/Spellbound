@@ -46,9 +46,6 @@ public class CheatCodeMenu extends Modal {
         if (code.equals("cinematic")) {
             Camera.setSpeed(5);
         }
-        if (code.equals("gui")) {
-            ((GameScreen)GameManager.getGameState(GameState.GAME_SCREEN)).toggleHUD();
-        }
     }
 
     @Override

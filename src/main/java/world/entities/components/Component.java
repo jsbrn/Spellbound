@@ -27,6 +27,10 @@ public abstract class Component {
     public Integer getParent() { return parent; }
     public void setParent(Integer entity) { parent = entity; }
 
+    public static Component create(String id) {
+        return create(id, new JSONObject());
+    }
+
     public static Component create(String id, JSONObject defaults) {
         Component c = null;
         if (id.equals("location")) c = new LocationComponent().deserialize(defaults);
@@ -35,6 +39,7 @@ public abstract class Component {
         if (id.equals("health")) c = new HealthComponent().deserialize(defaults);
         if (id.equals("velocity")) c = new VelocityComponent().deserialize(defaults);
         if (id.equals("magic_source")) c = new MagicSourceComponent().deserialize(defaults);
+        if (id.equals("player")) c = new PlayerComponent().deserialize(defaults);
 
         if (c != null) {
             c.eventListener = new EventListener();

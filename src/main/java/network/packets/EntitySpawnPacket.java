@@ -13,4 +13,7 @@ public class EntitySpawnPacket extends Packet {
         this.entityJSON = entityData.toJSONString();
     }
 
+    public String getEntityJSON() {
+        return entityJSON;
+    }
 }

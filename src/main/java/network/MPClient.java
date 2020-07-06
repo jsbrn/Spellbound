@@ -4,12 +4,17 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import network.handlers.client.ClientChunkPacketHandler;
-import network.packets.ChunkPacket;
+import network.handlers.client.ClientEntitySpawnPacketHandler;
+import network.handlers.client.ClientPlayerAssignmentPacketHandler;
+import network.handlers.client.ClientRegionPacketHandler;
+import network.packets.*;
 import world.World;
 import world.entities.systems.MovementSystem;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MPClient {
 
@@ -17,15 +22,21 @@ public class MPClient {
     private static Client client;
     private static World world;
 
+    private static long time;
+
+    private static Timer pingTimer;
+
     public static void init() {
         client = new Client();
+        time = 0;
         world = new World();
         Packet.registerPackets(client.getKryo());
         registerPacketHandlers();
+        pingTimer = new Timer();
         client.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
-                super.connected(connection);
+                connection.sendTCP(new JoinPacket());
             }
 
             @Override
@@ -46,16 +57,25 @@ public class MPClient {
         try {
             client.start();
             client.connect(10000, host, 6667);
+            pingTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    client.updateReturnTripTime();
+                }
+            }, 2000, 2000);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void close() {
+    public static void close()
+    {
+        pingTimer.cancel();
         client.close();
     }
 
     public static void update() {
+        client.getReturnTripTime();
         MovementSystem.update(world);
     }
 
@@ -66,6 +86,17 @@ public class MPClient {
     private static void registerPacketHandlers() {
         packetHandlers = new HashMap<>();
         packetHandlers.put(ChunkPacket.class, new ClientChunkPacketHandler());
+        packetHandlers.put(EntitySpawnPacket.class, new ClientEntitySpawnPacketHandler());
+        packetHandlers.put(PlayerAssignmentPacket.class, new ClientPlayerAssignmentPacketHandler());
+        packetHandlers.put(RegionPacket.class, new ClientRegionPacketHandler());
+    }
+
+    public static long getTime() {
+        return time;
+    }
+
+    public static int getPing() {
+        return client.getReturnTripTime();
     }
 
 }

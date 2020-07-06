@@ -8,6 +8,7 @@ import network.MPClient;
 import network.MPServer;
 import org.json.simple.JSONObject;
 import world.entities.systems.RenderSystem;
+import world.events.event.ChunkGeneratedEvent;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class Chunk {
     public Chunk(int x, int y, Region region) {
         this.region = region;
         this.coordinates = new int[]{x, y};
+        this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
+        this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
     }
 
     public void generate() {
@@ -42,6 +45,7 @@ public class Chunk {
                 region.addEntity(newEntityID);
             }
         }
+        MPServer.getEventManager().invoke(new ChunkGeneratedEvent(this));
         generated = true;
     }
 

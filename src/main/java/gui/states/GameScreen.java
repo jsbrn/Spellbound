@@ -16,6 +16,7 @@ import network.MPClient;
 import network.MPServer;
 import world.Camera;
 import world.World;
+import world.entities.components.magic.Spell;
 import world.events.Event;
 import world.events.EventManager;
 import world.events.EventHandler;
@@ -28,12 +29,14 @@ import world.events.event.NPCSpeakEvent;
 
 public class GameScreen extends GameState {
 
-    private boolean showHUD;
+    private Statusbar statusbar;
+    private Hotbar hotbar;
+    private SpellcraftingMenu spellcraftingMenu;
+    private Journal spellbook;
 
     public GameScreen()
     {
         super();
-        showHUD = true;
     }
 
     @Override
@@ -48,16 +51,18 @@ public class GameScreen extends GameState {
         MPClient.update();
     }
 
-    public void toggleHUD() {
-        showHUD = !showHUD;
-        resetGUI();
+    public void setTarget(Integer entityID) {
+        statusbar.setTarget(entityID);
+        hotbar.setTarget(entityID);
+        spellcraftingMenu.setTarget(entityID);
+        spellbook.setTarget(entityID);
     }
 
     @Override
     public void addGUIElements(GUI gui) {
-        if (Camera.getTargetEntity() == null) return;
-        SpellcraftingMenu spellcasting = new SpellcraftingMenu(Camera.getTargetEntity());
-        Journal spellbook = new Journal(Camera.getTargetEntity(), spellcasting);
+
+        spellcraftingMenu = new SpellcraftingMenu();
+        spellbook = new Journal(spellcraftingMenu);
         PauseMenu pauseMenu = new PauseMenu();
         CameraViewport viewport = new CameraViewport() {
             @Override
@@ -70,10 +75,12 @@ public class GameScreen extends GameState {
             }
         };
 
+        statusbar = new Statusbar();
+        hotbar = new Hotbar();
 
-        if (showHUD) gui.addElement(viewport, 0, 0, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Statusbar(Camera.getTargetEntity()), 2, 2, GUIAnchor.TOP_LEFT);
-        gui.addElement(new Hotbar(Camera.getTargetEntity()), 2, 26, GUIAnchor.TOP_LEFT);
+        gui.addElement(viewport, 0, 0, GUIAnchor.TOP_LEFT);
+        gui.addElement(statusbar, 2, 2, GUIAnchor.TOP_LEFT);
+        gui.addElement(hotbar, 2, 26, GUIAnchor.TOP_LEFT);
         gui.addElement(pauseMenu, 0,0, GUIAnchor.CENTER);
         pauseMenu.hide();
         Button spellbookButton = new Button(null, 16, 16, "spellbook.png", false) {
@@ -104,17 +111,15 @@ public class GameScreen extends GameState {
         gui.addElement(deathMessage, 0, 16, GUIAnchor.CENTER);
 
         gui.addElement(spellbook, 0, 0, GUIAnchor.CENTER);
-        gui.addElement(spellcasting, 0, 0, GUIAnchor.CENTER);
+        gui.addElement(spellcraftingMenu, 0, 0, GUIAnchor.CENTER);
         spellbook.hide();
-        spellcasting.hide();
+        spellcraftingMenu.hide();
 
         gui.addElement(new TextLabel("Spellbound Alpha Build", 4, Color.white, true, false), 0, 2, GUIAnchor.TOP_MIDDLE);
 
         SpeechBubble speechBubble = new SpeechBubble();
         gui.addElement(speechBubble, 0, -10, GUIAnchor.BOTTOM_MIDDLE);
         speechBubble.hide();
-
-        if (!showHUD) gui.addElement(viewport, 0, 0, GUIAnchor.TOP_LEFT);
 
     }
 

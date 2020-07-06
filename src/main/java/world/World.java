@@ -9,6 +9,7 @@ import world.entities.Entities;
 import world.generation.region.OverworldGenerator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class World {
@@ -42,7 +43,12 @@ public class World {
 
     public Region addRegion(Region region) {
         regions.put(region.getName(), region);
+        region.setWorld(this);
         return region;
+    }
+
+    public Collection<Region> getRegions() {
+        return regions.values();
     }
 
     public Region getRegion(String name) { return regions.get(name); }
@@ -51,6 +57,7 @@ public class World {
 
     public void update() {
         time += MiscMath.getConstant(1000, 1);
+        for (Region r: regions.values()) r.update(); //updating the region just handles chunk generation as players move around
     }
 
     public long getCurrentTime() { return time; }

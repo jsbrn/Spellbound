@@ -50,10 +50,6 @@ public abstract class GameState extends BasicGameState {
     }
 
     public final GUI getGUI() { return gui; }
-    public final void resetGUI() {
-        gui.reset();
-        addGUIElements(gui);
-    }
     protected abstract void addGUIElements(GUI gui);
     public final Input getInput() { return input; }
 

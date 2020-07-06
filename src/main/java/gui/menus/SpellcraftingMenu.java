@@ -31,9 +31,8 @@ public class SpellcraftingMenu extends Modal {
 
     private Spell spell;
 
-    public SpellcraftingMenu(Integer target) {
+    public SpellcraftingMenu() {
         super("gui/spellcasting.png");
-        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, target);
         this.buttons = new HashMap<>();
         this.categories = new ArrayList<>();
         this.spell = new Spell();
@@ -138,6 +137,10 @@ public class SpellcraftingMenu extends Modal {
         addChild(techniqueDescription, 85, 98, GUIAnchor.TOP_LEFT);
         addChild(techniqueConflicts, 85, 110, GUIAnchor.TOP_LEFT);
 
+    }
+
+    public void setTarget(Integer entityID) {
+        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, entityID);
     }
 
     private void createTechniqueButtons() {

@@ -19,8 +19,7 @@ public class Hotbar extends GUIElement {
 
     private ParticleSource[] previews;
 
-    public Hotbar(Integer target) {
-        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, target);
+    public Hotbar() {
         this.previews = new ParticleSource[3];
         try {
             this.image = new Image("gui/hotbar.png", false, Image.FILTER_NEAREST);
@@ -28,6 +27,10 @@ public class Hotbar extends GUIElement {
         } catch (SlickException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setTarget(Integer entityID) {
+        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, entityID);
     }
 
     @Override
@@ -71,6 +74,7 @@ public class Hotbar extends GUIElement {
 
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
+        if (spellbook == null) return;
         b.drawImage(image, 0, 0);
         b.drawImage(selected, 3, 3 + (17 * spellbook.getSelectedIndex()));
         for (int i = 0; i < spellbook.getSpells().size(); i++) {

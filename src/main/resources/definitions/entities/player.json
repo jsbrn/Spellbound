@@ -2,7 +2,7 @@
   "location": {
     "x": 0.0,
     "y": 0.0,
-    "region": "player_home"
+    "region": "world"
   },
   "velocity": {
     "forces": [

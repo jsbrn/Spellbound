@@ -4,8 +4,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
+import network.handlers.server.ServerJoinPacketHandler;
 import network.packets.ChunkPacket;
 import network.packets.EntitySpawnPacket;
+import network.packets.JoinPacket;
 import world.entities.Entities;
 import world.entities.components.Component;
 import world.entities.components.LocationComponent;
@@ -16,6 +18,8 @@ import world.events.EventListener;
 import world.events.EventManager;
 import org.json.simple.JSONObject;
 import world.World;
+import world.events.event.ChunkGeneratedEvent;
+import world.events.event.EntityEnteredChunkEvent;
 import world.events.event.EntitySpawnEvent;
 
 import javax.swing.text.html.parser.Entity;
@@ -38,6 +42,7 @@ public class MPServer {
         server = new Server();
         registerPacketHandlers();
         Packet.registerPackets(server.getKryo());
+        registerEventHandlers();
         server.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
@@ -86,11 +91,13 @@ public class MPServer {
     }
 
     public static void update() {
+        world.update();
         MovementSystem.update(world);
     }
 
     private static void registerPacketHandlers() {
         packetHandlers = new HashMap<>();
+        packetHandlers.put(JoinPacket.class, new ServerJoinPacketHandler());
     }
 
     private static void registerEventHandlers() {
@@ -101,6 +108,13 @@ public class MPServer {
                     EntitySpawnEvent ese = (EntitySpawnEvent)e;
                     server.sendToAllTCP(new EntitySpawnPacket(world.getEntities().serializeEntity(ese.getEntityID())));
                 }
+            })
+            .on(ChunkGeneratedEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    ChunkGeneratedEvent cge = (ChunkGeneratedEvent)e;
+                    server.sendToAllTCP(new ChunkPacket(cge.getChunk()));
+                }
             });
         eventManager.register(serverListener);
     }
@@ -108,14 +122,20 @@ public class MPServer {
     /* SOME GLOBAL SERVER ACTIONS THAT NEED TO BE SEPARATED FROM THE CLIENT*/
 
     public static int spawnEntity(JSONObject entity, Location location) {
+
         int entityID = world.getEntities().createEntity(entity);
         ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).setLocation(location);
         world.getRegion(location.getRegionName()).addEntity(entityID);
+
+        world.getEntities().addComponent(Component.create("player"), entityID);
 
         for (Component component: world.getEntities().getComponents(entityID))
             eventManager.register(component.getEventListener());
 
         eventManager.invoke(new EntitySpawnEvent(entityID));
+        eventManager.invoke(new EntityEnteredChunkEvent(
+                entityID,
+                world.getRegion(location.getRegionName()).getChunk(location.getChunkCoordinates()[0], location.getChunkCoordinates()[1])));
 
         return entityID;
     }

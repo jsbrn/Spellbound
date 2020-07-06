@@ -21,8 +21,7 @@ public class Statusbar extends GUIElement {
 
     private IconLabel amuletIndicator;
 
-    public Statusbar(Integer target) {
-        this.healthComponent = (HealthComponent) MPClient.getWorld().getEntities().getComponent(HealthComponent.class, target);
+    public Statusbar() {
         healthLabel = new TextLabel("-", 4, Color.white, true, false);
         manaLabel = new TextLabel("-", 4, Color.white, true, false);
         this.addChild(healthLabel, 5, 5, GUIAnchor.TOP_MIDDLE);
@@ -37,6 +36,10 @@ public class Statusbar extends GUIElement {
         } catch (SlickException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setTarget(Integer entityID) {
+        this.healthComponent = (HealthComponent) MPClient.getWorld().getEntities().getComponent(HealthComponent.class, entityID);
     }
 
     @Override
@@ -81,6 +84,7 @@ public class Statusbar extends GUIElement {
 
     @Override
     protected void drawBuffered(Graphics b, boolean mouseHovering, boolean mouseDown) {
+        if (healthComponent == null) return;
         healthLabel.setText(healthComponent.getValue() < 1 ? "!!!" : (int)healthComponent.getValue()+"/"+(int)healthComponent.getMax());
         //manaLabel.setText((int)target.getMana()+"/"+(int)target.getMaxMana());
 

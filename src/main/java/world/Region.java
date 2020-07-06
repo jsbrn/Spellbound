@@ -5,12 +5,15 @@ import com.github.mathiewz.slick.Sound;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
+import network.MPServer;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
+import world.entities.components.PlayerComponent;
 import world.generation.region.RegionGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Region {
@@ -25,13 +28,11 @@ public class Region {
 
     private Sound backgroundAmbience;
 
-    private long time;
     private RegionGenerator generator;
 
     public Region(String name, RegionGenerator generator) {
         this.generator = generator;
         this.name = name;
-        this.time = 0;
         this.backgroundAmbience = generator.getBackgroundAmbience();
         this.entities = new ArrayList<>();
         this.portals = new ArrayList<>();
@@ -44,7 +45,6 @@ public class Region {
     public Sound getBackgroundAmbience() {
         return backgroundAmbience;
     }
-    public long getCurrentTime() { return time; }
 
     public int addEntity(Integer e) {
         double lindex = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation().getIndex(this);
@@ -295,20 +295,19 @@ public class Region {
     public String getName() { return name; }
 
     public void update() {
-
-        time += MiscMath.getConstant(1000, 1);
-
         int radius = 1;
-        int[] pchcoords = Camera.getLocation().getChunkCoordinates();
-        for (int j = -radius; j <= radius; j++) {
-            for (int i = -radius; i <= radius; i++) {
-                int cx = pchcoords[0] + i;
-                int cy = pchcoords[1] + j;
-                Chunk adj = getChunk(cx, cy);
-                //if (adj != null) adj.update();
+        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class);
+        for (Integer eID: playerEntities) {
+            for (int j = -radius; j <= radius; j++) {
+                for (int i = -radius; i <= radius; i++) {
+                    Location loc = ((LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, eID)).getLocation();
+                    int cx = loc.getChunkCoordinates()[0] + i;
+                    int cy = loc.getChunkCoordinates()[1] + j;
+                    Chunk adj = getChunk(cx, cy);
+                    if (adj.isEmpty()) adj.generate();
+                }
             }
         }
-
     }
 
     public void draw(float scale, Graphics g) {
@@ -331,6 +330,7 @@ public class Region {
                     } else {
                         adj.drawTop(osx, osy, scale);
                     }
+                    adj.drawDebug(osx, osy, scale, g);
                 }
             }
         }

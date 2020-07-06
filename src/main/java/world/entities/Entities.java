@@ -29,7 +29,7 @@ public class Entities {
         JSONObject entity = new JSONObject();
         for (LinkedHashMap<Integer, Component> componentMap: COMPONENT_MAPS.values()) {
             Component c = componentMap.get(entityID);
-            entity.put(c.getID(), c);
+            entity.put(c.getID(), c.serialize());
         }
         return entity;
     }
@@ -67,7 +67,7 @@ public class Entities {
         return components;
     }
 
-    private void addComponent(Component component, int entityID) {
+    public void addComponent(Component component, int entityID) {
         COMPONENT_MAPS.computeIfAbsent(component.getClass(), k -> new LinkedHashMap<>());
         COMPONENT_MAPS.get(component.getClass()).put(entityID, component);
         component.setParent(entityID);

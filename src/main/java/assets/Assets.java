@@ -84,9 +84,7 @@ public class Assets {
             awtFont = Font.createFont(Font.PLAIN, Assets.class.getResourceAsStream("/fonts/font.ttf"))
                     .deriveFont(size)
                     .deriveFont(Font.PLAIN);
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
         TrueTypeFont font = new TrueTypeFont(awtFont, false);
@@ -128,16 +126,19 @@ public class Assets {
         return contents;
     }
 
-    public static JSONObject json(String url, boolean internal) {
-        String read = read(url, internal);
-        JSONParser parser = new JSONParser();
+    public static JSONObject json(String json) {
         try {
-            JSONObject json = (JSONObject)parser.parse(read);
-            return json;
+            System.out.println(json);
+            return (JSONObject)(new JSONParser().parse(json));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static JSONObject json(String url, boolean internal) {
+        String jsonString = read(url, internal);
+        return json(jsonString);
     }
 
 }

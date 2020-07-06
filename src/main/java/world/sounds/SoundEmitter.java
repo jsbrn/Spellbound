@@ -47,17 +47,17 @@ public class SoundEmitter {
     public void update() {
         if (!isActive) return;
         Location sourceLocation = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, parent)).getLocation();
-        if (MPClient.getWorld().getRegion(sourceLocation).getCurrentTime() > lastEmit + timing + variance) {
+        if (MPClient.getTime() > lastEmit + timing + variance) {
             play();
             variance = rng.nextInt(1 + maxVariance);
-            lastEmit = MPClient.getWorld().getRegion(sourceLocation).getCurrentTime();
+            lastEmit = MPClient.getTime();
         }
     }
 
     public void stop() {
         if (currentSound != null) currentSound.stop();
         Location sourceLocation = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, parent)).getLocation();
-        lastEmit = MPClient.getWorld().getRegion(sourceLocation).getCurrentTime();
+        lastEmit = MPClient.getTime();
     }
 
     public void play() {

@@ -1,6 +1,7 @@
 package world.entities.systems;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Graphics;
 import misc.Window;
 import world.Camera;
 import world.Chunk;
@@ -23,6 +24,10 @@ public class RenderSystem {
                 osc[0], osc[1],
                 renderWidth * Chunk.TILE_SIZE * scale,
                 renderHeight * Chunk.TILE_SIZE * scale);
+    }
+
+    public static void drawEntityDebug(Entities entities, int entityID, float scale, Graphics g) {
+
     }
 
 }

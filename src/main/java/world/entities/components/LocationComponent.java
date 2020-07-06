@@ -16,7 +16,11 @@ public class LocationComponent extends Component {
 
     @Override
     public JSONObject serialize() {
-        return null;
+        JSONObject serialized = new JSONObject();
+        serialized.put("x", location.getCoordinates()[0]);
+        serialized.put("y", location.getCoordinates()[1]);
+        serialized.put("region", location.getRegionName());
+        return serialized;
     }
 
     public Location getLocation() {

@@ -1,10 +1,7 @@
 package network;
 
 import com.esotericsoftware.kryo.Kryo;
-import network.packets.ChunkPacket;
-import network.packets.EntitySpawnPacket;
-import network.packets.JoinPacket;
-import network.packets.PlayerAssignmentPacket;
+import network.packets.*;
 
 public class Packet {
 
@@ -16,6 +13,7 @@ public class Packet {
         kryo.register(JoinPacket.class);
         kryo.register(PlayerAssignmentPacket.class);
         kryo.register(EntitySpawnPacket.class);
+        kryo.register(RegionPacket.class);
     }
 
 }

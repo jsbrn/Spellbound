@@ -23,9 +23,8 @@ public class Journal extends Modal {
     private int selectedSpell;
     private Button createButton, copyButton, combineButton, destroyButton, moveUpButton;
 
-    public Journal(Integer target, SpellcraftingMenu spellcraftingMenu) {
+    public Journal(SpellcraftingMenu spellcraftingMenu) {
         super("gui/spellbook_bg.png");
-        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, target);
         this.selectedSpell = -1;
         this.spellButtons = new ArrayList<>();
         addChild(new TextLabel("Inventory", 5, Color.black, false, false), 12, 4, GUIAnchor.TOP_LEFT);
@@ -79,6 +78,10 @@ public class Journal extends Modal {
         addChild(destroyButton, 109, -10, GUIAnchor.BOTTOM_LEFT);
         addChild(moveUpButton, 131, -10, GUIAnchor.BOTTOM_LEFT);
         addChild(createButton, -12, 4, GUIAnchor.TOP_RIGHT);
+    }
+
+    public void setTarget(Integer entityID) {
+        this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, entityID);
     }
 
     private void refresh() {

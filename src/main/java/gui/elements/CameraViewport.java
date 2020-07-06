@@ -78,6 +78,7 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public void drawOver(Graphics g) {
+        if (Camera.getTargetEntity() == null) return;
         MPClient.getWorld().getRegion(Camera.getLocation()).draw(Window.getScale(), g);
     }
 
@@ -103,7 +104,9 @@ public class CameraViewport extends GUIElement {
 
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
+                "Ping: "+MPClient.getPing()+"ms",
                 "Entity count: "+MPClient.getWorld().getRegion(Camera.getLocation()).getEntityIDs().size(),
+                "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
                 "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
                 "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
                         +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)

@@ -13,7 +13,7 @@ public class MovementSystem {
     public static void update(World world) {
         //TODO: update all regions with players in them
         Set<Integer> entities = world.getEntities()
-                .getEntitiesWith(world.getRegion("player_home").getEntityIDs(), LocationComponent.class, VelocityComponent.class, HitboxComponent.class);
+                .getEntitiesWith(world.getRegion("world").getEntityIDs(), LocationComponent.class, VelocityComponent.class, HitboxComponent.class);
         for (Integer entity: entities) {
             VelocityComponent vc = (VelocityComponent)world.getEntities().getComponent(VelocityComponent.class, entity);
             LocationComponent lc = (LocationComponent)world.getEntities().getComponent(LocationComponent.class, entity);
@@ -25,7 +25,5 @@ public class MovementSystem {
             lc.getLocation().addCoordinates(dir[0], dir[1]);
         }
     }
-
-
 
 }
