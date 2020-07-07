@@ -5,13 +5,16 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import network.handlers.client.*;
 import network.packets.*;
+import world.Camera;
 import world.World;
+import world.entities.components.PlayerComponent;
 import world.entities.systems.MovementSystem;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class MPClient {
 
@@ -50,6 +53,10 @@ public class MPClient {
         });
     }
 
+    public static boolean isOpen() {
+        return world != null;
+    }
+
     public static void join(String host) {
         try {
             client.start();
@@ -69,11 +76,14 @@ public class MPClient {
     {
         pingTimer.cancel();
         client.close();
+        world = null;
     }
 
     public static void update() {
         client.getReturnTripTime();
-        MovementSystem.update(world);
+        //update only the player
+        MovementSystem.update(world, world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
+                .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet()));
     }
 
     public static World getWorld() {
@@ -83,7 +93,7 @@ public class MPClient {
     private static void registerPacketHandlers() {
         packetHandlers = new HashMap<>();
         packetHandlers.put(ChunkPacket.class, new ClientChunkPacketHandler());
-        packetHandlers.put(EntitySpawnPacket.class, new ClientEntitySpawnPacketHandler());
+        packetHandlers.put(EntityPutPacket.class, new ClientEntityUpdatePacketHandler());
         packetHandlers.put(PlayerAssignmentPacket.class, new ClientPlayerAssignmentPacketHandler());
         packetHandlers.put(RegionPacket.class, new ClientRegionPacketHandler());
         packetHandlers.put(ComponentStateChangePacket.class, new ClientComponentStateChangePacketHandler());

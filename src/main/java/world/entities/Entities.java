@@ -1,28 +1,38 @@
 package world.entities;
 
-import network.MPServer;
 import org.json.simple.JSONObject;
 import world.entities.components.Component;
-import world.events.EventManager;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Entities {
 
-    private int lastEntityId = 0;
+    private int lastEntityID = 0;
     private HashMap<Class, LinkedHashMap<Integer, Component>> COMPONENT_MAPS = new HashMap<>();
 
-    public int createEntity(JSONObject object) {
-        int newId = lastEntityId + 1;
+    public int createEntity(JSONObject json) {
+        int newID = ++lastEntityID;
+        return createEntity(newID, json);
+    }
+
+    public int createEntity(int newID, JSONObject json) {
         //deserialize the components from the json and add them to the lists
-        for (Object key: object.keySet()) {
-            Component component = Component.create((String)key, (JSONObject)object.get(key));
-            addComponent(component, newId);
+        for (Object key: json.keySet()) {
+            Component component = Component.create((String)key, (JSONObject)json.get(key));
+            addComponent(component, newID);
         }
-        lastEntityId = newId;
-        return newId;
+        return newID;
+    }
+
+    public int updateEntity(int entityID, JSONObject newData) {
+        removeEntity(entityID);
+        createEntity(entityID, newData);
+        return entityID;
+    }
+
+    public boolean exists(int entityID) {
+        return COMPONENT_MAPS.values().stream().anyMatch(lic -> lic.containsKey(entityID));
     }
 
     public JSONObject serializeEntity(int entityID) {

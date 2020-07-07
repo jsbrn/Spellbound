@@ -2,6 +2,7 @@ package gui.states;
 
 import assets.Assets;
 import com.github.mathiewz.slick.Color;
+import com.github.mathiewz.slick.Input;
 import gui.GUI;
 import gui.GUIAnchor;
 import gui.elements.Button;
@@ -111,6 +112,15 @@ public class MainMenuScreen extends GameState {
             }
         }, -2, 10, GUIAnchor.TOP_RIGHT);
 
+    }
+
+    @Override
+    public void keyReleased(int key, char c) {
+        if (key == Input.KEY_H) {
+            MPServer.init();
+            MPServer.launch(0);
+        }
+        super.keyReleased(key, c);
     }
 
     @Override

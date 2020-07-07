@@ -128,7 +128,6 @@ public class Assets {
 
     public static JSONObject json(String json) {
         try {
-            System.out.println(json);
             return (JSONObject)(new JSONParser().parse(json));
         } catch (ParseException e) {
             e.printStackTrace();

@@ -10,13 +10,13 @@ import world.entities.components.LocationComponent;
 public class Camera {
 
     private static int speed = 10;
-    private static Integer targetEntity;
+    private static int targetEntity = -1;
 
     public static Location getLocation() {
         return ((LocationComponent) MPClient.getWorld().getEntities().getComponent(LocationComponent.class, targetEntity)).getLocation();
     }
 
-    public static Integer getTargetEntity() {
+    public static int getTargetEntity() {
         return targetEntity;
     }
 
@@ -45,7 +45,7 @@ public class Camera {
         Camera.speed = speed;
     }
 
-    public static void setTargetEntity(Integer e) {
+    public static void setTargetEntity(int e) {
         targetEntity = e;
     }
 

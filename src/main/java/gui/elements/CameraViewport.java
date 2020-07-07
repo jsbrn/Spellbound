@@ -14,7 +14,6 @@ import network.MPServer;
 import org.lwjgl.input.Mouse;
 import world.Camera;
 import world.Chunk;
-import world.entities.components.HealthComponent;
 import world.entities.components.LocationComponent;
 import world.entities.components.VelocityComponent;
 
@@ -86,7 +85,7 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public void drawOver(Graphics g) {
-        if (Camera.getTargetEntity() == null) return;
+        if (Camera.getTargetEntity() == -1) return;
         MPClient.getWorld().getRegion(Camera.getLocation()).draw(Window.getScale(), g);
     }
 
@@ -97,7 +96,7 @@ public class CameraViewport extends GUIElement {
         double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Window.getHeight() - Mouse.getY(), Window.getScale());
         float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());
         float[] origin_osc = Camera.getOnscreenCoordinates(0, 0, Window.getScale());
-        ArrayList<Integer> entities = MPClient.getWorld().getRegion(Camera.getLocation()).getEntityIDs((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
+        ArrayList<Integer> entities = MPClient.getWorld().getRegion(Camera.getLocation()).getEntities((int)mouse_wc[0], (int)mouse_wc[1], 1, 1);
         float[] osc = Camera.getOnscreenCoordinates((int)mouse_wc[0], (int)mouse_wc[1], Window.getScale());
 
         MPClient.getWorld().getRegion(Camera.getLocation()).drawDebug(Window.getScale(), g);
@@ -114,7 +113,7 @@ public class CameraViewport extends GUIElement {
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
                 "Ping: "+MPClient.getPing()+"ms",
-                "Entity count: "+MPClient.getWorld().getRegion(Camera.getLocation()).getEntityIDs().size(),
+                "Entity count: "+MPClient.getWorld().getRegion(Camera.getLocation()).getEntities().size(),
                 "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
                 "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
                 "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)

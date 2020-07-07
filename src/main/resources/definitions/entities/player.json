@@ -7,24 +7,9 @@
   "velocity": {
     "forces": [
       {
-        "direction": 0.0,
-        "magnitude": 11.0,
-        "deceleration": 2.0
-      },
-      {
         "direction": 180.0,
-        "magnitude": 1.5,
+        "magnitude": 1.0,
         "deceleration": 0.5
-      },
-      {
-        "direction": 45.0,
-        "magnitude": 2.0,
-        "deceleration": 0.5
-      },
-      {
-        "direction": 200.0,
-        "magnitude": 3.0,
-        "deceleration": 2.0
       }
     ]
   },

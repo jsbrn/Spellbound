@@ -38,7 +38,7 @@ public class Statusbar extends GUIElement {
         }
     }
 
-    public void setTarget(Integer entityID) {
+    public void setTarget(int entityID) {
         this.healthComponent = (HealthComponent) MPClient.getWorld().getEntities().getComponent(HealthComponent.class, entityID);
     }
 

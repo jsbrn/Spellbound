@@ -31,7 +31,7 @@ public class PauseMenu extends Modal {
             public void onClick(int button) {
                 //TODO: reimplement world saving / event cleanup
                 MPClient.close();
-                MPServer.close();
+                if (MPServer.isOpen()) MPServer.close();
                 GameManager.switchTo(GameState.MAIN_MENU, true);
                 SoundManager.stopAmbience();
                 //EventManager.unregisterAll();

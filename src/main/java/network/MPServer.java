@@ -7,8 +7,10 @@ import misc.Location;
 import network.handlers.server.ServerJoinPacketHandler;
 import network.packets.ChunkPacket;
 import network.packets.ComponentStateChangePacket;
-import network.packets.EntitySpawnPacket;
+import network.packets.EntityPutPacket;
 import network.packets.JoinPacket;
+import world.Chunk;
+import world.Region;
 import world.entities.components.Component;
 import world.entities.components.LocationComponent;
 import world.entities.systems.MovementSystem;
@@ -20,16 +22,19 @@ import org.json.simple.JSONObject;
 import world.World;
 import world.events.event.ChunkGeneratedEvent;
 import world.events.event.ComponentStateChangedEvent;
-import world.events.event.EntityEnteredChunkEvent;
-import world.events.event.EntitySpawnEvent;
+import world.events.event.EntityNearPlayerEvent;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MPServer {
 
     private static Server server;
     private static HashMap<Class, PacketHandler> packetHandlers;
+    private static HashMap<Connection, Integer> connectedPlayers;
 
     private static World world;
     private static JSONObject serverSettings;
@@ -38,6 +43,7 @@ public class MPServer {
     public static void init() {
         eventManager = new EventManager();
         serverSettings = new JSONObject();
+        connectedPlayers = new HashMap<>();
         world = new World();
         server = new Server();
         registerPacketHandlers();
@@ -52,6 +58,7 @@ public class MPServer {
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
+                connectedPlayers.remove(connection);
             }
 
             @Override
@@ -78,6 +85,7 @@ public class MPServer {
 
     public static boolean close() {
         server.close();
+        connectedPlayers.clear();
         world = null;
         return true;
     }
@@ -90,9 +98,14 @@ public class MPServer {
         return world;
     }
 
+    public static boolean isOpen() {
+        return world != null;
+    }
+
     public static void update() {
         world.update();
-        MovementSystem.update(world);
+        MovementSystem.update(world, connectedPlayers.values());
+        MovementSystem.pollForPlayerApproaches(world);
     }
 
     private static void registerPacketHandlers() {
@@ -102,13 +115,6 @@ public class MPServer {
 
     private static void registerEventHandlers() {
         EventListener serverListener = new EventListener()
-            .on(EntitySpawnEvent.class, new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    EntitySpawnEvent ese = (EntitySpawnEvent)e;
-                    server.sendToAllTCP(new EntitySpawnPacket(world.getEntities().serializeEntity(ese.getEntityID())));
-                }
-            })
             .on(ChunkGeneratedEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
@@ -116,41 +122,64 @@ public class MPServer {
                     server.sendToAllTCP(new ChunkPacket(cge.getChunk()));
                 }
             })
-            .on(EntityEnteredChunkEvent.class, new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    EntityEnteredChunkEvent eece = (EntityEnteredChunkEvent)e;
-                    //TODO: trigger an entity approach player event
-                }
-            })
             .on(ComponentStateChangedEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
                     ComponentStateChangedEvent csce = (ComponentStateChangedEvent)e;
                     Component changed = csce.getComponent();
-                    server.sendToAllTCP(new ComponentStateChangePacket(changed.getParent(), changed.getClass(), changed.serialize()));
+                    sendToAll(getConnectionsWithinRange(changed.getParent()), new ComponentStateChangePacket(changed.getParent(), changed.getClass(), changed.serialize()));
+                }
+            })
+            .on(EntityNearPlayerEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    EntityNearPlayerEvent enpe = (EntityNearPlayerEvent)e;
+                    getConnection(enpe.getPlayerID()).sendTCP(new EntityPutPacket(enpe.getEntityID(), MPServer.getWorld().getEntities().serializeEntity(enpe.getEntityID())));
                 }
             });
         eventManager.register(serverListener);
     }
 
+    private static void sendToAll(Collection<Connection> connections, Packet packet) {
+        for (Connection c: connections) c.sendTCP(packet);
+    }
+
+    public static Collection<Connection> getConnectionsWithinRange(int entityID) {
+        LocationComponent entityLocation = (LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, entityID);
+        return connectedPlayers.entrySet().stream().filter(entry -> {
+            int pID = entry.getValue();
+            Region reg = MPServer.getWorld().getRegion(entityLocation.getLocation().getRegionName());
+            //keep the player if it is contained within the region around the given entity id
+            return reg.getEntitiesNear(entityID, 1).contains(pID);
+        }).map(Map.Entry::getKey).collect(Collectors.toSet());
+    }
+
+    public static void assignTo(Connection c, int entityID) {
+        connectedPlayers.put(c, entityID);
+    }
+
+    public static int getEntityID(Connection c) {
+        return connectedPlayers.get(c);
+    }
+
+    public static Connection getConnection(int playerEntityID) {
+        return connectedPlayers.entrySet().stream()
+                .filter(entry -> entry.getValue() == playerEntityID).map(entry -> entry.getKey())
+                .findFirst().orElse(null);
+    }
+
     /* SOME GLOBAL SERVER ACTIONS THAT NEED TO BE SEPARATED FROM THE CLIENT*/
 
-    public static int spawnEntity(JSONObject entity, Location location) {
-
+    //TODO: better way to spawn in entities and players
+    public static int spawnEntity(JSONObject entity, Location location, boolean isPlayer) {
         int entityID = world.getEntities().createEntity(entity);
         ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).setLocation(location);
         world.getRegion(location.getRegionName()).addEntity(entityID);
 
-        world.getEntities().addComponent(Component.create("player"), entityID);
+        if (isPlayer) world.getEntities().addComponent(Component.create("player"), entityID);
 
         for (Component component: world.getEntities().getComponents(entityID))
             eventManager.register(component.getEventListener());
-
-        eventManager.invoke(new EntitySpawnEvent(entityID));
-        eventManager.invoke(new EntityEnteredChunkEvent(
-                entityID,
-                world.getRegion(location.getRegionName()).getChunk(location.getChunkCoordinates()[0], location.getChunkCoordinates()[1])));
 
         return entityID;
     }

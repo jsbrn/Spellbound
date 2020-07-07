@@ -48,11 +48,8 @@ public class PlayerCustomizationMenu extends Modal {
             @Override
             public void onClick(int button) {
                 int seed = Integer.parseInt(seedField.getText().replaceAll("[^\\d]", ""));
-                MPServer.init();
-                if (MPServer.launch(seed)) {
-                    MPClient.init();
-                    MPClient.join("127.0.0.1");
-                }
+                MPClient.init();
+                MPClient.join("127.0.0.1");
                 nameField.releaseFocus();
                 //creation.setName(nameField.getText());
                 //getGUI().popModal();

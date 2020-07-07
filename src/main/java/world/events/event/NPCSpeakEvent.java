@@ -5,7 +5,7 @@ import world.events.Event;
 
 public class NPCSpeakEvent extends Event {
 
-    private Integer npc, player;
+    private int npc, player;
 
     private DialogueDefinition dialogue;
     private String[] options;

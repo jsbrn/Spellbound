@@ -9,7 +9,6 @@ import network.MPServer;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 import world.entities.components.PlayerComponent;
-import world.events.event.EntityEnteredChunkEvent;
 import world.generation.region.RegionGenerator;
 
 import java.util.ArrayList;
@@ -48,6 +47,7 @@ public class Region {
     }
 
     public int addEntity(Integer e) {
+        if (entities.contains(e)) return -1;
         double lindex = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation().getIndex(this);
         int index = getEntityIndex(lindex, 0, entities.size());
         entities.add(index, e);
@@ -58,7 +58,16 @@ public class Region {
         return entities.remove(e);
     }
 
-    public ArrayList<Integer> getEntityIDs(int wx, int wy, int width, int height) {
+    public ArrayList<Integer> getEntitiesNear(int entityID, int chunkRadius) {
+        Location ploc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).getLocation();
+        return getEntities((
+                        ploc.getChunkCoordinates()[0] - chunkRadius) * Chunk.CHUNK_SIZE,
+                (ploc.getChunkCoordinates()[1] - chunkRadius) * Chunk.CHUNK_SIZE,
+                Chunk.CHUNK_SIZE * ((chunkRadius * 2) + 1),
+                Chunk.CHUNK_SIZE * ((chunkRadius * 2) + 1));
+    }
+
+    public ArrayList<Integer> getEntities(int wx, int wy, int width, int height) {
         ArrayList<Integer> subsection = new ArrayList<>();
         double minloc = MiscMath.getIndex(wx, wy, Integer.MAX_VALUE);
         double maxloc = MiscMath.getIndex(wx + width, wy + height, Integer.MAX_VALUE);
@@ -80,8 +89,8 @@ public class Region {
         return subsection;
     }
 
-    public List<Integer> getEntityIDs(double wx, double wy, double radius) {
-        ArrayList<Integer> entities = getEntityIDs(
+    public List<Integer> getEntities(double wx, double wy, double radius) {
+        ArrayList<Integer> entities = getEntities(
                 (int)(wx - radius), (int)(wy - radius),
                 (int)((radius * 2) + 1), (int)((radius * 2) + 2));
         return entities.stream().filter(e -> {
@@ -104,7 +113,7 @@ public class Region {
         };
     }
 
-    public ArrayList<Integer> getEntityIDs() { return entities; }
+    public ArrayList<Integer> getEntities() { return entities; }
 
     private int getEntityIndex(double location, int min, int max) {
 
@@ -126,6 +135,10 @@ public class Region {
             return getEntityIndex(location, half, max);
         }
 
+    }
+
+    public ArrayList<Chunk> getChunks() {
+        return chunks;
     }
 
     /**
@@ -296,15 +309,9 @@ public class Region {
     public String getName() { return name; }
 
     public void update() {
-        int radius = 2;
+        int radius = 3;
         Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
         for (Integer eID: playerEntities) {
-            LocationComponent lc = ((LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, eID));
-            //trigger entity entered chunk event if it has happened.
-            if (lc.hasEnteredNewChunk())
-                MPServer.getEventManager().invoke(new EntityEnteredChunkEvent(
-                        eID,
-                        getChunk(lc.getLocation().getChunkCoordinates()[0], lc.getLocation().getChunkCoordinates()[1])));
             for (int j = -radius; j <= radius; j++) {
                 for (int i = -radius; i <= radius; i++) {
                     Location loc = ((LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, eID)).getLocation();

@@ -137,7 +137,7 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                ArrayList<Integer> entities = region.getEntityIDs((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
+                ArrayList<Integer> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
                 for (Integer entityID: entities) RenderSystem.drawEntity(MPClient.getWorld().getEntities(), entityID, scale);
 
             }

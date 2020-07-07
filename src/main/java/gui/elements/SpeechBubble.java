@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class SpeechBubble extends GUIElement {
 
-    private Integer speaker;
+    private int speaker;
     private DialogueDefinition dialogue;
     private Image background;
     private TextLabel contents;
@@ -35,7 +35,7 @@ public class SpeechBubble extends GUIElement {
         this.background = Assets.getImage("gui/dialogue.png");
     }
 
-    public void setSpeaker(Integer speaker) {
+    public void setSpeaker(int speaker) {
         this.speaker = speaker;
         this.title.setText("(not implemented)");
         SoundManager.playSound(SoundManager.PAGE_TURN);

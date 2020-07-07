@@ -80,7 +80,7 @@ public class Journal extends Modal {
         addChild(createButton, -12, 4, GUIAnchor.TOP_RIGHT);
     }
 
-    public void setTarget(Integer entityID) {
+    public void setTarget(int entityID) {
         this.spellbook = (SpellbookComponent) MPClient.getWorld().getEntities().getComponent(SpellbookComponent.class, entityID);
     }
 

@@ -47,11 +47,11 @@ public class GameScreen extends GameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         super.update(gc, sbg, delta);
         MiscMath.DELTA_TIME = delta;
-        MPServer.update();
-        MPClient.update();
+        if (MPServer.isOpen()) MPServer.update();
+        if (MPClient.isOpen()) MPClient.update();
     }
 
-    public void setTarget(Integer entityID) {
+    public void setTarget(int entityID) {
         statusbar.setTarget(entityID);
         hotbar.setTarget(entityID);
         spellcraftingMenu.setTarget(entityID);
