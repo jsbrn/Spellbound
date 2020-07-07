@@ -9,6 +9,7 @@ import network.MPServer;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 import world.entities.components.PlayerComponent;
+import world.events.event.EntityEnteredChunkEvent;
 import world.generation.region.RegionGenerator;
 
 import java.util.ArrayList;
@@ -295,9 +296,15 @@ public class Region {
     public String getName() { return name; }
 
     public void update() {
-        int radius = 1;
-        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class);
+        int radius = 2;
+        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
         for (Integer eID: playerEntities) {
+            LocationComponent lc = ((LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, eID));
+            //trigger entity entered chunk event if it has happened.
+            if (lc.hasEnteredNewChunk())
+                MPServer.getEventManager().invoke(new EntityEnteredChunkEvent(
+                        eID,
+                        getChunk(lc.getLocation().getChunkCoordinates()[0], lc.getLocation().getChunkCoordinates()[1])));
             for (int j = -radius; j <= radius; j++) {
                 for (int i = -radius; i <= radius; i++) {
                     Location loc = ((LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, eID)).getLocation();

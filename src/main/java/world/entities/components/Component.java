@@ -1,5 +1,6 @@
 package world.entities.components;
 
+import network.Packet;
 import org.json.simple.JSONObject;
 import world.entities.components.magic.MagicSourceComponent;
 import world.events.EventHandler;

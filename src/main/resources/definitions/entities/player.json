@@ -8,8 +8,8 @@
     "forces": [
       {
         "direction": 0.0,
-        "magnitude": 1.0,
-        "deceleration": 1.0
+        "magnitude": 11.0,
+        "deceleration": 2.0
       },
       {
         "direction": 180.0,

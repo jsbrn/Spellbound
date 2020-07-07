@@ -7,6 +7,7 @@ import world.World;
 
 public class LocationComponent extends Component {
 
+    private int[] lastChunkCoordinates;
     private Location location;
 
     @Override
@@ -27,6 +28,15 @@ public class LocationComponent extends Component {
         return location;
     }
 
+    public boolean hasEnteredNewChunk() {
+        if (location.getChunkCoordinates()[0] != lastChunkCoordinates[0] || location.getChunkCoordinates()[1] != lastChunkCoordinates[1]) {
+            lastChunkCoordinates[0] = location.getChunkCoordinates()[0];
+            lastChunkCoordinates[1] = location.getChunkCoordinates()[1];
+            return true;
+        }
+        return false;
+    }
+
     public void setLocation(Location location) {
         this.location = location;
     }
@@ -34,6 +44,7 @@ public class LocationComponent extends Component {
     @Override
     public Component deserialize(JSONObject object) {
         location = new Location((String)object.get("region"), (double)object.get("x"), (double)object.get("y"));
+        lastChunkCoordinates = new int[]{location.getChunkCoordinates()[0], location.getChunkCoordinates()[1]};
         return this;
     }
 

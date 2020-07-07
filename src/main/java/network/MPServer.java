@@ -8,7 +8,6 @@ import network.handlers.server.ServerJoinPacketHandler;
 import network.packets.ChunkPacket;
 import network.packets.EntitySpawnPacket;
 import network.packets.JoinPacket;
-import world.entities.Entities;
 import world.entities.components.Component;
 import world.entities.components.LocationComponent;
 import world.entities.systems.MovementSystem;
@@ -22,7 +21,6 @@ import world.events.event.ChunkGeneratedEvent;
 import world.events.event.EntityEnteredChunkEvent;
 import world.events.event.EntitySpawnEvent;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -114,6 +112,13 @@ public class MPServer {
                 public void handle(Event e) {
                     ChunkGeneratedEvent cge = (ChunkGeneratedEvent)e;
                     server.sendToAllTCP(new ChunkPacket(cge.getChunk()));
+                }
+            })
+            .on(EntityEnteredChunkEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    EntityEnteredChunkEvent eece = (EntityEnteredChunkEvent)e;
+                    //TODO: trigger an entity approach player event
                 }
             });
         eventManager.register(serverListener);

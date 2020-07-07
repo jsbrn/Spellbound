@@ -12,6 +12,7 @@ public class EventManager {
             if (i < 0 || i >= listeners.size()) continue;
             listeners.get(i).invoke(e);
         }
+        System.out.println("Event invoked: "+e.getClass().getSimpleName());
     }
 
     public void register(EventListener listener) {

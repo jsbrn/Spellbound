@@ -62,7 +62,7 @@ public class MPClient {
                 public void run() {
                     client.updateReturnTripTime();
                 }
-            }, 2000, 2000);
+            }, 500, 4000);
         } catch (IOException e) {
             e.printStackTrace();
         }

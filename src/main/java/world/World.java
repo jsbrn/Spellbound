@@ -63,9 +63,9 @@ public class World {
     public long getCurrentTime() { return time; }
 
     public void draw(float scale, Graphics g) {
-        MPClient.getWorld().getRegion(Camera.getLocation()).draw(scale, g);
+        getRegion(Camera.getLocation()).draw(scale, g);
     }
 
-    public void drawDebug(float scale, Graphics g) { MPClient.getWorld().getRegion(Camera.getLocation()).drawDebug(scale, g); }
+    public void drawDebug(float scale, Graphics g) { getRegion(Camera.getLocation()).drawDebug(scale, g); }
 
 }
