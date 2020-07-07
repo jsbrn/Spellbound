@@ -1,8 +1,10 @@
 package world.entities.components;
 
 import misc.MiscMath;
+import network.MPServer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import world.events.event.ComponentStateChangedEvent;
 
 import java.util.LinkedList;
 
@@ -31,7 +33,7 @@ public class VelocityComponent extends Component {
     }
 
     @Override
-    public Component deserialize(JSONObject object) {
+    public void deserialize(JSONObject object) {
         forces = new LinkedList<>();
         JSONArray listOfForces = (JSONArray)object.get("forces");
         for (Object o: listOfForces) {
@@ -41,11 +43,11 @@ public class VelocityComponent extends Component {
                     (double)f.get("magnitude"),
                     (double)f.getOrDefault("deceleration", 0.0)));
         }
-        return this;
     }
 
     public void addForce(double direction, double magnitude, double deceleration) {
         forces.add(new Force(direction, magnitude, deceleration));
+        MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
     }
 
     /**

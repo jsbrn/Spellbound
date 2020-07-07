@@ -3,10 +3,7 @@ package network;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import network.handlers.client.ClientChunkPacketHandler;
-import network.handlers.client.ClientEntitySpawnPacketHandler;
-import network.handlers.client.ClientPlayerAssignmentPacketHandler;
-import network.handlers.client.ClientRegionPacketHandler;
+import network.handlers.client.*;
 import network.packets.*;
 import world.World;
 import world.entities.systems.MovementSystem;
@@ -89,6 +86,7 @@ public class MPClient {
         packetHandlers.put(EntitySpawnPacket.class, new ClientEntitySpawnPacketHandler());
         packetHandlers.put(PlayerAssignmentPacket.class, new ClientPlayerAssignmentPacketHandler());
         packetHandlers.put(RegionPacket.class, new ClientRegionPacketHandler());
+        packetHandlers.put(ComponentStateChangePacket.class, new ClientComponentStateChangePacketHandler());
     }
 
     public static long getTime() {

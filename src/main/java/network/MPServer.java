@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import misc.Location;
 import network.handlers.server.ServerJoinPacketHandler;
 import network.packets.ChunkPacket;
+import network.packets.ComponentStateChangePacket;
 import network.packets.EntitySpawnPacket;
 import network.packets.JoinPacket;
 import world.entities.components.Component;
@@ -18,6 +19,7 @@ import world.events.EventManager;
 import org.json.simple.JSONObject;
 import world.World;
 import world.events.event.ChunkGeneratedEvent;
+import world.events.event.ComponentStateChangedEvent;
 import world.events.event.EntityEnteredChunkEvent;
 import world.events.event.EntitySpawnEvent;
 
@@ -119,6 +121,14 @@ public class MPServer {
                 public void handle(Event e) {
                     EntityEnteredChunkEvent eece = (EntityEnteredChunkEvent)e;
                     //TODO: trigger an entity approach player event
+                }
+            })
+            .on(ComponentStateChangedEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    ComponentStateChangedEvent csce = (ComponentStateChangedEvent)e;
+                    Component changed = csce.getComponent();
+                    server.sendToAllTCP(new ComponentStateChangePacket(changed.getParent(), changed.getClass(), changed.serialize()));
                 }
             });
         eventManager.register(serverListener);

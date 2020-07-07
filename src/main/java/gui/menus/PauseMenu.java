@@ -9,6 +9,8 @@ import gui.elements.TextLabel;
 import gui.sound.SoundManager;
 import gui.states.GameState;
 import main.GameManager;
+import network.MPClient;
+import network.MPServer;
 import world.World;
 import world.events.EventManager;
 
@@ -28,7 +30,8 @@ public class PauseMenu extends Modal {
             @Override
             public void onClick(int button) {
                 //TODO: reimplement world saving / event cleanup
-                //World.save();
+                MPClient.close();
+                MPServer.close();
                 GameManager.switchTo(GameState.MAIN_MENU, true);
                 SoundManager.stopAmbience();
                 //EventManager.unregisterAll();

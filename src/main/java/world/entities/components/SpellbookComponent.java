@@ -49,7 +49,7 @@ public class SpellbookComponent extends Component {
         return serialized;
     }
 
-    public Component deserialize(JSONObject json) {
+    public void deserialize(JSONObject json) {
         spells.clear();
         discovered_techniques.clear();
         JSONArray discovered = (JSONArray)json.get("discovered_techniques");
@@ -60,7 +60,6 @@ public class SpellbookComponent extends Component {
             spell.deserialize((JSONObject)js);
             addSpell(spell);
         });
-        return this;
     }
 
     @Override

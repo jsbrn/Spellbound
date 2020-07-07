@@ -1,6 +1,8 @@
 package world.entities.components;
 
+import network.MPServer;
 import org.json.simple.JSONObject;
+import world.events.event.ComponentStateChangedEvent;
 
 public class HealthComponent extends Component {
 
@@ -20,14 +22,18 @@ public class HealthComponent extends Component {
     }
 
     @Override
-    public Component deserialize(JSONObject object) {
+    public void deserialize(JSONObject object) {
         value = (double)object.getOrDefault("value", 100);
         max = (double)object.getOrDefault("max", 100);
-        return this;
     }
 
     public double getValue() {
         return value;
+    }
+
+    public void setValue(int amount) {
+        value = amount;
+        MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
     }
 
     public double getMax() {

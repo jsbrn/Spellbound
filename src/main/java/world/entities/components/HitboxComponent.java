@@ -19,9 +19,8 @@ public class HitboxComponent extends Component {
     }
 
     @Override
-    public Component deserialize(JSONObject object) {
+    public void deserialize(JSONObject object) {
         this.radius = (double)object.get("radius");
-        return this;
     }
 
     public double getRadius() {

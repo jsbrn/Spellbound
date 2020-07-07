@@ -42,10 +42,9 @@ public class LocationComponent extends Component {
     }
 
     @Override
-    public Component deserialize(JSONObject object) {
+    public void deserialize(JSONObject object) {
         location = new Location((String)object.get("region"), (double)object.get("x"), (double)object.get("y"));
         lastChunkCoordinates = new int[]{location.getChunkCoordinates()[0], location.getChunkCoordinates()[1]};
-        return this;
     }
 
     @Override

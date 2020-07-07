@@ -56,8 +56,8 @@ public class MagicSourceComponent extends Component {
     }
 
     @Override
-    public Component deserialize(JSONObject object) {
-        return null;
+    public void deserialize(JSONObject object) {
+
     }
 
     @Override

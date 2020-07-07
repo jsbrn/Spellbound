@@ -4,15 +4,7 @@ import assets.Assets;
 import com.github.mathiewz.slick.Sound;
 import misc.Location;
 import org.lwjgl.openal.AL;
-import world.World;
-import world.events.Event;
-import world.events.EventManager;
-import world.events.EventHandler;
 import world.events.EventListener;
-import world.events.event.CastFailedEvent;
-import world.events.event.EntityChangeRegionEvent;
-import world.events.event.HumanoidDamageEvent;
-import world.events.event.HumanoidDeathEvent;
 
 public class SoundManager {
 

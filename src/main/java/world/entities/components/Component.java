@@ -22,7 +22,7 @@ public abstract class Component {
     }
 
     public abstract JSONObject serialize();
-    public abstract Component deserialize(JSONObject object);
+    public abstract void deserialize(JSONObject object);
     public abstract String getID();
 
     public Integer getParent() { return parent; }
@@ -34,15 +34,16 @@ public abstract class Component {
 
     public static Component create(String id, JSONObject defaults) {
         Component c = null;
-        if (id.equals("location")) c = new LocationComponent().deserialize(defaults);
-        if (id.equals("hitbox")) c = new HitboxComponent().deserialize(defaults);
-        if (id.equals("spellbook")) c = new SpellbookComponent().deserialize(defaults);
-        if (id.equals("health")) c = new HealthComponent().deserialize(defaults);
-        if (id.equals("velocity")) c = new VelocityComponent().deserialize(defaults);
-        if (id.equals("magic_source")) c = new MagicSourceComponent().deserialize(defaults);
-        if (id.equals("player")) c = new PlayerComponent().deserialize(defaults);
+        if (id.equals("location")) c = new LocationComponent();
+        if (id.equals("hitbox")) c = new HitboxComponent();
+        if (id.equals("spellbook")) c = new SpellbookComponent();
+        if (id.equals("health")) c = new HealthComponent();
+        if (id.equals("velocity")) c = new VelocityComponent();
+        if (id.equals("magic_source")) c = new MagicSourceComponent();
+        if (id.equals("player")) c = new PlayerComponent();
 
         if (c != null) {
+            c.deserialize(defaults);
             c.eventListener = new EventListener();
             c.registerEventHandlers();
         }

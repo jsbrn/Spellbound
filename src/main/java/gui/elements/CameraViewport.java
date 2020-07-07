@@ -10,9 +10,13 @@ import misc.Location;
 import misc.MiscMath;
 import misc.Window;
 import network.MPClient;
+import network.MPServer;
 import org.lwjgl.input.Mouse;
 import world.Camera;
 import world.Chunk;
+import world.entities.components.HealthComponent;
+import world.entities.components.LocationComponent;
+import world.entities.components.VelocityComponent;
 
 import java.util.ArrayList;
 
@@ -60,6 +64,10 @@ public class CameraViewport extends GUIElement {
     public boolean onKeyUp(int key) {
         if (key == Input.KEY_F3) getGUI().toggleDebugMode();
         if (key == Input.KEY_F12) getGUI().stackModal(new CheatCodeMenu());
+        if (key == Input.KEY_T) {
+            ((VelocityComponent)MPServer.getWorld().getEntities().getComponent(VelocityComponent.class, Camera.getTargetEntity()))
+                    .addForce(Math.random() * 360, 1 + (Math.random() * 4), 2);
+        }
         //Host.getEventManager().invoke(new KeyUpEvent(key));
         //TODO: send key packet to server from client, don't trigger an event
         return true;
@@ -100,7 +108,8 @@ public class CameraViewport extends GUIElement {
         g.drawRect(osc[0], osc[1], 1 * Window.getScale() * Chunk.TILE_SIZE, 1 * Window.getScale() * Chunk.TILE_SIZE);
         for (int i = 0; i < entities.size(); i++) g.drawString("Entity #"+entities.get(i), osc[0], osc[1] + (i * 20));
 
-        Location localPlayerLocation = Camera.getLocation();
+        Location localPlayerLocation = ((LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, Camera.getTargetEntity())).getLocation();
+        Location serverPlayerLocation = ((LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, Camera.getTargetEntity())).getLocation();
 
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
@@ -109,7 +118,8 @@ public class CameraViewport extends GUIElement {
                 "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
                 "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
                 "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
-                        +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)
+                        +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25),
+                "Distance to server copy: "+localPlayerLocation.distanceTo(serverPlayerLocation)+" tiles"
         };
 
         g.setColor(Color.white);

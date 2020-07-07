@@ -14,8 +14,8 @@ public class PlayerComponent extends Component {
     }
 
     @Override
-    public Component deserialize(JSONObject object) {
-        return this;
+    public void deserialize(JSONObject object) {
+
     }
 
     @Override
