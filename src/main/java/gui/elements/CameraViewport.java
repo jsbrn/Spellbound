@@ -85,7 +85,7 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public void drawOver(Graphics g) {
-        if (Camera.getTargetEntity() == -1) return;
+        if (Camera.getTargetEntity() == -1 || !MPClient.isOpen()) return;
         MPClient.getWorld().getRegion(Camera.getLocation()).draw(Window.getScale(), g);
     }
 

@@ -2,6 +2,8 @@ package world.entities.systems;
 
 import misc.Location;
 import misc.MiscMath;
+import misc.annotations.ServerClientExecution;
+import misc.annotations.ServerExecution;
 import network.MPServer;
 import world.Chunk;
 import world.Region;
@@ -19,6 +21,7 @@ import java.util.Set;
 
 public class MovementSystem {
 
+    @ServerClientExecution
     public static void update(World world, Collection<Integer> players) {
 
         Set<Integer> entitiesToMove = new HashSet<>();
@@ -47,6 +50,7 @@ public class MovementSystem {
 
     }
 
+    @ServerExecution
     public static void pollForPlayerApproaches(World world) {
         Set<Integer> players = world.getEntities().getEntitiesWith(PlayerComponent.class);
         for (Integer player: players) {

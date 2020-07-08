@@ -1,6 +1,9 @@
 package world.entities.components;
 
 import misc.MiscMath;
+import misc.annotations.ClientExecution;
+import misc.annotations.ServerClientExecution;
+import misc.annotations.ServerExecution;
 import network.MPServer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -45,6 +48,12 @@ public class VelocityComponent extends Component {
         }
     }
 
+    @ServerClientExecution
+    public void applyConstant() {
+
+    }
+
+    @ServerExecution
     public void addForce(double direction, double magnitude, double deceleration) {
         forces.add(new Force(direction, magnitude, deceleration));
         MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
@@ -54,14 +63,18 @@ public class VelocityComponent extends Component {
      * Get the direction on both axes in terms of tiles per second.
      * @return
      */
+    @ServerClientExecution
     public double[] calculateVector(long currentTime) {
         double[] dir = new double[2];
         for (int i = forces.size() - 1; i > -1; i--) {
             Force f = forces.get(i);
+            if (f.getMagnitude() == 0) {
+                forces.remove(i);
+                continue;
+            }
             f.updateMagnitude();
             dir[0] += f.getMagnitude() * f.getDirections()[0];
             dir[1] += f.getMagnitude() * f.getDirections()[1];
-            if (f.getMagnitude() == 0) forces.remove(i);
         }
         return dir;
     }

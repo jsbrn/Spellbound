@@ -3,6 +3,7 @@ package world.entities.systems;
 import assets.Assets;
 import com.github.mathiewz.slick.Graphics;
 import misc.Window;
+import misc.annotations.ClientExecution;
 import world.Camera;
 import world.Chunk;
 import world.World;
@@ -12,6 +13,7 @@ import world.entities.components.LocationComponent;
 
 public class RenderSystem {
 
+    @ClientExecution
     public static void drawEntity(Entities entities, int entityID, float scale) {
         HitboxComponent hitbox = (HitboxComponent) entities.getComponent(HitboxComponent.class, entityID);
         LocationComponent location = (LocationComponent) entities.getComponent(LocationComponent.class, entityID);
