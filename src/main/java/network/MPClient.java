@@ -99,6 +99,10 @@ public class MPClient {
         packetHandlers.put(ComponentStateChangePacket.class, new ClientComponentStateChangePacketHandler());
     }
 
+    public static void sendPacket(Packet p) {
+        client.sendTCP(p);
+    }
+
     public static long getTime() {
         return time;
     }

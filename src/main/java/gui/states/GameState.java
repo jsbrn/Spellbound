@@ -82,6 +82,41 @@ public abstract class GameState extends BasicGameState {
     }
 
     @Override
+    public void controllerRightPressed(int controller) {
+        keyPressed(Input.KEY_D, 'd');
+    }
+
+    @Override
+    public void controllerUpPressed(int controller) {
+        keyPressed(Input.KEY_W, 'w');
+    }
+
+    @Override
+    public void controllerDownPressed(int controller) {
+        keyPressed(Input.KEY_S, 's');
+    }
+
+    @Override
+    public void controllerLeftReleased(int controller) {
+        keyReleased(Input.KEY_A, 'a');
+    }
+
+    @Override
+    public void controllerRightReleased(int controller) {
+        keyReleased(Input.KEY_D, 'd');
+    }
+
+    @Override
+    public void controllerUpReleased(int controller) {
+        keyReleased(Input.KEY_W, 'w');
+    }
+
+    @Override
+    public void controllerDownReleased(int controller) {
+        keyReleased(Input.KEY_S, 's');
+    }
+
+    @Override
     public void mouseWheelMoved(int newValue) {
         gui.handleMouseScroll(newValue > 0 ? -1 : 1);
     }

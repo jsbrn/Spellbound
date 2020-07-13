@@ -14,6 +14,8 @@ import java.util.LinkedList;
 public class VelocityComponent extends Component {
 
     private LinkedList<Force> forces;
+    private Force constant; //controlled movement
+    private double baseSpeed;
 
     @Override
     protected void registerEventHandlers() {
@@ -24,6 +26,9 @@ public class VelocityComponent extends Component {
     public JSONObject serialize() {
         JSONObject serialized = new JSONObject();
         JSONArray listOfForces = new JSONArray();
+        JSONObject constantJSON = new JSONObject();
+        constantJSON.put("direction", constant.getDirection());
+        constantJSON.put("magnitude", constant.getOriginalMagnitude());
         for (Force f: forces) {
             JSONObject jsonForce = new JSONObject();
             jsonForce.put("magnitude", f.getOriginalMagnitude());
@@ -31,6 +36,8 @@ public class VelocityComponent extends Component {
             jsonForce.put("direction", f.getDirection());
             listOfForces.add(jsonForce);
         }
+        serialized.put("base_speed", baseSpeed);
+        serialized.put("constant", constantJSON);
         serialized.put("forces", listOfForces);
         return serialized;
     }
@@ -38,6 +45,8 @@ public class VelocityComponent extends Component {
     @Override
     public void deserialize(JSONObject object) {
         forces = new LinkedList<>();
+        JSONObject constantJSON = (JSONObject)object.getOrDefault("constant", new JSONObject());
+        constant = new Force((double)constantJSON.getOrDefault("direction", 0.0d), (double)constantJSON.getOrDefault("magnitude", 0.0d), 0);
         JSONArray listOfForces = (JSONArray)object.get("forces");
         for (Object o: listOfForces) {
             JSONObject f = (JSONObject)o;
@@ -46,11 +55,19 @@ public class VelocityComponent extends Component {
                     (double)f.get("magnitude"),
                     (double)f.getOrDefault("deceleration", 0.0)));
         }
+        baseSpeed = (double)object.getOrDefault("base_speed", 1.0d);
+    }
+
+    public double getBaseSpeed() {
+        return baseSpeed;
     }
 
     @ServerClientExecution
-    public void applyConstant() {
-
+    public void setConstant(double direction, double magnitude) {
+        if (direction != constant.getDirection() || magnitude != constant.getMagnitude()) {
+            constant = new Force(direction, magnitude, 0);
+            MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
+        }
     }
 
     @ServerExecution
@@ -65,7 +82,10 @@ public class VelocityComponent extends Component {
      */
     @ServerClientExecution
     public double[] calculateVector(long currentTime) {
-        double[] dir = new double[2];
+        double[] dir = new double[]{
+                constant.getMagnitude() * constant.getDirections()[0],
+                constant.getMagnitude() * constant.getDirections()[1]
+        };
         for (int i = forces.size() - 1; i > -1; i--) {
             Force f = forces.get(i);
             if (f.getMagnitude() == 0) {

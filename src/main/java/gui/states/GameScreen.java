@@ -14,6 +14,8 @@ import gui.menus.SpellcraftingMenu;
 import misc.MiscMath;
 import network.MPClient;
 import network.MPServer;
+import org.lwjgl.input.Controller;
+import org.lwjgl.input.Controllers;
 import world.Camera;
 import world.World;
 import world.entities.components.magic.Spell;
@@ -49,6 +51,7 @@ public class GameScreen extends GameState {
         MiscMath.DELTA_TIME = delta;
         if (MPServer.isOpen()) MPServer.update();
         if (MPClient.isOpen()) MPClient.update();
+
     }
 
     public void setTarget(int entityID) {
@@ -56,6 +59,16 @@ public class GameScreen extends GameState {
         hotbar.setTarget(entityID);
         spellcraftingMenu.setTarget(entityID);
         spellbook.setTarget(entityID);
+    }
+
+    @Override
+    public void controllerLeftPressed(int controller) {
+        keyPressed(Input.KEY_A, 'a');
+    }
+
+    @Override
+    public void controllerButtonPressed(int controller, int button) {
+        System.out.println("controller "+controller+" button "+button);
     }
 
     @Override

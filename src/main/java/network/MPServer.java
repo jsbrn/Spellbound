@@ -5,14 +5,19 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
 import network.handlers.server.ServerJoinPacketHandler;
+import network.handlers.server.ServerKeyPressedHandler;
+import network.handlers.server.ServerKeyReleasedHandler;
 import network.packets.ChunkPacket;
 import network.packets.ComponentStateChangePacket;
 import network.packets.EntityPutPacket;
 import network.packets.JoinPacket;
+import network.packets.input.KeyPressedPacket;
+import network.packets.input.KeyReleasedPacket;
 import world.Chunk;
 import world.Region;
 import world.entities.components.Component;
 import world.entities.components.LocationComponent;
+import world.entities.systems.InputProcessingSystem;
 import world.entities.systems.MovementSystem;
 import world.events.Event;
 import world.events.EventHandler;
@@ -106,11 +111,14 @@ public class MPServer {
         world.update();
         MovementSystem.update(world, connectedPlayers.values());
         MovementSystem.pollForPlayerApproaches(world);
+        InputProcessingSystem.update(world);
     }
 
     private static void registerPacketHandlers() {
         packetHandlers = new HashMap<>();
         packetHandlers.put(JoinPacket.class, new ServerJoinPacketHandler());
+        packetHandlers.put(KeyPressedPacket.class, new ServerKeyPressedHandler());
+        packetHandlers.put(KeyReleasedPacket.class, new ServerKeyReleasedHandler());
     }
 
     private static void registerEventHandlers() {

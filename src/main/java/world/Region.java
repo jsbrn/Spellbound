@@ -310,7 +310,7 @@ public class Region {
 
     public void update() {
         int radius = 3;
-        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
+        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(entities, PlayerComponent.class, LocationComponent.class);
         for (Integer eID: playerEntities) {
             for (int j = -radius; j <= radius; j++) {
                 for (int i = -radius; i <= radius; i++) {
@@ -329,7 +329,7 @@ public class Region {
         float[] oscoords = Camera.getOnscreenCoordinates(0, 0, scale);
 
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
-        int radius = 2;
+        int radius = 1;
 
         for (int pass = 0; pass < 2; pass++) {
             for (int cj = -radius; cj <= radius; cj++) {
@@ -343,8 +343,8 @@ public class Region {
                         adj.drawBase(osx, osy, scale);
                     } else {
                         adj.drawTop(osx, osy, scale);
+                        //adj.drawDebug(osx, osy, scale, g);
                     }
-                    adj.drawDebug(osx, osy, scale, g);
                 }
             }
         }

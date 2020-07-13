@@ -4,7 +4,9 @@
     "y": 0.0,
     "region": "world"
   },
+  "input": {},
   "velocity": {
+    "base_speed": 4.0,
     "forces": [
       {
         "direction": 180.0,

@@ -11,6 +11,8 @@ import misc.MiscMath;
 import misc.Window;
 import network.MPClient;
 import network.MPServer;
+import network.packets.input.KeyPressedPacket;
+import network.packets.input.KeyReleasedPacket;
 import org.lwjgl.input.Mouse;
 import world.Camera;
 import world.Chunk;
@@ -54,8 +56,7 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public boolean onKeyDown(int key) {
-        //EventManager.invoke(new KeyDownEvent(key));
-        //TODO: send packet instead
+        MPClient.sendPacket(new KeyPressedPacket(key));
         return true;
     }
 
@@ -67,8 +68,7 @@ public class CameraViewport extends GUIElement {
             ((VelocityComponent)MPServer.getWorld().getEntities().getComponent(VelocityComponent.class, Camera.getTargetEntity()))
                     .addForce(Math.random() * 360, 1 + (Math.random() * 4), 2);
         }
-        //Host.getEventManager().invoke(new KeyUpEvent(key));
-        //TODO: send key packet to server from client, don't trigger an event
+        MPClient.sendPacket(new KeyReleasedPacket(key));
         return true;
     }
 

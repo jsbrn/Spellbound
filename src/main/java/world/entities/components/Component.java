@@ -1,5 +1,7 @@
 package world.entities.components;
 
+import misc.annotations.ServerClientExecution;
+import misc.annotations.ServerExecution;
 import network.Packet;
 import org.json.simple.JSONObject;
 import world.entities.components.magic.MagicSourceComponent;
@@ -11,6 +13,7 @@ public abstract class Component {
     private Integer parent;
     private EventListener eventListener;
 
+    @ServerExecution
     protected abstract void registerEventHandlers();
 
     public EventListener getEventListener() {
@@ -32,6 +35,7 @@ public abstract class Component {
         return create(id, new JSONObject());
     }
 
+    @ServerClientExecution
     public static Component create(String id, JSONObject defaults) {
         Component c = null;
         if (id.equals("location")) c = new LocationComponent();
@@ -41,6 +45,7 @@ public abstract class Component {
         if (id.equals("velocity")) c = new VelocityComponent();
         if (id.equals("magic_source")) c = new MagicSourceComponent();
         if (id.equals("player")) c = new PlayerComponent();
+        if (id.equals("input")) c = new InputComponent();
 
         if (c != null) {
             c.deserialize(defaults);

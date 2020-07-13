@@ -54,11 +54,9 @@ public class MovementSystem {
     public static void pollForPlayerApproaches(World world) {
         Set<Integer> players = world.getEntities().getEntitiesWith(PlayerComponent.class);
         for (Integer player: players) {
-            System.out.println("Testing approach for player "+player);
             LocationComponent lc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, player);
             Region reg = world.getRegion(lc.getLocation().getRegionName());
             ArrayList<Integer> entitiesWithinRange = reg.getEntitiesNear(player, 1);
-            System.out.println(entitiesWithinRange.size() +" entities in range");
             for (Integer entity: entitiesWithinRange) {
                 LocationComponent eLoc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, entity);
                 boolean hasApproached = eLoc.hasApproachedPlayer(player);
