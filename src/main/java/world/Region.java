@@ -310,7 +310,7 @@ public class Region {
 
     public void update() {
         int radius = 3;
-        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(entities, PlayerComponent.class, LocationComponent.class);
+        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
         for (Integer eID: playerEntities) {
             for (int j = -radius; j <= radius; j++) {
                 for (int i = -radius; i <= radius; i++) {
@@ -329,7 +329,7 @@ public class Region {
         float[] oscoords = Camera.getOnscreenCoordinates(0, 0, scale);
 
         float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
-        int radius = 1;
+        int radius = 2;
 
         for (int pass = 0; pass < 2; pass++) {
             for (int cj = -radius; cj <= radius; cj++) {
@@ -343,7 +343,6 @@ public class Region {
                         adj.drawBase(osx, osy, scale);
                     } else {
                         adj.drawTop(osx, osy, scale);
-                        //adj.drawDebug(osx, osy, scale, g);
                     }
                 }
             }
@@ -351,7 +350,21 @@ public class Region {
     }
 
     public void drawDebug(float scale, Graphics g) {
+        int[] pchcoords = Camera.getLocation().getChunkCoordinates();
+        float[] oscoords = Camera.getOnscreenCoordinates(0, 0, scale);
 
+        float chunk_size = Chunk.CHUNK_SIZE * Chunk.TILE_SIZE * Window.getScale();
+        int radius = 1;
+        for (int cj = -radius; cj <= radius; cj++) {
+            for (int ci = -radius; ci <= radius; ci++) {
+                int cx = pchcoords[0] + ci;
+                int cy = pchcoords[1] + cj;
+                Chunk adj = getChunk(cx, cy);
+                if (adj == null) continue;
+                float osx = oscoords[0] + (cx * chunk_size), osy = oscoords[1] + (cy * chunk_size);
+                adj.drawDebug(osx, osy, scale, g);
+            }
+        }
     }
 
     @Override

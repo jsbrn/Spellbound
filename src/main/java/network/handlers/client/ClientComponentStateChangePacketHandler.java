@@ -16,6 +16,7 @@ public class ClientComponentStateChangePacketHandler implements PacketHandler {
         try {
             Class componentClass = Class.forName(cp.className);
             Component c = MPClient.getWorld().getEntities().getComponent(componentClass, cp.entityID);
+            if (c == null) return false;
             c.deserialize(Assets.json(cp.newJSONState));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

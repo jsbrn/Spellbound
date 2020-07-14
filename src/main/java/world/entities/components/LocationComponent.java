@@ -3,9 +3,7 @@ package world.entities.components;
 import misc.Location;
 import network.MPServer;
 import org.json.simple.JSONObject;
-import world.Chunk;
 import world.Region;
-import world.events.event.EntityNearPlayerEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +13,7 @@ public class LocationComponent extends Component {
     private Location location;
 
     private HashMap<Integer, Boolean> lastIsNearPlayer;
-    private int[] lastChunkCoordinates;
+    private int[] lastTileCoordinates;
 
     public LocationComponent() {
         this.lastIsNearPlayer = new HashMap<>();
@@ -43,11 +41,11 @@ public class LocationComponent extends Component {
         this.location = location;
     }
 
-    public boolean hasEnteredNewChunk() {
-        if (location.getChunkCoordinates()[0] != lastChunkCoordinates[0] || location.getChunkCoordinates()[1] != lastChunkCoordinates[1]) {
+    public boolean hasEnteredNewTile() {
+        if (Math.floor(location.getCoordinates()[0]) != lastTileCoordinates[0] || Math.floor(location.getChunkCoordinates()[1]) != lastTileCoordinates[1]) {
             //int[] diff = new int[]{location.getChunkCoordinates()[0] - lastChunkCoordinates[0], location.getChunkCoordinates()[1] - lastChunkCoordinates[1]};
-            lastChunkCoordinates[0] = location.getChunkCoordinates()[0];
-            lastChunkCoordinates[1] = location.getChunkCoordinates()[1];
+            lastTileCoordinates[0] = (int)Math.floor(location.getCoordinates()[0]);
+            lastTileCoordinates[1] = (int)Math.floor(location.getChunkCoordinates()[1]);
             return true;
         }
         return false;
@@ -70,7 +68,7 @@ public class LocationComponent extends Component {
     @Override
     public void deserialize(JSONObject object) {
         location = new Location((String)object.get("region"), (double)object.get("x"), (double)object.get("y"));
-        this.lastChunkCoordinates = new int[]{location.getChunkCoordinates()[0], location.getChunkCoordinates()[1]};
+        this.lastTileCoordinates = new int[]{location.getChunkCoordinates()[0], location.getChunkCoordinates()[1]};
     }
 
     @Override

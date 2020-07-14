@@ -1,9 +1,11 @@
 package network;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
+import misc.MiscMath;
 import network.handlers.server.ServerJoinPacketHandler;
 import network.handlers.server.ServerKeyPressedHandler;
 import network.handlers.server.ServerKeyReleasedHandler;
@@ -13,7 +15,6 @@ import network.packets.EntityPutPacket;
 import network.packets.JoinPacket;
 import network.packets.input.KeyPressedPacket;
 import network.packets.input.KeyReleasedPacket;
-import world.Chunk;
 import world.Region;
 import world.entities.components.Component;
 import world.entities.components.LocationComponent;
@@ -27,6 +28,7 @@ import org.json.simple.JSONObject;
 import world.World;
 import world.events.event.ChunkGeneratedEvent;
 import world.events.event.ComponentStateChangedEvent;
+import world.events.event.EntityMovedEvent;
 import world.events.event.EntityNearPlayerEvent;
 
 import java.io.IOException;
@@ -64,11 +66,12 @@ public class MPServer {
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
                 connectedPlayers.remove(connection);
+                world.getEntities().removeEntity(getEntityID(connection));
             }
 
             @Override
             public void received(Connection connection, Object packet) {
-                System.out.println("Server received: "+packet);
+                if (!(packet instanceof FrameworkMessage)) System.out.println("Server received: "+packet.getClass().getSimpleName());
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
             }
@@ -110,7 +113,7 @@ public class MPServer {
     public static void update() {
         world.update();
         MovementSystem.update(world, connectedPlayers.values());
-        MovementSystem.pollForPlayerApproaches(world);
+        MovementSystem.pollForMovementEvents(world);
         InputProcessingSystem.update(world);
     }
 

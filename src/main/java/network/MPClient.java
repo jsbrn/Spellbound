@@ -2,6 +2,7 @@ package network;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import network.handlers.client.*;
 import network.packets.*;
@@ -46,7 +47,7 @@ public class MPClient {
 
             @Override
             public void received(Connection connection, Object packet) {
-                System.out.println("Client received: "+packet);
+                if (!(packet instanceof FrameworkMessage)) System.out.println("Client received: "+packet.getClass().getSimpleName());
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
             }

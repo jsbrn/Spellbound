@@ -52,7 +52,7 @@ public class GameManager extends StateBasedGame {
         try {
             Window.WINDOW_INSTANCE = new AppGameContainer(new GameManager(Window.WINDOW_TITLE));
             DisplayMode desktop = Window.getAllDisplayModes().get(0);
-            Window.WINDOW_INSTANCE.setDisplayMode((int)(Window.getScreenWidth() * 0.75), (int)(Window.getScreenHeight() * 0.75), false);
+            Window.WINDOW_INSTANCE.setDisplayMode((int)(Window.getScreenWidth() * 0.5), (int)(Window.getScreenHeight() * 0.5), false);
             Window.WINDOW_INSTANCE.setSmoothDeltas(false);
             Window.WINDOW_INSTANCE.setAlwaysRender(true);
             Window.WINDOW_INSTANCE.setVSync(true);
