@@ -62,7 +62,7 @@ public class VelocityComponent extends Component {
         return baseSpeed;
     }
 
-    @ServerClientExecution
+    @ServerExecution
     public void setConstant(double direction, double magnitude) {
         if (direction != constant.getDirection() || magnitude != constant.getMagnitude()) {
             constant = new Force(direction, magnitude, 0);

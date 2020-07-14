@@ -9,10 +9,7 @@ import misc.MiscMath;
 import network.handlers.server.ServerJoinPacketHandler;
 import network.handlers.server.ServerKeyPressedHandler;
 import network.handlers.server.ServerKeyReleasedHandler;
-import network.packets.ChunkPacket;
-import network.packets.ComponentStateChangePacket;
-import network.packets.EntityPutPacket;
-import network.packets.JoinPacket;
+import network.packets.*;
 import network.packets.input.KeyPressedPacket;
 import network.packets.input.KeyReleasedPacket;
 import world.Region;
@@ -81,7 +78,7 @@ public class MPServer {
     public static boolean launch(int seed) {
         server.start();
         try {
-            server.bind(6667);
+            server.bind(6667, 6668);
             world.generate(seed);
             return true;
         } catch (IOException e) {
@@ -146,6 +143,15 @@ public class MPServer {
                 public void handle(Event e) {
                     EntityNearPlayerEvent enpe = (EntityNearPlayerEvent)e;
                     getConnection(enpe.getPlayerID()).sendTCP(new EntityPutPacket(enpe.getEntityID(), MPServer.getWorld().getEntities().serializeEntity(enpe.getEntityID())));
+                }
+            })
+            .on(EntityMovedEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    EntityMovedEvent eme = (EntityMovedEvent)e;
+                    getConnectionsWithinRange(eme.getEntity()).forEach(conn -> {
+                        conn.sendUDP(new LocationUpdatePacket(eme.getEntity()));
+                    });
                 }
             });
         eventManager.register(serverListener);

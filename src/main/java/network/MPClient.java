@@ -61,7 +61,7 @@ public class MPClient {
     public static void join(String host) {
         try {
             client.start();
-            client.connect(10000, host, 6667);
+            client.connect(10000, host, 6667, 6668);
             pingTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
@@ -98,6 +98,7 @@ public class MPClient {
         packetHandlers.put(PlayerAssignmentPacket.class, new ClientPlayerAssignmentPacketHandler());
         packetHandlers.put(RegionPacket.class, new ClientRegionPacketHandler());
         packetHandlers.put(ComponentStateChangePacket.class, new ClientComponentStateChangePacketHandler());
+        packetHandlers.put(LocationUpdatePacket.class, new ClientLocationUpdatePacketHandler());
     }
 
     public static void sendPacket(Packet p) {

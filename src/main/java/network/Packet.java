@@ -23,6 +23,7 @@ public class Packet {
         kryo.register(KeyReleasedPacket.class);
         kryo.register(MousePressedPacket.class);
         kryo.register(MouseReleasedPacket.class);
+        kryo.register(LocationUpdatePacket.class);
     }
 
 }

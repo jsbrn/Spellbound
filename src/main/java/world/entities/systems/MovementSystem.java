@@ -72,7 +72,6 @@ public class MovementSystem {
                 boolean hasMovedTiles = eLoc.hasEnteredNewTile();
                 if (hasMovedTiles) {
                     MPServer.getEventManager().invoke(new EntityMovedEvent(entity));
-                    MPServer.getEventManager().invoke(new ComponentStateChangedEvent(eLoc));
                 }
                 if (hasApproached) {
                     System.out.println(entity+" has approached "+player);
