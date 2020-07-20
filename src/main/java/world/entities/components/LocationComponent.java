@@ -3,6 +3,7 @@ package world.entities.components;
 import misc.Location;
 import network.MPServer;
 import org.json.simple.JSONObject;
+import world.Chunk;
 import world.Region;
 
 import java.util.ArrayList;
@@ -13,10 +14,11 @@ public class LocationComponent extends Component {
     private Location location;
 
     private HashMap<Integer, Boolean> lastIsNearPlayer;
-    private int[] lastTileCoordinates;
+    private int[] lastTileCoordinates, lastChunkCoordinates;
 
     public LocationComponent() {
         this.lastIsNearPlayer = new HashMap<>();
+        this.lastChunkCoordinates = new int[2];
     }
 
     @Override
@@ -42,7 +44,7 @@ public class LocationComponent extends Component {
     }
 
     public boolean hasEnteredNewTile() {
-        if (Math.floor(location.getCoordinates()[0]) != lastTileCoordinates[0] || Math.floor(location.getChunkCoordinates()[1]) != lastTileCoordinates[1]) {
+        if ((int)Math.floor(location.getCoordinates()[0]) != lastTileCoordinates[0] || (int)Math.floor(location.getChunkCoordinates()[1]) != lastTileCoordinates[1]) {
             //int[] diff = new int[]{location.getChunkCoordinates()[0] - lastChunkCoordinates[0], location.getChunkCoordinates()[1] - lastChunkCoordinates[1]};
             lastTileCoordinates[0] = (int)Math.floor(location.getCoordinates()[0]);
             lastTileCoordinates[1] = (int)Math.floor(location.getChunkCoordinates()[1]);
@@ -51,12 +53,20 @@ public class LocationComponent extends Component {
         return false;
     }
 
-    public boolean hasApproachedPlayer(int playerEntity) {
+    public Chunk hasEnteredNewChunk() {
+        if (location.getChunkCoordinates()[0] != lastChunkCoordinates[0] || location.getChunkCoordinates()[1] != lastChunkCoordinates[1]) {
+            //int[] diff = new int[]{location.getChunkCoordinates()[0] - lastChunkCoordinates[0], location.getChunkCoordinates()[1] - lastChunkCoordinates[1]};
+            lastChunkCoordinates[0] = location.getChunkCoordinates()[0];
+            lastChunkCoordinates[1] = location.getChunkCoordinates()[1];
+            return MPServer.getWorld().getRegion(location).getChunk(location);
+        }
+        return null;
+    }
+
+    public boolean hasApproachedPlayer(int playerEntity, int qualifyingRadius) {
         if (playerEntity == getParent()) return false;
         Location ploc = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, playerEntity)).getLocation();
-        Region preg = MPServer.getWorld().getRegion(ploc.getRegionName());
-        ArrayList<Integer> entities = preg.getEntitiesNear(playerEntity, 1);
-        boolean current = entities.contains(getParent());
+        boolean current = location.distanceTo(ploc) < Chunk.CHUNK_SIZE * qualifyingRadius * Chunk.TILE_SIZE;
         boolean last = lastIsNearPlayer.get(playerEntity) != null && lastIsNearPlayer.get(playerEntity);
         if (current != last) {
             lastIsNearPlayer.put(playerEntity, current);

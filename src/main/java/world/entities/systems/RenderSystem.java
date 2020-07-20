@@ -1,6 +1,7 @@
 package world.entities.systems;
 
 import assets.Assets;
+import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import misc.Window;
 import misc.annotations.ClientExecution;
@@ -29,7 +30,13 @@ public class RenderSystem {
     }
 
     public static void drawEntityDebug(Entities entities, int entityID, float scale, Graphics g) {
-
+        g.setColor(Color.red);
+        HitboxComponent hitbox = (HitboxComponent) entities.getComponent(HitboxComponent.class, entityID);
+        LocationComponent location = (LocationComponent) entities.getComponent(LocationComponent.class, entityID);
+        float[] osc = Camera.getOnscreenCoordinates(
+                location.getLocation().getCoordinates()[0],
+                location.getLocation().getCoordinates()[1], Window.getScale());
+        g.fillRect(osc[0] - 2, osc[1] - 2, 4, 4);
     }
 
 }

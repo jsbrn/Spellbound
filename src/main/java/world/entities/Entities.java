@@ -12,7 +12,7 @@ public class Entities {
     private HashMap<Class, LinkedHashMap<Integer, Component>> COMPONENT_MAPS = new HashMap<>();
 
     public int createEntity(JSONObject json) {
-        int newID = ++lastEntityID;
+        int newID = lastEntityID++;
         return createEntity(newID, json);
     }
 

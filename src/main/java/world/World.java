@@ -3,6 +3,7 @@ package world;
 import com.github.mathiewz.slick.Graphics;
 import misc.Location;
 import misc.MiscMath;
+import misc.annotations.ServerClientExecution;
 import network.MPClient;
 import org.json.simple.JSONObject;
 import world.entities.Entities;
@@ -18,11 +19,9 @@ public class World {
     private HashMap<String, Region> regions;
     private ArrayList<Portal> portals;
 
-    private long time;
     private int seed;
 
     public World() {
-        time = 0;
         regions = new HashMap<>();
         portals = new ArrayList<>();
         entities = new Entities();
@@ -55,12 +54,10 @@ public class World {
 
     public Region getRegion(Location location) { return getRegion(location.getRegionName()); }
 
+    @ServerClientExecution
     public void update() {
-        time += MiscMath.getConstant(1000, 1);
         for (Region r: regions.values()) r.update(); //updating the region just handles chunk generation as players move around
     }
-
-    public long getCurrentTime() { return time; }
 
     public void draw(float scale, Graphics g) {
         getRegion(Camera.getLocation()).draw(scale, g);

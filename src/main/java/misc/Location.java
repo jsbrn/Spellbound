@@ -36,7 +36,7 @@ public class Location {
     public double[] getCoordinates() {
         return coordinates;
     }
-    public int[] getChunkCoordinates() { return new int[]{(int)(coordinates[0] / Chunk.CHUNK_SIZE), (int)(coordinates[1] / Chunk.CHUNK_SIZE)}; }
+    public int[] getChunkCoordinates() { return new int[]{(int)Math.floor(coordinates[0] / Chunk.CHUNK_SIZE), (int)Math.floor(coordinates[1] / Chunk.CHUNK_SIZE)}; }
     public double[] getLocalCoordinates() { return new double[]{coordinates[0] % Chunk.CHUNK_SIZE, coordinates[1] % Chunk.CHUNK_SIZE}; }
 
     public double getIndex(Region region) { return MiscMath.getIndex(coordinates[0], coordinates[1], Integer.MAX_VALUE); }

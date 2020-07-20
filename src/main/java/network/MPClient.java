@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
+import misc.MiscMath;
 import network.handlers.client.*;
 import network.packets.*;
 import world.Camera;
@@ -67,7 +68,7 @@ public class MPClient {
                 public void run() {
                     client.updateReturnTripTime();
                 }
-            }, 500, 4000);
+            }, 100, 1000);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,6 +82,9 @@ public class MPClient {
     }
 
     public static void update() {
+
+        time += MiscMath.getConstant(1000, 1);
+
         client.getReturnTripTime();
         //update only the player
         MovementSystem.update(world, world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
@@ -94,11 +98,13 @@ public class MPClient {
     private static void registerPacketHandlers() {
         packetHandlers = new HashMap<>();
         packetHandlers.put(ChunkPacket.class, new ClientChunkPacketHandler());
-        packetHandlers.put(EntityPutPacket.class, new ClientEntityUpdatePacketHandler());
+        packetHandlers.put(EntityUpdatePacket.class, new ClientEntityUpdatePacketHandler());
         packetHandlers.put(PlayerAssignmentPacket.class, new ClientPlayerAssignmentPacketHandler());
         packetHandlers.put(RegionPacket.class, new ClientRegionPacketHandler());
         packetHandlers.put(ComponentStateChangePacket.class, new ClientComponentStateChangePacketHandler());
         packetHandlers.put(LocationUpdatePacket.class, new ClientLocationUpdatePacketHandler());
+        packetHandlers.put(EntityVelocityChangedPacket.class, new ClientEntityVelocityChangedPacketHandler());
+        packetHandlers.put(TimeSyncPacket.class, new ClientTimeSyncPacketHandler());
     }
 
     public static void sendPacket(Packet p) {
@@ -109,7 +115,9 @@ public class MPClient {
         return time;
     }
 
-    public static int getPing() {
+    public static void setTime(long t) { time = t; }
+
+    public static int getReturnTripTime() {
         return client.getReturnTripTime();
     }
 

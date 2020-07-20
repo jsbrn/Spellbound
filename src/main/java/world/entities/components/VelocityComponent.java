@@ -1,13 +1,12 @@
 package world.entities.components;
 
-import misc.MiscMath;
-import misc.annotations.ClientExecution;
+import misc.Force;
 import misc.annotations.ServerClientExecution;
 import misc.annotations.ServerExecution;
 import network.MPServer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import world.events.event.ComponentStateChangedEvent;
+import world.events.event.EntityVelocityChangedEvent;
 
 import java.util.LinkedList;
 
@@ -28,10 +27,10 @@ public class VelocityComponent extends Component {
         JSONArray listOfForces = new JSONArray();
         JSONObject constantJSON = new JSONObject();
         constantJSON.put("direction", constant.getDirection());
-        constantJSON.put("magnitude", constant.getOriginalMagnitude());
+        constantJSON.put("magnitude", constant.getMagnitude());
         for (Force f: forces) {
             JSONObject jsonForce = new JSONObject();
-            jsonForce.put("magnitude", f.getOriginalMagnitude());
+            jsonForce.put("magnitude", f.getMagnitude());
             jsonForce.put("deceleration", f.getDeceleration());
             jsonForce.put("direction", f.getDirection());
             listOfForces.add(jsonForce);
@@ -58,6 +57,14 @@ public class VelocityComponent extends Component {
         baseSpeed = (double)object.getOrDefault("base_speed", 1.0d);
     }
 
+    public void deserialize(double[] constant, double[][] fs) {
+        forces.clear();
+        this.constant = new Force(constant[0], constant[1], constant[2]);
+        for (double[] f: fs) {
+            forces.add(new Force(f[0], f[1], f[2]));
+        }
+    }
+
     public double getBaseSpeed() {
         return baseSpeed;
     }
@@ -66,22 +73,33 @@ public class VelocityComponent extends Component {
     public void setConstant(double direction, double magnitude) {
         if (direction != constant.getDirection() || magnitude != constant.getMagnitude()) {
             constant = new Force(direction, magnitude, 0);
-            MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
+            MPServer.getEventManager().invoke(new EntityVelocityChangedEvent(getParent()));
         }
+    }
+
+    public Force getConstant() {
+        return constant;
     }
 
     @ServerExecution
     public void addForce(double direction, double magnitude, double deceleration) {
         forces.add(new Force(direction, magnitude, deceleration));
-        MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
+        MPServer.getEventManager().invoke(new EntityVelocityChangedEvent(getParent()));
     }
 
+    public LinkedList<Force> getForces() {
+        return forces;
+    }
+
+    public void stop() { forces.clear(); }
+
     /**
-     * Get the direction on both axes in terms of tiles per second.
-     * @return
+     * Get the direction on both axes in terms of tiles per second. Applies acceleration to the force vectors before
+     * aggregating.
+     * @return A double[] describing the tiles per second on both axes.
      */
     @ServerClientExecution
-    public double[] calculateVector(long currentTime) {
+    public double[] calculateVector() {
         double[] dir = new double[]{
                 constant.getMagnitude() * constant.getDirections()[0],
                 constant.getMagnitude() * constant.getDirections()[1]
@@ -106,41 +124,3 @@ public class VelocityComponent extends Component {
 
 }
 
-class Force {
-
-    private double direction, magnitude, deceleration;
-    private double[] directions;
-
-    public Force(double direction, double magnitude, double deceleration) {
-        this.magnitude = magnitude;
-        this.direction = direction;
-        this.directions = MiscMath.getRotatedOffset(0, -1, direction);
-        this.deceleration = deceleration;
-    }
-
-    public double getOriginalMagnitude() {
-        return magnitude;
-    }
-
-    public double getMagnitude() {
-        return magnitude;
-    }
-
-    public void updateMagnitude() {
-        magnitude -= MiscMath.getConstant(deceleration, 1);
-        magnitude = MiscMath.clamp(magnitude, 0, Double.MAX_VALUE);
-    }
-
-    public double getDeceleration() {
-        return deceleration;
-    }
-
-    public double getDirection() {
-        return direction;
-    }
-
-    public double[] getDirections() {
-        return directions;
-    }
-
-}

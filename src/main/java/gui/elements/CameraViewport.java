@@ -18,6 +18,7 @@ import world.Camera;
 import world.Chunk;
 import world.entities.components.LocationComponent;
 import world.entities.components.VelocityComponent;
+import world.entities.systems.RenderSystem;
 
 import java.util.ArrayList;
 
@@ -114,7 +115,9 @@ public class CameraViewport extends GUIElement {
 
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
-                "Ping: "+MPClient.getPing()+"ms",
+                "Ping: "+MPClient.getReturnTripTime()+"ms",
+                "Server time: "+MPServer.getTime(),
+                "Client time: "+MPClient.getTime(),
                 "Entity count: "+MPClient.getWorld().getRegion(Camera.getLocation()).getEntities().size(),
                 "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
                 "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
@@ -127,6 +130,8 @@ public class CameraViewport extends GUIElement {
             g.drawString(debugStrings[i], 10, (Window.getHeight()) - (20*((debugStrings.length-1-i)+1)));
 
         g.setColor(Color.white);
+
+        if (MPServer.isOpen()) RenderSystem.drawEntityDebug(MPServer.getWorld().getEntities(), Camera.getTargetEntity(), Window.getScale(), g);
 
     }
 }

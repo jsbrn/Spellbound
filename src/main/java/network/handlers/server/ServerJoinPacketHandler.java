@@ -7,7 +7,7 @@ import network.MPServer;
 import network.Packet;
 import network.PacketHandler;
 import network.packets.ChunkPacket;
-import network.packets.EntityPutPacket;
+import network.packets.EntityUpdatePacket;
 import network.packets.PlayerAssignmentPacket;
 import network.packets.RegionPacket;
 import world.Chunk;
@@ -28,7 +28,7 @@ public class ServerJoinPacketHandler implements PacketHandler {
         int newID = MPServer.spawnEntity(Assets.json("definitions/entities/player.json", true), spawn, true);
 
         //send entity and assignment packet
-        from.sendTCP(new EntityPutPacket(newID, MPServer.getWorld().getEntities().serializeEntity(newID)));
+        from.sendTCP(new EntityUpdatePacket(newID, MPServer.getWorld().getEntities().serializeEntity(newID)));
         from.sendTCP(new PlayerAssignmentPacket(newID));
         MPServer.assignTo(from, newID);
         return true;

@@ -157,6 +157,11 @@ public class Region {
         return s;
     }
 
+    public Chunk getChunk(Location location) {
+        if (!name.equals(location.getRegionName())) return null;
+        return getChunk(location.getChunkCoordinates()[0], location.getChunkCoordinates()[1]);
+    }
+
     /**
      * Gets the sector at sector coords (x, y). Uses a binary search algorithm.
      *
@@ -309,7 +314,7 @@ public class Region {
     public String getName() { return name; }
 
     public void update() {
-        int radius = 3;
+        int radius = 1;
         Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
         for (Integer eID: playerEntities) {
             for (int j = -radius; j <= radius; j++) {

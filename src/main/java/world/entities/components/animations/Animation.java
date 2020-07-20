@@ -20,7 +20,7 @@ public class Animation implements Serializable {
             this.frame_count = frame_count;
             this.original_fps = fps;
             this.fps = original_fps;
-            this.start_time = MPClient.getWorld().getCurrentTime();
+            this.start_time = MPClient.getTime();
             this.sprite = new Image("animations/" +image, false, Image.FILTER_NEAREST);
             this.frame_width = this.sprite.getWidth() / (float)frame_count;
             this.frame_height = frame_height;
@@ -38,14 +38,14 @@ public class Animation implements Serializable {
     }
 
     private int getFrame() {
-        int mills = (int)((MPClient.getWorld().getCurrentTime() - start_time) % 1000);
+        int mills = (int)((MPClient.getTime() - start_time) % 1000);
         int frame = (mills / (1000 / (frame_count * fps))) % frame_count;
         return frame;
     }
 
     public int loopCount() {
         long frame_duration = 1000 / fps;
-        long time_since_start = MPClient.getWorld().getCurrentTime() - start_time;
+        long time_since_start = MPClient.getTime() - start_time;
         return (int)(time_since_start / frame_duration);
     }
 
@@ -54,7 +54,7 @@ public class Animation implements Serializable {
     public boolean finished() { return !loop && loopCount() > 0; }
 
     public void reset() {
-        this.start_time = MPClient.getWorld().getCurrentTime();
+        this.start_time = MPClient.getTime();
     }
 
     public void draw(float ex, float ey, float scale, int direction, Color filter) {

@@ -3,14 +3,14 @@ package network.packets;
 import network.Packet;
 import org.json.simple.JSONObject;
 
-public class EntityPutPacket extends Packet {
+public class EntityUpdatePacket extends Packet {
 
     public int entityID;
     public String entityJSON;
 
-    public EntityPutPacket() {}
+    public EntityUpdatePacket() {}
 
-    public EntityPutPacket(int entityID, JSONObject entityData) {
+    public EntityUpdatePacket(int entityID, JSONObject entityData) {
         this.entityID = entityID;
         this.entityJSON = entityData.toJSONString();
     }

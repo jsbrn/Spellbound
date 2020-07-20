@@ -223,7 +223,7 @@ class Particle {
     private Color color;
 
     public Particle(double velocity, double direction, int lifetime, double[] startPosition, double[] startOffset, Color color) {
-        this.emissionTime = MPClient.getWorld().getCurrentTime();
+        this.emissionTime = MPClient.getTime();
         this.startPosition = startPosition;
         this.startOffset = startOffset;
         this.velocity = velocity;
@@ -233,9 +233,9 @@ class Particle {
     }
 
     public Color getColor() { return color; }
-    public double percentComplete() { return (MPClient.getWorld().getCurrentTime() - emissionTime) / (double)lifetime; }
-    public boolean isExpired() { return MPClient.getWorld().getCurrentTime() - emissionTime > lifetime; }
-    public double getElapsedSeconds() { return (MPClient.getWorld().getCurrentTime() - emissionTime) / 1000f; }
+    public double percentComplete() { return (MPClient.getTime() - emissionTime) / (double)lifetime; }
+    public boolean isExpired() { return MPClient.getTime() - emissionTime > lifetime; }
+    public double getElapsedSeconds() { return (MPClient.getTime() - emissionTime) / 1000f; }
     public double[] getCoordinates() {
         return getRelativeCoordinates(startPosition);
     }

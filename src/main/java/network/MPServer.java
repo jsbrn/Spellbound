@@ -23,15 +23,10 @@ import world.events.EventListener;
 import world.events.EventManager;
 import org.json.simple.JSONObject;
 import world.World;
-import world.events.event.ChunkGeneratedEvent;
-import world.events.event.ComponentStateChangedEvent;
-import world.events.event.EntityMovedEvent;
-import world.events.event.EntityNearPlayerEvent;
+import world.events.event.*;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MPServer {
@@ -44,12 +39,17 @@ public class MPServer {
     private static JSONObject serverSettings;
     private static EventManager eventManager;
 
+    private static long time;
+    private static Timer timeSyncTimer;
+
     public static void init() {
+        time = 0;
         eventManager = new EventManager();
         serverSettings = new JSONObject();
         connectedPlayers = new HashMap<>();
         world = new World();
         server = new Server();
+        timeSyncTimer = new Timer();
         registerPacketHandlers();
         Packet.registerPackets(server.getKryo());
         registerEventHandlers();
@@ -80,6 +80,12 @@ public class MPServer {
         try {
             server.bind(6667, 6668);
             world.generate(seed);
+            timeSyncTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    connectedPlayers.keySet().forEach(conn -> conn.sendTCP(new TimeSyncPacket(time)));
+                }
+            }, 500, 1000);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,8 +113,11 @@ public class MPServer {
         return world != null;
     }
 
+    public static long getTime() { return time; }
+
     public static void update() {
         world.update();
+        time += MiscMath.getConstant(1000, 1);
         MovementSystem.update(world, connectedPlayers.values());
         MovementSystem.pollForMovementEvents(world);
         InputProcessingSystem.update(world);
@@ -130,28 +139,27 @@ public class MPServer {
                     server.sendToAllTCP(new ChunkPacket(cge.getChunk()));
                 }
             })
+            .on(EntityEnteredChunkEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    EntityEnteredChunkEvent cge = (EntityEnteredChunkEvent)e;
+                    Connection connection = getConnection(cge.getEntityID());
+                    server.sendToAllTCP(new EntityUpdatePacket(cge.getEntityID(), world.getEntities().serializeEntity(cge.getEntityID())));
+                }
+            })
             .on(ComponentStateChangedEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
                     ComponentStateChangedEvent csce = (ComponentStateChangedEvent)e;
                     Component changed = csce.getComponent();
-                    sendToAll(getConnectionsWithinRange(changed.getParent()), new ComponentStateChangePacket(changed.getParent(), changed.getClass(), changed.serialize()));
+                    server.sendToAllTCP(new ComponentStateChangePacket(changed.getParent(), changed.getClass(), changed.serialize()));
                 }
             })
-            .on(EntityNearPlayerEvent.class, new EventHandler() {
+            .on(EntityVelocityChangedEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
-                    EntityNearPlayerEvent enpe = (EntityNearPlayerEvent)e;
-                    getConnection(enpe.getPlayerID()).sendTCP(new EntityPutPacket(enpe.getEntityID(), MPServer.getWorld().getEntities().serializeEntity(enpe.getEntityID())));
-                }
-            })
-            .on(EntityMovedEvent.class, new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    EntityMovedEvent eme = (EntityMovedEvent)e;
-                    getConnectionsWithinRange(eme.getEntity()).forEach(conn -> {
-                        conn.sendUDP(new LocationUpdatePacket(eme.getEntity()));
-                    });
+                    EntityVelocityChangedEvent eme = (EntityVelocityChangedEvent)e;
+                    server.sendToAllTCP(new EntityVelocityChangedPacket(eme.getEntity()));
                 }
             });
         eventManager.register(serverListener);
@@ -167,7 +175,7 @@ public class MPServer {
             int pID = entry.getValue();
             Region reg = MPServer.getWorld().getRegion(entityLocation.getLocation().getRegionName());
             //keep the player if it is contained within the region around the given entity id
-            return reg.getEntitiesNear(entityID, 1).contains(pID);
+            return reg.getEntitiesNear(entityID, 2).contains(pID);
         }).map(Map.Entry::getKey).collect(Collectors.toSet());
     }
 
