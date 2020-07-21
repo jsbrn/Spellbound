@@ -12,6 +12,7 @@ import network.handlers.server.ServerKeyReleasedHandler;
 import network.packets.*;
 import network.packets.input.KeyPressedPacket;
 import network.packets.input.KeyReleasedPacket;
+import world.Chunk;
 import world.Region;
 import world.entities.components.Component;
 import world.entities.components.LocationComponent;
@@ -132,19 +133,29 @@ public class MPServer {
 
     private static void registerEventHandlers() {
         EventListener serverListener = new EventListener()
-            .on(ChunkGeneratedEvent.class, new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    ChunkGeneratedEvent cge = (ChunkGeneratedEvent)e;
-                    server.sendToAllTCP(new ChunkPacket(cge.getChunk()));
-                }
-            })
             .on(EntityEnteredChunkEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
                     EntityEnteredChunkEvent cge = (EntityEnteredChunkEvent)e;
                     Connection connection = getConnection(cge.getEntityID());
-                    server.sendToAllTCP(new EntityUpdatePacket(cge.getEntityID(), world.getEntities().serializeEntity(cge.getEntityID())));
+                    //send full json update to nearby players
+                    sendToAll(
+                            getConnectionsWithinRange(cge.getEntityID()),
+                            new EntityUpdatePacket(cge.getEntityID()));
+                    if (connection != null) {
+                        //if the entity is a player, send chunk data and entity updates for the surrounding region
+                        Chunk c = cge.getChunk();
+                        Region r = c.getRegion();
+                        Chunk[][] chunks = cge.getChunk().getRegion().getAdjacentChunks(c.getCoordinates()[0], c.getCoordinates()[1]);
+                        for (int i = 0; i < chunks.length; i++)
+                            for (int j = 0; j < chunks.length; j++)
+                                connection.sendTCP(new ChunkPacket(chunks[i][j]));
+                        Collection<Integer> near = r.getEntitiesNear(cge.getEntityID(), 1);
+                        for (Integer entity: near)
+                            connection.sendTCP(new EntityUpdatePacket(entity));
+                    }
+                    //send a location update to all clients (ignored if they don't have the entity)
+                    server.sendToAllTCP(new LocationUpdatePacket(cge.getEntityID()));
                 }
             })
             .on(ComponentStateChangedEvent.class, new EventHandler() {
@@ -152,14 +163,18 @@ public class MPServer {
                 public void handle(Event e) {
                     ComponentStateChangedEvent csce = (ComponentStateChangedEvent)e;
                     Component changed = csce.getComponent();
-                    server.sendToAllTCP(new ComponentStateChangePacket(changed.getParent(), changed.getClass(), changed.serialize()));
+                    sendToAll(
+                            getConnectionsWithinRange(changed.getParent()),
+                            new ComponentStateChangePacket(changed.getParent(), changed.getClass(), changed.serialize()));
                 }
             })
             .on(EntityVelocityChangedEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
                     EntityVelocityChangedEvent eme = (EntityVelocityChangedEvent)e;
-                    server.sendToAllTCP(new EntityVelocityChangedPacket(eme.getEntity()));
+                    sendToAll(
+                            getConnectionsWithinRange(eme.getEntity()),
+                            new EntityVelocityChangedPacket(eme.getEntity()));
                 }
             });
         eventManager.register(serverListener);
@@ -175,7 +190,7 @@ public class MPServer {
             int pID = entry.getValue();
             Region reg = MPServer.getWorld().getRegion(entityLocation.getLocation().getRegionName());
             //keep the player if it is contained within the region around the given entity id
-            return reg.getEntitiesNear(entityID, 2).contains(pID);
+            return reg.getEntitiesNear(entityID, 1).contains(pID);
         }).map(Map.Entry::getKey).collect(Collectors.toSet());
     }
 

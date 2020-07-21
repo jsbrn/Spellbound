@@ -1,5 +1,6 @@
 package network.packets;
 
+import network.MPServer;
 import network.Packet;
 import org.json.simple.JSONObject;
 
@@ -11,9 +12,9 @@ public class EntityUpdatePacket extends Packet {
 
     public EntityUpdatePacket() {}
 
-    public EntityUpdatePacket(int entityID, JSONObject entityData) {
+    public EntityUpdatePacket(int entityID) {
         this.entityID = entityID;
-        this.entityJSON = entityData.toJSONString();
+        this.entityJSON = MPServer.getWorld().getEntities().serializeEntity(entityID).toJSONString();
     }
 
 }

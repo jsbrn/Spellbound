@@ -108,7 +108,7 @@ public class CameraViewport extends GUIElement {
         ArrayList<Integer> entities = MPClient.getWorld().getRegion(Camera.getLocation().getRegionName()).getEntities();
         for (int i = 0; i < entities.size(); i++) {
             Location loc = ((LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, entities.get(i))).getLocation();
-            g.drawString("Entity #"+entities.get(i)+" @ ["+(int)loc.getCoordinates()[0]+", "+(int)loc.getCoordinates()[1]+"]", Window.getWidth()*0.8f, 10 + (i * 20));
+            g.drawString("Entity #"+entities.get(i)+" @ ["+(int)loc.getCoordinates()[0]+", "+(int)loc.getCoordinates()[1]+"]", Window.getWidth() - 200, 10 + (i * 20));
         }
 
         Location localPlayerLocation = ((LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, Camera.getTargetEntity())).getLocation();

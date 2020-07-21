@@ -25,6 +25,7 @@ public class EntityVelocityChangedPacket extends Packet {
         LocationComponent locationComponent = (LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, entityID);
 
         this.serverTime = MPServer.getTime();
+        this.entityID = entityID;
         this.wx = locationComponent.getLocation().getCoordinates()[0];
         this.wy = locationComponent.getLocation().getCoordinates()[1];
         this.forces = new double[velocityComponent.getForces().size()][3];

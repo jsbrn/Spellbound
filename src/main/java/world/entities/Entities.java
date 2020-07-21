@@ -1,5 +1,8 @@
 package world.entities;
 
+import misc.MiscMath;
+import misc.annotations.ClientExecution;
+import misc.annotations.ServerExecution;
 import org.json.simple.JSONObject;
 import world.entities.components.Component;
 
@@ -8,14 +11,15 @@ import java.util.stream.Collectors;
 
 public class Entities {
 
-    private int lastEntityID = 0;
     private HashMap<Class, LinkedHashMap<Integer, Component>> COMPONENT_MAPS = new HashMap<>();
 
+    @ServerExecution
     public int createEntity(JSONObject json) {
-        int newID = lastEntityID++;
+        int newID = (int)MiscMath.random(10000, 99999);
         return createEntity(newID, json);
     }
 
+    @ClientExecution
     public int createEntity(int newID, JSONObject json) {
         //deserialize the components from the json and add them to the lists
         for (Object key: json.keySet()) {

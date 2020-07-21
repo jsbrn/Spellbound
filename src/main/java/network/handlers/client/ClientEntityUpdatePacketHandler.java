@@ -14,6 +14,7 @@ import world.entities.systems.MovementSystem;
 public class ClientEntityUpdatePacketHandler implements PacketHandler {
     @Override
     public boolean handle(Packet p, Connection from) {
+
         EntityUpdatePacket esp = (EntityUpdatePacket)p;
         MPClient.getWorld().getEntities().createEntity(esp.entityID, Assets.json(esp.entityJSON));
         LocationComponent lc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, esp.entityID);
@@ -28,4 +29,5 @@ public class ClientEntityUpdatePacketHandler implements PacketHandler {
 
         return true;
     }
+
 }
