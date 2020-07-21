@@ -133,6 +133,13 @@ public class MPServer {
 
     private static void registerEventHandlers() {
         EventListener serverListener = new EventListener()
+            .on(ChunkGeneratedEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    ChunkGeneratedEvent cge = (ChunkGeneratedEvent)e;
+                    server.sendToAllTCP(new ChunkPacket(cge.getChunk()));
+                }
+            })
             .on(EntityEnteredChunkEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {

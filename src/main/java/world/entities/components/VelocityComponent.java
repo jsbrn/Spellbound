@@ -1,6 +1,7 @@
 package world.entities.components;
 
 import misc.Force;
+import misc.annotations.ClientExecution;
 import misc.annotations.ServerClientExecution;
 import misc.annotations.ServerExecution;
 import network.MPServer;
@@ -77,6 +78,13 @@ public class VelocityComponent extends Component {
         }
     }
 
+    @ClientExecution
+    public void setClientConstant(double direction, double magnitude) {
+        if (direction != constant.getDirection() || magnitude != constant.getMagnitude()) {
+            constant = new Force(direction, 1, -magnitude);
+        }
+    }
+
     public Force getConstant() {
         return constant;
     }
@@ -100,6 +108,7 @@ public class VelocityComponent extends Component {
      */
     @ServerClientExecution
     public double[] calculateVector(boolean constantsOnly, boolean backwards) {
+        constant.updateMagnitude();
         double[] dir = new double[]{
                 constant.getMagnitude() * constant.getDirections()[0],
                 constant.getMagnitude() * constant.getDirections()[1]

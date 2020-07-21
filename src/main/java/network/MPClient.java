@@ -87,6 +87,8 @@ public class MPClient {
 
     public static void update() {
 
+        Camera.update();
+
         time += MiscMath.getConstant(1000, 1);
 
         client.getReturnTripTime();

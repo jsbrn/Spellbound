@@ -9,11 +9,28 @@ import world.entities.components.LocationComponent;
 
 public class Camera {
 
-    private static int speed = 10;
+    private static int speed = 4;
     private static int targetEntity = -1;
+    private static Location location;
 
     public static Location getLocation() {
+        if (location == null) location = new Location("world", 0, 0);
+        return location;
+    }
+
+    private static Location getTargetLocation() {
         return ((LocationComponent) MPClient.getWorld().getEntities().getComponent(LocationComponent.class, targetEntity)).getLocation();
+    }
+
+    public static void update() {
+        double angle = MiscMath.angleBetween(
+                location.getCoordinates()[0],
+                location.getCoordinates()[1],
+                getTargetLocation().getCoordinates()[0],
+                getTargetLocation().getCoordinates()[1]);
+        double dist = location.distanceTo(getTargetLocation());
+        double[] dirs = MiscMath.getRotatedOffset(0, -1, angle);
+        getLocation().addCoordinates(dirs[0] * MiscMath.getConstant(dist * speed, 1), dirs[1] * MiscMath.getConstant(dist * speed, 1));
     }
 
     public static int getTargetEntity() {
@@ -30,15 +47,6 @@ public class Camera {
         double wx = getLocation().getCoordinates()[0] + ((osx - (double)(Window.getWidth() / 2)) / scale / Chunk.TILE_SIZE);
         double wy = getLocation().getCoordinates()[1] + ((osy - (double)(Window.getHeight() / 2)) / scale / Chunk.TILE_SIZE);
         return new double[]{wx, wy};
-    }
-
-    public static void move(int dx, int dy) {
-        double[] world_coords = getLocation().getCoordinates();
-        setTarget(world_coords[0] + MiscMath.getConstant(speed * dx, 1), world_coords[1] + MiscMath.getConstant(dy * speed, 1));
-    }
-
-    public static void setTarget(double wx, double wy) {
-        getLocation().setCoordinates(wx, wy);
     }
 
     public static void setSpeed(int speed) {

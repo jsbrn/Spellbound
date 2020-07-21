@@ -18,7 +18,7 @@ public class ServerJoinPacketHandler implements PacketHandler {
     @Override
     public boolean handle(Packet p, Connection from) {
 
-        //send region list to client
+        //download region list to client
         for (Region r: MPServer.getWorld().getRegions()) {
             from.sendTCP(new RegionPacket(r.getName()));
         }

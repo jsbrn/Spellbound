@@ -16,8 +16,10 @@ import network.packets.input.KeyReleasedPacket;
 import org.lwjgl.input.Mouse;
 import world.Camera;
 import world.Chunk;
+import world.entities.components.InputComponent;
 import world.entities.components.LocationComponent;
 import world.entities.components.VelocityComponent;
+import world.entities.systems.InputProcessingSystem;
 import world.entities.systems.RenderSystem;
 
 import java.util.ArrayList;
@@ -57,6 +59,11 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public boolean onKeyDown(int key) {
+        if (MPClient.getReturnTripTime() > 100) {
+            InputComponent ic = (InputComponent) MPClient.getWorld().getEntities().getComponent(InputComponent.class, Camera.getTargetEntity());
+            ic.setKey(key, true);
+            InputProcessingSystem.updateLocalPlayer();
+        }
         MPClient.sendPacket(new KeyPressedPacket(key));
         return true;
     }
@@ -68,6 +75,11 @@ public class CameraViewport extends GUIElement {
         if (key == Input.KEY_T) {
             ((VelocityComponent)MPServer.getWorld().getEntities().getComponent(VelocityComponent.class, Camera.getTargetEntity()))
                     .addForce(Math.random() * 360, 1 + (Math.random() * 4), 2);
+        }
+        if (MPClient.getReturnTripTime() > 100) {
+            InputComponent ic = (InputComponent) MPClient.getWorld().getEntities().getComponent(InputComponent.class, Camera.getTargetEntity());
+            ic.setKey(key, false);
+            InputProcessingSystem.updateLocalPlayer();
         }
         MPClient.sendPacket(new KeyReleasedPacket(key));
         return true;
