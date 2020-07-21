@@ -1,7 +1,6 @@
 package world.entities.systems;
 
 import misc.MiscMath;
-import misc.annotations.ClientExecution;
 import misc.annotations.ServerClientExecution;
 import misc.annotations.ServerExecution;
 import network.MPServer;
@@ -36,20 +35,20 @@ public class MovementSystem {
         }
 
         for (Integer entity : entitiesToMove) {
-            moveEntity(entity, world);
+            moveEntity(entity, world, false, false);
         }
 
 
     }
 
     @ServerClientExecution
-    public static void moveEntity(int entity, World world) {
+    public static void moveEntity(int entity, World world, boolean constantsOnly, boolean backwards) {
         VelocityComponent vc = (VelocityComponent) world.getEntities().getComponent(VelocityComponent.class, entity);
         LocationComponent lc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, entity);
         //HitboxComponent hc = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, entity);
         //TODO: if HC is null ignore collision
         //also TODO: implement collision
-        double[] dir = vc.calculateVector();
+        double[] dir = vc.calculateVector(constantsOnly, backwards);
         double[] oldPos = new double[]{Math.floor(lc.getLocation().getCoordinates()[0]), Math.floor(lc.getLocation().getCoordinates()[1])};
         dir[0] = MiscMath.getConstant(dir[0], 1);
         dir[1] = MiscMath.getConstant(dir[1], 1);
@@ -61,6 +60,10 @@ public class MovementSystem {
             reg.removeEntity(entity);
             reg.addEntity(entity);
         }
+    }
+
+    public static void backtrack(int entity, World world) {
+        moveEntity(entity, world, true, true);
     }
 
     @ServerExecution

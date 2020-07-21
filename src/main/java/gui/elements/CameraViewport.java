@@ -118,6 +118,7 @@ public class CameraViewport extends GUIElement {
                 "Ping: "+MPClient.getReturnTripTime()+"ms",
                 "Server time: "+MPServer.getTime(),
                 "Client time: "+MPClient.getTime(),
+                "Packets: "+MPClient.getPacketsSent()+" sent, "+MPClient.getPacketsReceived()+" received",
                 "Entity count: "+MPClient.getWorld().getRegion(Camera.getLocation()).getEntities().size(),
                 "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
                 "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),

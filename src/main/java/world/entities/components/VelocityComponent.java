@@ -99,20 +99,26 @@ public class VelocityComponent extends Component {
      * @return A double[] describing the tiles per second on both axes.
      */
     @ServerClientExecution
-    public double[] calculateVector() {
+    public double[] calculateVector(boolean constantsOnly, boolean backwards) {
         double[] dir = new double[]{
                 constant.getMagnitude() * constant.getDirections()[0],
                 constant.getMagnitude() * constant.getDirections()[1]
         };
-        for (int i = forces.size() - 1; i > -1; i--) {
-            Force f = forces.get(i);
-            if (f.getMagnitude() == 0) {
-                forces.remove(i);
-                continue;
+        if (!constantsOnly) {
+            for (int i = forces.size() - 1; i > -1; i--) {
+                Force f = forces.get(i);
+                if (f.getMagnitude() == 0) {
+                    forces.remove(i);
+                    continue;
+                }
+                f.updateMagnitude();
+                dir[0] += f.getMagnitude() * f.getDirections()[0];
+                dir[1] += f.getMagnitude() * f.getDirections()[1];
             }
-            f.updateMagnitude();
-            dir[0] += f.getMagnitude() * f.getDirections()[0];
-            dir[1] += f.getMagnitude() * f.getDirections()[1];
+        }
+        if (backwards) {
+            dir[0] = -dir[0];
+            dir[1] = -dir[1];
         }
         return dir;
     }

@@ -24,7 +24,7 @@ public class MPClient {
     private static Client client;
     private static World world;
 
-    private static long time;
+    private static long time, packetsReceived, packetsSent;
 
     private static Timer pingTimer;
 
@@ -48,6 +48,7 @@ public class MPClient {
 
             @Override
             public void received(Connection connection, Object packet) {
+                packetsReceived++;
                 if (!(packet instanceof FrameworkMessage)) System.out.println("Client received: "+packet.getClass().getSimpleName());
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
@@ -77,6 +78,9 @@ public class MPClient {
     public static void close()
     {
         pingTimer.cancel();
+        packetsSent = 0;
+        packetsReceived = 0;
+        time = 0;
         client.close();
         world = null;
     }
@@ -108,17 +112,23 @@ public class MPClient {
     }
 
     public static void sendPacket(Packet p) {
+        packetsSent++;
         client.sendTCP(p);
     }
 
     public static long getTime() {
         return time;
     }
-
     public static void setTime(long t) { time = t; }
-
     public static int getReturnTripTime() {
         return client.getReturnTripTime();
     }
 
+    public static long getPacketsSent() {
+        return packetsSent;
+    }
+
+    public static long getPacketsReceived() {
+        return packetsReceived;
+    }
 }

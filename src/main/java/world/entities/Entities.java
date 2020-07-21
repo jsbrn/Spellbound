@@ -25,12 +25,6 @@ public class Entities {
         return newID;
     }
 
-    public int updateEntity(int entityID, JSONObject newData) {
-        removeEntity(entityID);
-        createEntity(entityID, newData);
-        return entityID;
-    }
-
     public boolean exists(int entityID) {
         return COMPONENT_MAPS.values().stream().anyMatch(lic -> lic.containsKey(entityID));
     }
@@ -86,7 +80,7 @@ public class Entities {
     public void removeComponent(Class componentClass, int entityID) {
         HashMap<Integer, Component> componentList = COMPONENT_MAPS.get(componentClass);
         if (componentList == null) return;
-        Component removed = componentList.remove(entityID);
+        componentList.remove(entityID);
     }
 
 }
