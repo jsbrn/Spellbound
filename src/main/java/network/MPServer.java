@@ -63,13 +63,13 @@ public class MPServer {
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
-                connectedPlayers.remove(connection);
                 world.getEntities().removeEntity(getEntityID(connection));
+                connectedPlayers.remove(connection);
             }
 
             @Override
             public void received(Connection connection, Object packet) {
-                if (!(packet instanceof FrameworkMessage)) System.out.println("Server received: "+packet.getClass().getSimpleName());
+                //if (!(packet instanceof FrameworkMessage)) System.out.println("Server received: "+packet.getClass().getSimpleName());
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
             }

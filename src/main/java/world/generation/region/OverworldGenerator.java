@@ -18,7 +18,7 @@ public class OverworldGenerator extends RegionGenerator {
 
     @Override
     public byte getTop(int wx, int wy) {
-        return Tiles.AIR;
+        return Math.random() > 0.1 ? Tiles.AIR : Tiles.CHAIR;
     }
 
     @Override

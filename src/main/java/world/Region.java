@@ -292,6 +292,10 @@ public class Region {
         return null;
     }
 
+    public byte[] getTile(Location location) {
+        return getTile((int)Math.floor(location.getCoordinates()[0]), (int)Math.floor(location.getCoordinates()[1]));
+    }
+
     public byte[] getTile(int wx, int wy) {
         Chunk current = getChunk(wx / Chunk.CHUNK_SIZE, wy / Chunk.CHUNK_SIZE);
         if (current == null) return new byte[2];

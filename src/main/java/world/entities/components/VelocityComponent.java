@@ -9,11 +9,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import world.events.event.EntityVelocityChangedEvent;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class VelocityComponent extends Component {
 
-    private LinkedList<Force> forces;
+    private ArrayList<Force> forces;
     private Force constant; //controlled movement
     private double baseSpeed;
 
@@ -44,7 +45,7 @@ public class VelocityComponent extends Component {
 
     @Override
     public void deserialize(JSONObject object) {
-        forces = new LinkedList<>();
+        forces = new ArrayList<>();
         JSONObject constantJSON = (JSONObject)object.getOrDefault("constant", new JSONObject());
         constant = new Force((double)constantJSON.getOrDefault("direction", 0.0d), (double)constantJSON.getOrDefault("magnitude", 0.0d), 0);
         JSONArray listOfForces = (JSONArray)object.get("forces");
@@ -95,7 +96,7 @@ public class VelocityComponent extends Component {
         MPServer.getEventManager().invoke(new EntityVelocityChangedEvent(getParent()));
     }
 
-    public LinkedList<Force> getForces() {
+    public ArrayList<Force> getForces() {
         return forces;
     }
 

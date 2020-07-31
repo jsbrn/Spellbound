@@ -1,5 +1,6 @@
 package world.entities.components;
 
+import misc.annotations.ServerClientExecution;
 import org.json.simple.JSONObject;
 
 public class HitboxComponent extends Component {
