@@ -1,7 +1,6 @@
 package network;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
@@ -153,10 +152,8 @@ public class MPServer {
                         //if the entity is a player, send chunk data and entity updates for the surrounding region
                         Chunk c = cge.getChunk();
                         Region r = c.getRegion();
-                        Chunk[][] chunks = cge.getChunk().getRegion().getAdjacentChunks(c.getCoordinates()[0], c.getCoordinates()[1]);
-                        for (int i = 0; i < chunks.length; i++)
-                            for (int j = 0; j < chunks.length; j++)
-                                connection.sendTCP(new ChunkPacket(chunks[i][j]));
+                        ArrayList<Chunk> chunks = cge.getChunk().getRegion().getChunks(c.getCoordinates()[0], c.getCoordinates()[1], 1);
+                        for (Chunk a: chunks) connection.sendTCP(new ChunkPacket(a));
                         Collection<Integer> near = r.getEntitiesNear(cge.getEntityID(), 1);
                         for (Integer entity: near)
                             connection.sendTCP(new EntityUpdatePacket(entity));
@@ -220,8 +217,9 @@ public class MPServer {
     //TODO: better way to spawn in entities and players
     public static int spawnEntity(JSONObject entity, Location location, boolean isPlayer) {
         int entityID = world.getEntities().createEntity(entity);
-        ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).setLocation(location);
-        world.getRegion(location.getRegionName()).addEntity(entityID);
+        LocationComponent lc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID));
+        lc.setLocation(location);
+        MPServer.getWorld().getRegion(location).getChunk(location).addEntity(entityID);
 
         if (isPlayer) world.getEntities().addComponent(Component.create("player"), entityID);
 

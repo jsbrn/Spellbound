@@ -8,9 +8,9 @@ public class EntityEnteredChunkEvent extends Event {
     private int entityID;
     private Chunk chunk;
 
-    public EntityEnteredChunkEvent(int entityID, Chunk chunk) {
+    public EntityEnteredChunkEvent(int entityID, Chunk oldChunk, Chunk newChunk) {
         this.entityID = entityID;
-        this.chunk = chunk;
+        this.chunk = newChunk;
     }
 
     public int getEntityID() {

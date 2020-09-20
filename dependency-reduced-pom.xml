@@ -43,7 +43,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>main.Launcher</mainClass>
+                  <mainClass>main.ConsoleLauncher</mainClass>
                 </transformer>
               </transformers>
               <artifactSet>

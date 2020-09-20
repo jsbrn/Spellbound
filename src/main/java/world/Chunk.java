@@ -11,6 +11,7 @@ import world.entities.systems.RenderSystem;
 import world.events.event.ChunkGeneratedEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Chunk {
 
@@ -18,6 +19,7 @@ public class Chunk {
     public static final int CHUNK_SIZE = 15;
 
     private Region region;
+    private ArrayList<Integer> entities;
     private int[] coordinates;
 
     private byte[][] base;
@@ -30,6 +32,7 @@ public class Chunk {
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
+        this.entities = new ArrayList<>();
     }
 
     public void generate() {
@@ -42,7 +45,6 @@ public class Chunk {
                 JSONObject entityDefinition = region.getGenerator().getEntity(wc[0], wc[1]);
                 if (entityDefinition == null) continue;
                 int newEntityID = MPServer.getWorld().getEntities().createEntity(entityDefinition);
-                region.addEntity(newEntityID);
             }
         }
         MPServer.getEventManager().invoke(new ChunkGeneratedEvent(this));
@@ -80,6 +82,18 @@ public class Chunk {
 
     public byte[][] getBase() { return base; }
     public byte[][] getTop() { return top; }
+
+    public void addEntity(int entityID) {
+        if (!entities.contains(entityID)) entities.add(entityID);
+    }
+
+    public void removeEntity(Integer entityID) {
+        entities.remove(entityID);
+    }
+
+    public ArrayList<Integer> getEntities() {
+        return entities;
+    }
 
     public void drawBase(float osx, float osy, float scale) {
         for (int j = 0; j < CHUNK_SIZE; j++) {
@@ -137,7 +151,7 @@ public class Chunk {
                         Assets.TILE_SPRITESHEET.getHeight(), reveal ? translucent : Color.white);
                 Assets.TILE_SPRITESHEET.endUse();
 
-                ArrayList<Integer> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
+                List<Integer> entities = region.getEntities((coordinates[0] * CHUNK_SIZE) + i, (coordinates[1] * CHUNK_SIZE) + j, 1, 1);
                 for (Integer entityID: entities) RenderSystem.drawEntity(MPClient.getWorld().getEntities(), entityID, scale);
 
             }

@@ -30,7 +30,7 @@ public class ServerJoinPacketHandler implements PacketHandler {
 
         //send entity and assignment packet
         Chunk chunk = MPServer.getWorld().getRegion(spawn).getChunk(spawn);
-        MPServer.getEventManager().invoke(new EntityEnteredChunkEvent(newID, chunk));
+        MPServer.getEventManager().invoke(new EntityEnteredChunkEvent(newID, null, chunk));
         from.sendTCP(new PlayerAssignmentPacket(newID));
         return true;
     }

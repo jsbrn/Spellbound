@@ -23,6 +23,7 @@ import world.entities.systems.InputProcessingSystem;
 import world.entities.systems.RenderSystem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CameraViewport extends GUIElement {
 
@@ -113,34 +114,39 @@ public class CameraViewport extends GUIElement {
 
         MPClient.getWorld().getRegion(Camera.getLocation()).drawDebug(Window.getScale(), g);
 
-        g.setFont(Assets.getFont(14));
+        g.setFont(Assets.getFont(15));
 
         g.setColor(Color.white);
         g.drawRect(osc[0], osc[1], 1 * Window.getScale() * Chunk.TILE_SIZE, 1 * Window.getScale() * Chunk.TILE_SIZE);
-        ArrayList<Integer> entities = MPClient.getWorld().getRegion(Camera.getLocation().getRegionName()).getEntities();
-        for (int i = 0; i < entities.size(); i++) {
-            Location loc = ((LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, entities.get(i))).getLocation();
-            g.drawString("Entity #"+entities.get(i)+" @ ["+(int)loc.getCoordinates()[0]+", "+(int)loc.getCoordinates()[1]+"]", Window.getWidth() - 200, 10 + (i * 20));
-        }
 
         Location localPlayerLocation = ((LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, Camera.getTargetEntity())).getLocation();
 
+        //draw getEntity debug info
+        List<Integer> entities = MPClient.getWorld().getRegion(localPlayerLocation).getEntities(mouse_wc[0] - 2, mouse_wc[1] - 2, 4, 4);
+
+        g.setColor(Color.black);
+        for (Integer e: entities) g.drawString("Entity "+e, mouse_osc[0], mouse_osc[1]);
+
+        //draw the debug info
         String[] debugStrings = new String[]{
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
                 "Ping: "+MPClient.getReturnTripTime()+"ms",
                 "Server time: "+MPServer.getTime(),
                 "Client time: "+MPClient.getTime(),
                 "Packets: "+MPClient.getPacketsSent()+" sent, "+MPClient.getPacketsReceived()+" received",
-                "Entity count: "+MPClient.getWorld().getRegion(Camera.getLocation()).getEntities().size(),
                 "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
                 "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
                 "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
                         +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)
         };
 
-        g.setColor(Color.white);
-        for (int i = debugStrings.length - 1; i > -1; i--)
-            g.drawString(debugStrings[i], 10, (Window.getHeight()) - (20*((debugStrings.length-1-i)+1)));
+
+        for (int i = debugStrings.length - 1; i > -1; i--) {
+            g.setColor(Color.black);
+            g.drawString(debugStrings[i], 10, (Window.getHeight()) - (20 * ((debugStrings.length - 1 - i) + 1)));
+            g.setColor(Color.white);
+            g.drawString(debugStrings[i], 11, (Window.getHeight()) - (20 * ((debugStrings.length - 1 - i) + 1)) - 1);
+        }
 
         g.setColor(Color.white);
 

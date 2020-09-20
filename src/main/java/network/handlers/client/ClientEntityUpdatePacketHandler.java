@@ -20,8 +20,6 @@ public class ClientEntityUpdatePacketHandler implements PacketHandler {
         LocationComponent lc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, esp.entityID);
         VelocityComponent vc = (VelocityComponent) MPClient.getWorld().getEntities().getComponent(VelocityComponent.class, esp.entityID);
 
-        MPClient.getWorld().getRegion(lc.getLocation().getRegionName()).addEntity(esp.entityID);
-
         //interpolate movement
         int frames = (MPClient.getReturnTripTime() / 2) / MiscMath.DELTA_TIME;
         for (int i = 0; i < frames; i++)

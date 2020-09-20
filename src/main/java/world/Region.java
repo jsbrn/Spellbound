@@ -24,7 +24,6 @@ public class Region {
     private ArrayList<Chunk> chunks;
 
     private ArrayList<Portal> portals;
-    private ArrayList<Integer> entities;
 
     private Sound backgroundAmbience;
 
@@ -34,7 +33,6 @@ public class Region {
         this.generator = generator;
         this.name = name;
         this.backgroundAmbience = generator.getBackgroundAmbience();
-        this.entities = new ArrayList<>();
         this.portals = new ArrayList<>();
         this.chunks = new ArrayList<>();
     }
@@ -46,53 +44,42 @@ public class Region {
         return backgroundAmbience;
     }
 
-    public int addEntity(Integer e) {
-        if (entities.contains(e)) return -1;
-        double lindex = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation().getIndex(this);
-        int index = getEntityIndex(lindex, 0, entities.size());
-        entities.add(index, e);
-        return index;
-    }
-
-    public boolean removeEntity(Integer e) {
-        return entities.remove(e);
-    }
-
     public ArrayList<Integer> getEntitiesNear(int entityID, int chunkRadius) {
-        Location ploc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).getLocation();
-        return getEntities((
-                        ploc.getChunkCoordinates()[0] - chunkRadius) * Chunk.CHUNK_SIZE,
-                (ploc.getChunkCoordinates()[1] - chunkRadius) * Chunk.CHUNK_SIZE,
-                Chunk.CHUNK_SIZE * ((chunkRadius * 2) + 1),
-                Chunk.CHUNK_SIZE * ((chunkRadius * 2) + 1));
+        Location eLoc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).getLocation();
+        ArrayList<Chunk> adj = getChunks(eLoc.getChunkCoordinates()[0], eLoc.getChunkCoordinates()[1], chunkRadius);
+        ArrayList<Integer> entitiesNear = new ArrayList<>();
+        for (Chunk a: adj) entitiesNear.addAll(a.getEntities());
+        return entitiesNear;
     }
 
-    public ArrayList<Integer> getEntities(int wx, int wy, int width, int height) {
-        ArrayList<Integer> subsection = new ArrayList<>();
-        double minloc = MiscMath.getIndex(wx, wy, Integer.MAX_VALUE);
-        double maxloc = MiscMath.getIndex(wx + width, wy + height, Integer.MAX_VALUE);
-        int[] indices = getEntityIndices(minloc, maxloc);
-        for (int i = indices[0]; i < indices[1]; i++) {
-            Integer entity = entities.get(i);
-            Location location = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entity)).getLocation();
-            if (subsection.contains(entity)) continue;
-            boolean intersects = MiscMath.pointIntersectsRect(
-                    location.getCoordinates()[0],
-                    location.getCoordinates()[1],
+    public List<Integer> getEntities(double wx, double wy, double width, double height) {
+        ArrayList<Integer> chunkEntities = new ArrayList<>();
+        int cx = (int)Math.floor(wx / Chunk.CHUNK_SIZE),
+            cy = (int)Math.floor(wy / Chunk.CHUNK_SIZE),
+            cw = (int)Math.floor(width / Chunk.CHUNK_SIZE),
+            ch = (int)Math.floor(height / Chunk.CHUNK_SIZE);
+        for (int i = cy; i <= cy + cw; i++) {
+            for (int j = cy; j <= cy + ch; j++) {
+                chunkEntities.addAll(getChunk(cx, cy).getEntities());
+            }
+        }
+        return chunkEntities.stream().filter(eid -> {
+            Location location = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, eid)).getLocation();
+            HitboxComponent hitbox = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, eid);
+            return MiscMath.rectanglesIntersect(
+                    location.getCoordinates()[0] - (hitbox.getRadius()/2),
+                    location.getCoordinates()[1] - (hitbox.getRadius()/2),
+                    (int)hitbox.getRadius(),
+                    (int)hitbox.getRadius(),
                     wx,
                     wy,
-                    width,
-                    height
-            );
-            if (intersects) subsection.add(entity);
-        }
-        return subsection;
+                    (int)width,
+                    (int)height);
+        }).collect(Collectors.toList());
     }
 
     public List<Integer> getEntities(double wx, double wy, double radius) {
-        ArrayList<Integer> entities = getEntities(
-                (int)(wx - radius), (int)(wy - radius),
-                (int)((radius * 2) + 1), (int)((radius * 2) + 2));
+        List<Integer> entities = getEntities((int)Math.floor(wx - radius), (int)Math.floor(wy - radius), (int)Math.ceil(radius * 2), (int)Math.ceil(radius * 2));
         return entities.stream().filter(e -> {
             Location location = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation();
             HitboxComponent hitbox = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, e);
@@ -106,43 +93,12 @@ public class Region {
         }).collect(Collectors.toList());
     }
 
-    public int[] getEntityIndices(double min_location, double max_location) {
-        return new int[]{
-                getEntityIndex(min_location - 1, 0, entities.size()),
-                getEntityIndex(max_location + 1, 0, entities.size()),
-        };
-    }
-
-    public ArrayList<Integer> getEntities() { return entities; }
-
-    private int getEntityIndex(double location, int min, int max) {
-
-        if (entities.isEmpty()) return 0;
-
-        int half = min + ((max-min) / 2);
-
-        double minloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(min))).getLocation().getIndex(this);
-        double maxloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(max - 1))).getLocation().getIndex(this);
-        double halfloc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entities.get(half))).getLocation().getIndex(this);
-
-        if (location >= maxloc) return max;
-        if (location <= minloc) return min;
-        if (max - min == 1) return min + 1;
-
-        if (halfloc > location) {
-            return getEntityIndex(location, min, half);
-        } else {
-            return getEntityIndex(location, half, max);
-        }
-
-    }
-
     public ArrayList<Chunk> getChunks() {
         return chunks;
     }
 
     /**
-     * Find the sector with the offset value specified.
+     * Find the chunk with the offset value specified.
      *
      * @param x The offset (from sectors) from the origin.
      * @param y The offset (from sectors) from the origin.
@@ -163,7 +119,7 @@ public class Region {
     }
 
     /**
-     * Gets the sector at sector coords (x, y). Uses a binary search algorithm.
+     * Gets the chunk at chunk coords (x, y). Uses a binary search algorithm.
      *
      * @param x    Chunk coordinate.
      * @param y    Chunk coordinate.
@@ -174,8 +130,8 @@ public class Region {
      */
     private Chunk getChunk(int x, int y, int l, int u, ArrayList<Chunk> list) {
         if (list.isEmpty()) return null;
-        //if the sector is beyond the first and last, return null
-        //if the sector is the first or last, return the first or last, respectively
+        //if the chunk is beyond the first and last, return null
+        //if the chunk is the first or last, return the first or last, respectively
         if (list.get(0).compareTo(x, y) > 0 || list.get(list.size() - 1).compareTo(x, y) < 0) return null;
         if (list.get(u).getCoordinates()[0] == x && list.get(u).getCoordinates()[1] == y) return list.get(u);
         if (list.get(l).getCoordinates()[0] == x && list.get(l).getCoordinates()[1] == y) return list.get(l);
@@ -205,9 +161,9 @@ public class Region {
     }
 
     /**
-     * Adds (and sorts) a sector to the list of sectors.
+     * Adds (and sorts) a chunk to the list of sectors.
      *
-     * @param s The sector to add.
+     * @param s The chunk to add.
      * @return A boolean indicating the success of the operation.
      */
     public boolean addChunk(Chunk s) {
@@ -229,8 +185,8 @@ public class Region {
     }
 
     /**
-     * Given a sector (x, y), determine the index it needs to enter the list at,
-     * to keep the list sorted. If the sector is found to already exist from the list,
+     * Given a chunk (x, y), determine the index it needs to enter the list at,
+     * to keep the list sorted. If the chunk is found to already exist from the list,
      * -1 is returned. Uses a binary search algorithm.
      *
      * @param l Lower bound of the search region (when calling first, use 0)
@@ -307,12 +263,14 @@ public class Region {
         //TODO: implement per-player chunk discovery at some point
     }
 
-    public Chunk[][] getAdjacentChunks(int cx, int cy) {
-        return new Chunk[][]{
-            new Chunk[]{ getChunk( cx-1, cy-1), getChunk(cx-1, cy), getChunk(cx-1, cy+1) },
-            new Chunk[]{ getChunk( cx, cy-1), getChunk(cx, cy), getChunk(cx, cy+1) },
-            new Chunk[]{ getChunk( cx+1, cy-1), getChunk(cx+1, cy), getChunk(cx+1, cy+1) }
-        };
+    public ArrayList<Chunk> getChunks(int cx, int cy, int cr) {
+        ArrayList<Chunk> adj = new ArrayList<>();
+        for (int y = cy - cr; y <= cy + cr; y++) {
+            for (int x = cx - cr; x <= cx + cr; x++) {
+                adj.add(getChunk(cx, cy));
+            }
+        }
+        return adj;
     }
 
     public String getName() { return name; }

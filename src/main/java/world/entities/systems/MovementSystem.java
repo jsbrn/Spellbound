@@ -49,22 +49,24 @@ public class MovementSystem {
 
         Location old = new Location(lc.getLocation());
 
+        double oldPos[] = old.getCoordinates();
         double[] dir = vc.calculateVector(constantsOnly, backwards);
         dir[0] = MiscMath.getConstant(dir[0], 1);
         dir[1] = MiscMath.getConstant(dir[1], 1);
         double[] newPos = applyCollisionRules(lc, hc, dir, world);
 
-        lc.getLocation().setCoordinates(
-                MiscMath.clamp(old.getCoordinates()[0] + dir[0], old.getCoordinates()[0], newPos[0]),
-                MiscMath.clamp(old.getCoordinates()[1] + dir[1], old.getCoordinates()[1], newPos[1]));
+        double[] clampedPos = new double[]{
+                dir[0] > 0 ? MiscMath.clamp(old.getCoordinates()[0] + dir[0], old.getCoordinates()[0], newPos[0]) : MiscMath.clamp(old.getCoordinates()[0] + dir[0], newPos[0], old.getCoordinates()[0]),
+                dir[1] > 0 ? MiscMath.clamp(old.getCoordinates()[1] + dir[1], old.getCoordinates()[1], newPos[1]) : MiscMath.clamp(old.getCoordinates()[1] + dir[1], newPos[1], old.getCoordinates()[1]),
+        };
 
-        //sort in region entity list
-//        if (oldPos[0] != newPosInt[0] || oldPos[1] != newPosInt[1]) {
-//            Region reg = world.getRegion(lc.getLocation().getRegionName());
-//            //re sort position in region (TODO maybe add a dedicated method for this?)
-//            reg.removeEntity(entity);
-//            reg.addEntity(entity);
-//        }
+        lc.getLocation().setCoordinates(clampedPos[0], clampedPos[1]);
+
+        //move to appropriate chunk list
+        Chunk oldChunk = world.getRegion(old).getChunk(old);
+        Chunk newChunk = world.getRegion(lc.getLocation()).getChunk(lc.getLocation());
+        if (oldChunk != null && !oldChunk.equals(newChunk)) oldChunk.removeEntity(entity);
+        if (newChunk != null) newChunk.addEntity(entity); //will skip if exists in chunk already
     }
 
     @ServerExecution
@@ -80,7 +82,7 @@ public class MovementSystem {
         for (int a = 0; a < 2 && hc != null; a++) {
             Location l = new Location(lc.getLocation());
             for (int i = 0; i < increments; i++) {
-                double toAdd = dir[a] == 0 ? 0 : ((1/16f) * (dir[a] > 0 ? 1 : -1));
+                double toAdd = dir[a] == 0 ? 0 : ((1f/Chunk.TILE_SIZE) * (dir[a] > 0 ? 1 : -1));
                 l.addCoordinates(a == 0 ? toAdd : 0, a == 1 ? toAdd: 0);
                 if (collides(l, hc, world)) {
                     new_[a] = l.getCoordinates()[a];
@@ -111,8 +113,11 @@ public class MovementSystem {
             ArrayList<Integer> entitiesWithinRange = reg.getEntitiesNear(player, 1);
             for (Integer entity: entitiesWithinRange) {
                 LocationComponent eLoc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, entity);
+                Chunk old = MPServer.getWorld().getRegion(eLoc.getLocation()).getChunk(eLoc.getLocation());
                 Chunk newChunk = eLoc.hasEnteredNewChunk();
-                if (newChunk != null) MPServer.getEventManager().invoke(new EntityEnteredChunkEvent(entity, newChunk));
+                if (newChunk != null) {
+                    MPServer.getEventManager().invoke(new EntityEnteredChunkEvent(entity, old, newChunk));
+                }
             }
         }
     }

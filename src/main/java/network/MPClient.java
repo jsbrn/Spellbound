@@ -49,7 +49,7 @@ public class MPClient {
             @Override
             public void received(Connection connection, Object packet) {
                 packetsReceived++;
-                //if (!(packet instanceof FrameworkMessage)) System.out.println("Client received: "+packet.getClass().getSimpleName());
+                if (!(packet instanceof FrameworkMessage)) System.out.println("Client received: "+packet.getClass().getSimpleName());
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
             }
