@@ -26,7 +26,7 @@ Maven will unpack the LWJGL natives to `target/natives` when you run `mvn packag
 
 Slick2D depends on your system having `javaws.jar`. It is not supplied in the OpenJDK, so if you are running Linux you will need to install NetX.
 
-Do `sudo apt-get install icedtea-netx-common` and copy `/usr/share/icedtea-web/netx.jar` to `/usr/lib/jvm/java-8-openjdk-amd64/jre/lib` (or wherever the `jre/lib` folder is for the JDK version you have installed).
+Do `sudo apt-get install icedtea-netx-common` and copy `/usr/share/icedtea-web/netx.jar` to `/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/javaws.jar` (or wherever the `jre/lib` folder is for the JDK version you have installed).
 
 This should be enough to get you up and running.
 
