@@ -97,6 +97,7 @@ public class MPServer {
     public static boolean close() {
         server.close();
         connectedPlayers.clear();
+        eventManager.unregisterAll();
         world = null;
         return true;
     }
@@ -198,7 +199,7 @@ public class MPServer {
         }).map(Map.Entry::getKey).collect(Collectors.toSet());
     }
 
-    public static void assignTo(Connection c, int entityID) {
+    public static void assign(Connection c, int entityID) {
         connectedPlayers.put(c, entityID);
     }
 
@@ -214,17 +215,15 @@ public class MPServer {
 
     /* SOME GLOBAL SERVER ACTIONS THAT NEED TO BE SEPARATED FROM THE CLIENT*/
 
-    //TODO: better way to spawn in entities and players
     public static int spawnEntity(JSONObject entity, Location location, boolean isPlayer) {
-        int entityID = world.getEntities().createEntity(entity);
-        LocationComponent lc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID));
-        lc.setLocation(location);
-        MPServer.getWorld().getRegion(location).getChunk(location).addEntity(entityID);
 
+        int entityID = world.createEntity(entity, location);
         if (isPlayer) world.getEntities().addComponent(Component.create("player"), entityID);
 
         for (Component component: world.getEntities().getComponents(entityID))
             eventManager.register(component.getEventListener());
+
+        server.sendToAllTCP(new EntityUpdatePacket(entityID));
 
         return entityID;
     }

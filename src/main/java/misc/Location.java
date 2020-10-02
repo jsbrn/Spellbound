@@ -4,9 +4,10 @@ import network.MPServer;
 import org.apache.maven.monitor.event.EventDispatcher;
 import world.Chunk;
 import world.Region;
+import world.World;
 
 public class Location {
-
+    
     private String regionName;
     private double[] coordinates;
     private int lookDirection;

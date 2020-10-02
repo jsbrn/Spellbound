@@ -48,6 +48,7 @@ public class MovementSystem {
         HitboxComponent hc = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, entity);
 
         Location old = new Location(lc.getLocation());
+        Chunk oldChunk = world.getRegion(old).getChunk(old);
 
         double oldPos[] = old.getCoordinates();
         double[] dir = vc.calculateVector(constantsOnly, backwards);
@@ -63,10 +64,13 @@ public class MovementSystem {
         lc.getLocation().setCoordinates(clampedPos[0], clampedPos[1]);
 
         //move to appropriate chunk list
-        Chunk oldChunk = world.getRegion(old).getChunk(old);
         Chunk newChunk = world.getRegion(lc.getLocation()).getChunk(lc.getLocation());
-        if (oldChunk != null && !oldChunk.equals(newChunk)) oldChunk.removeEntity(entity);
-        if (newChunk != null) newChunk.addEntity(entity); //will skip if exists in chunk already
+        if (newChunk != null) newChunk.addEntity(entity);
+    }
+
+    public static void updateChunkEntities(int entityID, Chunk old, Chunk new_) {
+        if (old != null) old.removeEntity(entityID);
+        if (new_ != null) new_.addEntity(entityID); //will skip if exists in chunk already
     }
 
     @ServerExecution

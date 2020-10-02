@@ -2,11 +2,10 @@ package world;
 
 import com.github.mathiewz.slick.Graphics;
 import misc.Location;
-import misc.MiscMath;
 import misc.annotations.ServerClientExecution;
-import network.MPClient;
 import org.json.simple.JSONObject;
 import world.entities.Entities;
+import world.entities.components.LocationComponent;
 import world.generation.region.OverworldGenerator;
 
 import java.util.ArrayList;
@@ -36,6 +35,18 @@ public class World {
         return entities;
     }
 
+    public int createEntity(JSONObject json, Location location) {
+        int entityID = getEntities().addEntity(json);
+        LocationComponent lc = ((LocationComponent)getEntities().getComponent(LocationComponent.class, entityID));
+        if (lc != null) {
+            lc.moveTo(this, location);
+        }
+        return entityID;
+    }
+
+    //TODO: DESTROY ENTITY
+    //TODO: MOVE ENTITY TO REGION?
+
     public int getSeed() {
         return seed;
     }
@@ -49,9 +60,7 @@ public class World {
     public Collection<Region> getRegions() {
         return regions.values();
     }
-
     public Region getRegion(String name) { return regions.get(name); }
-
     public Region getRegion(Location location) { return getRegion(location.getRegionName()); }
 
     @ServerClientExecution

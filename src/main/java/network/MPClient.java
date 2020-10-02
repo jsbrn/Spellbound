@@ -13,9 +13,7 @@ import world.entities.components.PlayerComponent;
 import world.entities.systems.MovementSystem;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MPClient {
@@ -93,8 +91,9 @@ public class MPClient {
 
         client.getReturnTripTime();
         //update only the player
-        MovementSystem.update(world, world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
-                .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet()));
+        Set<Integer> localPlayer = world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
+                .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet());
+        MovementSystem.update(world, localPlayer);
     }
 
     public static World getWorld() {

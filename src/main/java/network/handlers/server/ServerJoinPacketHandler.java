@@ -6,8 +6,6 @@ import misc.Location;
 import network.MPServer;
 import network.Packet;
 import network.PacketHandler;
-import network.packets.ChunkPacket;
-import network.packets.EntityUpdatePacket;
 import network.packets.PlayerAssignmentPacket;
 import network.packets.RegionPacket;
 import world.Chunk;
@@ -26,7 +24,7 @@ public class ServerJoinPacketHandler implements PacketHandler {
         //create entity
         Location spawn = new Location("world", 1, 0);
         int newID = MPServer.spawnEntity(Assets.json("definitions/entities/player.json", true), spawn, true);
-        MPServer.assignTo(from, newID);
+        MPServer.assign(from, newID);
 
         //send entity and assignment packet
         Chunk chunk = MPServer.getWorld().getRegion(spawn).getChunk(spawn);

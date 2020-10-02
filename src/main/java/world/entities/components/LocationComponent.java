@@ -1,10 +1,12 @@
 package world.entities.components;
 
 import misc.Location;
+import misc.annotations.ServerExecution;
 import network.MPServer;
 import org.json.simple.JSONObject;
 import world.Chunk;
 import world.Region;
+import world.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +41,11 @@ public class LocationComponent extends Component {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void moveTo(World world, Location location) {
+        Location old = new Location(this.location);
         this.location = location;
+        Region oldRegion = world.getRegion(old);
+        oldRegion.removeEntity(getParent());
     }
 
     public boolean hasEnteredNewTile() {
@@ -53,6 +58,7 @@ public class LocationComponent extends Component {
         return false;
     }
 
+    @ServerExecution
     public Chunk hasEnteredNewChunk() {
         if (location.getChunkCoordinates()[0] != lastChunkCoordinates[0] || location.getChunkCoordinates()[1] != lastChunkCoordinates[1]) {
             //int[] diff = new int[]{location.getChunkCoordinates()[0] - lastChunkCoordinates[0], location.getChunkCoordinates()[1] - lastChunkCoordinates[1]};
@@ -63,6 +69,7 @@ public class LocationComponent extends Component {
         return null;
     }
 
+    @ServerExecution
     public boolean hasApproachedPlayer(int playerEntity, int qualifyingRadius) {
         if (playerEntity == getParent()) return false;
         Location ploc = ((LocationComponent) MPServer.getWorld().getEntities().getComponent(LocationComponent.class, playerEntity)).getLocation();

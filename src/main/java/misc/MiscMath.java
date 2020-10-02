@@ -274,4 +274,8 @@ public class MiscMath {
         return new int[]{(int)(index / Chunk.CHUNK_SIZE), (int)(index % Chunk.CHUNK_SIZE)};
     }
 
+    public static int[] getChunkCoordinates(double wx, double wy) {
+        return new int[]{(int)Math.floor(wx/Chunk.TILE_SIZE), (int)Math.floor(wy/Chunk.TILE_SIZE)};
+    }
+
 }

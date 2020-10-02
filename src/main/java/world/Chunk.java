@@ -44,7 +44,7 @@ public class Chunk {
                 top[i][j] = region.getGenerator().getTop(wc[0], wc[1]);
                 JSONObject entityDefinition = region.getGenerator().getEntity(wc[0], wc[1]);
                 if (entityDefinition == null) continue;
-                int newEntityID = MPServer.getWorld().getEntities().createEntity(entityDefinition);
+                int newEntityID = MPServer.getWorld().getEntities().addEntity(entityDefinition);
             }
         }
         MPServer.getEventManager().invoke(new ChunkGeneratedEvent(this));

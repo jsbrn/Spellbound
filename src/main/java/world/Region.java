@@ -5,7 +5,10 @@ import com.github.mathiewz.slick.Sound;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
+import misc.annotations.ServerClientExecution;
+import misc.annotations.ServerExecution;
 import network.MPServer;
+import world.entities.Entities;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 import world.entities.components.PlayerComponent;
@@ -19,14 +22,12 @@ import java.util.stream.Collectors;
 public class Region {
 
     private World world;
+    private ArrayList<Integer> entities;
 
     private String name;
     private ArrayList<Chunk> chunks;
-
     private ArrayList<Portal> portals;
-
     private Sound backgroundAmbience;
-
     private RegionGenerator generator;
 
     public Region(String name, RegionGenerator generator) {
@@ -35,11 +36,13 @@ public class Region {
         this.backgroundAmbience = generator.getBackgroundAmbience();
         this.portals = new ArrayList<>();
         this.chunks = new ArrayList<>();
+        this.entities = new ArrayList<>();
     }
 
     public void setWorld(World w) {
         this.world = w;
     }
+
     public Sound getBackgroundAmbience() {
         return backgroundAmbience;
     }
@@ -79,8 +82,8 @@ public class Region {
     }
 
     public List<Integer> getEntities(double wx, double wy, double radius) {
-        List<Integer> entities = getEntities((int)Math.floor(wx - radius), (int)Math.floor(wy - radius), (int)Math.ceil(radius * 2), (int)Math.ceil(radius * 2));
-        return entities.stream().filter(e -> {
+        List<Integer> foundEntities = getEntities((int)Math.floor(wx - radius), (int)Math.floor(wy - radius), (int)Math.ceil(radius * 2), (int)Math.ceil(radius * 2));
+        return foundEntities.stream().filter(e -> {
             Location location = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, e)).getLocation();
             HitboxComponent hitbox = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, e);
             return MiscMath.circlesIntersect(
@@ -91,6 +94,13 @@ public class Region {
                 wy,
                 radius);
         }).collect(Collectors.toList());
+    }
+
+    public ArrayList<Integer> getEntities() { return entities; }
+    public void addEntity(int entityID) { if (!entities.contains(entityID)) entities.add(entityID); }
+    public void removeEntity(int entityID) {
+        int index = entities.indexOf(entityID);
+        if (index >= 0) entities.remove(index);
     }
 
     public ArrayList<Chunk> getChunks() {
@@ -195,21 +205,15 @@ public class Region {
      */
     private int getPotentialChunkIndex(int x, int y, int l, int u) {
         //if the bounds are the number, then return the bound
-
         if (chunks.isEmpty()) return 0;
         if (chunks.get(0).compareTo(x, y) > 0) return 0;
         if (chunks.get(chunks.size() - 1).compareTo(x, y) < 0) return chunks.size();
-
         int lsize = (u + 1) - l;
         int index = lsize / 2 + l;
-
         if (lsize == 0) return -1;
-
         Chunk element = chunks.get(index);
         int cmp = element.compareTo(x, y);
-
         if (cmp == 0) return -1;
-
         int sub_bounds[] = new int[]{cmp > 0 ? l : index, cmp > 0 ? index : u};
         if ((sub_bounds[1] + 1) - sub_bounds[0] <= 2) { //if sublist is two from length
             if (chunks.get(sub_bounds[0]).compareTo(x, y) < 0
@@ -275,17 +279,19 @@ public class Region {
 
     public String getName() { return name; }
 
+    @ServerExecution
     public void update() {
         int radius = 1;
-        Set<Integer> playerEntities = MPServer.getWorld().getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
+        Set<Integer> playerEntities = world.getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
         for (Integer eID: playerEntities) {
             for (int j = -radius; j <= radius; j++) {
                 for (int i = -radius; i <= radius; i++) {
-                    Location loc = ((LocationComponent)MPServer.getWorld().getEntities().getComponent(LocationComponent.class, eID)).getLocation();
+                    Location loc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, eID)).getLocation();
                     int cx = loc.getChunkCoordinates()[0] + i;
                     int cy = loc.getChunkCoordinates()[1] + j;
                     Chunk adj = getChunk(cx, cy);
-                    if (adj.isEmpty()) adj.generate();
+                    if (adj.isEmpty())
+                        adj.generate();
                 }
             }
         }

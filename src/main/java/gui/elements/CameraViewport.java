@@ -122,10 +122,9 @@ public class CameraViewport extends GUIElement {
         Location localPlayerLocation = ((LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, Camera.getTargetEntity())).getLocation();
 
         //draw getEntity debug info
-        List<Integer> entities = MPClient.getWorld().getRegion(localPlayerLocation).getEntities(mouse_wc[0] - 2, mouse_wc[1] - 2, 4, 4);
-
-        g.setColor(Color.black);
-        for (Integer e: entities) g.drawString("Entity "+e, mouse_osc[0], mouse_osc[1]);
+        int[] mouse_cc = MiscMath.getChunkCoordinates(mouse_wc[0], mouse_wc[1]);
+        List<Integer> clientEntities = MPClient.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getEntities();
+        List<Integer> serverEntities = MPServer.isOpen() ? MPServer.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getEntities() : null;
 
         //draw the debug info
         String[] debugStrings = new String[]{
@@ -137,7 +136,9 @@ public class CameraViewport extends GUIElement {
                 "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
                 "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
                 "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
-                        +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)
+                        +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25),
+                "Server entities: "+(serverEntities != null ? serverEntities.size()+"" : "-"),
+                "Client entities: "+clientEntities.size()
         };
 
 
