@@ -217,7 +217,7 @@ public class MPServer {
 
     public static int spawnEntity(JSONObject entity, Location location, boolean isPlayer) {
 
-        int entityID = world.createEntity(entity, location);
+        int entityID = world.spawnEntity((int)MiscMath.random(100000, 999999), entity, location);
         if (isPlayer) world.getEntities().addComponent(Component.create("player"), entityID);
 
         for (Component component: world.getEntities().getComponents(entityID))

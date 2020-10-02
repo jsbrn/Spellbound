@@ -7,7 +7,6 @@ import network.MPClient;
 import network.Packet;
 import network.PacketHandler;
 import network.packets.EntityUpdatePacket;
-import world.Chunk;
 import world.entities.components.LocationComponent;
 import world.entities.components.VelocityComponent;
 import world.entities.systems.MovementSystem;
@@ -17,7 +16,7 @@ public class ClientEntityUpdatePacketHandler implements PacketHandler {
     public boolean handle(Packet p, Connection from) {
 
         EntityUpdatePacket esp = (EntityUpdatePacket)p;
-        MPClient.getWorld().getEntities().addEntity(esp.entityID, Assets.json(esp.entityJSON));
+        MPClient.getWorld().getEntities().putEntity(esp.entityID, Assets.json(esp.entityJSON));
         LocationComponent lc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, esp.entityID);
         VelocityComponent vc = (VelocityComponent) MPClient.getWorld().getEntities().getComponent(VelocityComponent.class, esp.entityID);
 

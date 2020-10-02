@@ -41,11 +41,9 @@ public class LocationComponent extends Component {
         return location;
     }
 
-    public void moveTo(World world, Location location) {
+    public void setLocation(Location location) {
         Location old = new Location(this.location);
         this.location = location;
-        Region oldRegion = world.getRegion(old);
-        oldRegion.removeEntity(getParent());
     }
 
     public boolean hasEnteredNewTile() {

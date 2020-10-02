@@ -19,7 +19,7 @@ public class Chunk {
     public static final int CHUNK_SIZE = 15;
 
     private Region region;
-    private ArrayList<Integer> entities;
+    private ArrayList<Integer> cachedEntities;
     private int[] coordinates;
 
     private byte[][] base;
@@ -32,7 +32,7 @@ public class Chunk {
         this.coordinates = new int[]{x, y};
         this.base = new byte[CHUNK_SIZE][CHUNK_SIZE];
         this.top = new byte[CHUNK_SIZE][CHUNK_SIZE];
-        this.entities = new ArrayList<>();
+        this.cachedEntities = new ArrayList<>();
     }
 
     public void generate() {
@@ -44,7 +44,8 @@ public class Chunk {
                 top[i][j] = region.getGenerator().getTop(wc[0], wc[1]);
                 JSONObject entityDefinition = region.getGenerator().getEntity(wc[0], wc[1]);
                 if (entityDefinition == null) continue;
-                int newEntityID = MPServer.getWorld().getEntities().addEntity(entityDefinition);
+                //TODO: fix chunk entity natural generation
+                //int newEntityID = MPServer.getWorld().getEntities().addEntity(entityDefinition);
             }
         }
         MPServer.getEventManager().invoke(new ChunkGeneratedEvent(this));
@@ -83,16 +84,12 @@ public class Chunk {
     public byte[][] getBase() { return base; }
     public byte[][] getTop() { return top; }
 
-    public void addEntity(int entityID) {
-        if (!entities.contains(entityID)) entities.add(entityID);
+    public void cacheEntity(int entityID) {
+        if (!cachedEntities.contains(entityID)) cachedEntities.add(entityID);
     }
 
-    public void removeEntity(Integer entityID) {
-        entities.remove(entityID);
-    }
-
-    public ArrayList<Integer> getEntities() {
-        return entities;
+    public ArrayList<Integer> getCachedEntities() {
+        return cachedEntities;
     }
 
     public void drawBase(float osx, float osy, float scale) {

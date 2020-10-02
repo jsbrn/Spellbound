@@ -3,6 +3,7 @@ package network.handlers.server;
 import assets.Assets;
 import com.esotericsoftware.kryonet.Connection;
 import misc.Location;
+import misc.MiscMath;
 import network.MPServer;
 import network.Packet;
 import network.PacketHandler;
@@ -22,7 +23,7 @@ public class ServerJoinPacketHandler implements PacketHandler {
         }
 
         //create entity
-        Location spawn = new Location("world", 1, 0);
+        Location spawn = new Location("world", MiscMath.random(-2, 2), MiscMath.random(-2, 2), 180);
         int newID = MPServer.spawnEntity(Assets.json("definitions/entities/player.json", true), spawn, true);
         MPServer.assign(from, newID);
 

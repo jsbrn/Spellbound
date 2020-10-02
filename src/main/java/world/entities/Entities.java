@@ -13,20 +13,14 @@ public class Entities {
 
     private HashMap<Class, LinkedHashMap<Integer, Component>> componentMaps = new HashMap<>();
 
-    @ServerExecution
-    public int addEntity(JSONObject json) {
-        int newID = (int)MiscMath.random(10000, 99999);
-        return addEntity(newID, json);
-    }
-
     @ClientExecution
-    public int addEntity(int newID, JSONObject json) {
+    public int putEntity(int entityID, JSONObject json) {
         //deserialize the components from the json and add them to the lists
         for (Object key: json.keySet()) {
             Component component = Component.create((String)key, (JSONObject)json.get(key));
-            addComponent(component, newID);
+            addComponent(component, entityID);
         }
-        return newID;
+        return entityID;
     }
 
     public boolean exists(int entityID) {

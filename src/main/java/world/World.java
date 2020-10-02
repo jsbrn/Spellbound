@@ -35,11 +35,20 @@ public class World {
         return entities;
     }
 
-    public int createEntity(JSONObject json, Location location) {
-        int entityID = getEntities().addEntity(json);
+    /**
+     * Spawns an entity by the given ID. If the ID already exists, simply update the entity.
+     * @param entityID
+     * @param json
+     * @param location
+     * @return
+     */
+    @ServerClientExecution
+    public int spawnEntity(int entityID, JSONObject json, Location location) {
+        getEntities().putEntity(entityID, json);
         LocationComponent lc = ((LocationComponent)getEntities().getComponent(LocationComponent.class, entityID));
         if (lc != null) {
-            lc.moveTo(this, location);
+            if (location != null) lc.setLocation(location);
+            getRegion(lc.getLocation()).getChunk(lc.getLocation()).cacheEntity(entityID);
         }
         return entityID;
     }

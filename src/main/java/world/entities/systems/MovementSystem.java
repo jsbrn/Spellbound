@@ -65,12 +65,7 @@ public class MovementSystem {
 
         //move to appropriate chunk list
         Chunk newChunk = world.getRegion(lc.getLocation()).getChunk(lc.getLocation());
-        if (newChunk != null) newChunk.addEntity(entity);
-    }
-
-    public static void updateChunkEntities(int entityID, Chunk old, Chunk new_) {
-        if (old != null) old.removeEntity(entityID);
-        if (new_ != null) new_.addEntity(entityID); //will skip if exists in chunk already
+        if (newChunk != null) newChunk.cacheEntity(entity);
     }
 
     @ServerExecution

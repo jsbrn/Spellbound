@@ -22,7 +22,6 @@ import world.entities.components.VelocityComponent;
 import world.entities.systems.InputProcessingSystem;
 import world.entities.systems.RenderSystem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CameraViewport extends GUIElement {
@@ -123,22 +122,20 @@ public class CameraViewport extends GUIElement {
 
         //draw getEntity debug info
         int[] mouse_cc = MiscMath.getChunkCoordinates(mouse_wc[0], mouse_wc[1]);
-        List<Integer> clientEntities = MPClient.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getEntities();
-        List<Integer> serverEntities = MPServer.isOpen() ? MPServer.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getEntities() : null;
+        List<Integer> clientEntities = MPClient.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getCachedEntities();
+        List<Integer> serverEntities = MPServer.isOpen() ? MPServer.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getCachedEntities() : null;
 
         //draw the debug info
         String[] debugStrings = new String[]{
+                MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
+                        +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25)
+                        +" ("+localPlayerLocation.getRegionName()+")",
                 "FPS: "+ Window.WINDOW_INSTANCE.getFPS(),
                 "Ping: "+MPClient.getReturnTripTime()+"ms",
-                "Server time: "+MPServer.getTime(),
-                "Client time: "+MPClient.getTime(),
+                "Current time: (server: "+MPServer.getTime()+", client: "+MPClient.getTime()+")",
                 "Packets: "+MPClient.getPacketsSent()+" sent, "+MPClient.getPacketsReceived()+" received",
                 "Mouse (WC): "+mouse_wc[0]+", "+mouse_wc[1],
-                "Region: "+MPClient.getWorld().getRegion(Camera.getLocation()).getName(),
-                "Coordinates: "+MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)
-                        +", "+MiscMath.round(localPlayerLocation.getCoordinates()[1], 0.25),
-                "Server entities: "+(serverEntities != null ? serverEntities.size()+"" : "-"),
-                "Client entities: "+clientEntities.size()
+                "Chunk entity cache: (server: "+(serverEntities != null ? serverEntities.size()+"" : "-")+", client: "+clientEntities.size()+")"
         };
 
 

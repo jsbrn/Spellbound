@@ -5,10 +5,7 @@ import com.github.mathiewz.slick.Sound;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import misc.annotations.ServerClientExecution;
 import misc.annotations.ServerExecution;
-import network.MPServer;
-import world.entities.Entities;
 import world.entities.components.HitboxComponent;
 import world.entities.components.LocationComponent;
 import world.entities.components.PlayerComponent;
@@ -22,7 +19,6 @@ import java.util.stream.Collectors;
 public class Region {
 
     private World world;
-    private ArrayList<Integer> entities;
 
     private String name;
     private ArrayList<Chunk> chunks;
@@ -36,7 +32,6 @@ public class Region {
         this.backgroundAmbience = generator.getBackgroundAmbience();
         this.portals = new ArrayList<>();
         this.chunks = new ArrayList<>();
-        this.entities = new ArrayList<>();
     }
 
     public void setWorld(World w) {
@@ -51,7 +46,7 @@ public class Region {
         Location eLoc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).getLocation();
         ArrayList<Chunk> adj = getChunks(eLoc.getChunkCoordinates()[0], eLoc.getChunkCoordinates()[1], chunkRadius);
         ArrayList<Integer> entitiesNear = new ArrayList<>();
-        for (Chunk a: adj) entitiesNear.addAll(a.getEntities());
+        for (Chunk a: adj) entitiesNear.addAll(a.getCachedEntities());
         return entitiesNear;
     }
 
@@ -63,7 +58,7 @@ public class Region {
             ch = (int)Math.floor(height / Chunk.CHUNK_SIZE);
         for (int i = cy; i <= cy + cw; i++) {
             for (int j = cy; j <= cy + ch; j++) {
-                chunkEntities.addAll(getChunk(cx, cy).getEntities());
+                chunkEntities.addAll(getChunk(cx, cy).getCachedEntities());
             }
         }
         return chunkEntities.stream().filter(eid -> {
@@ -94,13 +89,6 @@ public class Region {
                 wy,
                 radius);
         }).collect(Collectors.toList());
-    }
-
-    public ArrayList<Integer> getEntities() { return entities; }
-    public void addEntity(int entityID) { if (!entities.contains(entityID)) entities.add(entityID); }
-    public void removeEntity(int entityID) {
-        int index = entities.indexOf(entityID);
-        if (index >= 0) entities.remove(index);
     }
 
     public ArrayList<Chunk> getChunks() {

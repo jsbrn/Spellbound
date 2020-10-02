@@ -9,9 +9,9 @@
     "base_speed": 4.0,
     "forces": [
       {
-        "direction": 180.0,
-        "magnitude": 1.0,
-        "deceleration": 0.5
+        "direction": 0.0,
+        "magnitude": 0.0,
+        "deceleration": 0.0
       }
     ]
   },
