@@ -11,8 +11,6 @@ import gui.states.GameState;
 import main.GameManager;
 import network.MPClient;
 import network.MPServer;
-import world.World;
-import world.events.EventManager;
 
 public class PauseMenu extends Modal {
 
@@ -42,7 +40,7 @@ public class PauseMenu extends Modal {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return true;
     }
 

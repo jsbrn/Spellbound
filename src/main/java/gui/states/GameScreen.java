@@ -137,11 +137,6 @@ public class GameScreen extends GameState {
     }
 
     @Override
-    public void keyReleased(int key, char c) {
-        super.keyReleased(key, c);
-    }
-
-    @Override
     public void onEnter() {
 
     }

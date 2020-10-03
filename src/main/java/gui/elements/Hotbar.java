@@ -7,7 +7,6 @@ import com.github.mathiewz.slick.SlickException;
 import gui.GUIElement;
 import misc.MiscMath;
 import network.MPClient;
-import world.entities.Entities;
 import world.entities.components.SpellbookComponent;
 import world.particles.ParticleSource;
 
@@ -60,7 +59,7 @@ public class Hotbar extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         if (key == Input.KEY_1) { spellbook.selectSpell(0); return true; }
         if (key == Input.KEY_2) { spellbook.selectSpell(1); return true; }
         if (key == Input.KEY_3) { spellbook.selectSpell(2); return true; }

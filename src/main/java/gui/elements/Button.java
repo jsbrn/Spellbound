@@ -83,7 +83,7 @@ public abstract class Button extends GUIElement {
     public boolean onMouseMoved(int ogx, int ogy) { return false; }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return false;
     }
 

@@ -8,7 +8,6 @@ import gui.GUIElement;
 import gui.sound.SoundManager;
 import misc.Window;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class TextLabel extends GUIElement {
@@ -91,7 +90,6 @@ public class TextLabel extends GUIElement {
     }
 
     public void setText(String newtext) {
-        newtext = newtext.replaceAll("’", "'");
         if (!newtext.equals(text)) {
             lines = computeLines(newtext);
             text = newtext;
@@ -140,7 +138,7 @@ public class TextLabel extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return false;
     }
 

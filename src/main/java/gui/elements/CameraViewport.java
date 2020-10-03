@@ -58,7 +58,7 @@ public class CameraViewport extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         if (MPClient.getReturnTripTime() > 100) {
             InputComponent ic = (InputComponent) MPClient.getWorld().getEntities().getComponent(InputComponent.class, Camera.getTargetEntity());
             ic.setKey(key, true);

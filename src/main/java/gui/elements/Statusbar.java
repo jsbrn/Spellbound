@@ -7,7 +7,6 @@ import com.github.mathiewz.slick.SlickException;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import network.MPClient;
-import world.entities.Entities;
 import world.entities.components.HealthComponent;
 
 public class Statusbar extends GUIElement {
@@ -66,7 +65,7 @@ public class Statusbar extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return false;
     }
 

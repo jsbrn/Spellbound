@@ -10,11 +10,16 @@ import misc.Window;
 public class TextBox extends GUIElement {
 
     private int[] dims;
-    private String text;
+    private String text, regexKeep;
     private boolean focused;
     private TextLabel label;
 
     public TextBox(int w, int h) {
+        this(w, h, ".*");
+    }
+
+    public TextBox(int w, int h, String regexKeep) {
+        this.regexKeep = regexKeep;
         this.dims = new int[]{w, h};
         this.text = "";
         this.focused = false;
@@ -58,26 +63,24 @@ public class TextBox extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
-        if (focused) {
-            getGUI().getParent().getInput().enableKeyRepeat();
-            boolean shifting = getGUI().getParent().getInput().isKeyDown(Input.KEY_LSHIFT)
-                || getGUI().getParent().getInput().isKeyDown(Input.KEY_RSHIFT);
-            boolean control = getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL)
-                    || getGUI().getParent().getInput().isKeyDown(Input.KEY_RCONTROL);
-            if (key == Input.KEY_BACK && !text.isEmpty()) {
-                if (control)
-                    text = "";
-                else
-                    text = text.substring(0, text.length() - 1);
-            }
-            if (key == Input.KEY_SPACE) text += " ";
-            String charr = shifting ? Input.getKeyName(key).toUpperCase() : Input.getKeyName(key).toLowerCase();
-            if (charr.matches("[A-Z]|[a-z]|[0-9]")) text += charr;
-            label.setText(text);
-            return true;
+    public boolean onKeyDown(int key, char c) {
+        System.out.println(c);
+        if ((c < 32 || c > 136) && key != Input.KEY_BACK) return false;
+        if (!(c+"").matches(regexKeep)) return false;
+        if (!focused) return false;
+
+        getGUI().getParent().getInput().enableKeyRepeat();
+        boolean control = getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL)
+                || getGUI().getParent().getInput().isKeyDown(Input.KEY_RCONTROL);
+
+        if (key == Input.KEY_BACK) {
+            text = control ? "" : text.substring(0, Math.max(0, text.length() - 1));
+        } else {
+            text += c;
         }
-        return false;
+
+        label.setText(text);
+        return true;
     }
 
     public void grabFocus() { this.focused = true; }

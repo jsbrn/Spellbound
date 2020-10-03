@@ -5,15 +5,11 @@ import assets.definitions.DialogueDefinition;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Graphics;
 import com.github.mathiewz.slick.Image;
-import com.github.mathiewz.slick.Input;
 import gui.GUIAnchor;
 import gui.GUIElement;
 import gui.sound.SoundManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import world.Chunk;
-import world.World;
-import world.events.EventManager;
-import world.events.event.PlayerReplyEvent;
 
 import java.util.ArrayList;
 
@@ -87,7 +83,7 @@ public class SpeechBubble extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return true;
     }
 

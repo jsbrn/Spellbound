@@ -130,27 +130,27 @@ public abstract class GUIElement {
         return onMouseScroll(direction);
     }
 
-    public final boolean handleKeyUp(int key) {
+    public final boolean handleKeyUp(int key, char c) {
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
-            if (e.handleKeyUp(key)) return true;
+            if (e.handleKeyUp(key, c)) return true;
         }
         return isActive() && onKeyUp(key);
     }
 
-    public final boolean handleKeyDown(int key) {
+    public final boolean handleKeyDown(int key, char c) {
         for (int i = children.size() - 1; i >= 0; i--) {
             GUIElement e = children.get(i);
-            if (e.handleKeyDown(key)) return true;
+            if (e.handleKeyDown(key, c)) return true;
         }
-        return isActive() && onKeyDown(key);
+        return isActive() && onKeyDown(key, c);
     }
 
     public abstract boolean onMouseMoved(int ogx, int ogy);
     public abstract boolean onMouseRelease(int ogx, int ogy, int button);
     public abstract boolean onMousePressed(int ogx, int ogy, int button);
     public abstract boolean onMouseScroll(int direction);
-    public abstract boolean onKeyDown(int key);
+    public abstract boolean onKeyDown(int key, char c);
     public abstract boolean onKeyUp(int key);
 
     public final GUIElement addChild(GUIElement element, int ogx, int ogy, GUIAnchor anchor) {

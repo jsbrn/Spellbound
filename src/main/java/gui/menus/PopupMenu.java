@@ -7,7 +7,6 @@ import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.Modal;
 import gui.elements.TextLabel;
-import world.World;
 
 public class PopupMenu extends Modal {
 
@@ -29,7 +28,7 @@ public class PopupMenu extends Modal {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return true;
     }
 

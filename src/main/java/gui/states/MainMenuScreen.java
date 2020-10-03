@@ -8,7 +8,7 @@ import gui.GUIAnchor;
 import gui.elements.Button;
 import gui.elements.IconLabel;
 import gui.elements.TextLabel;
-import gui.menus.PlayerCustomizationMenu;
+import gui.menus.ServerSelectMenu;
 import main.GameManager;
 import misc.Window;
 import network.MPServer;
@@ -55,7 +55,7 @@ public class MainMenuScreen extends GameState {
             public void onClick(int button) {
                 File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
                 //if (!f.exists()) {
-                    gui.stackModal(new PlayerCustomizationMenu());
+                    gui.stackModal(new ServerSelectMenu());
 //                //} else {
 //                    World.init();
 //                    //make a backup before loading a save

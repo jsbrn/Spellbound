@@ -8,11 +8,7 @@ import gui.elements.Button;
 import gui.elements.Modal;
 import gui.elements.TextBox;
 import gui.elements.TextLabel;
-import gui.states.GameScreen;
-import gui.states.GameState;
-import main.GameManager;
 import world.Camera;
-import world.World;
 
 public class CheatCodeMenu extends Modal {
 
@@ -23,12 +19,12 @@ public class CheatCodeMenu extends Modal {
         addChild(new TextLabel("ENTER CHEAT CODE", 6, Color.black, false, false), 0, 8, GUIAnchor.TOP_MIDDLE);
         input = new TextBox(64, 8) {
             @Override
-            public boolean onKeyDown(int key) {
+            public boolean onKeyDown(int key, char c) {
                 if (key == Input.KEY_ENTER) {
                     checkCode();
                     getGUI().popModal();
                 }
-                return super.onKeyDown(key);
+                return super.onKeyDown(key, c);
             }
         };
         addChild(input, 0, 0, GUIAnchor.CENTER);
@@ -49,7 +45,7 @@ public class CheatCodeMenu extends Modal {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return true;
     }
 

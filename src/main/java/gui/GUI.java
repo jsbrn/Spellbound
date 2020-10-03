@@ -9,7 +9,6 @@ import gui.states.GameState;
 import misc.Location;
 import misc.MiscMath;
 import misc.Window;
-import world.World;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -81,20 +80,20 @@ public class GUI {
         return false;
     }
 
-    public boolean onKeyDown(int key) {
-        if (!modals.isEmpty()) return modals.peek().handleKeyDown(key);
+    public boolean onKeyDown(int key, char c) {
+        if (!modals.isEmpty()) return modals.peek().handleKeyDown(key, c);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
-            if (e.handleKeyDown(key)) return true;
+            if (e.handleKeyDown(key, c)) return true;
         }
         return false;
     }
 
-    public boolean onKeyUp(int key) {
-        if (!modals.isEmpty()) return modals.peek().handleKeyUp(key);
+    public boolean onKeyUp(int key, char c) {
+        if (!modals.isEmpty()) return modals.peek().handleKeyUp(key, c);
         for (int i = elements.size() - 1; i >= 0; i--) {
             GUIElement e = elements.get(i);
-            if (e.handleKeyUp(key)) return true;
+            if (e.handleKeyUp(key, c)) return true;
         }
         return false;
     }

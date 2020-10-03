@@ -55,7 +55,7 @@ public class IconLabel extends GUIElement {
     }
 
     @Override
-    public boolean onKeyDown(int key) {
+    public boolean onKeyDown(int key, char c) {
         return false;
     }
 

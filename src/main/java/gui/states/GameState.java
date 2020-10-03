@@ -62,7 +62,7 @@ public abstract class GameState extends BasicGameState {
             Window.toggleFullScreen();
         }
 
-        getGUI().onKeyUp(key);
+        getGUI().onKeyUp(key, c);
 
     }
 
@@ -78,7 +78,7 @@ public abstract class GameState extends BasicGameState {
 
     @Override
     public void keyPressed(int key, char c) {
-        gui.onKeyDown(key);
+        gui.onKeyDown(key, c);
     }
 
     @Override
