@@ -100,7 +100,6 @@ public class MPServer {
                     connectedPlayers.keySet().forEach(conn -> conn.sendTCP(new TimeSyncPacket(time)));
                 }
             }, 500, 1000);
-            System.out.println("COOL");
             if (dedicatedThread) server.start();
             return true;
         } catch (IOException e) {
@@ -116,6 +115,10 @@ public class MPServer {
         eventManager.unregisterAll();
         world = null;
         return true;
+    }
+
+    public static void invokeCommand(String command) {
+        System.out.println("Server received command: "+command);
     }
 
     public static EventManager getEventManager() {
@@ -134,8 +137,8 @@ public class MPServer {
 
     public static void update(int timeout) {
         try {
-            server.update(timeout);
             update();
+            server.update(timeout);
         } catch (IOException e) {
             e.printStackTrace();
         }
