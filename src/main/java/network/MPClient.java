@@ -27,13 +27,17 @@ public class MPClient {
     private static Timer pingTimer;
 
     public static void init() {
+        init(0, 0);
+    }
+
+    public static void init(int minLag, int maxLag) {
         client = new Client();
         time = 0;
         world = new World();
         Packet.registerPackets(client.getKryo());
         registerPacketHandlers();
         pingTimer = new Timer();
-        client.addListener(new Listener() {
+        client.addListener(new Listener.LagListener(minLag, maxLag, new Listener() {
             @Override
             public void connected(Connection connection) {
                 connection.sendTCP(new JoinPacket());
@@ -51,7 +55,7 @@ public class MPClient {
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
             }
-        });
+        }));
     }
 
     public static boolean isOpen() {

@@ -53,6 +53,10 @@ public class World {
         return entityID;
     }
 
+    public void destroyEntity(int entityID) {
+        getEntities().removeEntity(entityID);
+    }
+
     //TODO: DESTROY ENTITY
     //TODO: MOVE ENTITY TO REGION?
 

@@ -7,11 +7,13 @@ import misc.Location;
 import network.MPClient;
 import network.MPServer;
 import org.json.simple.JSONObject;
+import world.entities.components.LocationComponent;
 import world.entities.systems.RenderSystem;
 import world.events.event.ChunkGeneratedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Chunk {
 
@@ -88,8 +90,14 @@ public class Chunk {
         if (!cachedEntities.contains(entityID)) cachedEntities.add(entityID);
     }
 
-    public ArrayList<Integer> getCachedEntities() {
-        return cachedEntities;
+    public List<Integer> getCachedEntities() {
+        return cachedEntities.stream().filter(eid -> {
+            LocationComponent lc = (LocationComponent)region.getWorld().getEntities().getComponent(LocationComponent.class, eid);
+            if (lc == null) return false;
+            Location loc = lc.getLocation();
+            if (loc == null) return false;
+            return loc.getChunkCoordinates()[0] == coordinates[0] && loc.getChunkCoordinates()[1] == coordinates[1];
+        }).collect(Collectors.toList());
     }
 
     public void drawBase(float osx, float osy, float scale) {

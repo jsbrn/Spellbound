@@ -37,6 +37,7 @@ public class Region {
     public void setWorld(World w) {
         this.world = w;
     }
+    public World getWorld() { return world; }
 
     public Sound getBackgroundAmbience() {
         return backgroundAmbience;

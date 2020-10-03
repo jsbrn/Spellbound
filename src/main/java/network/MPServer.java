@@ -37,20 +37,24 @@ public class MPServer {
     private static HashMap<Connection, Integer> connectedPlayers;
 
     private static World world;
-    private static JSONObject serverSettings;
     private static EventManager eventManager;
 
     private static long time;
     private static Timer timeSyncTimer;
 
     public static void init() {
-        init(new Server());
+        init(new Server(), 0, 0);
     }
 
-    public static void init(Server kryoServer) {
+    public static void init(int minLag, int maxLag) {
+        init(new Server(), minLag, maxLag);
+    }
+
+    public static void init(Server kryoServer, int minLag, int maxLag) {
+
         time = 0;
         eventManager = new EventManager();
-        serverSettings = new JSONObject();
+
         connectedPlayers = new HashMap<>();
         world = new World();
         server = kryoServer;
@@ -59,7 +63,7 @@ public class MPServer {
         Packet.registerPackets(server.getKryo());
         registerEventHandlers();
 
-        server.addListener(new Listener() {
+        server.addListener(new Listener.LagListener(minLag, maxLag, new Listener() {
             @Override
             public void connected(Connection connection) {
                 super.connected(connection);
@@ -68,7 +72,11 @@ public class MPServer {
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
-                world.getEntities().removeEntity(getEntityID(connection));
+                int entityID = getEntityID(connection);
+                if (entityID > 0) {
+                    world.destroyEntity(entityID);
+                    server.sendToAllTCP(new EntityDestroyPacket(entityID));
+                }
                 connectedPlayers.remove(connection);
             }
 
@@ -78,7 +86,7 @@ public class MPServer {
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
             }
-        });
+        }));
     }
 
     public static boolean launch(int seed, boolean dedicatedThread) {
@@ -126,8 +134,8 @@ public class MPServer {
 
     public static void update(int timeout) {
         try {
-            update();
             server.update(timeout);
+            update();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -221,7 +229,7 @@ public class MPServer {
     }
 
     public static int getEntityID(Connection c) {
-        return connectedPlayers.get(c);
+        return connectedPlayers.get(c) > 0 ? connectedPlayers.get(c) : -1;
     }
 
     public static Connection getConnection(int playerEntityID) {
