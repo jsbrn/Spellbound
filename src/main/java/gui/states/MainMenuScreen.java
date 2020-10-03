@@ -118,7 +118,7 @@ public class MainMenuScreen extends GameState {
     public void keyReleased(int key, char c) {
         if (key == Input.KEY_H) {
             MPServer.init();
-            MPServer.launch(0);
+            MPServer.launch(0, true);
         }
         super.keyReleased(key, c);
     }

@@ -1,6 +1,7 @@
 package network;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
@@ -43,16 +44,21 @@ public class MPServer {
     private static Timer timeSyncTimer;
 
     public static void init() {
+        init(new Server());
+    }
+
+    public static void init(Server kryoServer) {
         time = 0;
         eventManager = new EventManager();
         serverSettings = new JSONObject();
         connectedPlayers = new HashMap<>();
         world = new World();
-        server = new Server();
+        server = kryoServer;
         timeSyncTimer = new Timer();
         registerPacketHandlers();
         Packet.registerPackets(server.getKryo());
         registerEventHandlers();
+
         server.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
@@ -68,17 +74,17 @@ public class MPServer {
 
             @Override
             public void received(Connection connection, Object packet) {
-                //if (!(packet instanceof FrameworkMessage)) System.out.println("Server received: "+packet.getClass().getSimpleName());
+                if (!(packet instanceof FrameworkMessage)) System.out.println("Server received: "+packet.getClass().getSimpleName());
                 PacketHandler handler = packetHandlers.get(packet.getClass());
                 if (handler != null) handler.handle((Packet)packet, connection);
             }
         });
     }
 
-    public static boolean launch(int seed) {
-        server.start();
+    public static boolean launch(int seed, boolean dedicatedThread) {
+
         try {
-            server.bind(6667, 6668);
+            server.bind(6667, 6667);
             world.generate(seed);
             timeSyncTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -86,6 +92,8 @@ public class MPServer {
                     connectedPlayers.keySet().forEach(conn -> conn.sendTCP(new TimeSyncPacket(time)));
                 }
             }, 500, 1000);
+            System.out.println("COOL");
+            if (dedicatedThread) server.start();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,6 +123,15 @@ public class MPServer {
     }
 
     public static long getTime() { return time; }
+
+    public static void update(int timeout) {
+        try {
+            update();
+            server.update(timeout);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void update() {
         world.update();

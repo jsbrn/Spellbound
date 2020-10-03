@@ -47,6 +47,8 @@ public class MovementSystem {
         LocationComponent lc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, entity);
         HitboxComponent hc = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, entity);
 
+        if (vc == null) return;
+
         Location old = new Location(lc.getLocation());
         Chunk oldChunk = world.getRegion(old).getChunk(old);
 

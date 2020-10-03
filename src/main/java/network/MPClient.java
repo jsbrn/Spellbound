@@ -61,7 +61,7 @@ public class MPClient {
     public static void join(String host) {
         try {
             client.start();
-            client.connect(10000, host, 6667, 6668);
+            client.connect(10000, host, 6667, 6667);
             pingTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
@@ -84,11 +84,8 @@ public class MPClient {
     }
 
     public static void update() {
-
         Camera.update();
-
         time += MiscMath.getConstant(1000, 1);
-
         client.getReturnTripTime();
         //update only the player
         Set<Integer> localPlayer = world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
