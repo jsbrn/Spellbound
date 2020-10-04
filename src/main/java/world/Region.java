@@ -43,12 +43,16 @@ public class Region {
         return backgroundAmbience;
     }
 
-    public ArrayList<Integer> getEntitiesNear(int entityID, int chunkRadius) {
+    public List<Integer> getEntitiesNear(int entityID, int chunkRadius) {
         Location eLoc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID)).getLocation();
         ArrayList<Chunk> adj = getChunks(eLoc.getChunkCoordinates()[0], eLoc.getChunkCoordinates()[1], chunkRadius);
         ArrayList<Integer> entitiesNear = new ArrayList<>();
         for (Chunk a: adj) entitiesNear.addAll(a.getCachedEntities());
-        return entitiesNear;
+        return entitiesNear.stream().filter(eid -> {
+            LocationComponent lc = (LocationComponent)world.getEntities().getComponent(LocationComponent.class, eid);
+            if (lc == null) return false;
+            return lc.getLocation().isNear(eLoc, chunkRadius);
+        }).collect(Collectors.toList());
     }
 
     public List<Integer> getEntities(double wx, double wy, double width, double height) {

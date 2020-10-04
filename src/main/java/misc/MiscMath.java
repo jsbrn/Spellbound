@@ -82,7 +82,7 @@ public class MiscMath {
      * @return A boolean indicating whether the point intersects.
      */
     public static boolean pointIntersectsRect(double x, double y,
-                                              double rx, double ry, int rw, int rh) {
+                                              double rx, double ry, double rw, double rh) {
         return x >= rx && x < rx + rw && y >= ry && y < ry + rh;
     }
 

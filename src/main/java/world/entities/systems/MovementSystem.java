@@ -27,7 +27,7 @@ public class MovementSystem {
 
         for (Integer player: players) {
             LocationComponent plc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, player);
-            ArrayList<Integer> nearPlayer = world.getRegion(plc.getLocation().getRegionName()).getEntitiesNear(player, 1);
+            List<Integer> nearPlayer = world.getRegion(plc.getLocation().getRegionName()).getEntitiesNear(player, 1);
             Set<Integer> nearWithRequirements = world.getEntities().getEntitiesWith(LocationComponent.class, VelocityComponent.class);
             nearWithRequirements.retainAll(nearPlayer);
             entitiesToMove.addAll(nearWithRequirements);
@@ -111,7 +111,7 @@ public class MovementSystem {
         for (Integer player: players) {
             LocationComponent lc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, player);
             Region reg = world.getRegion(lc.getLocation().getRegionName());
-            ArrayList<Integer> entitiesWithinRange = reg.getEntitiesNear(player, 1);
+            List<Integer> entitiesWithinRange = reg.getEntitiesNear(player, 1);
             for (Integer entity: entitiesWithinRange) {
                 LocationComponent eLoc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, entity);
                 Chunk old = MPServer.getWorld().getRegion(eLoc.getLocation()).getChunk(eLoc.getLocation());

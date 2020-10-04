@@ -50,6 +50,16 @@ public class Location {
         return MiscMath.distance(coordinates[0], coordinates[1], wx, wy);
     }
 
+    public boolean intersects(double wx, double wy, double width, double height) {
+        return MiscMath.pointIntersectsRect(coordinates[0], coordinates[1], wx, wy, width, height);
+    }
+
+    public boolean isNear(Location l, int chunkRange) {
+        int xDist = Math.abs(getChunkCoordinates()[0] - l.getChunkCoordinates()[0]);
+        int yDist = Math.abs(getChunkCoordinates()[1] - l.getChunkCoordinates()[1]);
+        return xDist <= chunkRange && yDist <= chunkRange;
+    }
+
     public int angleBetween(Location location) {
         return (int)MiscMath.angleBetween(coordinates[0], coordinates[1], location.coordinates[0], location.coordinates[1]);
     }

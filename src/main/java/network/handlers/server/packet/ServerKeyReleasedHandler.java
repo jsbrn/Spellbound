@@ -1,4 +1,4 @@
-package network.handlers.server;
+package network.handlers.server.packet;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.github.mathiewz.slick.Input;

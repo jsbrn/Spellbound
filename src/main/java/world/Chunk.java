@@ -91,13 +91,8 @@ public class Chunk {
     }
 
     public List<Integer> getCachedEntities() {
-        return cachedEntities.stream().filter(eid -> {
-            LocationComponent lc = (LocationComponent)region.getWorld().getEntities().getComponent(LocationComponent.class, eid);
-            if (lc == null) return false;
-            Location loc = lc.getLocation();
-            if (loc == null) return false;
-            return loc.getChunkCoordinates()[0] == coordinates[0] && loc.getChunkCoordinates()[1] == coordinates[1];
-        }).collect(Collectors.toList());
+        //filter out entities that no longer exist in the world
+        return cachedEntities.stream().filter(eid -> region.getWorld().getEntities().exists(eid)).collect(Collectors.toList());
     }
 
     public void drawBase(float osx, float osy, float scale) {

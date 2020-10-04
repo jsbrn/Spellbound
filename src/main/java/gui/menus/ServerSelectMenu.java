@@ -48,7 +48,7 @@ public class ServerSelectMenu extends Modal {
         };
 
         addChild(hostField, 10, 16, GUIAnchor.TOP_LEFT);
-        addChild(new TextLabel("Single Player", 5, Color.darkGray, false, false), 10, 38, GUIAnchor.TOP_LEFT);
+        addChild(new TextLabel("Single Player", 5, Color.darkGray, false, false), 10, 40, GUIAnchor.TOP_LEFT);
         addChild(new TextLabel("Join Game", 5, Color.darkGray, false, false), 10, 8, GUIAnchor.TOP_LEFT);
         //addChild(new TextLabel("Character Customization", 5, Color.white, true, false), 24, 4, GUIAnchor.TOP_MIDDLE);
         addChild(new Button("Cancel", 24, 8, null, true) {

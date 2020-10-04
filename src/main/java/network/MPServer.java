@@ -6,9 +6,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
 import misc.MiscMath;
-import network.handlers.server.ServerJoinPacketHandler;
-import network.handlers.server.ServerKeyPressedHandler;
-import network.handlers.server.ServerKeyReleasedHandler;
+import network.handlers.server.packet.ServerJoinPacketHandler;
+import network.handlers.server.packet.ServerKeyPressedHandler;
+import network.handlers.server.packet.ServerKeyReleasedHandler;
 import network.packets.*;
 import network.packets.input.KeyPressedPacket;
 import network.packets.input.KeyReleasedPacket;
@@ -74,10 +74,10 @@ public class MPServer {
                 super.disconnected(connection);
                 int entityID = getEntityID(connection);
                 if (entityID > 0) {
+                    connectedPlayers.remove(connection);
                     world.destroyEntity(entityID);
                     server.sendToAllTCP(new EntityDestroyPacket(entityID));
                 }
-                connectedPlayers.remove(connection);
             }
 
             @Override
