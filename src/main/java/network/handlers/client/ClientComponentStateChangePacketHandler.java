@@ -7,7 +7,6 @@ import network.Packet;
 import network.PacketHandler;
 import network.packets.ComponentStateChangePacket;
 import world.entities.components.Component;
-import world.events.event.ComponentStateChangedEvent;
 
 public class ClientComponentStateChangePacketHandler implements PacketHandler {
     @Override

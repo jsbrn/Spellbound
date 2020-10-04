@@ -74,7 +74,7 @@ public class MPServer {
                 super.disconnected(connection);
                 int entityID = getEntityID(connection);
                 if (entityID > 0) {
-                    connectedPlayers.remove(connection);
+                    System.out.println("Removed "+connectedPlayers.get(connection)+" (connection "+connection.getID()+")");                    connectedPlayers.remove(connection);
                     world.destroyEntity(entityID);
                     server.sendToAllTCP(new EntityDestroyPacket(entityID));
                 }

@@ -6,6 +6,7 @@ import misc.annotations.ServerClientExecution;
 import org.json.simple.JSONObject;
 import world.entities.Entities;
 import world.entities.components.LocationComponent;
+import world.entities.systems.MovementSystem;
 import world.generation.region.OverworldGenerator;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class World {
         LocationComponent lc = ((LocationComponent)getEntities().getComponent(LocationComponent.class, entityID));
         if (lc != null) {
             if (location != null) lc.setLocation(location);
-            getRegion(lc.getLocation()).getChunk(lc.getLocation()).cacheEntity(entityID);
+            MovementSystem.cacheEntity(entityID, getRegion(lc.getLocation()).getChunk(lc.getLocation()), 1);
         }
         return entityID;
     }

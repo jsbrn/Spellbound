@@ -6,6 +6,7 @@ import network.Packet;
 import network.PacketHandler;
 import network.packets.LocationUpdatePacket;
 import world.entities.components.LocationComponent;
+import world.entities.systems.MovementSystem;
 
 public class ClientLocationUpdatePacketHandler implements PacketHandler {
     @Override
@@ -14,7 +15,7 @@ public class ClientLocationUpdatePacketHandler implements PacketHandler {
         LocationComponent loc = (LocationComponent) MPClient.getWorld().getEntities().getComponent(LocationComponent.class, lup.entityID);
         if (loc == null) return false;
         loc.getLocation().setCoordinates(lup.wx, lup.wy);
-        MPClient.getWorld().getRegion(loc.getLocation()).getChunk(loc.getLocation()).cacheEntity(lup.entityID);
+        MovementSystem.cacheEntity(lup.entityID, MPClient.getWorld().getRegion(loc.getLocation()).getChunk(loc.getLocation()), 1);
         return true;
     }
 }

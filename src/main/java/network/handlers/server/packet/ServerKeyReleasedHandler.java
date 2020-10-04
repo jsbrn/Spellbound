@@ -1,13 +1,11 @@
 package network.handlers.server.packet;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.github.mathiewz.slick.Input;
 import misc.MiscMath;
 import network.MPClient;
 import network.MPServer;
 import network.Packet;
 import network.PacketHandler;
-import network.packets.input.KeyPressedPacket;
 import network.packets.input.KeyReleasedPacket;
 import world.entities.components.InputComponent;
 import world.entities.systems.MovementSystem;

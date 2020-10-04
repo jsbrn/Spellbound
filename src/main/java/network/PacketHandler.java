@@ -1,6 +1,7 @@
 package network;
 
 import com.esotericsoftware.kryonet.Connection;
+import network.Packet;
 
 public interface PacketHandler {
 

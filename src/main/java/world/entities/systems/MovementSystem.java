@@ -67,7 +67,16 @@ public class MovementSystem {
 
         //move to appropriate chunk list
         Chunk newChunk = world.getRegion(lc.getLocation()).getChunk(lc.getLocation());
-        if (newChunk != null) newChunk.cacheEntity(entity);
+        if (newChunk != null) cacheEntity(entity, newChunk, 1);
+    }
+
+    /**
+     * Cache the entity in this chunk and all the adjacent chunks.
+     * @param chunk The origin (center) chunk.
+     */
+    public static void cacheEntity(int entityID, Chunk chunk, int chunkRadius) {
+        ArrayList<Chunk> chunks = chunk.getRegion().getChunks(chunk.getCoordinates()[0], chunk.getCoordinates()[1], chunkRadius);
+        for (Chunk c: chunks) c.cacheEntity(entityID);
     }
 
     @ServerExecution

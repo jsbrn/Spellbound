@@ -1,11 +1,9 @@
 {
-  "player": {},
   "location": {
     "x": 0.0,
     "y": 0.0,
     "region": "world"
   },
-  "input": {},
   "velocity": {
     "base_speed": 4.0,
     "forces": [

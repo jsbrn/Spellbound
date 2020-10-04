@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class Entities {
 
+    private ArrayList<Integer> entityIDs = new ArrayList<>();
     private HashMap<Class, LinkedHashMap<Integer, Component>> componentMaps = new HashMap<>();
 
     @ClientExecution
@@ -20,11 +21,16 @@ public class Entities {
             Component component = Component.create((String)key, (JSONObject)json.get(key));
             addComponent(component, entityID);
         }
+        if (!entityIDs.contains(entityID)) entityIDs.add(entityID);
         return entityID;
     }
 
     public boolean exists(int entityID) {
-        return componentMaps.values().stream().anyMatch(lic -> lic.containsKey(entityID));
+        return entityIDs.contains(entityID);
+    }
+
+    public int count() {
+        return entityIDs.size();
     }
 
     public JSONObject serializeEntity(int entityID) {
@@ -38,6 +44,7 @@ public class Entities {
 
     public void removeEntity(int entityID) {
         componentMaps.keySet().forEach(componentClass -> removeComponent(componentClass, entityID));
+        entityIDs.remove((Integer) entityID);
     }
 
     public Component getComponent(Class componentClass, int entityID) {
@@ -47,19 +54,17 @@ public class Entities {
     }
 
     public Set<Integer> getEntitiesWith(Class... componentClasses) {
-        return getEntitiesWith(componentMaps.values().stream()
-                .map(lhm -> new ArrayList<Integer>(lhm.keySet()))
-                .reduce(new ArrayList<Integer>(), (total, current) -> {
-                    total.addAll(current);
-                    return total;
-                }), componentClasses);
+        return getEntitiesWith(entityIDs, componentClasses);
     }
 
     public Set<Integer> getEntitiesWith(ArrayList<Integer> from, Class... componentClasses) {
-        HashSet<Integer> entities = new HashSet<Integer>(from);
-        return entities.stream()
-                .filter(e -> componentMaps.values().stream().allMatch(lhm -> lhm.containsKey(e)))
-                .collect(Collectors.toSet());
+        Set<Integer> entities = new HashSet<Integer>();
+        for (Class componentClass: componentClasses)
+            entities.addAll(from.stream().filter(eID ->
+                    componentMaps.containsKey(componentClass) &&
+                    componentMaps.get(componentClass).containsKey(eID))
+                    .collect(Collectors.toList()));
+        return entities;
     }
 
     public ArrayList<Component> getComponents(Integer entityID) {

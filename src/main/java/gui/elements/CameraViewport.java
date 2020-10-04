@@ -125,6 +125,15 @@ public class CameraViewport extends GUIElement {
         List<Integer> clientEntities = MPClient.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getCachedEntities();
         List<Integer> serverEntities = MPServer.isOpen() ? MPServer.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getCachedEntities() : null;
 
+        for (int entityID: clientEntities) {
+            g.setColor(Color.black);
+            LocationComponent loc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, entityID);
+            if (loc == null) continue;
+            Location l = loc.getLocation();
+            float[] eosc = Camera.getOnscreenCoordinates(l.getCoordinates()[0], l.getCoordinates()[1], Window.getScale());
+            g.drawString(entityID+"", eosc[0], eosc[1]);
+        }
+
         //draw the debug info
         String[] debugStrings = new String[]{
                 MiscMath.round(localPlayerLocation.getCoordinates()[0], 0.25)

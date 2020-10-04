@@ -9,9 +9,7 @@ import network.Packet;
 import network.PacketHandler;
 import network.packets.input.KeyPressedPacket;
 import world.entities.components.InputComponent;
-import world.entities.components.LocationComponent;
 import world.entities.systems.MovementSystem;
-import world.events.event.PlayerInteractEvent;
 
 public class ServerKeyPressedHandler implements PacketHandler {
 
