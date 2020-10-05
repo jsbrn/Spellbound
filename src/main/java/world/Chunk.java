@@ -87,12 +87,16 @@ public class Chunk {
     public byte[][] getTop() { return top; }
 
     public void cacheEntity(int entityID) {
-        if (!cachedEntities.contains(entityID)) cachedEntities.add(entityID);
+        if (!cachedEntities.contains(entityID)) {
+            System.out.println("Cached entity "+entityID+" in chunk "+coordinates[0]+" "+coordinates[1]);
+            cachedEntities.add(entityID);
+        }
     }
 
     public List<Integer> getCachedEntities() {
         //filter out entities that no longer exist in the world
-        return cachedEntities.stream().filter(eid -> region.getWorld().getEntities().exists(eid)).collect(Collectors.toList());
+        return cachedEntities;
+        //return cachedEntities.stream().filter(eid -> region.getWorld().getEntities().exists(eid)).collect(Collectors.toList());
     }
 
     public void drawBase(float osx, float osy, float scale) {

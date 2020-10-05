@@ -16,9 +16,10 @@ public class ClientEntityUpdatePacketHandler implements PacketHandler {
     public boolean handle(Packet p, Connection from) {
 
         EntityUpdatePacket esp = (EntityUpdatePacket)p;
-        MPClient.getWorld().getEntities().putEntity(esp.entityID, Assets.json(esp.entityJSON));
         LocationComponent lc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, esp.entityID);
         VelocityComponent vc = (VelocityComponent) MPClient.getWorld().getEntities().getComponent(VelocityComponent.class, esp.entityID);
+
+        MPClient.getWorld().spawnEntity(esp.entityID, Assets.json(esp.entityJSON), null);
 
         //interpolate movement
         int frames = (MPClient.getReturnTripTime() / 2) / MiscMath.DELTA_TIME;

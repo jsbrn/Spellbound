@@ -275,7 +275,7 @@ public class MiscMath {
     }
 
     public static int[] getChunkCoordinates(double wx, double wy) {
-        return new int[]{(int)Math.floor(wx/Chunk.TILE_SIZE), (int)Math.floor(wy/Chunk.TILE_SIZE)};
+        return new int[]{(int)Math.floor(wx/Chunk.CHUNK_SIZE), (int)Math.floor(wy/Chunk.CHUNK_SIZE)};
     }
 
 }

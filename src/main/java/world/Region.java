@@ -52,15 +52,15 @@ public class Region {
             LocationComponent lc = (LocationComponent)world.getEntities().getComponent(LocationComponent.class, eid);
             if (lc == null) return false;
             return lc.getLocation().isNear(eLoc, chunkRadius);
-        }).collect(Collectors.toList());
+        }).distinct().collect(Collectors.toList());
     }
 
     public List<Integer> getEntities(double wx, double wy, double width, double height) {
         ArrayList<Integer> chunkEntities = new ArrayList<>();
         int cx = (int)Math.floor(wx / Chunk.CHUNK_SIZE),
             cy = (int)Math.floor(wy / Chunk.CHUNK_SIZE),
-            cw = (int)Math.floor(width / Chunk.CHUNK_SIZE),
-            ch = (int)Math.floor(height / Chunk.CHUNK_SIZE);
+            cw = (int)((width / Chunk.CHUNK_SIZE) + 1),
+            ch = (int)((width / Chunk.CHUNK_SIZE) + 1);
         for (int i = cy; i <= cy + cw; i++) {
             for (int j = cy; j <= cy + ch; j++) {
                 chunkEntities.addAll(getChunk(cx, cy).getCachedEntities());
@@ -78,7 +78,7 @@ public class Region {
                     wy,
                     (int)width,
                     (int)height);
-        }).collect(Collectors.toList());
+        }).distinct().collect(Collectors.toList());
     }
 
     public List<Integer> getEntities(double wx, double wy, double radius) {
@@ -93,7 +93,7 @@ public class Region {
                 wx,
                 wy,
                 radius);
-        }).collect(Collectors.toList());
+        }).distinct().collect(Collectors.toList());
     }
 
     public ArrayList<Chunk> getChunks() {
