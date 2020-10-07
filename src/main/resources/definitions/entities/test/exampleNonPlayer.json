@@ -1,0 +1,14 @@
+{
+  "location": {
+    "x": 0.0,
+    "y": 0.0,
+    "region": "world"
+  },
+  "hitbox": {
+    "radius": 0.5
+  },
+  "health": {
+    "value": 100.0,
+    "max": 100.0
+  }
+}

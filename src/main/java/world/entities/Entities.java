@@ -59,11 +59,17 @@ public class Entities {
 
     public Set<Integer> getEntitiesWith(ArrayList<Integer> from, Class... componentClasses) {
         Set<Integer> entities = new HashSet<Integer>();
-        for (Class componentClass: componentClasses)
-            entities.addAll(from.stream().filter(eID ->
-                    componentMaps.containsKey(componentClass) &&
-                    componentMaps.get(componentClass).containsKey(eID))
-                    .collect(Collectors.toList()));
+        for (int entityID: from) {
+            boolean hasAllComponents = true;
+            for (Class componentClass : componentClasses) {
+                if (!componentMaps.containsKey(componentClass)) continue;
+                if (!componentMaps.get(componentClass).containsKey(entityID)) {
+                    hasAllComponents = false;
+                    break;
+                }
+            }
+            if (hasAllComponents) entities.add(entityID);
+        }
         return entities;
     }
 

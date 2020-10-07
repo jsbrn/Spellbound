@@ -1,4 +1,5 @@
 {
+  "player": {},
   "location": {
     "x": 0.0,
     "y": 0.0,
@@ -14,6 +15,7 @@
       }
     ]
   },
+  "input": {},
   "hitbox": {
     "radius": 0.5
   },
