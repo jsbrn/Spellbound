@@ -17,11 +17,6 @@ public class ClientChunkPacketHandler implements PacketHandler {
         if (region == null) return false;
         Chunk c = region.getChunk(ctp.cx, ctp.cy);
 
-        if (c == null) {
-            c = new Chunk(ctp.cx, ctp.cy, region);
-            region.addChunk(c);
-        }
-
         for (int i = 0; i < ctp.base.length; i++) {
             for (int j = 0; j < ctp.base[0].length; j++) {
                 c.set(i, j, ctp.base[i][j], ctp.top[i][j]);

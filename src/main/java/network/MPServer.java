@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import misc.Location;
 import misc.MiscMath;
+import network.handlers.server.packet.ServerChunkRequestPacketHandler;
 import network.handlers.server.packet.ServerJoinPacketHandler;
 import network.handlers.server.packet.ServerKeyPressedHandler;
 import network.handlers.server.packet.ServerKeyReleasedHandler;
@@ -157,6 +158,7 @@ public class MPServer {
         packetHandlers.put(JoinPacket.class, new ServerJoinPacketHandler());
         packetHandlers.put(KeyPressedPacket.class, new ServerKeyPressedHandler());
         packetHandlers.put(KeyReleasedPacket.class, new ServerKeyReleasedHandler());
+        packetHandlers.put(ChunkRequestPacket.class, new ServerChunkRequestPacketHandler());
     }
 
     private static void registerEventHandlers() {
