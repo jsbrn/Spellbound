@@ -16,4 +16,12 @@ public class ChunkRequestPacket extends Packet {
         this.regionName = c.getRegion().getName();
     }
 
+    @Override
+    public String toString() {
+        return "ChunkRequestPacket{" +
+                "cx=" + cx +
+                ", cy=" + cy +
+                ", regionName='" + regionName + '\'' +
+                '}';
+    }
 }

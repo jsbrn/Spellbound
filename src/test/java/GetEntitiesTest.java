@@ -20,7 +20,7 @@ public class GetEntitiesTest {
     private static JSONObject testEntityData;
     private static World world;
 
-    private static LocationComponent testEntityLocation;
+    private static LocationComponent testLoc;
 
     @BeforeAll
     static void beforeAll() {
@@ -28,8 +28,8 @@ public class GetEntitiesTest {
         world = new World();
         world.addRegion(new Region("world", new OverworldGenerator(0)));
         world.spawnEntity(0, testEntityData, null);
-        testEntityLocation = (LocationComponent)world.getEntities().getComponent(LocationComponent.class, 0);
-        testEntityLocation.getLocation().setCoordinates(MiscMath.random(0, Chunk.CHUNK_SIZE), MiscMath.random(0, Chunk.CHUNK_SIZE));
+        testLoc = (LocationComponent)world.getEntities().getComponent(LocationComponent.class, 0);
+        testLoc.getLocation().setCoordinates(MiscMath.random(0, Chunk.CHUNK_SIZE), MiscMath.random(0, Chunk.CHUNK_SIZE));
     }
 
     @BeforeEach
@@ -44,9 +44,9 @@ public class GetEntitiesTest {
 
     @Test
     void testCachesAllAdjacentChunks() {
-        Chunk c = world.getRegion(testEntityLocation.getLocation()).getChunk(testEntityLocation.getLocation());
+        Chunk c = world.getRegion(testLoc.getLocation()).getChunk(testLoc.getLocation());
         MovementSystem.cacheEntity(0, c, 1);
-        ArrayList<Chunk> adj = world.getRegion(testEntityLocation.getLocation()).getChunks(c.getCoordinates()[0], c.getCoordinates()[1], 1);
+        ArrayList<Chunk> adj = world.getRegion(testLoc.getLocation()).getChunks(c.getCoordinates()[0], c.getCoordinates()[1], 1);
         Assertions.assertEquals(9, adj.size());
         for (Chunk a: adj)
             Assertions.assertEquals(1, a.getCachedEntities().size());
@@ -54,7 +54,7 @@ public class GetEntitiesTest {
 
     @Test
     void testChunkCacheExistence() {
-        Chunk c = world.getRegion(testEntityLocation.getLocation()).getChunk(testEntityLocation.getLocation());
+        Chunk c = world.getRegion(testLoc.getLocation()).getChunk(testLoc.getLocation());
         Assertions.assertNotNull(c);
         Assertions.assertEquals(1, c.getCachedEntities().size());
     }
@@ -67,9 +67,11 @@ public class GetEntitiesTest {
 
     @Test
     void testGetChunks() {
-        List<Chunk> gotChunks = world.getRegion(testEntityLocation.getLocation()).getChunks(testEntityLocation.getLocation().getChunkCoordinates()[0], testEntityLocation.getLocation().getChunkCoordinates()[1], 1);
+        List<Chunk> gotChunks = world.getRegion(testLoc.getLocation()).getChunks(testLoc.getLocation().getChunkCoordinates()[0], testLoc.getLocation().getChunkCoordinates()[1], 1);
         Assertions.assertNotNull(gotChunks);
         Assertions.assertEquals(9, gotChunks.size());
+        Assertions.assertEquals(testLoc.getLocation().getChunkCoordinates()[0] + 1, gotChunks.get(2).getCoordinates()[0]);
+        Assertions.assertEquals(testLoc.getLocation().getChunkCoordinates()[1] + 1, gotChunks.get(6).getCoordinates()[1]);
     }
 
 }

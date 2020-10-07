@@ -95,8 +95,7 @@ public class Chunk {
 
     public List<Integer> getCachedEntities() {
         //filter out entities that no longer exist in the world
-        return cachedEntities;
-        //return cachedEntities.stream().filter(eid -> region.getWorld().getEntities().exists(eid)).collect(Collectors.toList());
+        return cachedEntities.stream().filter(eid -> region.getWorld().getEntities().exists(eid)).collect(Collectors.toList());
     }
 
     public void drawBase(float osx, float osy, float scale) {

@@ -146,7 +146,6 @@ public class MPServer {
     }
 
     public static void update() {
-        world.update();
         time += MiscMath.getConstant(1000, 1);
         MovementSystem.update(world, connectedPlayers.values());
         MovementSystem.pollForMovementEvents(world);

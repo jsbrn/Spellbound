@@ -49,6 +49,7 @@ public class Region {
         ArrayList<Integer> entitiesNear = new ArrayList<>();
         for (Chunk a: adj) entitiesNear.addAll(a.getCachedEntities());
         return entitiesNear.stream().filter(eid -> {
+            if (!world.getEntities().exists(eid)) return false;
             LocationComponent lc = (LocationComponent)world.getEntities().getComponent(LocationComponent.class, eid);
             if (lc == null) return false;
             return lc.getLocation().isNear(eLoc, chunkRadius);
@@ -67,6 +68,7 @@ public class Region {
             }
         }
         return chunkEntities.stream().filter(eid -> {
+            if (!world.getEntities().exists(eid)) return false;
             Location location = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, eid)).getLocation();
             HitboxComponent hitbox = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, eid);
             return MiscMath.rectanglesIntersect(
@@ -276,24 +278,6 @@ public class Region {
     }
 
     public String getName() { return name; }
-
-    @ServerExecution
-    public void update() {
-        int radius = 1;
-        Set<Integer> playerEntities = world.getEntities().getEntitiesWith(PlayerComponent.class, LocationComponent.class);
-        for (Integer eID: playerEntities) {
-            for (int j = -radius; j <= radius; j++) {
-                for (int i = -radius; i <= radius; i++) {
-                    Location loc = ((LocationComponent)world.getEntities().getComponent(LocationComponent.class, eID)).getLocation();
-                    int cx = loc.getChunkCoordinates()[0] + i;
-                    int cy = loc.getChunkCoordinates()[1] + j;
-                    Chunk adj = getChunk(cx, cy);
-                    if (adj.isEmpty())
-                        adj.generate();
-                }
-            }
-        }
-    }
 
     public void draw(float scale, Graphics g) {
         int[] pchcoords = Camera.getLocation().getChunkCoordinates();

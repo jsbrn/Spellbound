@@ -77,11 +77,6 @@ public class World {
     public Region getRegion(String name) { return regions.get(name); }
     public Region getRegion(Location location) { return getRegion(location.getRegionName()); }
 
-    @ServerClientExecution
-    public void update() {
-        for (Region r: regions.values()) r.update(); //updating the region just handles chunk generation as players move around
-    }
-
     public void draw(float scale, Graphics g) {
         getRegion(Camera.getLocation()).draw(scale, g);
     }

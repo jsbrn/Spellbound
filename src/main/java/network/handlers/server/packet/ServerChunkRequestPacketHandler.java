@@ -14,8 +14,10 @@ public class ServerChunkRequestPacketHandler implements PacketHandler {
     public boolean handle(Packet p, Connection from) {
         ChunkRequestPacket crp = (ChunkRequestPacket)p;
         Chunk c = MPServer.getWorld().getRegion(crp.regionName).getChunk(crp.cx, crp.cy);
-        if (c != null)
+        if (c != null) {
+            c.generate();
             from.sendTCP(new ChunkPacket(c));
+        }
         return true;
     }
 }
