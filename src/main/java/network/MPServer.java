@@ -65,6 +65,7 @@ public class MPServer {
         registerEventHandlers();
 
         server.addListener(new Listener.LagListener(minLag, maxLag, new Listener() {
+
             @Override
             public void connected(Connection connection) {
                 super.connected(connection);
@@ -101,7 +102,10 @@ public class MPServer {
                     connectedPlayers.keySet().forEach(conn -> conn.sendTCP(new TimeSyncPacket(time)));
                 }
             }, 500, 1000);
-            if (dedicatedThread) server.start();
+            if (dedicatedThread) {
+                System.out.println("Starting server on separate thread...");
+                server.start();
+            }
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,6 +140,11 @@ public class MPServer {
 
     public static long getTime() { return time; }
 
+    /**
+     * Update the world and the kryo server in the same thread.
+     * Used by HeadlessLauncher.
+     * @param timeout Number of milliseconds to block.
+     */
     public static void update(int timeout) {
         try {
             update();
@@ -145,6 +154,10 @@ public class MPServer {
         }
     }
 
+    /**
+     * Update the world. Assumes kryo server is being updated automatically in separate thread.
+     * Used when server is ran inside client process.
+     */
     public static void update() {
         time += MiscMath.getConstant(1000, 1);
         MovementSystem.update(world, connectedPlayers.values());

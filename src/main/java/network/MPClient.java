@@ -126,6 +126,7 @@ public class MPClient {
         packetHandlers = new HashMap<>();
         packetHandlers.put(ChunkPacket.class, new ClientChunkPacketHandler());
         packetHandlers.put(EntityUpdatePacket.class, new ClientEntityUpdatePacketHandler());
+        packetHandlers.put(EntityDestroyPacket.class, new ClientEntityDestroyPacketHandler());
         packetHandlers.put(PlayerAssignmentPacket.class, new ClientPlayerAssignmentPacketHandler());
         packetHandlers.put(RegionPacket.class, new ClientRegionPacketHandler());
         packetHandlers.put(ComponentStateChangePacket.class, new ClientComponentStateChangePacketHandler());
