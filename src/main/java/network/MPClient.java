@@ -8,7 +8,9 @@ import misc.MiscMath;
 import network.handlers.client.*;
 import network.packets.*;
 import world.Camera;
+import world.Chunk;
 import world.World;
+import world.entities.components.LocationComponent;
 import world.entities.components.PlayerComponent;
 import world.entities.systems.MovementSystem;
 
@@ -23,6 +25,7 @@ public class MPClient {
     private static World world;
 
     private static long time, packetsReceived, packetsSent;
+    private static ArrayList<Chunk> requestedChunks;
 
     private static Timer pingTimer;
 
@@ -37,6 +40,7 @@ public class MPClient {
         Packet.registerPackets(client.getKryo());
         registerPacketHandlers();
         pingTimer = new Timer();
+        requestedChunks = new ArrayList<>();
         client.addListener(new Listener.LagListener(minLag, maxLag, new Listener() {
             @Override
             public void connected(Connection connection) {
@@ -80,6 +84,7 @@ public class MPClient {
     public static void close()
     {
         pingTimer.cancel();
+        requestedChunks.clear();
         packetsSent = 0;
         packetsReceived = 0;
         time = 0;
@@ -95,6 +100,22 @@ public class MPClient {
         Set<Integer> localPlayer = world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
                 .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet());
         MovementSystem.update(world, localPlayer);
+        requestChunksAround(Camera.getTargetEntity());
+    }
+
+    private static void requestChunksAround(int entityID) {
+        LocationComponent loc = (LocationComponent)world.getEntities().getComponent(LocationComponent.class, entityID);
+        if (loc == null) return;
+        ArrayList<Chunk> adj = world.getRegion(loc.getLocation()).getChunks(loc.getLocation(), 1);
+        for (Chunk a: adj) requestChunk(a);
+    }
+
+    private static void requestChunk(Chunk c) {
+        if (!requestedChunks.contains(c)) {
+            client.sendTCP(new ChunkRequestPacket(c));
+            requestedChunks.add(c);
+        }
+
     }
 
     public static World getWorld() {

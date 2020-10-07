@@ -260,11 +260,16 @@ public class Region {
         //TODO: implement per-player chunk discovery at some point
     }
 
+    public ArrayList<Chunk> getChunks(Location location, int cr) {
+        Chunk c = getChunk(location);
+        return getChunks(c.getCoordinates()[0], c.getCoordinates()[1], cr);
+    }
+
     public ArrayList<Chunk> getChunks(int cx, int cy, int cr) {
         ArrayList<Chunk> adj = new ArrayList<>();
         for (int y = cy - cr; y <= cy + cr; y++) {
             for (int x = cx - cr; x <= cx + cr; x++) {
-                adj.add(getChunk(cx, cy));
+                adj.add(getChunk(x, y));
             }
         }
         return adj;

@@ -16,6 +16,7 @@ public class Packet {
         kryo.register(double[][].class);
         kryo.register(Packet.class);
         kryo.register(ChunkPacket.class);
+        kryo.register(ChunkRequestPacket.class);
         kryo.register(JoinPacket.class);
         kryo.register(PlayerAssignmentPacket.class);
         kryo.register(EntityUpdatePacket.class);

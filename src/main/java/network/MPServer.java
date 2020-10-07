@@ -161,13 +161,6 @@ public class MPServer {
 
     private static void registerEventHandlers() {
         EventListener serverListener = new EventListener()
-            .on(ChunkGeneratedEvent.class, new EventHandler() {
-                @Override
-                public void handle(Event e) {
-                    ChunkGeneratedEvent cge = (ChunkGeneratedEvent)e;
-                    server.sendToAllTCP(new ChunkPacket(cge.getChunk()));
-                }
-            })
             .on(EntityEnteredChunkEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
@@ -178,11 +171,9 @@ public class MPServer {
                             getConnectionsWithinRange(cge.getEntityID()),
                             new EntityUpdatePacket(cge.getEntityID()));
                     if (connection != null) {
-                        //if the entity is a player, send chunk data and entity updates for the surrounding region
+                        //if the entity is a player, send entity updates for surrounding area
                         Chunk c = cge.getChunk();
                         Region r = c.getRegion();
-                        ArrayList<Chunk> chunks = cge.getChunk().getRegion().getChunks(c.getCoordinates()[0], c.getCoordinates()[1], 1);
-                        for (Chunk a: chunks) connection.sendTCP(new ChunkPacket(a));
                         Collection<Integer> near = r.getEntitiesNear(cge.getEntityID(), 1);
                         for (Integer entity: near)
                             connection.sendTCP(new EntityUpdatePacket(entity));
