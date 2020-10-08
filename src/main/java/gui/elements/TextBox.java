@@ -64,7 +64,6 @@ public class TextBox extends GUIElement {
 
     @Override
     public boolean onKeyDown(int key, char c) {
-        System.out.println(c);
         if ((c < 32 || c > 136) && key != Input.KEY_BACK) return false;
         if (!(c+"").matches(regexKeep)) return false;
         if (!focused) return false;

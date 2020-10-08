@@ -8,6 +8,8 @@ import gui.GUI;
 import gui.sound.SoundManager;
 import main.GameManager;
 import misc.Window;
+import network.MPClient;
+import network.MPServer;
 import org.lwjgl.opengl.Display;
 
 public abstract class GameState extends BasicGameState {
@@ -46,6 +48,8 @@ public abstract class GameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        if (MPServer.isOpen()) MPServer.update();
+        if (MPClient.isOpen()) MPClient.update();
         SoundManager.update();
     }
 

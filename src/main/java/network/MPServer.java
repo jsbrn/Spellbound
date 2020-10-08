@@ -13,6 +13,7 @@ import network.handlers.server.packet.ServerKeyReleasedHandler;
 import network.packets.*;
 import network.packets.input.KeyPressedPacket;
 import network.packets.input.KeyReleasedPacket;
+import org.apache.commons.lang3.tuple.Pair;
 import world.Chunk;
 import world.Region;
 import world.entities.components.Component;
@@ -36,6 +37,9 @@ public class MPServer {
     private static Server server;
     private static HashMap<Class, PacketHandler> packetHandlers;
     private static HashMap<Connection, Integer> connectedPlayers;
+    //because Listener's disconnect method is not thread safe, we must handle all disconnects ourselves
+    private static List<Connection> queuedDisconnectResponses;
+    private static List<Pair<Connection, Packet>> queuedIncomingPackets;
 
     private static World world;
     private static EventManager eventManager;
@@ -55,7 +59,8 @@ public class MPServer {
 
         time = 0;
         eventManager = new EventManager();
-
+        queuedDisconnectResponses = Collections.synchronizedList(new ArrayList<>());
+        queuedIncomingPackets = Collections.synchronizedList(new ArrayList<>());
         connectedPlayers = new HashMap<>();
         world = new World();
         server = kryoServer;
@@ -65,28 +70,23 @@ public class MPServer {
         registerEventHandlers();
 
         server.addListener(new Listener.LagListener(minLag, maxLag, new Listener() {
-
             @Override
             public void connected(Connection connection) {
                 super.connected(connection);
             }
-
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
-                int entityID = getEntityID(connection);
-                if (entityID > 0) {
-                    System.out.println("Removed "+connectedPlayers.get(connection)+" (connection "+connection.getID()+")");                    connectedPlayers.remove(connection);
-                    world.destroyEntity(entityID);
-                    server.sendToAllTCP(new EntityDestroyPacket(entityID));
+                synchronized (queuedDisconnectResponses) {
+                    queuedDisconnectResponses.add(connection);
                 }
             }
-
             @Override
             public void received(Connection connection, Object packet) {
                 if (!(packet instanceof FrameworkMessage)) System.out.println("Server received: "+packet.getClass().getSimpleName());
-                PacketHandler handler = packetHandlers.get(packet.getClass());
-                if (handler != null) handler.handle((Packet)packet, connection);
+                synchronized (queuedIncomingPackets) {
+                    queuedIncomingPackets.add(Pair.of(connection, (Packet) packet));
+                }
             }
         }));
     }
@@ -117,28 +117,12 @@ public class MPServer {
     public static boolean close() {
         server.close();
         connectedPlayers.clear();
+        queuedIncomingPackets.clear();
+        queuedDisconnectResponses.clear();
         eventManager.unregisterAll();
         world = null;
         return true;
     }
-
-    public static void invokeCommand(String command) {
-        System.out.println("Server received command: "+command);
-    }
-
-    public static EventManager getEventManager() {
-        return eventManager;
-    }
-
-    public static World getWorld() {
-        return world;
-    }
-
-    public static boolean isOpen() {
-        return world != null;
-    }
-
-    public static long getTime() { return time; }
 
     /**
      * Update the world and the kryo server in the same thread.
@@ -163,6 +147,36 @@ public class MPServer {
         MovementSystem.update(world, connectedPlayers.values());
         MovementSystem.pollForMovementEvents(world);
         InputProcessingSystem.update(world);
+        safelyHandleIncomingPackets();
+        safelyHandleDisconnects();
+    }
+
+    private static void safelyHandleIncomingPackets() {
+        synchronized (queuedIncomingPackets) {
+            for (Pair<Connection, Packet> incoming : queuedIncomingPackets) {
+                Packet packet = incoming.getRight();
+                Connection conn = incoming.getLeft();
+                System.out.println(packet.getClass());
+                PacketHandler handler = packetHandlers.get(packet.getClass());
+                if (handler != null) handler.handle(packet, conn);
+            }
+            queuedIncomingPackets.clear();
+        }
+    }
+
+    private static void safelyHandleDisconnects() {
+        synchronized (queuedDisconnectResponses) {
+            for (Connection c : queuedDisconnectResponses) {
+                if (c == null) continue;
+                int entityID = getEntityID(c);
+                if (entityID > 0) {
+                    System.out.println("Removed " + connectedPlayers.get(c) + " (connection " + c.getID() + ")");
+                    connectedPlayers.remove(c);
+                    world.destroyEntity(entityID);
+                    server.sendToAllTCP(new EntityDestroyPacket(entityID));
+                }
+            }
+        }
     }
 
     private static void registerPacketHandlers() {
@@ -237,7 +251,8 @@ public class MPServer {
     }
 
     public static int getEntityID(Connection c) {
-        return connectedPlayers.get(c) > 0 ? connectedPlayers.get(c) : -1;
+        System.out.println(c+", "+connectedPlayers);
+        return connectedPlayers.get(c) != null ? connectedPlayers.get(c) : -1;
     }
 
     public static Connection getConnection(int playerEntityID) {
@@ -245,6 +260,24 @@ public class MPServer {
                 .filter(entry -> entry.getValue() == playerEntityID).map(entry -> entry.getKey())
                 .findFirst().orElse(null);
     }
+
+    public static void invokeCommand(String command) {
+        System.out.println("Server received command: "+command);
+    }
+
+    public static EventManager getEventManager() {
+        return eventManager;
+    }
+
+    public static World getWorld() {
+        return world;
+    }
+
+    public static boolean isOpen() {
+        return world != null;
+    }
+
+    public static long getTime() { return time; }
 
     /* SOME GLOBAL SERVER ACTIONS THAT NEED TO BE SEPARATED FROM THE CLIENT*/
 

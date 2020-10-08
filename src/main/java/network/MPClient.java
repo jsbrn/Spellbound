@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import misc.MiscMath;
 import network.handlers.client.*;
 import network.packets.*;
+import org.apache.commons.lang3.tuple.Pair;
 import world.Camera;
 import world.Chunk;
 import world.World;
@@ -26,6 +27,7 @@ public class MPClient {
 
     private static long time, packetsReceived, packetsSent;
     private static ArrayList<Chunk> requestedChunks;
+    private static List<Pair<Connection, Packet>> queuedIncomingPackets;
 
     private static Timer pingTimer;
 
@@ -37,6 +39,7 @@ public class MPClient {
         client = new Client();
         time = 0;
         world = new World();
+        queuedIncomingPackets = Collections.synchronizedList(new ArrayList<>());
         Packet.registerPackets(client.getKryo());
         registerPacketHandlers();
         pingTimer = new Timer();
@@ -56,8 +59,9 @@ public class MPClient {
             public void received(Connection connection, Object packet) {
                 packetsReceived++;
                 if (!(packet instanceof FrameworkMessage)) System.out.println("Client received: "+packet.getClass().getSimpleName());
-                PacketHandler handler = packetHandlers.get(packet.getClass());
-                if (handler != null) handler.handle((Packet)packet, connection);
+                synchronized (queuedIncomingPackets) {
+                    queuedIncomingPackets.add(Pair.of(connection, (Packet) packet));
+                }
             }
         }));
     }
@@ -93,14 +97,30 @@ public class MPClient {
     }
 
     public static void update() {
-        Camera.update();
         time += MiscMath.getConstant(1000, 1);
         client.getReturnTripTime();
         //update only the player
-        Set<Integer> localPlayer = world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
-                .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet());
-        MovementSystem.update(world, localPlayer);
-        requestChunksAround(Camera.getTargetEntity());
+        if (Camera.getTargetEntity() >= 0) {
+            Camera.update();
+            Set<Integer> localPlayer = world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
+                    .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet());
+            MovementSystem.update(world, localPlayer);
+            requestChunksAround(Camera.getTargetEntity());
+        }
+        safelyHandleIncomingPackets();
+    }
+
+    private static void safelyHandleIncomingPackets() {
+        synchronized (queuedIncomingPackets) {
+            for (Pair<Connection, Packet> incoming : queuedIncomingPackets) {
+                Packet packet = incoming.getRight();
+                Connection conn = incoming.getLeft();
+                System.out.println(packet.getClass());
+                PacketHandler handler = packetHandlers.get(packet.getClass());
+                if (handler != null) handler.handle(packet, conn);
+            }
+            queuedIncomingPackets.clear();
+        }
     }
 
     private static void requestChunksAround(int entityID) {
@@ -133,6 +153,7 @@ public class MPClient {
         packetHandlers.put(LocationUpdatePacket.class, new ClientLocationUpdatePacketHandler());
         packetHandlers.put(EntityVelocityChangedPacket.class, new ClientEntityVelocityChangedPacketHandler());
         packetHandlers.put(TimeSyncPacket.class, new ClientTimeSyncPacketHandler());
+        packetHandlers.put(EntityDestroyPacket.class, new ClientEntityDestroyPacketHandler());
     }
 
     public static void sendPacket(Packet p) {

@@ -49,9 +49,6 @@ public class GameScreen extends GameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         super.update(gc, sbg, delta);
         MiscMath.DELTA_TIME = delta;
-        if (MPServer.isOpen()) MPServer.update();
-        if (MPClient.isOpen()) MPClient.update();
-
     }
 
     public void setTarget(int entityID) {

@@ -20,6 +20,7 @@ public class Packet {
         kryo.register(JoinPacket.class);
         kryo.register(PlayerAssignmentPacket.class);
         kryo.register(EntityUpdatePacket.class);
+        kryo.register(EntityDestroyPacket.class);
         kryo.register(RegionPacket.class);
         kryo.register(ComponentStateChangePacket.class);
         kryo.register(KeyPressedPacket.class);

@@ -6,6 +6,8 @@ public class EntityDestroyPacket extends Packet {
 
     public int entityID;
 
+    public EntityDestroyPacket() {}
+
     public EntityDestroyPacket(int entityID) {
         this.entityID = entityID;
     }

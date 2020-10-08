@@ -20,7 +20,6 @@ public class EntitiesTest {
 
     @BeforeAll
     static void beforeAll() {
-        System.out.println("Before All");
         randomID = (int)MiscMath.random(0, 999);
         validSearchFilter.add(randomID);
         invalidSearchFilter.add(1001);
@@ -32,7 +31,7 @@ public class EntitiesTest {
 
     @BeforeEach
     void setUp() {
-        System.out.println("Before Each");
+
     }
 
     @Test

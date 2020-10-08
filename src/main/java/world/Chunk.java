@@ -88,7 +88,6 @@ public class Chunk {
 
     public void cacheEntity(int entityID) {
         if (!cachedEntities.contains(entityID)) {
-            System.out.println("Cached entity "+entityID+" in chunk "+coordinates[0]+" "+coordinates[1]);
             cachedEntities.add(entityID);
         }
     }

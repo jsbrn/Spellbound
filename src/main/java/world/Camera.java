@@ -19,10 +19,12 @@ public class Camera {
     }
 
     private static Location getTargetLocation() {
-        return ((LocationComponent) MPClient.getWorld().getEntities().getComponent(LocationComponent.class, targetEntity)).getLocation();
+        LocationComponent loc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, targetEntity);
+        return loc == null ? null : loc.getLocation();
     }
 
     public static void update() {
+        if (location == null || getTargetLocation() == null) return;
         double angle = MiscMath.angleBetween(
                 location.getCoordinates()[0],
                 location.getCoordinates()[1],
