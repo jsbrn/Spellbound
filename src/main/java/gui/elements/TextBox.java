@@ -7,6 +7,11 @@ import gui.GUIAnchor;
 import gui.GUIElement;
 import misc.Window;
 
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+
 public class TextBox extends GUIElement {
 
     private int[] dims;
@@ -82,6 +87,22 @@ public class TextBox extends GUIElement {
         return true;
     }
 
+    private String getClipBoard(){
+        try {
+            return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+        } catch (HeadlessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedFlavorException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public void grabFocus() { this.focused = true; }
 
     public void releaseFocus() {
@@ -89,8 +110,14 @@ public class TextBox extends GUIElement {
     }
 
     @Override
-    public boolean onKeyUp(int key) {
+    public boolean onKeyUp(int key, char c) {
         getGUI().getParent().getInput().disableKeyRepeat();
+        boolean control = getGUI().getParent().getInput().isKeyDown(Input.KEY_LCONTROL)
+                || getGUI().getParent().getInput().isKeyDown(Input.KEY_RCONTROL);
+        if (key == Input.KEY_V && control) {
+            text += getClipBoard();
+            label.setText(text);
+        }
         return false;
     }
 

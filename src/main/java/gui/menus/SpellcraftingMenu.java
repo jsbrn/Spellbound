@@ -40,9 +40,9 @@ public class SpellcraftingMenu extends Modal {
 
         nameField = new TextBox(64, 8) {
             @Override
-            public boolean onKeyUp(int key) {
+            public boolean onKeyUp(int key, char c) {
                 refreshRequirements();
-                return super.onKeyUp(key);
+                return super.onKeyUp(key, c);
             }
         };
         crystalCost = new TextLabel("0", 8, Color.white, true, false);

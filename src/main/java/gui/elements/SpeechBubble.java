@@ -88,7 +88,7 @@ public class SpeechBubble extends GUIElement {
     }
 
     @Override
-    public boolean onKeyUp(int key) {
+    public boolean onKeyUp(int key, char c) {
         throw new NotImplementedException();
     }
 

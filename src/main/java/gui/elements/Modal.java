@@ -54,7 +54,7 @@ public class Modal extends GUIElement {
     }
 
     @Override
-    public boolean onKeyUp(int key) {
+    public boolean onKeyUp(int key, char c) {
         if (key == Input.KEY_ESCAPE) {
             getGUI().popModal();
         }

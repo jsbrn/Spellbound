@@ -124,12 +124,12 @@ public class Journal extends Modal {
     }
 
     @Override
-    public boolean onKeyUp(int key) {
+    public boolean onKeyUp(int key, char c) {
         if (key == Input.KEY_TAB) {
             getGUI().popModal();
             return true;
         }
-        return super.onKeyUp(key);
+        return super.onKeyUp(key, c);
     }
 
     @Override

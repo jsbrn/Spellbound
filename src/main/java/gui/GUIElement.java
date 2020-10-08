@@ -135,7 +135,7 @@ public abstract class GUIElement {
             GUIElement e = children.get(i);
             if (e.handleKeyUp(key, c)) return true;
         }
-        return isActive() && onKeyUp(key);
+        return isActive() && onKeyUp(key, c);
     }
 
     public final boolean handleKeyDown(int key, char c) {
@@ -151,7 +151,7 @@ public abstract class GUIElement {
     public abstract boolean onMousePressed(int ogx, int ogy, int button);
     public abstract boolean onMouseScroll(int direction);
     public abstract boolean onKeyDown(int key, char c);
-    public abstract boolean onKeyUp(int key);
+    public abstract boolean onKeyUp(int key, char c);
 
     public final GUIElement addChild(GUIElement element, int ogx, int ogy, GUIAnchor anchor) {
         if (!children.contains(element)) children.add(element);

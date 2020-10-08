@@ -12,21 +12,7 @@ import gui.menus.Journal;
 import gui.menus.PauseMenu;
 import gui.menus.SpellcraftingMenu;
 import misc.MiscMath;
-import network.MPClient;
-import network.MPServer;
-import org.lwjgl.input.Controller;
-import org.lwjgl.input.Controllers;
 import world.Camera;
-import world.World;
-import world.entities.components.magic.Spell;
-import world.events.Event;
-import world.events.EventManager;
-import world.events.EventHandler;
-import world.events.EventListener;
-import world.events.event.ConversationEndedEvent;
-import world.events.event.HumanoidDeathEvent;
-import world.events.event.HumanoidRespawnEvent;
-import world.events.event.NPCSpeakEvent;
 
 
 public class GameScreen extends GameState {
@@ -77,12 +63,12 @@ public class GameScreen extends GameState {
         PauseMenu pauseMenu = new PauseMenu();
         CameraViewport viewport = new CameraViewport() {
             @Override
-            public boolean onKeyUp(int key) {
+            public boolean onKeyUp(int key, char c) {
                 if (key == Input.KEY_ESCAPE) {
                     gui.stackModal(pauseMenu);
                     return true;
                 }
-                return super.onKeyUp(key);
+                return super.onKeyUp(key, c);
             }
         };
 
@@ -96,7 +82,7 @@ public class GameScreen extends GameState {
         pauseMenu.hide();
         Button spellbookButton = new Button(null, 16, 16, "spellbook.png", false) {
             @Override
-            public boolean onKeyUp(int key) {
+            public boolean onKeyUp(int key, char c) {
                 if (key == Input.KEY_TAB) {
                     gui.stackModal(spellbook);
                     return true;
@@ -113,7 +99,7 @@ public class GameScreen extends GameState {
 
         TextLabel deathMessage = new TextLabel("Press R to continue", 4, Color.white, true, false){
             @Override
-            public boolean onKeyUp(int key) {
+            public boolean onKeyUp(int key, char c) {
                 return key != Input.KEY_R;
             }
         };

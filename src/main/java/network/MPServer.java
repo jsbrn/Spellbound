@@ -176,6 +176,7 @@ public class MPServer {
                     server.sendToAllTCP(new EntityDestroyPacket(entityID));
                 }
             }
+            queuedDisconnectResponses.clear();
         }
     }
 
@@ -251,7 +252,6 @@ public class MPServer {
     }
 
     public static int getEntityID(Connection c) {
-        System.out.println(c+", "+connectedPlayers);
         return connectedPlayers.get(c) != null ? connectedPlayers.get(c) : -1;
     }
 

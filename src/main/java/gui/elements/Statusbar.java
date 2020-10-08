@@ -70,7 +70,7 @@ public class Statusbar extends GUIElement {
     }
 
     @Override
-    public boolean onKeyUp(int key) {
+    public boolean onKeyUp(int key, char c) {
 //        if (key == Input.KEY_R && World.getLocalPlayer().isDead()) {
 //            World.init(null);
 //            World.load();

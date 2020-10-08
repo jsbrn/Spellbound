@@ -88,7 +88,7 @@ public abstract class Button extends GUIElement {
     }
 
     @Override
-    public boolean onKeyUp(int key) {
+    public boolean onKeyUp(int key, char c) {
         return false;
     }
 
