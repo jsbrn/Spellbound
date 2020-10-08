@@ -22,7 +22,7 @@ public class ServerKeyPressedHandler implements PacketHandler {
         long timePassed = kpp.ping / 2;
         long frames = timePassed / MiscMath.DELTA_TIME;
         for (int i = 0; i < frames; i++)
-            MovementSystem.backtrack(MPServer.getEntityID(from), MPClient.getWorld());
+            MovementSystem.backtrack(MPServer.getEntityID(from), MPServer.getWorld());
 
         InputComponent input = (InputComponent)MPServer.getWorld().getEntities().getComponent(InputComponent.class, entityID);
         input.setKey(kpp.key, true);

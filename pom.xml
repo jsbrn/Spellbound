@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>Spellbound</artifactId>
-    <version>0.0.0c-alpha</version>
+    <version>0.0.0d-alpha</version>
 
     <repositories>
         <repository>

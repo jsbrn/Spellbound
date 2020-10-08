@@ -23,7 +23,7 @@ public class ServerJoinPacketHandler implements PacketHandler {
         }
 
         //create entity
-        Location spawn = new Location("world", 20000, -20000, 180);
+        Location spawn = new Location("world", 0, 0, 180);
         int newID = MPServer.spawnEntity(Assets.json("definitions/entities/player.json", true), spawn, true);
         MPServer.assign(from, newID);
         System.out.println("Assigned entity "+newID+" to "+from.getID());

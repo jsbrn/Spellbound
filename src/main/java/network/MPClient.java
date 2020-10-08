@@ -100,13 +100,10 @@ public class MPClient {
         time += MiscMath.getConstant(1000, 1);
         client.getReturnTripTime();
         //update only the player
-        if (Camera.getTargetEntity() >= 0) {
-            Camera.update();
-            Set<Integer> localPlayer = world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
-                    .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet());
-            MovementSystem.update(world, localPlayer);
-            requestChunksAround(Camera.getTargetEntity());
-        }
+        Set<Integer> localPlayer = world.getEntities().getEntitiesWith(PlayerComponent.class).stream()
+                .filter(e -> e == Camera.getTargetEntity()).collect(Collectors.toSet());
+        MovementSystem.update(world, localPlayer);
+        requestChunksAround(Camera.getTargetEntity());
         safelyHandleIncomingPackets();
     }
 

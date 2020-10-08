@@ -106,6 +106,8 @@ public class CameraViewport extends GUIElement {
     protected void drawDebug(Graphics g) {
         super.drawDebug(g);
 
+        if (!MPClient.isOpen()) return;
+
         double[] mouse_wc = Camera.getWorldCoordinates(Mouse.getX(), Window.getHeight() - Mouse.getY(), Window.getScale());
         float[] mouse_osc = Camera.getOnscreenCoordinates(mouse_wc[0], mouse_wc[1], Window.getScale());
         float[] origin_osc = Camera.getOnscreenCoordinates(0, 0, Window.getScale());

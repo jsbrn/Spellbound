@@ -49,6 +49,7 @@ public class GameScreen extends GameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         super.update(gc, sbg, delta);
         MiscMath.DELTA_TIME = delta;
+        Camera.update();
     }
 
     public void setTarget(int entityID) {

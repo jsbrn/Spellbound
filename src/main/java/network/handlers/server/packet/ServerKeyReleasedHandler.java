@@ -21,7 +21,7 @@ public class ServerKeyReleasedHandler implements PacketHandler {
         long timePassed = kpp.ping / 2;
         long frames = timePassed / MiscMath.DELTA_TIME;
         for (int i = 0; i < frames; i++)
-            MovementSystem.backtrack(entityID, MPClient.getWorld());
+            MovementSystem.backtrack(entityID, MPServer.getWorld());
 
         InputComponent input = (InputComponent)MPServer.getWorld().getEntities().getComponent(InputComponent.class, entityID);
         input.setKey(kpp.key, false);
