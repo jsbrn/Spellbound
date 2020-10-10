@@ -17,12 +17,6 @@ public class ServerKeyReleasedHandler implements PacketHandler {
         KeyReleasedPacket kpp = (KeyReleasedPacket) p;
         int entityID = MPServer.getEntityID(from);
 
-        //server-side movement interpolation
-        long timePassed = kpp.ping / 2;
-        long frames = timePassed / MiscMath.DELTA_TIME;
-        for (int i = 0; i < frames; i++)
-            MovementSystem.backtrack(entityID, MPServer.getWorld());
-
         InputComponent input = (InputComponent)MPServer.getWorld().getEntities().getComponent(InputComponent.class, entityID);
         input.setKey(kpp.key, false);
         return true;

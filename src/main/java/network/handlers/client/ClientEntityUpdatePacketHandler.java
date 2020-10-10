@@ -21,11 +21,6 @@ public class ClientEntityUpdatePacketHandler implements PacketHandler {
 
         MPClient.getWorld().spawnEntity(esp.entityID, Assets.json(esp.entityJSON), null);
 
-        //interpolate movement
-        int frames = (MPClient.getReturnTripTime() / 2) / MiscMath.DELTA_TIME;
-        for (int i = 0; i < frames; i++)
-            MovementSystem.moveEntity(esp.entityID, MPClient.getWorld(), false, false);
-
         return true;
     }
 

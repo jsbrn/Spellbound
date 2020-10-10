@@ -18,12 +18,6 @@ public class ServerKeyPressedHandler implements PacketHandler {
         KeyPressedPacket kpp = (KeyPressedPacket)p;
         int entityID = MPServer.getEntityID(from);
 
-        //server-side movement interpolation
-        long timePassed = kpp.ping / 2;
-        long frames = timePassed / MiscMath.DELTA_TIME;
-        for (int i = 0; i < frames; i++)
-            MovementSystem.backtrack(MPServer.getEntityID(from), MPServer.getWorld());
-
         InputComponent input = (InputComponent)MPServer.getWorld().getEntities().getComponent(InputComponent.class, entityID);
         input.setKey(kpp.key, true);
         if (kpp.key == Input.KEY_E) {
