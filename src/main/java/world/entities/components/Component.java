@@ -46,6 +46,7 @@ public abstract class Component {
         if (id.equals("magic_source")) c = new MagicSourceComponent();
         if (id.equals("player")) c = new PlayerComponent();
         if (id.equals("input")) c = new InputComponent();
+        if (id.equals("animator")) c = new AnimatorComponent();
 
         if (c != null) {
             c.deserialize(defaults);

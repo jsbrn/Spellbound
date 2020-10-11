@@ -4,13 +4,14 @@ import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Image;
 import com.github.mathiewz.slick.SlickException;
 import network.MPClient;
+import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
 public class Animation implements Serializable {
 
     private Image sprite;
-    private int frame_count, original_fps, fps;
+    private int frame_count, fps;
     private float frame_width, frame_height;
     private long start_time;
     private boolean loop, directional;
@@ -18,8 +19,7 @@ public class Animation implements Serializable {
     public Animation(String image, int fps, int frame_count, int frame_height, boolean loops, boolean directional) {
         try {
             this.frame_count = frame_count;
-            this.original_fps = fps;
-            this.fps = original_fps;
+            this.fps = fps;
             this.start_time = MPClient.getTime();
             this.sprite = new Image("animations/" +image, false, Image.FILTER_NEAREST);
             this.frame_width = this.sprite.getWidth() / (float)frame_count;
@@ -55,6 +55,29 @@ public class Animation implements Serializable {
 
     public void reset() {
         this.start_time = MPClient.getTime();
+    }
+
+    public JSONObject serialize() {
+        JSONObject json = new JSONObject();
+        json.put("sprite", sprite.getResourceReference());
+        json.put("frame_height", frame_height);
+        json.put("frame_width", frame_width);
+        json.put("fps", fps);
+        json.put("loop", loop);
+        json.put("directional", directional);
+        return json;
+    }
+
+    public static Animation deserialize(JSONObject json) {
+        Animation a = new Animation(
+                (String)json.get("sprite"),
+                (int)(long)json.getOrDefault("fps", 1),
+                (int)(long)json.getOrDefault("frame_width", 16),
+                (int)(long)json.getOrDefault("frame_height", 16),
+                (boolean)json.getOrDefault("loop", true),
+                (boolean)json.getOrDefault("directional", false)
+        );
+        return a;
     }
 
     public void draw(float ex, float ey, float scale, int direction, Color filter) {

@@ -38,6 +38,11 @@ public class Location {
         return coordinates;
     }
     public int[] getChunkCoordinates() { return new int[]{(int)Math.floor(coordinates[0] / Chunk.CHUNK_SIZE), (int)Math.floor(coordinates[1] / Chunk.CHUNK_SIZE)}; }
+
+    /**
+     * Get the local coordinates (with origin being the top-left of the current chunk).
+     * @return Your position in the current chunk.
+     */
     public double[] getLocalCoordinates() { return new double[]{coordinates[0] % Chunk.CHUNK_SIZE, coordinates[1] % Chunk.CHUNK_SIZE}; }
 
     public double getIndex(Region region) { return MiscMath.getIndex(coordinates[0], coordinates[1], Integer.MAX_VALUE); }

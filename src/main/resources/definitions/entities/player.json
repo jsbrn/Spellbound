@@ -26,5 +26,25 @@
   "spellbook": {
     "discovered_techniques": ["movement_caster"],
     "spells": []
+  },
+  "animator": {
+    "layers": [
+      {
+        "active_animations": ["walking"],
+        "enabled": true,
+        "name": "arms",
+        "animations": [
+          {
+            "type": "walking",
+            "sprite": "/animations/humanoid/arms_walking.png",
+            "fps": 3,
+            "frame_width": 16,
+            "frame_height": 16,
+            "loop": true,
+            "directional": true
+          }
+        ]
+      }
+    ]
   }
 }

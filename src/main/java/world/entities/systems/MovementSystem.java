@@ -55,9 +55,11 @@ public class MovementSystem {
         Chunk oldChunk = world.getRegion(old).getChunk(old);
 
         double oldPos[] = old.getCoordinates();
+        byte[] tile = world.getRegion(old).getChunk(old).get((int)old.getLocalCoordinates()[0], (int)old.getLocalCoordinates()[1]);
+        double tileMultiplier = Math.min(Tiles.getSpeedMultiplier(tile[0]), Tiles.getSpeedMultiplier(tile[1]));
         double[] dir = vc.calculateVector(constantsOnly, backwards);
-        dir[0] = MiscMath.getConstant(dir[0], 1);
-        dir[1] = MiscMath.getConstant(dir[1], 1);
+        dir[0] = MiscMath.getConstant(dir[0] * tileMultiplier, 1);
+        dir[1] = MiscMath.getConstant(dir[1] * tileMultiplier, 1);
         double[] newPos = applyCollisionRules(lc, hc, dir, world);
 
         double[] clampedPos = new double[]{
