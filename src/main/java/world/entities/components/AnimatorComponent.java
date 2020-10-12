@@ -18,7 +18,7 @@ public class AnimatorComponent extends Component {
 
     @Override
     protected void registerEventHandlers() {
-
+    
     }
 
     public Collection<AnimationLayer> getLayers() {
@@ -42,19 +42,6 @@ public class AnimatorComponent extends Component {
         if (activeAnimations.contains(context)) {
             activeAnimations.remove(context);
             MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
-        }
-    }
-
-    @ServerClientExecution
-    public void cleanExpiredContexts() {
-        for (int i = activeAnimations.size() - 1; i > -1; i--) {
-            boolean isContextFinished = true;
-            for (AnimationLayer al: animationLayers.values()) {
-                Animation a = al.getAnimation(activeAnimations.get(i));
-                if (a == null) continue;
-                if (a.loops() || a.finished()) isContextFinished = false;
-            }
-            if (isContextFinished) activeAnimations.remove(i);
         }
     }
 

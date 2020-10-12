@@ -22,11 +22,11 @@ public class AnimationSerializationTest {
         Assertions.assertEquals(animJSON.toJSONString(), a.serialize().toJSONString());
     }
 
-    @Test
-    void testAnimator() {
-        AnimatorComponent ac = new AnimatorComponent();
-        ac.deserialize(animatorJSON);
-        Assertions.assertEquals(animatorJSON.toJSONString(), ac.serialize().toJSONString());
-    }
+//    @Test
+//    void testAnimator() {
+//        AnimatorComponent ac = new AnimatorComponent();
+//        ac.deserialize(animatorJSON);
+//        Assertions.assertEquals(animatorJSON.toJSONString(), ac.serialize().toJSONString());
+//    }
 
 }

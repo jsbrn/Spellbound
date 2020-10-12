@@ -86,7 +86,7 @@ public class LocationComponent extends Component {
     public void deserialize(JSONObject object) {
         location = new Location((String)object.get("region"), (double)object.get("x"), (double)object.get("y"));
         this.lastTileCoordinates = new int[]{location.getChunkCoordinates()[0], location.getChunkCoordinates()[1]};
-        location.setLookDirection(((Long)object.get("look_direction")).intValue());
+        location.setLookDirection(((Long)object.getOrDefault("look_direction", 0L)).intValue());
     }
 
     @Override

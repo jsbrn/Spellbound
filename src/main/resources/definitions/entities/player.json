@@ -110,5 +110,13 @@
         ]
       }
     ]
+  },
+  "cosmetics": {
+    "change_layers": {
+
+    },
+    "add_layers": {
+
+    }
   }
 }
