@@ -1,7 +1,7 @@
 {
   "sprite": "/images/whatever.png",
   "fps": 3,
-  "frame_width": 16,
+  "frame_count": 3,
   "frame_height": 16,
   "loop": true,
   "directional": true

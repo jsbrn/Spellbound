@@ -59,11 +59,9 @@ public class CameraViewport extends GUIElement {
 
     @Override
     public boolean onKeyDown(int key, char c) {
-        if (MPClient.getReturnTripTime() > 100) {
-            InputComponent ic = (InputComponent) MPClient.getWorld().getEntities().getComponent(InputComponent.class, Camera.getTargetEntity());
-            ic.setKey(key, true);
-            InputProcessingSystem.updateLocalPlayer();
-        }
+//        InputComponent ic = (InputComponent) MPClient.getWorld().getEntities().getComponent(InputComponent.class, Camera.getTargetEntity());
+//        ic.setKey(key, true);
+//        InputProcessingSystem.updateLocalPlayer();
         MPClient.sendPacket(new KeyPressedPacket(key));
         return true;
     }
@@ -76,11 +74,11 @@ public class CameraViewport extends GUIElement {
             ((VelocityComponent)MPServer.getWorld().getEntities().getComponent(VelocityComponent.class, Camera.getTargetEntity()))
                     .addForce(Math.random() * 360, 1 + (Math.random() * 4), 2);
         }
-        if (MPClient.getReturnTripTime() > 100) {
-            InputComponent ic = (InputComponent) MPClient.getWorld().getEntities().getComponent(InputComponent.class, Camera.getTargetEntity());
-            ic.setKey(key, false);
-            InputProcessingSystem.updateLocalPlayer();
-        }
+
+//        InputComponent ic = (InputComponent) MPClient.getWorld().getEntities().getComponent(InputComponent.class, Camera.getTargetEntity());
+//        ic.setKey(key, false);
+//        InputProcessingSystem.updateLocalPlayer();
+
         MPClient.sendPacket(new KeyReleasedPacket(key));
         return true;
     }
@@ -126,15 +124,6 @@ public class CameraViewport extends GUIElement {
         int[] mouse_cc = MiscMath.getChunkCoordinates(mouse_wc[0], mouse_wc[1]);
         List<Integer> clientEntities = MPClient.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getCachedEntities();
         List<Integer> serverEntities = MPServer.isOpen() ? MPServer.getWorld().getRegion(localPlayerLocation).getChunk(mouse_cc[0], mouse_cc[1]).getCachedEntities() : null;
-
-        for (int entityID: clientEntities) {
-            g.setColor(Color.black);
-            LocationComponent loc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, entityID);
-            if (loc == null) continue;
-            Location l = loc.getLocation();
-            float[] eosc = Camera.getOnscreenCoordinates(l.getCoordinates()[0], l.getCoordinates()[1], Window.getScale());
-            g.drawString(entityID+"", eosc[0], eosc[1]);
-        }
 
         //draw the debug info
         String[] debugStrings = new String[]{

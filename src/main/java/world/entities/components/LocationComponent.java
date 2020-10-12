@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import world.Chunk;
 import world.Region;
 import world.World;
+import world.events.event.ComponentStateChangedEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class LocationComponent extends Component {
         JSONObject serialized = new JSONObject();
         serialized.put("x", location.getCoordinates()[0]);
         serialized.put("y", location.getCoordinates()[1]);
+        serialized.put("look_direction", location.getLookDirection());
         serialized.put("region", location.getRegionName());
         return serialized;
     }
@@ -84,6 +86,7 @@ public class LocationComponent extends Component {
     public void deserialize(JSONObject object) {
         location = new Location((String)object.get("region"), (double)object.get("x"), (double)object.get("y"));
         this.lastTileCoordinates = new int[]{location.getChunkCoordinates()[0], location.getChunkCoordinates()[1]};
+        location.setLookDirection(((Long)object.get("look_direction")).intValue());
     }
 
     @Override

@@ -17,6 +17,7 @@ public class ClientEntityVelocityChangedPacketHandler implements PacketHandler {
         LocationComponent lc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, evcp.entityID);
         VelocityComponent vc = (VelocityComponent) MPClient.getWorld().getEntities().getComponent(VelocityComponent.class, evcp.entityID);
 
+        lc.getLocation().setLookDirection(evcp.lookDirection);
         lc.getLocation().setCoordinates(evcp.wx, evcp.wy);
         vc.deserialize(evcp.constant, evcp.forces);
 

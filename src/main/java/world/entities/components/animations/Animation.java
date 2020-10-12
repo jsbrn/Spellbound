@@ -1,5 +1,6 @@
 package world.entities.components.animations;
 
+import assets.Assets;
 import com.github.mathiewz.slick.Color;
 import com.github.mathiewz.slick.Image;
 import com.github.mathiewz.slick.SlickException;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 public class Animation implements Serializable {
 
     private Image sprite;
+    private String sprite_url;
     private int frame_count, fps;
     private float frame_width, frame_height;
     private long start_time;
@@ -21,8 +23,7 @@ public class Animation implements Serializable {
             this.frame_count = frame_count;
             this.fps = fps;
             this.start_time = MPClient.getTime();
-            this.sprite = new Image("animations/" +image, false, Image.FILTER_NEAREST);
-            this.frame_width = this.sprite.getWidth() / (float)frame_count;
+            this.sprite_url = image;
             this.frame_height = frame_height;
             this.loop = loops;
             this.directional = directional;
@@ -59,9 +60,9 @@ public class Animation implements Serializable {
 
     public JSONObject serialize() {
         JSONObject json = new JSONObject();
-        json.put("sprite", sprite.getResourceReference());
-        json.put("frame_height", frame_height);
-        json.put("frame_width", frame_width);
+        json.put("sprite", sprite_url);
+        json.put("frame_height", (int)frame_height);
+        json.put("frame_count", frame_count);
         json.put("fps", fps);
         json.put("loop", loop);
         json.put("directional", directional);
@@ -71,9 +72,9 @@ public class Animation implements Serializable {
     public static Animation deserialize(JSONObject json) {
         Animation a = new Animation(
                 (String)json.get("sprite"),
-                (int)(long)json.getOrDefault("fps", 1),
-                (int)(long)json.getOrDefault("frame_width", 16),
-                (int)(long)json.getOrDefault("frame_height", 16),
+                ((Number)json.get("fps")).intValue(),
+                ((Number)json.get("frame_count")).intValue(),
+                ((Number)json.get("frame_height")).intValue(),
                 (boolean)json.getOrDefault("loop", true),
                 (boolean)json.getOrDefault("directional", false)
         );
@@ -81,15 +82,22 @@ public class Animation implements Serializable {
     }
 
     public void draw(float ex, float ey, float scale, int direction, Color filter) {
+
+        //initialize the sprite when drawing
+        if (sprite == null) {
+            this.sprite = Assets.getImage(sprite_url);
+            this.frame_width = this.sprite.getWidth() / (float)frame_count;
+        }
+
         int frame = getFrame();
         sprite.startUse();
         float y_offset = -(frame_height/2 * scale), x_offset = -(frame_width/2 * scale);
         int src_y = (int)(!directional ? 0 : direction * frame_height);
         sprite.drawEmbedded(
-                ex + x_offset,
-                ey + y_offset,
-                ex + (frame_width * scale) + x_offset,
-                ey + (frame_height * scale) + y_offset,
+                (int)(ex + x_offset),
+                (int)(ey + y_offset),
+                (int)(ex + (frame_width * scale) + x_offset),
+                (int)(ey + (frame_height * scale) + y_offset),
                 frame * frame_width,
                 src_y,
                 (frame + 1) * frame_width,

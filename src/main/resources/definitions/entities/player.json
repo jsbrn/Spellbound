@@ -3,6 +3,7 @@
   "location": {
     "x": 0.0,
     "y": 0.0,
+    "look_direction": 180,
     "region": "world"
   },
   "input": {},
@@ -28,17 +29,80 @@
     "spells": []
   },
   "animator": {
+    "active_animations": ["default"],
     "layers": [
       {
-        "active_animations": ["walking"],
+        "enabled": true,
+        "name": "torso",
+        "animations": [
+          {
+            "type": "default",
+            "sprite": "animations/humanoid/torso_idle.png",
+            "fps": 1,
+            "frame_count": 1,
+            "frame_height": 16,
+            "loop": true,
+            "directional": true
+          }
+        ]
+      },
+      {
         "enabled": true,
         "name": "arms",
         "animations": [
           {
             "type": "walking",
-            "sprite": "/animations/humanoid/arms_walking.png",
-            "fps": 3,
-            "frame_width": 16,
+            "sprite": "animations/humanoid/arms_walking.png",
+            "fps": 2,
+            "frame_count": 4,
+            "frame_height": 16,
+            "loop": true,
+            "directional": true
+          },
+          {
+            "type": "default",
+            "sprite": "animations/humanoid/arms_idle.png",
+            "fps": 1,
+            "frame_count": 1,
+            "frame_height": 16,
+            "loop": true,
+            "directional": true
+          }
+        ]
+      },
+      {
+        "enabled": true,
+        "name": "legs",
+        "animations": [
+          {
+            "type": "walking",
+            "sprite": "animations/humanoid/legs_walking.png",
+            "fps": 2,
+            "frame_count": 4,
+            "frame_height": 16,
+            "loop": true,
+            "directional": true
+          },
+          {
+            "type": "default",
+            "sprite": "animations/humanoid/legs_idle.png",
+            "fps": 1,
+            "frame_count": 1,
+            "frame_height": 16,
+            "loop": true,
+            "directional": true
+          }
+        ]
+      },
+      {
+        "enabled": true,
+        "name": "head",
+        "animations": [
+          {
+            "type": "default",
+            "sprite": "animations/humanoid/head_idle.png",
+            "fps": 1,
+            "frame_count": 1,
             "frame_height": 16,
             "loop": true,
             "directional": true

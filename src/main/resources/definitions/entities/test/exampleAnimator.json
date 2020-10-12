@@ -1,0 +1,18 @@
+{
+  "active_animations": ["walking"],
+  "layers": [{
+    "enabled": true,
+    "name": "arms",
+    "animations": [
+      {
+        "type": "walking",
+        "sprite": "/animations/humanoid/arms_walking.png",
+        "fps": 6,
+        "frame_count": 4,
+        "frame_height": 16,
+        "loop": true,
+        "directional": true
+      }
+    ]
+}]
+}

@@ -43,9 +43,7 @@ public class MovementSystem {
 
     @ServerClientExecution
     public static void moveEntity(int entity, World world, boolean constantsOnly, boolean backwards) {
-        System.out.println(entity+", "+world+", "+constantsOnly);
         VelocityComponent vc = (VelocityComponent) world.getEntities().getComponent(VelocityComponent.class, entity);
-        System.out.println(vc);
         LocationComponent lc = (LocationComponent) world.getEntities().getComponent(LocationComponent.class, entity);
         HitboxComponent hc = (HitboxComponent)world.getEntities().getComponent(HitboxComponent.class, entity);
 

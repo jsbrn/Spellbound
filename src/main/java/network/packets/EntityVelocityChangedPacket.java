@@ -16,6 +16,7 @@ public class EntityVelocityChangedPacket extends Packet {
     public double[][] forces;
     public double[] constant;
     public double wx, wy;
+    public int lookDirection;
 
     public EntityVelocityChangedPacket() {}
 
@@ -26,6 +27,7 @@ public class EntityVelocityChangedPacket extends Packet {
 
         this.serverTime = MPServer.getTime();
         this.entityID = entityID;
+        this.lookDirection = locationComponent.getLocation().getLookDirection();
         this.wx = locationComponent.getLocation().getCoordinates()[0];
         this.wy = locationComponent.getLocation().getCoordinates()[1];
         this.forces = new double[velocityComponent.getForces().size()][3];
