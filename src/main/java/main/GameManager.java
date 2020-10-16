@@ -11,10 +11,14 @@ import com.github.mathiewz.slick.state.transition.FadeOutTransition;
 import gui.sound.SoundManager;
 import gui.states.*;
 import misc.Window;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.lwjgl.opengl.DisplayMode;
 import network.MPServer;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class GameManager extends StateBasedGame {
@@ -48,9 +52,16 @@ public class GameManager extends StateBasedGame {
 
         Settings.load();
 
+
+
         //initialize the window
         try {
-            Window.WINDOW_INSTANCE = new AppGameContainer(new GameManager(Window.WINDOW_TITLE));
+
+            MavenXpp3Reader reader = new MavenXpp3Reader();
+            Model model = reader.read(new FileReader("pom.xml"));
+            Window.WINDOW_TITLE = "Spellbound "+model.getVersion();
+
+                    Window.WINDOW_INSTANCE = new AppGameContainer(new GameManager(Window.WINDOW_TITLE));
             DisplayMode desktop = Window.getAllDisplayModes().get(0);
             Window.WINDOW_INSTANCE.setDisplayMode((int)(Window.getScreenWidth() * 0.5), (int)(Window.getScreenHeight() * 0.5), false);
             Window.WINDOW_INSTANCE.setSmoothDeltas(false);
@@ -72,7 +83,9 @@ public class GameManager extends StateBasedGame {
             Window.WINDOW_INSTANCE.start();
 
         } catch (SlickException e) {
-
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
         }
 
         SoundManager.cleanup();

@@ -31,7 +31,7 @@ public class RenderSystem {
             Animation a = layer.getCurrentAnimation(animator.getActiveAnimations());
             if (a == null) continue;
             int lookDir = (int)MiscMath.round(location.getLocation().getLookDirection(), 45) / 45;
-            a.draw(osc[0], osc[1], scale, lookDir, Color.white);
+            a.draw(osc[0], osc[1], scale, lookDir, layer.getColor());
         }
     }
 

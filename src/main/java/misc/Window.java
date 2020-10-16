@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class Window {
 
     //the name of the window
-    public static final String WINDOW_TITLE = "Spellbound - Alpha Candidate";
+    public static String WINDOW_TITLE;
     //create a window object
     public static AppGameContainer WINDOW_INSTANCE;
 

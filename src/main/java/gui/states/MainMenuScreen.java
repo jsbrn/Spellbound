@@ -53,22 +53,7 @@ public class MainMenuScreen extends GameState {
         Button playButton = new Button(null, 24, 24, "icons/play.png", true) {
             @Override
             public void onClick(int button) {
-                File f = new File(Assets.ROOT_DIRECTORY+"/world/world.json");
-                //if (!f.exists()) {
-                    gui.stackModal(new ServerSelectMenu());
-//                //} else {
-//                    World.init();
-//                    //make a backup before loading a save
-//                    try {
-//                        new File(Assets.ROOT_DIRECTORY+"/backups/").mkdirs();
-//                        new ZipFile(Assets.ROOT_DIRECTORY+"/backups/backup_"+System.currentTimeMillis()+".zip")
-//                                .addFolder(new File(Assets.ROOT_DIRECTORY+"/world/"), new ZipParameters());
-//                    } catch (ZipException e) {
-//                        e.printStackTrace();
-//                    }
-//                    World.load();
-//                    startGame();
-//                //}
+                gui.stackModal(new ServerSelectMenu());
             }
         };
 
@@ -95,8 +80,7 @@ public class MainMenuScreen extends GameState {
 
         gui.addElement(new IconLabel("title.png"), 0, 8, GUIAnchor.TOP_MIDDLE);
         gui.addElement(new TextLabel("Alpha Candidate", 8, Color.white, true, false), 0, 32, GUIAnchor.TOP_MIDDLE);
-        gui.addElement(new TextLabel("0.0.0-alpha", 3, Color.lightGray, Color.lightGray, true, false), -2, 2, GUIAnchor.TOP_RIGHT);
-        gui.addElement(openRoot, -2, 6, GUIAnchor.TOP_RIGHT);
+        gui.addElement(openRoot, -2, 2, GUIAnchor.TOP_RIGHT);
 
         gui.addElement(new TextLabel("Visit the website", 3, Color.white, Color.yellow, true, false) {
             @Override
@@ -110,7 +94,7 @@ public class MainMenuScreen extends GameState {
                 }
                 return true;
             }
-        }, -2, 10, GUIAnchor.TOP_RIGHT);
+        }, -2, 6, GUIAnchor.TOP_RIGHT);
 
     }
 
