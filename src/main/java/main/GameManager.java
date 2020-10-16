@@ -52,16 +52,11 @@ public class GameManager extends StateBasedGame {
 
         Settings.load();
 
-
-
         //initialize the window
         try {
 
-            MavenXpp3Reader reader = new MavenXpp3Reader();
-            Model model = reader.read(new FileReader("pom.xml"));
-            Window.WINDOW_TITLE = "Spellbound "+model.getVersion();
-
-                    Window.WINDOW_INSTANCE = new AppGameContainer(new GameManager(Window.WINDOW_TITLE));
+            Window.WINDOW_TITLE = "Spellbound 0.0.1-alpha";
+            Window.WINDOW_INSTANCE = new AppGameContainer(new GameManager(Window.WINDOW_TITLE));
             DisplayMode desktop = Window.getAllDisplayModes().get(0);
             Window.WINDOW_INSTANCE.setDisplayMode((int)(Window.getScreenWidth() * 0.5), (int)(Window.getScreenHeight() * 0.5), false);
             Window.WINDOW_INSTANCE.setSmoothDeltas(false);
@@ -83,8 +78,6 @@ public class GameManager extends StateBasedGame {
             Window.WINDOW_INSTANCE.start();
 
         } catch (SlickException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
 
