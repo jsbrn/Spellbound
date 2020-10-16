@@ -5,8 +5,7 @@ script: mvn package
 deploy:
   provider: releases
   api_key: "$GITHUB_AUTH_TOKEN"
-  file: "target/Spellbound.jar"
-  name: "Spellbound-$TRAVIS_TAG"
+  file: "target/Spellbound-$TRAVIS_TAG.jar"
   prerelease: true
   skip_cleanup: true
   on:
