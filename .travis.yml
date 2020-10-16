@@ -6,6 +6,8 @@ deploy:
   provider: releases
   api_key: "$GITHUB_AUTH_TOKEN"
   file: "target/Spellbound.jar"
+  name: "Spellbound-$TRAVIS_TAG"
+  prerelease: true
   skip_cleanup: true
   on:
     tags: true
