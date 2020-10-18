@@ -14,6 +14,7 @@ public class Packet {
         kryo.register(byte[][].class);
         kryo.register(double[].class);
         kryo.register(double[][].class);
+        kryo.register(String[].class);
         kryo.register(Packet.class);
         kryo.register(ChunkPacket.class);
         kryo.register(ChunkRequestPacket.class);
@@ -23,6 +24,7 @@ public class Packet {
         kryo.register(EntityDestroyPacket.class);
         kryo.register(RegionPacket.class);
         kryo.register(ComponentStateChangePacket.class);
+        kryo.register(ActiveAnimationsPacket.class);
         kryo.register(KeyPressedPacket.class);
         kryo.register(KeyReleasedPacket.class);
         kryo.register(MousePressedPacket.class);

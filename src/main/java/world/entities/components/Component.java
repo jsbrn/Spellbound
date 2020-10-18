@@ -50,7 +50,6 @@ public abstract class Component {
         if (id.equals("player")) c = new PlayerComponent();
         if (id.equals("input")) c = new InputComponent();
         if (id.equals("animator")) c = new AnimatorComponent();
-        if (id.equals("cosmetics")) c = new CosmeticsComponent();
 
         if (c != null) {
             //inherit from an existing component json file

@@ -3,12 +3,14 @@ package world.entities.components;
 import com.github.mathiewz.slick.Color;
 import misc.Colors;
 import misc.MiscMath;
+import misc.annotations.ClientExecution;
 import misc.annotations.ServerExecution;
 import network.MPServer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import world.entities.components.animations.AnimationLayer;
 import world.events.event.ComponentStateChangedEvent;
+import world.events.event.EntityChangedAnimationEvent;
 
 import java.util.*;
 
@@ -34,7 +36,7 @@ public class AnimatorComponent extends Component {
     public void addContext(String context) {
         if (!activeAnimations.contains(context)) {
             activeAnimations.add(context);
-            MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
+            MPServer.getEventManager().invoke(new EntityChangedAnimationEvent(this));
         }
     }
 
@@ -42,7 +44,7 @@ public class AnimatorComponent extends Component {
     public void removeContext(String context) {
         if (activeAnimations.contains(context)) {
             activeAnimations.remove(context);
-            MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
+            MPServer.getEventManager().invoke(new EntityChangedAnimationEvent(this));
         }
     }
 
@@ -118,10 +120,17 @@ public class AnimatorComponent extends Component {
             for (Object o: all) {
                 JSONObject cos = (JSONObject)o;
                 JSONArray one_of = (JSONArray)cos.get("one_of");
-                putLayer(one_of.get((int)MiscMath.random(0, one_of.size()-1))+"", Colors.fromJSONArray((JSONArray)cos.get("color")));
+                putLayer(one_of.get((int)MiscMath.random(0, one_of.size()))+"", Colors.fromJSONArray((JSONArray)cos.get("color")));
             }
         }
 
+    }
+
+    @ClientExecution
+    public void setLocalActiveAnimations(String[] serializedList) {
+        activeAnimations.clear();
+        for (String anim: serializedList)
+            activeAnimations.add(anim);
     }
 
     @Override

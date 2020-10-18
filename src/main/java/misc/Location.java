@@ -43,7 +43,10 @@ public class Location {
      * Get the local coordinates (with origin being the top-left of the current chunk).
      * @return Your position in the current chunk.
      */
-    public double[] getLocalCoordinates() { return new double[]{coordinates[0] % Chunk.CHUNK_SIZE, coordinates[1] % Chunk.CHUNK_SIZE}; }
+    public double[] getLocalCoordinates() { return new double[]{
+            (coordinates[0] - (getChunkCoordinates()[0]*Chunk.CHUNK_SIZE)) % Chunk.CHUNK_SIZE,
+            (coordinates[1] - (getChunkCoordinates()[1]*Chunk.CHUNK_SIZE)) % Chunk.CHUNK_SIZE};
+    }
 
     public double getIndex(Region region) { return MiscMath.getIndex(coordinates[0], coordinates[1], Integer.MAX_VALUE); }
 

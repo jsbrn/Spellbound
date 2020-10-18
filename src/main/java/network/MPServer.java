@@ -229,6 +229,15 @@ public class MPServer {
                             getConnectionsWithinRange(eme.getEntity()),
                             new EntityVelocityChangedPacket(eme.getEntity()));
                 }
+            })
+            .on(EntityChangedAnimationEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    EntityChangedAnimationEvent ecae = (EntityChangedAnimationEvent)e;
+                    sendToAll(
+                            getConnectionsWithinRange(ecae.getAnimatorComponent().getParent()),
+                            new ActiveAnimationsPacket(ecae.getAnimatorComponent()));
+                }
             });
         eventManager.register(serverListener);
     }

@@ -151,6 +151,7 @@ public class MPClient {
         packetHandlers.put(EntityVelocityChangedPacket.class, new ClientEntityVelocityChangedPacketHandler());
         packetHandlers.put(TimeSyncPacket.class, new ClientTimeSyncPacketHandler());
         packetHandlers.put(EntityDestroyPacket.class, new ClientEntityDestroyPacketHandler());
+        packetHandlers.put(ActiveAnimationsPacket.class, new ClientActiveAnimationsPacketHandler());
     }
 
     public static void sendPacket(Packet p) {
