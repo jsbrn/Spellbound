@@ -20,7 +20,8 @@ public class ClientEntityUpdatePacketHandler implements PacketHandler {
         LocationComponent lc = (LocationComponent)MPClient.getWorld().getEntities().getComponent(LocationComponent.class, esp.entityID);
         VelocityComponent vc = (VelocityComponent) MPClient.getWorld().getEntities().getComponent(VelocityComponent.class, esp.entityID);
 
-        MPClient.getWorld().spawnEntity(esp.entityID, (JSONObject)Assets.json(esp.entityJSON), null);
+        JSONObject parsed = (JSONObject)Assets.json(esp.entityJSON);
+        MPClient.getWorld().spawnEntity(esp.entityID, parsed, null);
 
         return true;
     }

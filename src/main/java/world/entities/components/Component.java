@@ -1,5 +1,6 @@
 package world.entities.components;
 
+import assets.Assets;
 import misc.annotations.ServerClientExecution;
 import misc.annotations.ServerExecution;
 import network.Packet;
@@ -7,6 +8,8 @@ import org.json.simple.JSONObject;
 import world.entities.components.magic.MagicSourceComponent;
 import world.events.EventHandler;
 import world.events.EventListener;
+
+import java.util.Map;
 
 public abstract class Component {
 
@@ -47,9 +50,20 @@ public abstract class Component {
         if (id.equals("player")) c = new PlayerComponent();
         if (id.equals("input")) c = new InputComponent();
         if (id.equals("animator")) c = new AnimatorComponent();
+        if (id.equals("cosmetics")) c = new CosmeticsComponent();
 
         if (c != null) {
-            c.deserialize(defaults);
+            //inherit from an existing component json file
+            if (defaults.containsKey("_inherit_")) {
+                JSONObject inherited = (JSONObject) Assets.json((String)defaults.get("_inherit_"), true);
+                for (Object o: defaults.keySet()) {
+                    String key = (String)o;
+                    inherited.put(key, defaults.get(key));
+                }
+                c.deserialize(inherited);
+            } else {
+                c.deserialize(defaults);
+            }
             c.eventListener = new EventListener();
             c.registerEventHandlers();
         }

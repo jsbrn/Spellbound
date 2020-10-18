@@ -1,0 +1,25 @@
+{
+  "active_animations": ["idle"],
+  "layers": [
+    {
+      "enabled": true,
+      "type": "humanoid/torso",
+      "color": [130, 100, 85, 255]
+    },
+    {
+      "enabled": true,
+      "type": "humanoid/arms",
+      "color": [25, 25, 10, 255]
+    },
+    {
+      "enabled": true,
+      "type": "humanoid/legs",
+      "color": [25, 25, 10, 255]
+    },
+    {
+      "enabled": true,
+      "type": "humanoid/head",
+      "color": [240, 235, 180, 255]
+    }
+  ]
+}
