@@ -29,18 +29,14 @@
     "spells": []
   },
   "animator": {
-    "_inherit_": "components/humanoid_animator.json"
-  },
-  "cosmetics": {
-    "under": [],
-    "over": [
-      {
-        "type": "humanoid/cosmetics/short_hair",
-        "color": [0, 0, 0, 255]
-      }
-    ],
-    "colors": {
-      "humanoid/torso": [0, 0, 0, 255]
+    "_inherit_": "components/humanoid_animator.json",
+    "cosmetics": {
+      "apply": [
+        {
+          "one_of": ["humanoid/cosmetics/short", "humanoid/cosmetics/cone"],
+          "color": [0, 0, 0, 255]
+        }
+      ]
     }
   }
 }

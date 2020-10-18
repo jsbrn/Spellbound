@@ -1,4 +1,5 @@
 import assets.Assets;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +13,14 @@ public class AnimationSerializationTest {
 
     @BeforeEach
     void setUp() {
-        animJSON = (JSONObject)Assets.json("definitions/entities/test/exampleAnimation.json", true);
-        animatorJSON = (JSONObject)Assets.json("definitions/entities/test/exampleAnimator.json", true);
+        JSONArray animations = (JSONArray)Assets.json("animations/humanoid/torso/animations.json", true);
+        animJSON = (JSONObject)animations.get(0);
+        animatorJSON = (JSONObject)Assets.json("components/humanoid_animator.json", true);
+    }
+
+    @Test
+    void testAnimationDeserialization() {
+        Animation.deserialize(animJSON);
     }
 
     @Test

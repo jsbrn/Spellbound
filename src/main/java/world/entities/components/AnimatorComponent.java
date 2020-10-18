@@ -1,12 +1,12 @@
 package world.entities.components;
 
-import assets.Assets;
-import misc.annotations.ServerClientExecution;
+import com.github.mathiewz.slick.Color;
+import misc.Colors;
+import misc.MiscMath;
 import misc.annotations.ServerExecution;
 import network.MPServer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import world.entities.components.animations.Animation;
 import world.entities.components.animations.AnimationLayer;
 import world.events.event.ComponentStateChangedEvent;
 
@@ -46,6 +46,29 @@ public class AnimatorComponent extends Component {
         }
     }
 
+    @ServerExecution
+    private void putLayer(String type, Color color) {
+        JSONObject jsonLayer = new JSONObject();
+        jsonLayer.put("type", type);
+        jsonLayer.put("enabled", true);
+        jsonLayer.put("color", Colors.toJSONArray(color));
+        AnimationLayer cosLayer = new AnimationLayer();
+        cosLayer.deserialize(jsonLayer);
+        animationLayers.put(type, cosLayer);
+    }
+
+    @ServerExecution
+    public void applyLayer(String type, Color color) {
+        putLayer(type, color);
+        MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
+    }
+
+    @ServerExecution
+    public void removeLayer(String type) {
+        animationLayers.remove(type);
+        MPServer.getEventManager().invoke(new ComponentStateChangedEvent(this));
+    }
+
     public ArrayList<String> getActiveAnimations() {
         return activeAnimations;
     }
@@ -83,9 +106,21 @@ public class AnimatorComponent extends Component {
             layer.deserialize(jsonLayer);
             animationLayers.put((String)jsonLayer.get("type"), layer);
         }
+
         //load active animations
         JSONArray jsonContexts = (JSONArray)object.getOrDefault("active_animations", new JSONArray());
         for (Object o: jsonContexts) activeAnimations.add((String)o);
+
+        //load and apply cosmetics
+        if (object.containsKey("cosmetics")) {
+            JSONObject cosmetics = (JSONObject)object.get("cosmetics");
+            JSONArray all = (JSONArray)cosmetics.get("apply");
+            for (Object o: all) {
+                JSONObject cos = (JSONObject)o;
+                JSONArray one_of = (JSONArray)cos.get("one_of");
+                putLayer(one_of.get((int)MiscMath.random(0, one_of.size()-1))+"", Colors.fromJSONArray((JSONArray)cos.get("color")));
+            }
+        }
 
     }
 

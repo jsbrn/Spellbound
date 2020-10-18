@@ -2,6 +2,7 @@ package world.entities.components.animations;
 
 import assets.Assets;
 import com.github.mathiewz.slick.Color;
+import misc.Colors;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -19,6 +20,7 @@ public class AnimationLayer {
         this.enabled = true;
         this.color = Color.white;
     }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -51,12 +53,7 @@ public class AnimationLayer {
         json.put("enabled", enabled);
         json.put("type", type);
 
-        JSONArray colorJSON = new JSONArray();
-        colorJSON.add(color.getRed());
-        colorJSON.add(color.getGreen());
-        colorJSON.add(color.getBlue());
-        colorJSON.add(color.getAlpha());
-        json.put("color", colorJSON);
+        json.put("color", Colors.toJSONArray(color));
 
         return json;
     }
@@ -67,15 +64,7 @@ public class AnimationLayer {
         System.out.println(json.toJSONString());
 
         JSONArray jsonColor = (JSONArray)json.getOrDefault("color", new JSONArray());
-        if (jsonColor.size() != 4)
-            color = Color.white;
-        else
-            color = new Color(
-                ((Long)jsonColor.get(0)).intValue(),
-                ((Long)jsonColor.get(1)).intValue(),
-                ((Long)jsonColor.get(2)).intValue(),
-                ((Long)jsonColor.get(3)).intValue()
-            );
+        color = Colors.fromJSONArray(jsonColor);
 
         //load animations for this layer from resources folder
         JSONArray jsonAnimations = (JSONArray)Assets.json("animations/"+(String)json.get("type")+"/animations.json", true);
