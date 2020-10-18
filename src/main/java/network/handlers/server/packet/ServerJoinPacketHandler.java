@@ -9,6 +9,7 @@ import network.Packet;
 import network.PacketHandler;
 import network.packets.PlayerAssignmentPacket;
 import network.packets.RegionPacket;
+import org.json.simple.JSONObject;
 import world.Chunk;
 import world.Region;
 import world.events.event.EntityEnteredChunkEvent;
@@ -24,7 +25,7 @@ public class ServerJoinPacketHandler implements PacketHandler {
 
         //create entity
         Location spawn = new Location("world", 0, 0, 180);
-        int newID = MPServer.spawnEntity(Assets.json("definitions/entities/player.json", true), spawn, true);
+        int newID = MPServer.spawnEntity((JSONObject)Assets.json("definitions/entities/player.json", true), spawn, true);
         MPServer.assign(from, newID);
         System.out.println("Assigned entity "+newID+" to "+from.getID());
 

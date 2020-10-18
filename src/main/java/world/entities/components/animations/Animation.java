@@ -58,20 +58,9 @@ public class Animation implements Serializable {
         this.start_time = MPClient.getTime();
     }
 
-    public JSONObject serialize() {
-        JSONObject json = new JSONObject();
-        json.put("sprite", sprite_url);
-        json.put("frame_height", (int)frame_height);
-        json.put("frame_count", frame_count);
-        json.put("fps", fps);
-        json.put("loop", loop);
-        json.put("directional", directional);
-        return json;
-    }
-
     public static Animation deserialize(JSONObject json) {
         Animation a = new Animation(
-                (String)json.get("sprite"),
+                "animations/"+(String)json.get("type")+"/"+(String)json.get("name")+".png",
                 ((Number)json.get("fps")).intValue(),
                 ((Number)json.get("frame_count")).intValue(),
                 ((Number)json.get("frame_height")).intValue(),

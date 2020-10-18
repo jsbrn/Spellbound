@@ -24,7 +24,7 @@ public class GetEntitiesTest {
 
     @BeforeAll
     static void beforeAll() {
-        testEntityData = Assets.json("definitions/entities/test/exampleNonPlayer.json", true);
+        testEntityData = (JSONObject)Assets.json("definitions/entities/test/exampleNonPlayer.json", true);
         world = new World();
         world.addRegion(new Region("world", new OverworldGenerator(0)));
         world.spawnEntity(0, testEntityData, null);

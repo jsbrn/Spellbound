@@ -22,7 +22,7 @@ public class Settings {
         if (!Files.exists(Paths.get(url)))
             init();
         else
-            settings = Assets.json(url, false);
+            settings = (JSONObject)Assets.json(url, false);
 
         save();
     }

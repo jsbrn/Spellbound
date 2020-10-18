@@ -18,7 +18,6 @@
     ]
   },
   "hitbox": {
-    "_inherit_": "path/to/component.json",
     "radius": 0.5
   },
   "health": {
@@ -30,89 +29,27 @@
     "spells": []
   },
   "animator": {
-    "active_animations": ["default"],
+    "active_animations": ["idle"],
     "layers": [
       {
         "enabled": true,
-        "name": "torso",
-        "color": [50, 50, 20, 255],
-        "animations": [
-          {
-            "type": "default",
-            "sprite": "animations/humanoid/torso_idle.png",
-            "fps": 1,
-            "frame_count": 1,
-            "frame_height": 16,
-            "loop": true,
-            "directional": true
-          }
-        ]
+        "type": "humanoid/torso",
+        "color": [130, 100, 85, 255]
       },
       {
         "enabled": true,
-        "name": "arms",
-        "color": [25, 25, 10, 255],
-        "animations": [
-          {
-            "type": "walking",
-            "sprite": "animations/humanoid/arms_walking.png",
-            "fps": 2,
-            "frame_count": 4,
-            "frame_height": 16,
-            "loop": true,
-            "directional": true
-          },
-          {
-            "type": "default",
-            "sprite": "animations/humanoid/arms_idle.png",
-            "fps": 1,
-            "frame_count": 1,
-            "frame_height": 16,
-            "loop": true,
-            "directional": true
-          }
-        ]
+        "type": "humanoid/arms",
+        "color": [25, 25, 10, 255]
       },
       {
         "enabled": true,
-        "name": "legs",
-        "color": [25, 25, 10, 255],
-        "animations": [
-          {
-            "type": "walking",
-            "sprite": "animations/humanoid/legs_walking.png",
-            "fps": 2,
-            "frame_count": 4,
-            "frame_height": 16,
-            "loop": true,
-            "directional": true
-          },
-          {
-            "type": "default",
-            "sprite": "animations/humanoid/legs_idle.png",
-            "fps": 1,
-            "frame_count": 1,
-            "frame_height": 16,
-            "loop": true,
-            "directional": true
-          }
-        ]
+        "type": "humanoid/legs",
+        "color": [25, 25, 10, 255]
       },
       {
         "enabled": true,
-        "name": "head",
-        "color": [190, 170, 120, 255],
-        "animations": [
-          {
-            "type": "default",
-            "sprite": "animations/humanoid/head_idle.png",
-            "fps": 1,
-            "frame_count": 1,
-            "frame_height": 16,
-            "loop": true,
-            "directional": true
-          }
-        ]
+        "type": "humanoid/head",
+        "color": [240, 235, 180, 255]
       }
     ]
   }

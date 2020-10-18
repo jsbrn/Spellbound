@@ -106,6 +106,7 @@ public class Assets {
     }
 
     public static String read(String url, boolean internal) {
+        System.out.println("Reading "+url+" (internal: "+internal+")");
         BufferedReader bf = null;
         String contents = "";
         try {
@@ -126,16 +127,16 @@ public class Assets {
         return contents;
     }
 
-    public static JSONObject json(String json) {
+    public static Object json(String json) {
         try {
-            return (JSONObject)(new JSONParser().parse(json));
+            return new JSONParser().parse(json);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static JSONObject json(String url, boolean internal) {
+    public static Object json(String url, boolean internal) {
         String jsonString = read(url, internal);
         return json(jsonString);
     }

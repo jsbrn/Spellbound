@@ -12,21 +12,15 @@ public class AnimationSerializationTest {
 
     @BeforeEach
     void setUp() {
-        animJSON = Assets.json("definitions/entities/test/exampleAnimation.json", true);
-        animatorJSON = Assets.json("definitions/entities/test/exampleAnimator.json", true);
+        animJSON = (JSONObject)Assets.json("definitions/entities/test/exampleAnimation.json", true);
+        animatorJSON = (JSONObject)Assets.json("definitions/entities/test/exampleAnimator.json", true);
     }
 
     @Test
-    void testAnimation() {
-        Animation a = Animation.deserialize(animJSON);
-        Assertions.assertEquals(animJSON.toJSONString(), a.serialize().toJSONString());
+    void testAnimator() {
+        AnimatorComponent ac = new AnimatorComponent();
+        ac.deserialize(animatorJSON);
+        Assertions.assertEquals(animatorJSON.toJSONString(), ac.serialize().toJSONString());
     }
-
-//    @Test
-//    void testAnimator() {
-//        AnimatorComponent ac = new AnimatorComponent();
-//        ac.deserialize(animatorJSON);
-//        Assertions.assertEquals(animatorJSON.toJSONString(), ac.serialize().toJSONString());
-//    }
 
 }

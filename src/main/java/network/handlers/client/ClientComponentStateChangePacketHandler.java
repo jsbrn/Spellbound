@@ -6,6 +6,7 @@ import network.MPClient;
 import network.Packet;
 import network.PacketHandler;
 import network.packets.ComponentStateChangePacket;
+import org.json.simple.JSONObject;
 import world.entities.components.Component;
 
 public class ClientComponentStateChangePacketHandler implements PacketHandler {
@@ -16,7 +17,7 @@ public class ClientComponentStateChangePacketHandler implements PacketHandler {
             Class componentClass = Class.forName(cp.className);
             Component c = MPClient.getWorld().getEntities().getComponent(componentClass, cp.entityID);
             if (c == null) return false;
-            c.deserialize(Assets.json(cp.newJSONState));
+            c.deserialize((JSONObject)Assets.json(cp.newJSONState));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

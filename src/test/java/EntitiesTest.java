@@ -23,8 +23,8 @@ public class EntitiesTest {
         randomID = (int)MiscMath.random(0, 999);
         validSearchFilter.add(randomID);
         invalidSearchFilter.add(1001);
-        exampleNonPlayer = Assets.json("definitions/entities/test/exampleNonPlayer.json", true);
-        examplePlayer = Assets.json("definitions/entities/test/examplePlayer.json", true);
+        exampleNonPlayer = (JSONObject)Assets.json("definitions/entities/test/exampleNonPlayer.json", true);
+        examplePlayer = (JSONObject)Assets.json("definitions/entities/test/examplePlayer.json", true);
         entities.putEntity(randomID, exampleNonPlayer);
         entities.putEntity(randomID + 1, examplePlayer);
     }

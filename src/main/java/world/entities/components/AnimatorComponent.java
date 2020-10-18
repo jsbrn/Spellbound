@@ -1,5 +1,6 @@
 package world.entities.components;
 
+import assets.Assets;
 import misc.annotations.ServerClientExecution;
 import misc.annotations.ServerExecution;
 import network.MPServer;
@@ -56,7 +57,7 @@ public class AnimatorComponent extends Component {
         //save animation layers
         for (Map.Entry<String, AnimationLayer> layer: animationLayers.entrySet()) {
             JSONObject layerJSON = layer.getValue().serialize();
-            layerJSON.put("name", layer.getKey());
+            layerJSON.put("type", layer.getKey());
             layersJSON.add(layerJSON);
         }
         serialized.put("layers", layersJSON);
@@ -80,7 +81,7 @@ public class AnimatorComponent extends Component {
             JSONObject jsonLayer = (JSONObject)o;
             AnimationLayer layer = new AnimationLayer();
             layer.deserialize(jsonLayer);
-            animationLayers.put((String)jsonLayer.get("name"), layer);
+            animationLayers.put((String)jsonLayer.get("type"), layer);
         }
         //load active animations
         JSONArray jsonContexts = (JSONArray)object.getOrDefault("active_animations", new JSONArray());

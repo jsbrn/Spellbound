@@ -1,5 +1,6 @@
 package world.entities.components.animations;
 
+import assets.Assets;
 import com.github.mathiewz.slick.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,6 +12,7 @@ public class AnimationLayer {
     private LinkedHashMap<String, Animation> animationsByPrioritySort;
     private boolean enabled;
     private Color color;
+    private String type;
 
     public AnimationLayer() {
         this.animationsByPrioritySort = new LinkedHashMap<>();
@@ -47,6 +49,7 @@ public class AnimationLayer {
     public JSONObject serialize() {
         JSONObject json = new JSONObject();
         json.put("enabled", enabled);
+        json.put("type", type);
 
         JSONArray colorJSON = new JSONArray();
         colorJSON.add(color.getRed());
@@ -55,19 +58,13 @@ public class AnimationLayer {
         colorJSON.add(color.getAlpha());
         json.put("color", colorJSON);
 
-        JSONArray serializedAnims = new JSONArray();
-        for (Map.Entry<String, Animation> anim: animationsByPrioritySort.entrySet()) {
-            JSONObject animJSON = anim.getValue().serialize();
-            animJSON.put("type", anim.getKey());
-            serializedAnims.add(animJSON);
-        }
-
-        json.put("animations", serializedAnims);
         return json;
     }
 
     public void deserialize(JSONObject json) {
         this.enabled = (boolean)json.getOrDefault("enabled", true);
+
+        System.out.println(json.toJSONString());
 
         JSONArray jsonColor = (JSONArray)json.getOrDefault("color", new JSONArray());
         if (jsonColor.size() != 4)
@@ -80,12 +77,15 @@ public class AnimationLayer {
                 ((Long)jsonColor.get(3)).intValue()
             );
 
-        JSONArray jsonAnimations = (JSONArray)json.get("animations");
+        //load animations for this layer from resources folder
+        JSONArray jsonAnimations = (JSONArray)Assets.json("animations/"+(String)json.get("type")+"/animations.json", true);
         for (Object o: jsonAnimations) {
             JSONObject jsonAnim = (JSONObject)o;
+            jsonAnim.put("type", json.get("type"));
             Animation a = Animation.deserialize(jsonAnim);
-            animationsByPrioritySort.put((String)jsonAnim.get("type"), a);
+            animationsByPrioritySort.put((String)jsonAnim.get("name"), a);
         }
+
     }
 
 }
