@@ -4,13 +4,16 @@ import com.github.mathiewz.slick.Color;
 import misc.Colors;
 import misc.MiscMath;
 import misc.annotations.ClientExecution;
+import misc.annotations.ServerClientExecution;
 import misc.annotations.ServerExecution;
 import network.MPServer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import world.entities.components.animations.Animation;
 import world.entities.components.animations.AnimationLayer;
 import world.events.event.ComponentStateChangedEvent;
-import world.events.event.EntityChangedAnimationEvent;
+import world.events.event.EntityAnimationActivatedEvent;
+import world.events.event.EntityAnimationDeactivatedEvent;
 
 import java.util.*;
 
@@ -36,7 +39,8 @@ public class AnimatorComponent extends Component {
     public void addContext(String context) {
         if (!activeAnimations.contains(context)) {
             activeAnimations.add(context);
-            MPServer.getEventManager().invoke(new EntityChangedAnimationEvent(this));
+            resetAll(context);
+            MPServer.getEventManager().invoke(new EntityAnimationActivatedEvent(getParent(), context));
         }
     }
 
@@ -44,8 +48,19 @@ public class AnimatorComponent extends Component {
     public void removeContext(String context) {
         if (activeAnimations.contains(context)) {
             activeAnimations.remove(context);
-            MPServer.getEventManager().invoke(new EntityChangedAnimationEvent(this));
+            MPServer.getEventManager().invoke(new EntityAnimationDeactivatedEvent(getParent(), context));
         }
+    }
+
+    @ClientExecution
+    public void addLocalContext(String context) {
+        activeAnimations.add(context);
+        resetAll(context);
+    }
+
+    @ClientExecution
+    public void removeLocalContext(String context) {
+        activeAnimations.remove(context);
     }
 
     @ServerExecution
@@ -126,11 +141,12 @@ public class AnimatorComponent extends Component {
 
     }
 
-    @ClientExecution
-    public void setLocalActiveAnimations(String[] serializedList) {
-        activeAnimations.clear();
-        for (String anim: serializedList)
-            activeAnimations.add(anim);
+    @ServerClientExecution
+    private void resetAll(String context) {
+        for (AnimationLayer layer: animationLayers.values()) {
+            Animation a = layer.getAnimation(context);
+            if (a != null) a.reset();
+        }
     }
 
     @Override

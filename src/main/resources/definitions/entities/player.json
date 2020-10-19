@@ -35,6 +35,10 @@
         {
           "one_of": ["humanoid/cosmetics/short", "humanoid/cosmetics/cone"],
           "color": [0, 0, 0, 255]
+        },
+        {
+          "one_of": ["humanoid/cosmetics/undershirt"],
+          "color": [200, 200, 200, 255]
         }
       ]
     }

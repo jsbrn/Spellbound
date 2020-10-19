@@ -4,17 +4,17 @@ import com.esotericsoftware.kryonet.Connection;
 import network.MPClient;
 import network.Packet;
 import network.PacketHandler;
-import network.packets.ActiveAnimationsPacket;
+import network.packets.ActivateAnimationPacket;
+import network.packets.DeactivateAnimationPacket;
 import world.entities.components.AnimatorComponent;
 
-public class ClientActiveAnimationsPacketHandler implements PacketHandler {
+public class ClientDeactivateAnimationPacketHandler implements PacketHandler {
     @Override
     public boolean handle(Packet p, Connection from) {
-        ActiveAnimationsPacket aap = (ActiveAnimationsPacket)p;
+        DeactivateAnimationPacket aap = (DeactivateAnimationPacket) p;
         AnimatorComponent ac = (AnimatorComponent)MPClient.getWorld().getEntities().getComponent(AnimatorComponent.class, aap.entityID);
         if (ac == null) return false;
-        System.out.println(aap.activeAnimations);
-        ac.setLocalActiveAnimations(aap.activeAnimations);
+        ac.removeLocalContext(aap.animationName);
         return true;
     }
 }

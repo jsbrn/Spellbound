@@ -230,13 +230,22 @@ public class MPServer {
                             new EntityVelocityChangedPacket(eme.getEntity()));
                 }
             })
-            .on(EntityChangedAnimationEvent.class, new EventHandler() {
+            .on(EntityAnimationActivatedEvent.class, new EventHandler() {
                 @Override
                 public void handle(Event e) {
-                    EntityChangedAnimationEvent ecae = (EntityChangedAnimationEvent)e;
+                    EntityAnimationActivatedEvent ecae = (EntityAnimationActivatedEvent)e;
                     sendToAll(
-                            getConnectionsWithinRange(ecae.getAnimatorComponent().getParent()),
-                            new ActiveAnimationsPacket(ecae.getAnimatorComponent()));
+                            getConnectionsWithinRange(ecae.getEntityID()),
+                            new ActivateAnimationPacket(ecae.getEntityID(), ecae.getAnimationName()));
+                }
+            })
+            .on(EntityAnimationDeactivatedEvent.class, new EventHandler() {
+                @Override
+                public void handle(Event e) {
+                    EntityAnimationDeactivatedEvent ecae = (EntityAnimationDeactivatedEvent)e;
+                    sendToAll(
+                            getConnectionsWithinRange(ecae.getEntityID()),
+                            new DeactivateAnimationPacket(ecae.getEntityID(), ecae.getAnimationName()));
                 }
             });
         eventManager.register(serverListener);

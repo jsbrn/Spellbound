@@ -1,0 +1,10 @@
+[
+  {
+    "name": "idle",
+    "fps": 1,
+    "frame_count": 1,
+    "frame_height": 32,
+    "loop": true,
+    "directional": true
+  }
+]

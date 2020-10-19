@@ -24,7 +24,8 @@ public class Packet {
         kryo.register(EntityDestroyPacket.class);
         kryo.register(RegionPacket.class);
         kryo.register(ComponentStateChangePacket.class);
-        kryo.register(ActiveAnimationsPacket.class);
+        kryo.register(ActivateAnimationPacket.class);
+        kryo.register(DeactivateAnimationPacket.class);
         kryo.register(KeyPressedPacket.class);
         kryo.register(KeyReleasedPacket.class);
         kryo.register(MousePressedPacket.class);
